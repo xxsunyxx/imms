@@ -88,8 +88,27 @@ CREATE TABLE IF NOT EXISTS state_snapshots (
     PRIMARY KEY (session_id, round, agent_id)
 );
 
+CREATE TABLE IF NOT EXISTS game_events (
+    seq INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL,
+    round INT NOT NULL,
+    actor TEXT NOT NULL,
+    act_type TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    visibility_json TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS game_state (
+    session_id TEXT NOT NULL,
+    key TEXT NOT NULL,
+    value_json TEXT NOT NULL,
+    PRIMARY KEY (session_id, key)
+);
+
 CREATE INDEX IF NOT EXISTS idx_l1_lookup ON persona_l1(script_id, character_id, extraction_version);
 CREATE INDEX IF NOT EXISTS idx_events_session ON attribute_events(session_id, seq);
+CREATE INDEX IF NOT EXISTS idx_game_events_session ON game_events(session_id, seq);
 """
 
 
@@ -306,6 +325,56 @@ def export_db(conn, out_path):
         "persona_l3": [dict(r) for r in conn.execute("SELECT * FROM persona_l3")],
         "sessions": [dict(r) for r in conn.execute("SELECT * FROM sessions")],
         "attribute_events": [dict(r) for r in conn.execute("SELECT * FROM attribute_events")],
+        "game_events": [dict(r) for r in conn.execute("SELECT * FROM game_events")],
+        "game_state": [dict(r) for r in conn.execute("SELECT * FROM game_state")],
     }
     write_json(out_path, payload)
     return payload
+
+
+def set_game_state(conn, session_id, key, value):
+    conn.execute(
+        "INSERT OR REPLACE INTO game_state(session_id, key, value_json) VALUES(?,?,?)",
+        (session_id, key, json.dumps(value, ensure_ascii=False)),
+    )
+    conn.commit()
+
+
+def get_game_state(conn, session_id, key, default=None):
+    row = conn.execute(
+        "SELECT value_json FROM game_state WHERE session_id=? AND key=?", (session_id, key)
+    ).fetchone()
+    return json.loads(row["value_json"]) if row else default
+
+
+def append_game_event(conn, session_id, round_no, actor, act_type, payload, visibility):
+    conn.execute(
+        """INSERT INTO game_events(session_id, round, actor, act_type, payload_json, visibility_json, created_at)
+           VALUES(?,?,?,?,?,?,?)""",
+        (
+            session_id,
+            round_no,
+            actor,
+            act_type,
+            json.dumps(payload, ensure_ascii=False),
+            json.dumps(visibility, ensure_ascii=False),
+            now(),
+        ),
+    )
+    conn.commit()
+    return conn.execute("SELECT MAX(seq) AS s FROM game_events WHERE session_id=?", (session_id,)).fetchone()["s"]
+
+
+def visible_game_events(conn, session_id, seat_id, round_no=None):
+    sql = "SELECT * FROM game_events WHERE session_id=?"
+    params = [session_id]
+    if round_no is not None:
+        sql += " AND round<=?"
+        params.append(round_no)
+    sql += " ORDER BY seq"
+    rows = []
+    for row in conn.execute(sql, params):
+        vis = json.loads(row["visibility_json"])
+        if "public" in vis or seat_id in vis or row["actor"] == seat_id or seat_id.startswith("gm:"):
+            rows.append(dict(row))
+    return rows

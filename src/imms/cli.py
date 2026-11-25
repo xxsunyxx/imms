@@ -9,6 +9,7 @@ from . import db as db_mod
 from . import derive as derive_mod
 from . import normalize as normalize_mod
 from . import ontology as ontology_mod
+from . import runtime as runtime_mod
 from .util import print_json, read_json, write_json
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -80,6 +81,12 @@ def build_parser():
 
     exp_p = sub.add_parser("export", help="Export DB tables to JSON")
     exp_p.add_argument("--out", required=True)
+
+    play_p = sub.add_parser("play", help="Run a deterministic headless session")
+    play_p.add_argument("--session", required=True)
+    play_p.add_argument("--rounds", type=int, default=3)
+    play_p.add_argument("--scripted", help="JSON file with user utterances and optional vote")
+    play_p.add_argument("--seed", type=int, default=42)
     return p
 
 
@@ -141,6 +148,10 @@ def main(argv=None):
 
         elif args.cmd == "export":
             print_json(db_mod.export_db(conn, args.out))
+
+        elif args.cmd == "play":
+            scripted = read_json(args.scripted) if args.scripted else None
+            print_json(runtime_mod.run_session(conn, args.session, args.rounds, scripted, args.seed))
         return 0
     except ValueError as exc:
         print_json({"error": str(exc)})

@@ -22,6 +22,13 @@ uv run imms --db cross.db compare --script-id 跨源等效测试 --a char_conan 
 uv run imms --db imms.db assigned set --session 雨夜山庄-s001 --char char_01 --key public_identity --value '"山庄主人"' --reason '第二幕身份揭示' --round 2
 uv run imms --db imms.db emergent set --session 雨夜山庄-s001 --char char_01 --key trust --target char_02 --value -0.2 --reason '谎言被戳穿' --round 3
 uv run imms --db imms.db audit --session 雨夜山庄-s001 --char char_01
+uv run imms --db imms.db play --session 雨夜山庄-s001 --rounds 2 --scripted examples/sample_script/user_script.json --seed 42
+```
+
+## 单测
+
+```bash
+uv run python -m unittest discover -s tests
 ```
 
 ## 剧本格式
@@ -35,6 +42,7 @@ uv run imms --db imms.db audit --session 雨夜山庄-s001 --char char_01
 - `docs/NORMALIZATION.md` — 归一化规则
 - `docs/FORMULAS.md` — F01–F30 公式登记
 - `docs/STORAGE.md` — SQLite 表与只读约束
+- `docs/RUNTIME.md` — 对局引擎与回合循环
 
 ## 已踩过的坑
 
