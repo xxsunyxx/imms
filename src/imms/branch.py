@@ -153,7 +153,12 @@ def regress(base_result, fork_result, fork_conn, fork_id, at_round):
     checks["claims_known"] = claims_ok
 
     fork_final = fork_result["result"]
-    checks["solvable"] = bool(fork_final.get("solved"))
+    # "Solvable" means the vote mechanism produced legal seats; whether the
+    # players actually caught the culprit is an outcome, not an integrity bug.
+    checks["solvable"] = (
+        fork_final.get("winner") in runtime_state
+        and fork_final.get("culprit") in runtime_state
+    )
 
     divergence = {
         "at_round": at_round,

@@ -30,7 +30,19 @@ uv run imms --db imms.db replay --session snow-night-villa-s001 --out replay.md
 uv run imms --db imms.db branch fork --session snow-night-villa-s001 --at-round 2 --override-round 2 --override-utterance "我承认偷看过遗嘱" --out branch_report.json
 ```
 
-LLM 台词（可选）：设 `IMMS_LLM_URL` / `IMMS_LLM_MODEL` 后 `play --llm auto`；未配置时用离线模板。LLM 只写台词，不碰数值与事实。详见 `docs/RUNTIME.md`。
+LLM 台词（可选）：设 `IMMS_LLM_URL` / `IMMS_LLM_MODEL` 后 `play --llm auto`；未配置时用离线模板。LLM 只写台词，不碰数值与事实。
+
+## 批量导入 100 套盒装本
+
+```bash
+uv run imms --db imms.db import-boxed --dir refer/mystery-scripts-100/盒装本
+uv run imms --db imms.db scripts
+uv run imms --db imms.db assemble --script-id C01 --human c01_r02
+uv run imms --db imms.db play --session C01-s001 --rounds 2 \
+  --scripted examples/scripts/boxed_user_script.json --llm template
+```
+
+四类各 25 套（搞笑/恐怖/职场/反转），2–4 人本均可装配。线索文本取自清单；抽验 C01/H01 图片与清单一致，故不启用 OCR。映射与注意事项见 `docs/BOXED.md`。详见 `docs/RUNTIME.md`。
 
 ## 单测
 
@@ -53,6 +65,7 @@ uv run python -m unittest discover -s tests
 - `docs/STORAGE.md` — SQLite 表与只读约束
 - `docs/RUNTIME.md` — 对局引擎与回合循环
 - `docs/INFOGUARD.md` — 信息边界四层引擎与参考取舍
+- `docs/BOXED.md` — 100 套盒装本批量导入与映射
 
 ## 已踩过的坑
 
@@ -68,3 +81,5 @@ uv run python -m unittest discover -s tests
 - InfoGuard 只管 AI 生成的台词；人类玩家说什么都合法，只在别人感知时把超知内容包成传闻。
 - 关键词命中默认只标记不改写；judge 解析失败必须按 `confirmed` 处理，不能"失败即放行"。
 - 线索释放后必须在 detector 与 context guard 两侧同步 `exempt_fact`，否则已公开线索会被误判为剧透。
+- 线索指向与投票目标都必须经席位表解析角色 id；硬编码 `ai:` 前缀会在人类角色被指向时产生幽灵席位。
+- 分叉回归的 `solvable` 只能校验投票机制合法，不能拿「玩家是否破案」当完整性指标。

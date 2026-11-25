@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from . import assemble as assemble_mod
+from . import boxed as boxed_mod
 from . import branch as branch_mod
 from . import db as db_mod
 from . import derive as derive_mod
@@ -78,6 +79,11 @@ def build_parser():
     aud_p.add_argument("--char")
     aud_p.add_argument("--since", type=int, default=0)
 
+    imp_p = sub.add_parser("import-boxed", help="Bulk import 盒装本 scripts into the database")
+    imp_p.add_argument("--dir", default="refer/mystery-scripts-100/盒装本")
+    imp_p.add_argument("--limit", type=int)
+    imp_p.add_argument("--report", help="Optional JSON import report path")
+
     sub.add_parser("scripts", help="List stored scripts").add_argument("action", choices=["list"], nargs="?", default="list")
     seats_p = sub.add_parser("seats", help="List assembled seats")
     seats_p.add_argument("--session", required=True)
@@ -146,7 +152,7 @@ def main(argv=None):
     try:
         if args.cmd == "parse":
             onto = ontology_mod.parse_script_dir(args.script)
-            onto["title"] = onto["script_id"]
+            onto.setdefault("title", onto["script_id"])
             db_mod.save_script(conn, onto)
             if args.out:
                 write_json(args.out, onto)
@@ -189,6 +195,12 @@ def main(argv=None):
 
         elif args.cmd == "audit":
             print_json(db_mod.audit(conn, args.session, args.char, args.since))
+
+        elif args.cmd == "import-boxed":
+            report = boxed_mod.import_boxes(conn, args.dir, CONFIG, args.limit)
+            if args.report:
+                write_json(args.report, report)
+            print_json({"imported": report["imported"], "ocr": "skipped", "scripts": report["scripts"][:5]})
 
         elif args.cmd == "scripts":
             print_json(db_mod.list_scripts(conn))

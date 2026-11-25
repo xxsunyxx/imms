@@ -48,3 +48,14 @@
 - CLI 新增 `imms infoguard scopes/check`（`--direction in|out`）；文档 `docs/INFOGUARD.md`，README/RUNTIME 同步。
 - 测试：新增 test_infoguard.py，N×F 对抗矩阵（全角色×全私有事实）+ 传闻化 + 双向豁免 + judge 失败安全 + runtime 改写；30 个 unittest 全通过，branch fork 回归仍 pass。
 - 修正：初版把人类玩家发言也当输出泄露改写，违背"玩家可拿 A 的秘密质问 B"的合法玩法，已改为只拦 AI。
+
+## 2026-11-25 · 批量导入 100 套盒装本
+
+- 来源 `refer/mystery-scripts-100/盒装本/`（外部参考仓库，gitignore），100 套：搞笑/恐怖/职场/反转各 25，角色 2–4 人。
+- 新增 `src/imms/boxed.py`：解析 `本盒完整内容.md` 的五段结构，生成标准 Ontology；角色秘密→private facts + known_fact_ids，公开背景→public，真相/反转→truth，线索清单→clues + clue_fact_map + logLR，评审名片整块剔除。
+- 新增 `imms import-boxed`（含 --dir/--limit/--report）：一次性 save_script + normalize + save_persona_l1；100/100 导入成功，结构校验 0 异常。
+- `parse_script_dir` 遇到 `本盒完整内容.md` 自动走盒装解析；`assemble` 支持 2 人本；`validate_ontology` 下限改 2。
+- 修正：GM 线索释放与投票目标硬编码 `ai:` 前缀，人类席位被指向时产生幽灵席位；改为按 session participants 的 script_character_id→seat 映射解析。
+- 修正：branch 回归的 `solvable` 原为「玩家是否破案」，导致未破案的正常分叉被判 fail；改为校验投票产出合法席位。
+- 用户要求先抽验图片：C01/H01 的 `线索卡.png` 与清单逐条一致，因此不启用 OCR；曾短暂添加的可选 OCR 依赖已撤销，uv.lock 还原；图片路径作为 `source_images` 保留。
+- 测试：新增 test_boxed.py（解析/可见性/导入/人类席位映射），全量 34 个 unittest 通过；C01 干净库 parse→normalize→assemble→play→private→replay→branch 端到端通过。详见 docs/BOXED.md。

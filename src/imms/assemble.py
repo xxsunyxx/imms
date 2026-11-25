@@ -14,7 +14,7 @@ def assemble(conn, script_id, human_character_id, difficulty=3):
     if selectable and human_character_id not in selectable.split(","):
         raise ValueError("ERR_CHAR_NOT_SELECTABLE")
     playable = {cid: ch for cid, ch in chars.items() if not ch.get("is_victim")}
-    if len(playable) < 3:
+    if len(playable) < 2:
         raise ValueError("ERR_CHAR_COUNT")
     if not onto.get("truth_graph"):
         raise ValueError("ERR_TRUTH_INCONSISTENT")

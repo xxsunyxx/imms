@@ -233,7 +233,7 @@ def _user_act(scripted, scripted_index, target_name):
     return {"act_type": "assert", "utterance": item, "claimed_facts": [], "target": None, "inner_intent": "用户自行决定"}
 
 
-def _gm_step(conn, session_id, round_no, onto, runtime, guard=None):
+def _gm_step(conn, session_id, round_no, onto, runtime, guard=None, seat_map=None):
     revealed = db.get_game_state(conn, session_id, "revealed_clues", [])
     events = db.visible_game_events(conn, session_id, "gm")
     n_accuse = sum(1 for e in events if e["round"] == round_no and e["act_type"] == "accuse")
@@ -253,7 +253,8 @@ def _gm_step(conn, session_id, round_no, onto, runtime, guard=None):
             injected = {"type": "clue_release", "clue": clue, "facts_now_public": exempted}
             match = re.search(r"logLR:(\w+)=([-\d.]+)", clue)
             if match:
-                target_seat = f"ai:{match.group(1)}"
+                target_raw = match.group(1)
+                target_seat = (seat_map or {}).get(target_raw, f"ai:{target_raw}")
                 log_lr = float(match.group(2))
                 for state in runtime.values():
                     if state.get("seat_id") == target_seat:
@@ -296,10 +297,16 @@ def _vote(conn, session_id, runtime, session_doc, scripted):
                 break
         culprit_id = name_map.get(culprit_name, culprit_name)
     seat_ids = set(runtime.keys())
+    char_to_seat = {
+        p["script_character_id"]: p["id"]
+        for p in session_doc["participants"] if p.get("script_character_id")
+    }
 
     def to_seat(value):
         if value in seat_ids:
             return value
+        if value in char_to_seat:
+            return char_to_seat[value]
         for prefix in ("ai:", "human:"):
             if prefix + str(value) in seat_ids:
                 return prefix + str(value)
@@ -456,7 +463,11 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             if guard_info:
                 log.append({"round": round_no, "actor": seat_id, "act": "infoguard", "result": guard_info})
         db.set_game_state(conn, session_id, "user_input_index", user_index)
-        gm_result = _gm_step(conn, session_id, round_no, onto, runtime, guard_engine)
+        seat_map = {
+            p["script_character_id"]: p["id"]
+            for p in session_doc["participants"] if p.get("script_character_id")
+        }
+        gm_result = _gm_step(conn, session_id, round_no, onto, runtime, guard_engine, seat_map)
         for change_seat, change_char, change in gm_result.pop("changes", []):
             if change_seat:
                 _log_changes(conn, session_id, round_no, change_seat, change_char, [change])

@@ -130,6 +130,9 @@ def parse_yaml_script(path):
 
 def parse_script_dir(script_dir):
     root = Path(script_dir)
+    if root.is_dir() and (root / "本盒完整内容.md").exists():
+        from . import boxed
+        return boxed.parse_boxed_dir(root)
     if root.is_file() and root.suffix.lower() in {".yaml", ".yml"}:
         return parse_yaml_script(root)
     if not root.is_dir():
@@ -221,7 +224,7 @@ def validate_ontology(onto):
     chars = onto.get("characters", [])
     ids = [c.get("id") for c in chars]
     return {
-        "char_count": len(chars) >= 3,
+        "char_count": len(chars) >= 2,
         "unique_ids": len(ids) == len(set(ids)),
         "has_truth": len(onto.get("truth_graph", [])) > 0,
         "has_clues": len(onto.get("clue_pool", [])) > 0,
