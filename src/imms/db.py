@@ -88,6 +88,17 @@ CREATE TABLE IF NOT EXISTS state_snapshots (
     PRIMARY KEY (session_id, round, agent_id)
 );
 
+CREATE TABLE IF NOT EXISTS private_rooms (
+    room_id TEXT PRIMARY KEY,
+    session_id TEXT NOT NULL,
+    round INT NOT NULL,
+    participants_json TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'open',
+    opened_seq INT,
+    closed_seq INT,
+    created_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS game_events (
     seq INTEGER PRIMARY KEY AUTOINCREMENT,
     session_id TEXT NOT NULL,
@@ -326,6 +337,7 @@ def export_db(conn, out_path):
         "sessions": [dict(r) for r in conn.execute("SELECT * FROM sessions")],
         "attribute_events": [dict(r) for r in conn.execute("SELECT * FROM attribute_events")],
         "game_events": [dict(r) for r in conn.execute("SELECT * FROM game_events")],
+        "private_rooms": [dict(r) for r in conn.execute("SELECT * FROM private_rooms")],
         "game_state": [dict(r) for r in conn.execute("SELECT * FROM game_state")],
     }
     write_json(out_path, payload)
@@ -372,9 +384,112 @@ def visible_game_events(conn, session_id, seat_id, round_no=None):
         sql += " AND round<=?"
         params.append(round_no)
     sql += " ORDER BY seq"
+    room_cache = {}
+
+    def in_room(token):
+        room_id = token[len("room:"):]
+        if room_id not in room_cache:
+            row = conn.execute(
+                "SELECT participants_json FROM private_rooms WHERE room_id=?", (room_id,)
+            ).fetchone()
+            room_cache[room_id] = json.loads(row["participants_json"]) if row else []
+        return seat_id in room_cache[room_id]
+
     rows = []
     for row in conn.execute(sql, params):
         vis = json.loads(row["visibility_json"])
-        if "public" in vis or seat_id in vis or row["actor"] == seat_id or seat_id.startswith("gm:"):
+        if (
+            "public" in vis
+            or seat_id in vis
+            or row["actor"] == seat_id
+            or seat_id.startswith("gm:")
+            or any(isinstance(t, str) and t.startswith("room:") and in_room(t) for t in vis)
+        ):
             rows.append(dict(row))
     return rows
+
+
+def open_private_room(conn, session_doc, round_no, participants):
+    session_id = session_doc["session_id"]
+    valid = {p["id"] for p in session_doc["participants"] if p["kind"] != "gm"}
+    seats = list(dict.fromkeys(participants))
+    if len(seats) < 2:
+        raise ValueError("ERR_ROOM_TOO_SMALL")
+    unknown = [s for s in seats if s not in valid]
+    if unknown:
+        raise ValueError("ERR_ROOM_SEAT_NOT_FOUND")
+    count = conn.execute(
+        "SELECT COUNT(*) AS n FROM private_rooms WHERE session_id=?", (session_id,)
+    ).fetchone()["n"]
+    room_id = f"{session_id}-p{count + 1:03d}"
+    conn.execute(
+        """INSERT INTO private_rooms(room_id, session_id, round, participants_json, status, created_at)
+           VALUES(?,?,?,?,?,?)""",
+        (room_id, session_id, round_no, json.dumps(seats, ensure_ascii=False), "open", now()),
+    )
+    seq = append_game_event(
+        conn, session_id, round_no, "gm:host", "room_open",
+        {"room_id": room_id, "participants": seats}, [f"room:{room_id}"],
+    )
+    conn.execute("UPDATE private_rooms SET opened_seq=? WHERE room_id=?", (seq, room_id))
+    conn.commit()
+    return {"room_id": room_id, "participants": seats, "round": round_no, "opened_seq": seq}
+
+
+def get_private_room(conn, room_id):
+    row = conn.execute("SELECT * FROM private_rooms WHERE room_id=?", (room_id,)).fetchone()
+    if row is None:
+        raise ValueError("ERR_ROOM_NOT_FOUND")
+    data = dict(row)
+    data["participants"] = json.loads(data.pop("participants_json"))
+    return data
+
+
+def list_private_rooms(conn, session_id):
+    rows = conn.execute(
+        "SELECT room_id, round, status, participants_json, opened_seq, closed_seq FROM private_rooms WHERE session_id=? ORDER BY room_id",
+        (session_id,),
+    ).fetchall()
+    return [
+        {**dict(r), "participants": json.loads(r["participants_json"]), "participants_json": None}
+        for r in rows
+    ]
+
+
+def close_private_room(conn, session_id, room_id):
+    room = get_private_room(conn, room_id)
+    if room["session_id"] != session_id:
+        raise ValueError("ERR_ROOM_SESSION_MISMATCH")
+    if room["status"] != "open":
+        raise ValueError("ERR_ROOM_ALREADY_CLOSED")
+    seq = append_game_event(conn, session_id, room["round"], "gm:host", "room_close", {"room_id": room_id}, [f"room:{room_id}"])
+    conn.execute("UPDATE private_rooms SET status='closed', closed_seq=? WHERE room_id=?", (seq, room_id))
+    conn.commit()
+    return {"room_id": room_id, "status": "closed", "closed_seq": seq}
+
+
+def private_say(conn, session_id, room_id, actor, utterance, target=None, claimed_facts=None, inner_intent=None):
+    room = get_private_room(conn, room_id)
+    if room["session_id"] != session_id:
+        raise ValueError("ERR_ROOM_SESSION_MISMATCH")
+    if room["status"] != "open":
+        raise ValueError("ERR_ROOM_CLOSED")
+    if actor not in room["participants"]:
+        raise ValueError("ERR_NOT_ROOM_MEMBER")
+    if not utterance or not utterance.strip():
+        raise ValueError("ERR_EMPTY_UTTERANCE")
+    runtime = get_game_state(conn, session_id, "runtime", {})
+    known = set(get_game_state(conn, session_id, "revealed_clues", []))
+    state = runtime.get(actor, {})
+    known |= set(state.get("beliefs", {}))
+    claims = [f for f in (claimed_facts or []) if f in known]
+    payload = {
+        "room_id": room_id,
+        "utterance": utterance.strip()[:500],
+        "claimed_facts": claims,
+        "target": target if target in room["participants"] else None,
+        "inner_intent": inner_intent if inner_intent is not None else "用户自行决定",
+        "emotion_shown": "平静",
+    }
+    seq = append_game_event(conn, session_id, room["round"], actor, "private_say", payload, [f"room:{room_id}"])
+    return {"room_id": room_id, "seq": seq, "actor": actor, "claimed_facts": claims}

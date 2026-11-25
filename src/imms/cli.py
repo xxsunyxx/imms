@@ -9,6 +9,7 @@ from . import db as db_mod
 from . import derive as derive_mod
 from . import normalize as normalize_mod
 from . import ontology as ontology_mod
+from . import replay as replay_mod
 from . import runtime as runtime_mod
 from .util import print_json, read_json, write_json
 
@@ -79,6 +80,30 @@ def build_parser():
     seats_p = sub.add_parser("seats", help="List assembled seats")
     seats_p.add_argument("--session", required=True)
 
+    priv_p = sub.add_parser("private", help="Private chat rooms ordered by global seq")
+    priv_sp = priv_p.add_subparsers(dest="private_action", required=True)
+    po = priv_sp.add_parser("open", help="Open a room for 2+ seats")
+    po.add_argument("--session", required=True)
+    po.add_argument("--round", type=int, default=1)
+    po.add_argument("--seats", required=True, help="comma-separated seat ids")
+    ps = priv_sp.add_parser("say", help="Speak inside a room")
+    ps.add_argument("--session", required=True)
+    ps.add_argument("--room", required=True)
+    ps.add_argument("--actor", required=True)
+    ps.add_argument("--utterance", required=True)
+    ps.add_argument("--to", help="target seat id inside the room")
+    ps.add_argument("--claimed-fact", action="append", default=[])
+    ps.add_argument("--inner-intent")
+    pc = priv_sp.add_parser("close", help="Close a room")
+    pc.add_argument("--session", required=True)
+    pc.add_argument("--room", required=True)
+    pl = priv_sp.add_parser("list", help="List rooms of a session")
+    pl.add_argument("--session", required=True)
+
+    rep_p = sub.add_parser("replay", help="Generate five-section post-game replay")
+    rep_p.add_argument("--session", required=True)
+    rep_p.add_argument("--out", help="Markdown output path")
+
     exp_p = sub.add_parser("export", help="Export DB tables to JSON")
     exp_p.add_argument("--out", required=True)
 
@@ -87,6 +112,8 @@ def build_parser():
     play_p.add_argument("--rounds", type=int, default=3)
     play_p.add_argument("--scripted", help="JSON file with user utterances and optional vote")
     play_p.add_argument("--seed", type=int, default=42)
+    play_p.add_argument("--llm", choices=["auto", "template", "http"], default=None,
+                        help="Speech provider; auto uses http when IMMS_LLM_URL is set")
     return p
 
 
@@ -146,12 +173,33 @@ def main(argv=None):
         elif args.cmd == "seats":
             print_json(db_mod.get_session(conn, args.session)["participants"])
 
+        elif args.cmd == "private":
+            db_mod.get_session(conn, args.session)
+            if args.private_action == "open":
+                seats = [s.strip() for s in args.seats.split(",") if s.strip()]
+                print_json(db_mod.open_private_room(conn, db_mod.get_session(conn, args.session), args.round, seats))
+            elif args.private_action == "say":
+                print_json(db_mod.private_say(
+                    conn, args.session, args.room, args.actor, args.utterance,
+                    target=args.to, claimed_facts=args.claimed_fact, inner_intent=args.inner_intent,
+                ))
+            elif args.private_action == "close":
+                print_json(db_mod.close_private_room(conn, args.session, args.room))
+            elif args.private_action == "list":
+                print_json(db_mod.list_private_rooms(conn, args.session))
+
+        elif args.cmd == "replay":
+            text = replay_mod.build_replay(conn, args.session)
+            out = args.out or f"replay_{args.session}.md"
+            Path(out).write_text(text, encoding="utf-8")
+            print_json({"out": out, "sections": replay_mod.SECTIONS, "bytes": len(text.encode("utf-8"))})
+
         elif args.cmd == "export":
             print_json(db_mod.export_db(conn, args.out))
 
         elif args.cmd == "play":
             scripted = read_json(args.scripted) if args.scripted else None
-            print_json(runtime_mod.run_session(conn, args.session, args.rounds, scripted, args.seed))
+            print_json(runtime_mod.run_session(conn, args.session, args.rounds, scripted, args.seed, args.llm))
         return 0
     except ValueError as exc:
         print_json({"error": str(exc)})

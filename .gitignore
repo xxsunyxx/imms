@@ -6,5 +6,6 @@ __pycache__/
 state.json
 output/
 *.log
+!commit.log
 *.db
 *.sqlite

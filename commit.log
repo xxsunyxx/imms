@@ -1,0 +1,21 @@
+2026-11-25
+
+- 建立 IMMS v0.1 CLI 骨架：parse / normalize / assemble / persona show / derive / assigned set / emergent set / audit / scripts / seats / export。
+- 改用 SQLite 作为唯一持久化层：scripts、persona_l1、persona_l2、persona_l3、sessions、attribute_events、state_snapshots。
+- persona_l1 加触发器硬禁 UPDATE/DELETE；重新归一化以新 extraction_version 追加。
+- 提供示例剧本 examples/sample_script/script.md，可跑通 parse → normalize → assemble → derive → 变更 → audit 全链路。
+- 新增跨来源等效：`tech_craft` / `combat_effective` / `social_leverage` 派生公式 + `imms compare` 逐维并列命令；示例 `examples/cross_source/script.md` 验证柯南 vs 钢铁侠落在同一标准向量上。
+- 新增对局引擎：`src/imms/formulas.py`（F01–F27 纯函数）、`src/imms/runtime.py`（GM 节奏 + 角色 agent 回合 + 投票）、`imms play` 命令、7 个 unittest 全通过。
+- 新增 `game_events` / `game_state` 表；SpeechAct 的 utterance 与 inner_intent 分离落库。用户席位只接受输入，不由 LLM 代打。
+- 修正 IMMS 附录走查与 F02 完整公式的口径差异（衰减项），在 FORMULAS.md 注明。
+- 依赖：仅 Python 标准库；用 uv 管理环境与锁文件。
+
+## 2026-11-25 · LLM 台词层 / 私聊并发 / 复盘
+
+- 新增 `src/imms/llm.py`：template（离线）与 http（OpenAI-compatible / Ollama）provider；Prompt 分块注入，只产出 utterance / emotion_shown / claimed_facts。
+- 台词层护栏：claimed_facts 裁剪到持有者已知集合，act_type 强制等于公式层意图；LLM 不可达或输出非法时回退模板，记入 llm_stats。公式层未改动。
+- 新增 `private_rooms` 表与 `imms private open/say/close/list`；公开与私聊共用 game_events 全局 seq；可见性 token `room:<id>` 按参与者过滤，GM 全见。
+- 公式驱动的显著 L3 变化（|Δ|≥0.05）写入 attribute_events，actor=`runtime:formula`，供复盘排序。
+- 修正口径：GM 释放指向某角色的线索时，该角色更新 exposure_risk 而非对自身的 suspicion。
+- 新增 `src/imms/replay.py` 与 `imms replay`：五段式复盘（真相时间线 / 内心独白 / 转折点 Top5 / 谎言全景 / 反事实推演）。
+- 测试：新增 test_llm.py / test_private.py / test_replay.py，共 17 个 unittest 全通过；干净库端到端验证私聊可见性与复盘内容。

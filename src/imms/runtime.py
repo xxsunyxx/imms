@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import db, formulas
+from . import db, formulas, llm
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -18,6 +18,7 @@ REL_DOMAIN = {
 }
 APPRAISAL = {
     "defend": "defend_public", "ally": "defend_public", "share_clue": "share_clue",
+    "private_say": "share_clue",
     "accuse": "accuse_unfounded", "lie_exposed": "lie_exposed", "caught_lying": "caught_lying",
     "deflect": "take_credit", "betray": "betray", "rescue": "rescue",
 }
@@ -97,7 +98,7 @@ def _appraise(state, event, round_no):
         before = state["relations"].setdefault(actor, dict(REL_DEFAULT))[dim]
         after = formulas.relation_update(before, REL_DEFAULT[dim], 0.95, coeff, eta, kappa_v, state["nu"], lo, hi)
         state["relations"][actor][dim] = after
-        changed.append({"dim": dim, "before": round(before, 4), "after": round(after, 4)})
+        changed.append({"dim": dim, "target": actor, "before": round(before, 4), "after": round(after, 4)})
     emo = state["emotion"]
     impact = {"valence": -0.15 if coeff < 0 else 0.10, "arousal": 0.12, "dominance": 0.05}
     state["emotion"] = formulas.pad_update(emo, 2.0, 1.0, impact)
@@ -106,12 +107,45 @@ def _appraise(state, event, round_no):
 
 
 def _update_suspicion(state, events):
+    changed = []
     for ev in events:
         payload = ev.get("payload", {})
         for target, log_lr in payload.get("log_lr", {}).items():
+            before = state["suspicion"].get(target, formulas.sigmoid(state["ell"].get(target, 0.0)))
             ell = state["ell"].get(target, 0.0) + formulas.evidence_weight(0.8, 1.0, 0.1) * log_lr
             state["ell"][target] = ell
             state["suspicion"][target] = formulas.sigmoid(ell)
+            changed.append({"dim": "suspicion", "target": target, "before": before, "after": state["suspicion"][target]})
+    return changed
+
+
+def _log_changes(conn, session_id, round_no, seat_id, character_id, changes):
+    """Mirror significant formula-driven L3 deltas into the audit trail."""
+    for ch in changes:
+        before, after = ch.get("before"), ch.get("after")
+        if not isinstance(before, (int, float)) or not isinstance(after, (int, float)):
+            continue
+        before, after = round(before, 4), round(after, 4)
+        if abs(after - before) < 0.05:
+            continue
+        data = {
+            "key": ch["dim"], "value": after, "layer": "L3",
+            "scope": "dyadic", "target": ch.get("target"),
+            "visibility": "self", "source": "runtime:formula",
+            "locked": False, "reason": "事件评价 F02/F12", "updated_at_round": round_no,
+            "updated_by": seat_id,
+        }
+        conn.execute(
+            """INSERT INTO attribute_events(session_id, round, actor, layer, character_id, key, target,
+                                            before_json, after_json, reason, created_at)
+               VALUES(?,?,?,?,?,?,?,?,?,?,?)""",
+            (
+                session_id, round_no, "runtime:formula", "L3", character_id, ch["dim"],
+                ch.get("target") or "", json.dumps({"value": before}, ensure_ascii=False),
+                json.dumps(data, ensure_ascii=False), "事件评价 F02/F12", db.now(),
+            ),
+        )
+    conn.commit()
 
 
 def _fit(intent, attrs):
@@ -208,6 +242,7 @@ def _gm_step(conn, session_id, round_no, onto, runtime):
     heat = formulas.actual_heat(n_accuse, n_contra, mean_arousal)
     target = formulas.heat_target(round_no, max(1, round_no), 3.0)
     injected = None
+    gm_changes = []
     if heat < target - 0.3:
         pool = [c for c in onto.get("clue_pool", []) if c not in revealed]
         if pool:
@@ -220,15 +255,29 @@ def _gm_step(conn, session_id, round_no, onto, runtime):
                 target_seat = f"ai:{match.group(1)}"
                 log_lr = float(match.group(2))
                 for state in runtime.values():
+                    if state.get("seat_id") == target_seat:
+                        # The accused does not suspect themselves; they feel exposure.
+                        emo = state["emotion"]
+                        before_risk = emo.get("exposure_risk", 0.0)
+                        emo["exposure_risk"] = min(1.0, before_risk + 0.2)
+                        gm_changes.append((state.get("seat_id"), state["character_id"], {
+                            "dim": "exposure_risk", "before": before_risk, "after": emo["exposure_risk"],
+                        }))
+                        continue
+                    before = state["suspicion"].get(target_seat, formulas.sigmoid(state["ell"].get(target_seat, 0.0)))
                     ell = state["ell"].get(target_seat, 0.0) + 0.8 * log_lr
                     state["ell"][target_seat] = ell
                     state["suspicion"][target_seat] = formulas.sigmoid(ell)
+                    gm_changes.append((state.get("seat_id"), state["character_id"], {
+                        "dim": "suspicion", "target": target_seat,
+                        "before": before, "after": state["suspicion"][target_seat],
+                    }))
             db.set_game_state(conn, session_id, "runtime", runtime)
             db.append_game_event(conn, session_id, round_no, "gm:host", "clue_release", injected, ["public"])
     elif heat > target + 0.3:
         injected = {"type": "rest"}
         db.append_game_event(conn, session_id, round_no, "gm:host", "rest", injected, ["public"])
-    return {"heat": round(heat, 4), "target": round(target, 4), "injected": injected}
+    return {"heat": round(heat, 4), "target": round(target, 4), "injected": injected, "changes": gm_changes}
 
 
 def _vote(conn, session_id, runtime, session_doc, scripted):
@@ -270,7 +319,7 @@ def _vote(conn, session_id, runtime, session_doc, scripted):
     return {"culprit": culprit_id, "tally": tally, "winner": winner, "solved": winner == culprit_id}
 
 
-def run_session(conn, session_id, rounds=3, scripted=None, seed=42):
+def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=None):
     session_doc = db.get_session(conn, session_id)
     init_runtime(conn, session_doc)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -286,6 +335,8 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42):
     public_facts = set(db.get_game_state(conn, session_id, "revealed_clues", []))
     names = {v: k for k, v in _name_map(onto).items()}
     seat_names = {p["id"]: p["seat_label"] for p in session_doc["participants"]}
+    speaker = llm.build_provider(llm_name)
+    llm_stats = {"provider": speaker.name, "generated": 0, "fallback": 0}
     log = []
 
     for round_no in range(1, rounds + 1):
@@ -295,9 +346,12 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42):
                 {"actor": e["actor"], "act_type": e["act_type"], "payload": json.loads(e["payload_json"])}
                 for e in seen
             ]
+            round_changes = []
             for ev in parsed:
-                _appraise(state, ev, round_no)
-            _update_suspicion(state, parsed)
+                _, changes = _appraise(state, ev, round_no)
+                round_changes.extend(changes)
+            round_changes.extend(_update_suspicion(state, parsed))
+            _log_changes(conn, session_id, round_no, seat_id, state["character_id"], round_changes)
             if state["is_human"]:
                 raw = _user_act(scripted, user_index, names.get(state["character_id"], state["character_id"]))
                 user_index += 1
@@ -315,22 +369,40 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42):
                     "claimed_facts": [clue] if intent == "assert" and clue in state["beliefs"] else [],
                     "target": target_id,
                     "inner_intent": f"意图={intent}；怀疑最高={target_name}",
+                    "emotion_shown": "平静",
                 }
+                if speaker.name != "template":
+                    allowed = sorted(set(public_facts) | set(state["beliefs"]))
+                    prompt = llm.build_prompt(state, intent, target_name, clue, round_no, allowed, seat_names)
+                    try:
+                        generated = llm.parse_speech(speaker.generate(prompt), allowed, intent)
+                        act["utterance"] = generated["utterance"]
+                        act["emotion_shown"] = generated["emotion_shown"]
+                        act["claimed_facts"] = generated["claimed_facts"]
+                        llm_stats["generated"] += 1
+                    except llm.LLMError as exc:
+                        llm_stats["fallback"] += 1
+                        log.append({"round": round_no, "actor": seat_id, "act": "llm_fallback", "reason": str(exc)})
             act = _guard(state, act, public_facts)
             payload = {
                 "utterance": act["utterance"],
                 "inner_intent": act["inner_intent"],
                 "claimed_facts": act["claimed_facts"],
                 "target": act["target"],
+                "emotion_shown": act.get("emotion_shown", "平静"),
             }
             db.append_game_event(conn, session_id, round_no, seat_id, act["act_type"], payload, ["public"])
             state["memory"].append({"round": round_no, "act": act["act_type"], "importance": 0.5})
             log.append({"round": round_no, "actor": seat_id, "act": act["act_type"], "utterance": act["utterance"]})
         db.set_game_state(conn, session_id, "user_input_index", user_index)
         gm_result = _gm_step(conn, session_id, round_no, onto, runtime)
+        for change_seat, change_char, change in gm_result.pop("changes", []):
+            if change_seat:
+                _log_changes(conn, session_id, round_no, change_seat, change_char, [change])
         log.append({"round": round_no, "actor": "gm:host", "act": "pacing", "result": gm_result})
 
     db.set_game_state(conn, session_id, "runtime", runtime)
+    db.set_game_state(conn, session_id, "llm_stats", llm_stats)
     result = _vote(conn, session_id, runtime, session_doc, scripted)
     db.set_game_state(conn, session_id, "result", result)
-    return {"session_id": session_id, "rounds": rounds, "log": log, "result": result}
+    return {"session_id": session_id, "rounds": rounds, "log": log, "result": result, "llm": llm_stats}
