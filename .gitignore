@@ -9,3 +9,6 @@ output/
 !commit.log
 *.db
 *.sqlite
+
+# external reference repos
+refer/
