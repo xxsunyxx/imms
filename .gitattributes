@@ -1,2 +1,2 @@
 * text=auto eol=lf
-corpus/raw/** -text
+corpus/raw/** -text -eol
