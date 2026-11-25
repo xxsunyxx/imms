@@ -7,6 +7,7 @@ from pathlib import Path
 from . import assemble as assemble_mod
 from . import boxed as boxed_mod
 from . import branch as branch_mod
+from . import corpus as corpus_mod
 from . import db as db_mod
 from . import derive as derive_mod
 from . import infoguard as infoguard_mod
@@ -83,6 +84,18 @@ def build_parser():
     imp_p.add_argument("--dir", default="refer/mystery-scripts-100/盒装本")
     imp_p.add_argument("--limit", type=int)
     imp_p.add_argument("--report", help="Optional JSON import report path")
+
+    build_p = sub.add_parser("build-corpus", help="Build project-owned corpus from disposable refer sources")
+    build_p.add_argument("--source-root", default=str(ROOT / "refer"))
+    build_p.add_argument("--out", default=str(ROOT / "corpus"))
+    build_p.add_argument("--report", help="Optional JSON manifest report path")
+
+    import_corpus_p = sub.add_parser("import-corpus", help="Import accepted corpus scripts into the database")
+    import_corpus_p.add_argument("--dir", default=str(ROOT / "corpus"))
+    import_corpus_p.add_argument("--report", help="Optional JSON import report path")
+
+    corpus_report_p = sub.add_parser("corpus-report", help="Show admission decisions from the corpus manifest")
+    corpus_report_p.add_argument("--dir", default=str(ROOT / "corpus"))
 
     sub.add_parser("scripts", help="List stored scripts").add_argument("action", choices=["list"], nargs="?", default="list")
     seats_p = sub.add_parser("seats", help="List assembled seats")
@@ -201,6 +214,31 @@ def main(argv=None):
             if args.report:
                 write_json(args.report, report)
             print_json({"imported": report["imported"], "ocr": "skipped", "scripts": report["scripts"][:5]})
+
+        elif args.cmd == "build-corpus":
+            manifest = corpus_mod.build_corpus(args.source_root, args.out)
+            if args.report:
+                write_json(args.report, manifest)
+            print_json({"summary": manifest["summary"], "entries": [
+                {
+                    "source_id": e["source_id"],
+                    "decision": e["decision"],
+                    "reasons": [r["code"] for r in e.get("reasons", [])],
+                }
+                for e in manifest["entries"]
+            ]})
+
+        elif args.cmd == "import-corpus":
+            report = corpus_mod.import_corpus(conn, args.dir, CONFIG)
+            if args.report:
+                write_json(args.report, report)
+            print_json({
+                "imported": report["imported"], "skipped": report["skipped"],
+                "scripts": report["scripts"], "skipped_detail": report["skipped_detail"],
+            })
+
+        elif args.cmd == "corpus-report":
+            print_json(corpus_mod.corpus_report(args.dir))
 
         elif args.cmd == "scripts":
             print_json(db_mod.list_scripts(conn))

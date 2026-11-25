@@ -44,6 +44,16 @@ uv run imms --db imms.db play --session C01-s001 --rounds 2 \
 
 四类各 25 套（搞笑/恐怖/职场/反转），2–4 人本均可装配。线索文本取自清单；抽验 C01/H01 图片与清单一致，故不启用 OCR。映射与注意事项见 `docs/BOXED.md`。详见 `docs/RUNTIME.md`。
 
+## 自持语料库（外部 refer 可删除）
+
+```bash
+uv run imms --db corpus.db build-corpus
+uv run imms --db corpus.db corpus-report
+uv run imms --db corpus.db import-corpus --dir corpus
+```
+
+`corpus/` 保存来源副本、标准 Ontology 与准入清单；`refer/` 删除后仍可重建数据库。本次从 9 个候选中收 6 个纯文本推理本，放弃 3 个：mossvale 两个故事依赖鼠标实景搜证，《西游记·火焰山》没有凶手/证据链/结局裁决。缺失字段的补全只使用来源已有证据，全部记在 `completions[]` 与 manifest 中；规则见 `docs/CORPUS.md`。
+
 ## 单测
 
 ```bash
@@ -66,6 +76,7 @@ uv run python -m unittest discover -s tests
 - `docs/RUNTIME.md` — 对局引擎与回合循环
 - `docs/INFOGUARD.md` — 信息边界四层引擎与参考取舍
 - `docs/BOXED.md` — 100 套盒装本批量导入与映射
+- `docs/CORPUS.md` — 自持语料库、准入门禁与缺陷补全
 
 ## 已踩过的坑
 
@@ -83,3 +94,6 @@ uv run python -m unittest discover -s tests
 - 线索释放后必须在 detector 与 context guard 两侧同步 `exempt_fact`，否则已公开线索会被误判为剧透。
 - 线索指向与投票目标都必须经席位表解析角色 id；硬编码 `ai:` 前缀会在人类角色被指向时产生幽灵席位。
 - 分叉回归的 `solvable` 只能校验投票机制合法，不能拿「玩家是否破案」当完整性指标。
+- 外部参考目录会被删除：可用剧本必须在 `refer/` 还在时转成项目自持的 `corpus/`，运行链路不得引用 `refer/` 路径。
+- 需要鼠标地图、实景搜查或靠图片认物的本子不是纯文本剧本杀，直接 SKIP；不要为了“装进去”而改写玩法。
+- 剧情逻辑缺口只能从来源已有证据补全（死者标注、线索回指、问询提示）；补不出来的就放弃，绝不编造时间与事实。

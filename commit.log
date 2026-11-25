@@ -59,3 +59,12 @@
 - 修正：branch 回归的 `solvable` 原为「玩家是否破案」，导致未破案的正常分叉被判 fail；改为校验投票产出合法席位。
 - 用户要求先抽验图片：C01/H01 的 `线索卡.png` 与清单逐条一致，因此不启用 OCR；曾短暂添加的可选 OCR 依赖已撤销，uv.lock 还原；图片路径作为 `source_images` 保留。
 - 测试：新增 test_boxed.py（解析/可见性/导入/人类席位映射），全量 34 个 unittest 通过；C01 干净库 parse→normalize→assemble→play→private→replay→branch 端到端通过。详见 docs/BOXED.md。
+
+## 2026-11-25 · 自持语料库与准入/补全机制
+
+- 用户明确 `refer/` 会被删除，且「不适合的本子该放弃就放弃」。新增 `corpus/` 作为项目自持存储：`raw/rpg` 保留来源字节、`scripts` 保留标准 Ontology、`manifest.json` 记录来源 SHA256 与准入决定；运行链路不再引用 `refer/`。
+- 新增 `src/imms/corpus.py`：把 RolePlayingGame 的 7 份 JSON 剧本转成 Ontology（角色私有知识→private facts + known_fact_ids，search_targets.clues→文本线索，evidence_chain→truth facts，末幕 final_decision→endings）。
+- 准入硬门禁：需要鼠标/地图/图片认物、无凶手、无证据链、无 stage_flow/结局、可玩角色不足、凶手不在角色表，一律 SKIP。mossvale 两个故事因 room/spot 场景搜证被放弃；《西游记·火焰山》因缺少推理结构被放弃；其余 6 个纯文本本 IMPORT。
+- 补全机制：R1 死者从来源文本标注；R2 stage 1-based→0-based；R3 未点名线索只回指完整真相；R4 无时间线记缺口不编造；R5 雾港私有材料缺口只生成“待核对”问询线索、不泄露私有内容；R6 重复线索 id 加序号。所有补全写入 Ontology `completions[]` 与 manifest。
+- CLI 新增 `build-corpus` / `import-corpus` / `corpus-report`；文档 `docs/CORPUS.md`，README 同步。
+- 测试：新增 `tests/test_corpus.py`（准入、补全结构、落库与投票），全量 37 个 unittest 通过；6 个本落库，`rpg_last_train` 完成 assemble→play→vote 冒烟。

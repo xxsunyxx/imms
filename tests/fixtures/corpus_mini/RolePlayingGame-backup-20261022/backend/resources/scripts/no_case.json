@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "script_meta": {"script_id": "no_case", "title": "叙事片段"},
+  "story_background": "山道火势渐弱。",
+  "roles": [
+    {"role_id": "n_a", "role_name": "甲", "human_playable": true, "public_identity": "旅人"},
+    {"role_id": "n_b", "role_name": "乙", "human_playable": true, "public_identity": "童子"}
+  ],
+  "truth": {"full_story": "两人和解。", "complete_timeline": {}},
+  "mechanics_config": {"search": {"search_targets": []}}
+}

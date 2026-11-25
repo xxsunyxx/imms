@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "script_meta": {
+    "script_id": "mini_case",
+    "title": "最小测试本",
+    "total_stages": 2,
+    "provenance": {"kind": "test"}
+  },
+  "story_background": "馆长秦重在雨夜倒在办公室，众人需要核对账本。",
+  "roles": [
+    {
+      "role_id": "mini_a",
+      "role_name": "甲",
+      "human_playable": true,
+      "public_identity": "档案管理员",
+      "personality": "冷静",
+      "hidden_goal": "隐瞒旧账",
+      "stage_knowledge": {
+        "stage_1": {
+          "blocks": [
+            {
+              "block_id": "mini_a_s1",
+              "type": "secret",
+              "content": "你曾调换账本。",
+              "visibility": "self_only",
+              "unlock_stage": 1,
+              "owner_role": "mini_a"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "role_id": "mini_b",
+      "role_name": "乙",
+      "human_playable": true,
+      "public_identity": "投递员",
+      "personality": "沉默",
+      "hidden_goal": "保住邮袋",
+      "stage_knowledge": {
+        "stage_1": {
+          "blocks": [
+            {
+              "block_id": "mini_b_s1",
+              "type": "memory",
+              "content": "你看见账本被调换。",
+              "visibility": "self_only",
+              "unlock_stage": 1,
+              "owner_role": "mini_b"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "stage_flow": {
+    "stage_1": {
+      "resolution": {
+        "final_decision": {
+          "eligible_role_ids": ["mini_a", "mini_b"],
+          "correct_verdict": "指认成立。",
+          "incorrect_verdict": "指认不成立。"
+        }
+      }
+    }
+  },
+  "mechanics_config": {
+    "search": {
+      "search_targets": [
+        {
+          "id": "desk",
+          "name": "书桌",
+          "unlock_stage": 1,
+          "clues": [
+            {"id": "mini_clue_1", "content": "账本有调换痕迹。", "exclusivity": "shared"}
+          ]
+        }
+      ]
+    }
+  },
+  "truth": {
+    "culprit_role_id": "mini_b",
+    "full_story": "乙调换账本并杀害秦重。",
+    "complete_timeline": {"20:00": "秦重进入办公室"},
+    "evidence_chain": [
+      {
+        "conclusion": "账本被调换。",
+        "clue_ids": ["mini_clue_1"],
+        "reasoning": "痕迹明显。"
+      }
+    ]
+  },
+  "hard_constraints": []
+}
