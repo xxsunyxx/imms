@@ -19,3 +19,11 @@
 - 修正口径：GM 释放指向某角色的线索时，该角色更新 exposure_risk 而非对自身的 suspicion。
 - 新增 `src/imms/replay.py` 与 `imms replay`：五段式复盘（真相时间线 / 内心独白 / 转折点 Top5 / 谎言全景 / 反事实推演）。
 - 测试：新增 test_llm.py / test_private.py / test_replay.py，共 17 个 unittest 全通过；干净库端到端验证私聊可见性与复盘内容。
+
+## 2026-11-25 · GM 分叉回归
+
+- 用户校正：GM 的核心不是叙事，而是内容分叉后的回归能力。据此把「反事实推演」升级为可真实重放的 `imms branch fork`。
+- `state_snapshots` 从预留表改为每轮末物化：每席位 runtime + `@global`（revealed_clues / user_input_index / round）。`run_session` 增加 `start_round`，可从指定轮次续跑。
+- 新增 `src/imms/branch.py`：在内存 SQLite 副本中从轮 k−1 快照分叉，替换用户该轮发言，重放后续完整链路；原会话不被污染。
+- 回归校验四项：bounded / info_isolation / claims_known / solvable；差异报告含原局与分叉局赢家、破案与否、结局翻转；verdict ∈ pass/changed/fail。
+- 测试：新增 test_branch.py，共 21 个 unittest 全通过；干净库验证 override 发言生效、原局事件与结果未变、结局翻转可被检出。

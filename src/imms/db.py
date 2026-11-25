@@ -337,11 +337,28 @@ def export_db(conn, out_path):
         "sessions": [dict(r) for r in conn.execute("SELECT * FROM sessions")],
         "attribute_events": [dict(r) for r in conn.execute("SELECT * FROM attribute_events")],
         "game_events": [dict(r) for r in conn.execute("SELECT * FROM game_events")],
+        "state_snapshots": [dict(r) for r in conn.execute("SELECT * FROM state_snapshots")],
         "private_rooms": [dict(r) for r in conn.execute("SELECT * FROM private_rooms")],
         "game_state": [dict(r) for r in conn.execute("SELECT * FROM game_state")],
     }
     write_json(out_path, payload)
     return payload
+
+
+def save_snapshot(conn, session_id, round_no, agent_id, data):
+    conn.execute(
+        "INSERT OR REPLACE INTO state_snapshots(session_id, round, agent_id, data_json) VALUES(?,?,?,?)",
+        (session_id, round_no, agent_id, json.dumps(data, ensure_ascii=False)),
+    )
+    conn.commit()
+
+
+def load_snapshot(conn, session_id, round_no):
+    rows = conn.execute(
+        "SELECT agent_id, data_json FROM state_snapshots WHERE session_id=? AND round=?",
+        (session_id, round_no),
+    ).fetchall()
+    return {r["agent_id"]: json.loads(r["data_json"]) for r in rows}
 
 
 def set_game_state(conn, session_id, key, value):

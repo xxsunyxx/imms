@@ -12,7 +12,7 @@
 | `persona_l3` | 临场属性（有向用 `target`），可改 | 公式引擎 / GM CLI |
 | `sessions` | 装配后的席位名册 | `imms assemble` |
 | `attribute_events` | L2/L3 每次变更的 before/after/reason | 所有写入方 |
-| `state_snapshots` | 轮末状态快照（预留） | 公式引擎 |
+| `state_snapshots` | 每轮末每席位 runtime + `@global`（线索/输入索引/轮次），支撑分叉回归 | 公式引擎 |
 | `game_events` | 每轮 SpeechAct，含 utterance / inner_intent；公开与私聊共用全局 `seq` | 对局引擎 / `imms private say` |
 | `game_state` | runtime / round / revealed_clues / result / llm_stats | 对局引擎 |
 | `private_rooms` | 私聊房间席位、轮次、opened_seq / closed_seq | `imms private open/close` |

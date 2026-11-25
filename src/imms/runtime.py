@@ -319,7 +319,7 @@ def _vote(conn, session_id, runtime, session_doc, scripted):
     return {"culprit": culprit_id, "tally": tally, "winner": winner, "solved": winner == culprit_id}
 
 
-def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=None):
+def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=None, start_round=None):
     session_doc = db.get_session(conn, session_id)
     init_runtime(conn, session_doc)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -339,7 +339,9 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     llm_stats = {"provider": speaker.name, "generated": 0, "fallback": 0}
     log = []
 
-    for round_no in range(1, rounds + 1):
+    current_round = db.get_game_state(conn, session_id, "round", 0)
+    first_round = start_round if start_round is not None else current_round + 1
+    for round_no in range(first_round, rounds + 1):
         for seat_id, state in runtime.items():
             seen = db.visible_game_events(conn, session_id, seat_id, round_no - 1)
             parsed = [
@@ -400,6 +402,15 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             if change_seat:
                 _log_changes(conn, session_id, round_no, change_seat, change_char, [change])
         log.append({"round": round_no, "actor": "gm:host", "act": "pacing", "result": gm_result})
+
+        for snap_seat, snap_state in runtime.items():
+            db.save_snapshot(conn, session_id, round_no, snap_seat, snap_state)
+        db.save_snapshot(conn, session_id, round_no, "@global", {
+            "revealed_clues": db.get_game_state(conn, session_id, "revealed_clues", []),
+            "user_input_index": user_index,
+            "round": round_no,
+        })
+        db.set_game_state(conn, session_id, "round", round_no)
 
     db.set_game_state(conn, session_id, "runtime", runtime)
     db.set_game_state(conn, session_id, "llm_stats", llm_stats)

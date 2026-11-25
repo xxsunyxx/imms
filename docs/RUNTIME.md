@@ -80,8 +80,27 @@ uv run imms --db imms.db replay --session 雨夜山庄-s001 --out replay.md
 
 五段：真相时间线、角色内心独白、关键转折点 Top 5、谎言全景图、反事实推演。反事实用已记录的 `logLR` 重算怀疑度与投票分布，不重放搜证/私聊，故为近似推演。
 
-## 8. 边界
+## 8. GM 分叉回归（核心能力）
+
+**GM 的难点不是把话说漂亮，而是内容分叉后能否回归。** 用户改一轮决策、GM 注入一个事件，系统必须精确恢复当时状态、重跑后续、并校验全局仍然成立。
+
+```bash
+uv run imms --db imms.db branch fork --session 雨夜山庄-s001 --at-round 2 \
+  --override-round 2 --override-utterance "我相信赵管事，账房的灯熄得早与我无关。" \
+  --seed 42 --out branch_report.json
+```
+
+- **精确恢复**：每轮末把每个席位的 runtime 与 `@global`（已释放线索、用户输入索引、轮次）写入 `state_snapshots`。`--at-round k` 恢复第 `k-1` 轮末快照，从该边界续跑。
+- **不污染原局**：分叉在内存 SQLite 副本中执行；原会话的事件、快照、结果一字不改。
+- **真实重放**：与 §7 的"数值近似反事实"不同，这里重新走完整的评价→关系/怀疑更新→效用→护栏→GM 节奏→投票链路。
+- **回归校验**（`checks`）：`bounded`（关系/情绪不越界）、`info_isolation`（私聊仍仅房间可见）、`claims_known`（无人声明未知事实）、`solvable`（分叉局仍可解）。
+- **差异报告**（`divergence`）：原局/分叉局的赢家、是否破案、结局是否翻转。`verdict` ∈ `pass` / `changed` / `fail`。
+
+典型用途：用户复盘时问"若第 3 轮我选择相信他"，直接分叉跑出另一条时间线，而不是靠模型口述推测。也可作为剧本平衡性回归：批量分叉后统计 `fail` 比例。
+
+## 9. 边界
 
 - 不做语音、不做 Web UI；LLM 端点需用户自行提供。
 - RUNTIME 公式见 `docs/FORMULAS.md` F01–F27；纯函数实现见 `src/imms/formulas.py`。
 - 投票真相比对从 Ontology 的 `TruthGraph` 文本推断角色名；正式剧本应显式写 `culprit` 字段。
+- 分叉重放使用与基础局相同的角色台词 provider；`--llm http` 时端点需可用，否则回退模板。

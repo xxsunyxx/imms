@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from . import assemble as assemble_mod
+from . import branch as branch_mod
 from . import db as db_mod
 from . import derive as derive_mod
 from . import normalize as normalize_mod
@@ -100,6 +101,17 @@ def build_parser():
     pl = priv_sp.add_parser("list", help="List rooms of a session")
     pl.add_argument("--session", required=True)
 
+    br_p = sub.add_parser("branch", help="GM branch regression: fork at a round and replay")
+    br_sp = br_p.add_subparsers(dest="branch_action", required=True)
+    bf = br_sp.add_parser("fork", help="Fork at the start of a round, replay and regress-check")
+    bf.add_argument("--session", required=True)
+    bf.add_argument("--at-round", type=int, required=True)
+    bf.add_argument("--override-round", type=int, help="Round whose user utterance to replace")
+    bf.add_argument("--override-utterance", help="Replacement user utterance")
+    bf.add_argument("--seed", type=int, default=42)
+    bf.add_argument("--llm", choices=["auto", "template", "http"], default="template")
+    bf.add_argument("--out", help="JSON report path")
+
     rep_p = sub.add_parser("replay", help="Generate five-section post-game replay")
     rep_p.add_argument("--session", required=True)
     rep_p.add_argument("--out", help="Markdown output path")
@@ -187,6 +199,15 @@ def main(argv=None):
                 print_json(db_mod.close_private_room(conn, args.session, args.room))
             elif args.private_action == "list":
                 print_json(db_mod.list_private_rooms(conn, args.session))
+
+        elif args.cmd == "branch":
+            report = branch_mod.fork_and_regress(
+                conn, args.session, args.at_round, args.override_round,
+                args.override_utterance, args.seed, args.llm,
+            )
+            if args.out:
+                write_json(args.out, report)
+            print_json(report)
 
         elif args.cmd == "replay":
             text = replay_mod.build_replay(conn, args.session)

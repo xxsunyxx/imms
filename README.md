@@ -27,6 +27,7 @@ uv run imms --db imms.db private open --session 雨夜山庄-s001 --round 3 --se
 uv run imms --db imms.db private say --session 雨夜山庄-s001 --room 雨夜山庄-s001-p001 --actor human:char_01 --to ai:char_02 --utterance "账房的灯熄得早。"
 uv run imms --db imms.db private close --session 雨夜山庄-s001 --room 雨夜山庄-s001-p001
 uv run imms --db imms.db replay --session 雨夜山庄-s001 --out replay.md
+uv run imms --db imms.db branch fork --session 雨夜山庄-s001 --at-round 2 --override-round 2 --override-utterance "我相信赵管事" --out branch_report.json
 ```
 
 LLM 台词（可选）：设 `IMMS_LLM_URL` / `IMMS_LLM_MODEL` 后 `play --llm auto`；未配置时用离线模板。LLM 只写台词，不碰数值与事实。详见 `docs/RUNTIME.md`。
@@ -59,3 +60,5 @@ uv run python -m unittest discover -s tests
 - LLM 输出必须裁剪 `claimed_facts` 并强制 `act_type`；让模型决定"说什么"可以，决定"知道什么"不行。
 - 私聊与圆桌必须共用一个自增 `seq`；分表计数会在并发时错序。
 - 被线索指向的角色应更新 `exposure_risk` 而非对自身的 `suspicion`；否则复盘会出现"自己怀疑自己"。
+- 分叉必须落在轮末快照边界（第 k 轮开分叉 = 恢复第 k−1 轮末），不能从事件日志现推状态；重复施加评价会双重更新关系。
+- GM 的核心能力是分叉回归，不是叙事润色：每次分叉都要校验数值域、信息隔离、事实已知与可解性。
