@@ -528,7 +528,7 @@ def build_corpus(source_root=None, out_dir=None):
 
 def import_corpus(conn, corpus_dir, config_dir):
     """Store accepted corpus scripts and their read-only L1 persona cards."""
-    from . import db, normalize
+    from . import db, normalize, registry
 
     corpus_dir = Path(corpus_dir)
     manifest = read_json(corpus_dir / "manifest.json")
@@ -545,13 +545,24 @@ def import_corpus(conn, corpus_dir, config_dir):
         doc, report = normalize.normalize_persona(onto, Path(config_dir))
         db.save_script(conn, onto)
         db.save_persona_l1(conn, onto["script_id"], doc)
+        registry.register(
+            conn, onto["script_id"], title=onto.get("title"),
+            source_kind=entry.get("source_kind", ""),
+            source_sha256=entry.get("source_sha256", ""),
+            skeleton_version="0", canonical_version=onto.get("schema_version", ""),
+            skeleton_file=entry.get("skeleton_file", ""), script_file=entry.get("script_file", ""),
+        )
+        skeleton_file = entry.get("skeleton_file")
+        if skeleton_file and (corpus_dir / skeleton_file).exists():
+            registry.save_skeleton(conn, onto["script_id"], read_json(corpus_dir / skeleton_file))
+        registry.set_status(conn, onto["script_id"], "normalized", "L1 persona cards generated")
         imported.append({
             "script_id": onto["script_id"],
             "title": onto["title"],
             "characters": len(onto["characters"]),
             "clues": len(onto["clues"]),
-            "victim": onto["evaluation"]["victim_name"],
-            "culprit": onto["evaluation"]["killer_id"],
+            "victim": onto.get("evaluation", {}).get("victim_name"),
+            "culprit": onto.get("evaluation", {}).get("killer_id"),
             "completions": len(onto.get("completions", [])),
             "missing_evidence": len(report.get("missing_evidence", [])),
         })

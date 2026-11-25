@@ -1,8 +1,4 @@
 {
-  "schema_version": "1.0",
-  "generated_at": "2026-11-25T04:31:12+00:00",
-  "source_root": "D:\\github\\Murder-Mystery\\refer",
-  "storage": "corpus/raw keeps source bytes; corpus/scripts keeps project-owned Ontology JSON",
   "admission_rules": [
     "skip if scene search needs mouse/map/image recognition",
     "skip if no declared culprit, evidence chain, stage flow or final decision",
@@ -10,54 +6,30 @@
   ],
   "entries": [
     {
-      "source_id": "deep_sea_echo",
-      "title": "深海回声",
-      "source_kind": "RolePlayingGame JSON",
-      "source_path": "RolePlayingGame-backup-20261022\\backend\\resources\\scripts\\deep_sea_echo.json",
-      "source_sha256": "a78bbe0af522cf810e7fd2eb12a4af60906f72011d9b2c279d54738907df674d",
-      "decision": "import",
-      "reasons": [],
-      "script_id": "rpg_deep_sea_echo",
-      "script_file": "scripts/rpg_deep_sea_echo.json",
       "characters": 4,
-      "clues": 12,
-      "facts": 59,
-      "victim": "钟望",
-      "culprit": "shen_ke",
-      "completions": [
-        {
-          "rule": "R1_victim_annotation",
-          "field": "evaluation.victim_name",
-          "value": "钟望",
-          "basis": "source_text_annotation"
-        },
-        {
-          "rule": "R3_clue_truth_fallback",
-          "field": "clues[sea_handover].reveals_fact_ids",
-          "value": [
-            "f_rpg_deep_sea_echo_truth"
-          ],
-          "basis": "clue not named in evidence_chain; linked to full truth fact"
-        }
-      ],
       "checks": {
-        "char_count": true,
-        "unique_ids": true,
-        "has_truth": true,
-        "has_clues": true,
-        "has_endings": true,
-        "has_timeline": true,
-        "culprit_in_roles": true,
-        "victim_named": true,
-        "clue_refs_valid": true
-      }
+        "canonical_fields": true,
+        "clue_refs_valid": true,
+        "clue_weights_parseable": true
+      },
+      "clues": 12,
+      "completions": 2,
+      "decision": "import",
+      "facts": 59,
+      "raw_files": [
+        "raw/rpg/deep_sea_echo.json"
+      ],
+      "reasons": [],
+      "script_file": "scripts/rpg_deep_sea_echo.json",
+      "script_id": "rpg_deep_sea_echo",
+      "skeleton_file": "skeletons/rpg_deep_sea_echo.json",
+      "source_id": "rpg_json:deep_sea_echo.json",
+      "source_kind": "rpg_json",
+      "source_path": "corpus\\raw\\rpg\\deep_sea_echo.json",
+      "source_sha256": "a78bbe0af522cf810e7fd2eb12a4af60906f72011d9b2c279d54738907df674d",
+      "title": "深海回声"
     },
     {
-      "source_id": "flame_mountain",
-      "title": "西游记·火焰山",
-      "source_kind": "RolePlayingGame JSON",
-      "source_path": "RolePlayingGame-backup-20261022\\backend\\resources\\scripts\\flame_mountain.json",
-      "source_sha256": "d65f957ff0343d2d98537d5d070cbb30e900496053695d0efb6694b1d1fbf845",
       "decision": "skip",
       "reasons": [
         {
@@ -72,217 +44,134 @@
           "code": "no_stage_flow",
           "detail": "stage_flow missing"
         }
-      ]
+      ],
+      "source_id": "flame_mountain",
+      "source_kind": "RolePlayingGame JSON",
+      "source_path": "RolePlayingGame-backup-20261022\\backend\\resources\\scripts\\flame_mountain.json",
+      "source_sha256": "d65f957ff0343d2d98537d5d070cbb30e900496053695d0efb6694b1d1fbf845",
+      "title": "西游记·火焰山"
     },
     {
-      "source_id": "fog_harbor_clocktower",
-      "title": "雾港档案·钟楼夜宴",
-      "source_kind": "RolePlayingGame JSON",
-      "source_path": "RolePlayingGame-backup-20261022\\backend\\resources\\scripts\\fog_harbor_clocktower.json",
-      "source_sha256": "44f3575826417b7c9c42f9762e260f87a612ef4f4b8c2197c1a4ef6eba1ff037",
-      "decision": "import",
-      "reasons": [],
-      "script_id": "rpg_fog_harbor_clocktower",
-      "script_file": "scripts/rpg_fog_harbor_clocktower.json",
       "characters": 4,
+      "checks": {
+        "canonical_fields": true,
+        "clue_refs_valid": true,
+        "clue_weights_parseable": true
+      },
       "clues": 7,
+      "completions": 3,
+      "decision": "import",
       "facts": 31,
-      "victim": "陆绍庭",
-      "culprit": "gu_linchuan",
-      "completions": [
-        {
-          "rule": "R1_victim_annotation",
-          "field": "evaluation.victim_name",
-          "value": "陆绍庭",
-          "basis": "source_text_annotation"
-        },
-        {
-          "rule": "R3_clue_truth_fallback",
-          "field": "clues[clue_passport_case].reveals_fact_ids",
-          "value": [
-            "f_rpg_fog_harbor_clocktower_truth"
-          ],
-          "basis": "clue not named in evidence_chain; linked to full truth fact"
-        },
-        {
-          "rule": "R5_inquiry_gap",
-          "field": "clues[]",
-          "value": "rpg_fog_harbor_clocktower_gap_inquiry",
-          "basis": "evidence chain names material held only in private memory; prompt added, content not leaked"
-        }
+      "raw_files": [
+        "raw/rpg/fog_harbor_clocktower.json"
       ],
-      "checks": {
-        "char_count": true,
-        "unique_ids": true,
-        "has_truth": true,
-        "has_clues": true,
-        "has_endings": true,
-        "has_timeline": true,
-        "culprit_in_roles": true,
-        "victim_named": true,
-        "clue_refs_valid": true
-      }
+      "reasons": [],
+      "script_file": "scripts/rpg_fog_harbor_clocktower.json",
+      "script_id": "rpg_fog_harbor_clocktower",
+      "skeleton_file": "skeletons/rpg_fog_harbor_clocktower.json",
+      "source_id": "rpg_json:fog_harbor_clocktower.json",
+      "source_kind": "rpg_json",
+      "source_path": "corpus\\raw\\rpg\\fog_harbor_clocktower.json",
+      "source_sha256": "44f3575826417b7c9c42f9762e260f87a612ef4f4b8c2197c1a4ef6eba1ff037",
+      "title": "雾港档案·钟楼夜宴"
     },
     {
-      "source_id": "last_train",
-      "title": "末班列车",
-      "source_kind": "RolePlayingGame JSON",
-      "source_path": "RolePlayingGame-backup-20261022\\backend\\resources\\scripts\\last_train.json",
-      "source_sha256": "8569f331ea13d20222b5030761bd8cbe858f896b28b2d13057c353ceeb3172bb",
-      "decision": "import",
-      "reasons": [],
-      "script_id": "rpg_last_train",
-      "script_file": "scripts/rpg_last_train.json",
       "characters": 5,
+      "checks": {
+        "canonical_fields": true,
+        "clue_refs_valid": true,
+        "clue_weights_parseable": true
+      },
       "clues": 16,
+      "completions": 1,
+      "decision": "import",
       "facts": 99,
-      "victim": "魏舟",
-      "culprit": "lt_ren_rui",
-      "completions": [
-        {
-          "rule": "R1_victim_annotation",
-          "field": "evaluation.victim_name",
-          "value": "魏舟",
-          "basis": "source_text_annotation"
-        }
+      "raw_files": [
+        "raw/rpg/last_train.json"
       ],
-      "checks": {
-        "char_count": true,
-        "unique_ids": true,
-        "has_truth": true,
-        "has_clues": true,
-        "has_endings": true,
-        "has_timeline": true,
-        "culprit_in_roles": true,
-        "victim_named": true,
-        "clue_refs_valid": true
-      }
+      "reasons": [],
+      "script_file": "scripts/rpg_last_train.json",
+      "script_id": "rpg_last_train",
+      "skeleton_file": "skeletons/rpg_last_train.json",
+      "source_id": "rpg_json:last_train.json",
+      "source_kind": "rpg_json",
+      "source_path": "corpus\\raw\\rpg\\last_train.json",
+      "source_sha256": "8569f331ea13d20222b5030761bd8cbe858f896b28b2d13057c353ceeb3172bb",
+      "title": "末班列车"
     },
     {
-      "source_id": "old_house_corridor",
-      "title": "旧宅回廊",
-      "source_kind": "RolePlayingGame JSON",
-      "source_path": "RolePlayingGame-backup-20261022\\backend\\resources\\scripts\\old_house_corridor.json",
-      "source_sha256": "824db5a4ac73b78f3bde769f19aedbfac846feb0533248bd15677d597bdeef22",
-      "decision": "import",
-      "reasons": [],
-      "script_id": "rpg_old_house_corridor",
-      "script_file": "scripts/rpg_old_house_corridor.json",
       "characters": 5,
+      "checks": {
+        "canonical_fields": true,
+        "clue_refs_valid": true,
+        "clue_weights_parseable": true
+      },
       "clues": 13,
+      "completions": 1,
+      "decision": "import",
       "facts": 71,
-      "victim": "姜慎",
-      "culprit": "pei_yan",
-      "completions": [
-        {
-          "rule": "R1_victim_annotation",
-          "field": "evaluation.victim_name",
-          "value": "姜慎",
-          "basis": "source_text_annotation"
-        }
+      "raw_files": [
+        "raw/rpg/old_house_corridor.json"
       ],
-      "checks": {
-        "char_count": true,
-        "unique_ids": true,
-        "has_truth": true,
-        "has_clues": true,
-        "has_endings": true,
-        "has_timeline": true,
-        "culprit_in_roles": true,
-        "victim_named": true,
-        "clue_refs_valid": true
-      }
+      "reasons": [],
+      "script_file": "scripts/rpg_old_house_corridor.json",
+      "script_id": "rpg_old_house_corridor",
+      "skeleton_file": "skeletons/rpg_old_house_corridor.json",
+      "source_id": "rpg_json:old_house_corridor.json",
+      "source_kind": "rpg_json",
+      "source_path": "corpus\\raw\\rpg\\old_house_corridor.json",
+      "source_sha256": "824db5a4ac73b78f3bde769f19aedbfac846feb0533248bd15677d597bdeef22",
+      "title": "旧宅回廊"
     },
     {
-      "source_id": "rainy_night_letter",
-      "title": "雨夜来信",
-      "source_kind": "RolePlayingGame JSON",
-      "source_path": "RolePlayingGame-backup-20261022\\backend\\resources\\scripts\\rainy_night_letter.json",
-      "source_sha256": "6714d1dca377c081fef445449eaee83133204fa90f04c69da9fe43f3889124f9",
-      "decision": "import",
-      "reasons": [],
-      "script_id": "rpg_rainy_night_letter",
-      "script_file": "scripts/rpg_rainy_night_letter.json",
       "characters": 3,
+      "checks": {
+        "canonical_fields": true,
+        "clue_refs_valid": true,
+        "clue_weights_parseable": true
+      },
       "clues": 13,
-      "facts": 46,
-      "victim": "秦重",
-      "culprit": "rnl_shen_yu",
-      "completions": [
-        {
-          "rule": "R1_victim_annotation",
-          "field": "evaluation.victim_name",
-          "value": "秦重",
-          "basis": "source_text_annotation"
-        },
-        {
-          "rule": "R3_clue_truth_fallback",
-          "field": "clues[rnl_clue_body].reveals_fact_ids",
-          "value": [
-            "f_rpg_rainy_night_letter_truth"
-          ],
-          "basis": "clue not named in evidence_chain; linked to full truth fact"
-        }
-      ],
-      "checks": {
-        "char_count": true,
-        "unique_ids": true,
-        "has_truth": true,
-        "has_clues": true,
-        "has_endings": true,
-        "has_timeline": true,
-        "culprit_in_roles": true,
-        "victim_named": true,
-        "clue_refs_valid": true
-      }
-    },
-    {
-      "source_id": "silent_theater",
-      "title": "无声剧院",
-      "source_kind": "RolePlayingGame JSON",
-      "source_path": "RolePlayingGame-backup-20261022\\backend\\resources\\scripts\\silent_theater.json",
-      "source_sha256": "56dc6e6f14b3a5549d61769d06a6da0844b446fc3acdce311d77db3a47bcf32f",
+      "completions": 2,
       "decision": "import",
-      "reasons": [],
-      "script_id": "rpg_silent_theater",
-      "script_file": "scripts/rpg_silent_theater.json",
-      "characters": 6,
-      "clues": 18,
-      "facts": 101,
-      "victim": "范策",
-      "culprit": "gan_ji",
-      "completions": [
-        {
-          "rule": "R1_victim_annotation",
-          "field": "evaluation.victim_name",
-          "value": "范策",
-          "basis": "source_text_annotation"
-        },
-        {
-          "rule": "R3_clue_truth_fallback",
-          "field": "clues[theater_access_scope].reveals_fact_ids",
-          "value": [
-            "f_rpg_silent_theater_truth"
-          ],
-          "basis": "clue not named in evidence_chain; linked to full truth fact"
-        }
+      "facts": 46,
+      "raw_files": [
+        "raw/rpg/rainy_night_letter.json"
       ],
-      "checks": {
-        "char_count": true,
-        "unique_ids": true,
-        "has_truth": true,
-        "has_clues": true,
-        "has_endings": true,
-        "has_timeline": true,
-        "culprit_in_roles": true,
-        "victim_named": true,
-        "clue_refs_valid": true
-      }
+      "reasons": [],
+      "script_file": "scripts/rpg_rainy_night_letter.json",
+      "script_id": "rpg_rainy_night_letter",
+      "skeleton_file": "skeletons/rpg_rainy_night_letter.json",
+      "source_id": "rpg_json:rainy_night_letter.json",
+      "source_kind": "rpg_json",
+      "source_path": "corpus\\raw\\rpg\\rainy_night_letter.json",
+      "source_sha256": "6714d1dca377c081fef445449eaee83133204fa90f04c69da9fe43f3889124f9",
+      "title": "雨夜来信"
     },
     {
-      "source_id": "mossvale_fog_lamp",
-      "title": "雾灯未眠",
-      "source_kind": "mossvale JavaScript game",
+      "characters": 6,
+      "checks": {
+        "canonical_fields": true,
+        "clue_refs_valid": true,
+        "clue_weights_parseable": true
+      },
+      "clues": 18,
+      "completions": 2,
+      "decision": "import",
+      "facts": 101,
+      "raw_files": [
+        "raw/rpg/silent_theater.json"
+      ],
+      "reasons": [],
+      "script_file": "scripts/rpg_silent_theater.json",
+      "script_id": "rpg_silent_theater",
+      "skeleton_file": "skeletons/rpg_silent_theater.json",
+      "source_id": "rpg_json:silent_theater.json",
+      "source_kind": "rpg_json",
+      "source_path": "corpus\\raw\\rpg\\silent_theater.json",
+      "source_sha256": "56dc6e6f14b3a5549d61769d06a6da0844b446fc3acdce311d77db3a47bcf32f",
+      "title": "无声剧院"
+    },
+    {
       "decision": "skip",
       "reasons": [
         {
@@ -299,12 +188,12 @@
           "path": "mossvale/mystery/shared/layout.mjs",
           "sha256": "57e2c0280a69741a747bfd357b35f42264c00599d21724d2b4b474e9af353652"
         }
-      ]
+      ],
+      "source_id": "mossvale_fog_lamp",
+      "source_kind": "mossvale JavaScript game",
+      "title": "雾灯未眠"
     },
     {
-      "source_id": "mossvale_suspect7",
-      "title": "第7号嫌疑人",
-      "source_kind": "mossvale JavaScript game",
       "decision": "skip",
       "reasons": [
         {
@@ -321,12 +210,20 @@
           "path": "mossvale/mystery/shared/suspect7/cast.mjs",
           "sha256": "fbd253b7ffe55a85fda5b9284a37ac90776e10906bf520b613e5a24e90b8cf52"
         }
-      ]
+      ],
+      "source_id": "mossvale_suspect7",
+      "source_kind": "mossvale JavaScript game",
+      "title": "第7号嫌疑人"
     }
   ],
+  "generated_at": "2026-11-25T04:54:21+00:00",
+  "pipeline": "ingest",
+  "schema_version": "1.0",
+  "source_root": "D:\\github\\Murder-Mystery\\refer",
+  "storage": "corpus/raw keeps source bytes; corpus/scripts keeps project-owned Ontology JSON",
   "summary": {
-    "total": 9,
     "import": 6,
-    "skip": 3
+    "skip": 3,
+    "total": 9
   }
 }

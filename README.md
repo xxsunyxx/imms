@@ -69,6 +69,31 @@ uv run imms --db corpus.db import-corpus --dir corpus
 
 `corpus/` 保存来源副本、标准 Ontology 与准入清单；`refer/` 删除后仍可重建数据库。本次从 9 个候选中收 6 个纯文本推理本，放弃 3 个：mossvale 两个故事依赖鼠标实景搜证，《西游记·火焰山》没有凶手/证据链/结局裁决。缺失字段的补全只使用来源已有证据，全部记在 `completions[]` 与 manifest 中；规则见 `docs/CORPUS.md`。
 
+## 统一摄入：先骨架，再归一化
+
+```bash
+uv run imms ingest detect --path <任意来源>
+uv run imms ingest skeleton --path <来源> --llm auto --out skeleton.json
+uv run imms ingest convert --path <来源> --llm template --out ontology.json
+uv run imms ingest add --path <来源> --root corpus
+uv run imms ingest batch --path <目录> --root corpus
+uv run imms ingest report && uv run imms ingest validate --file corpus/scripts/rpg_last_train.json
+```
+
+YAML / 盒装本 Markdown / RolePlayingGame JSON / 旧式分段文本 / 标准 Ontology 走同一条 `detect → admit → skeleton → 补全 → canonical` 管线；需要鼠标搜证或图片认物的本子直接 SKIP 并留原因。LLM 只在固定槽位里摘要，越界内容丢弃，不生成人物、时间、事实或数值。详见 `docs/INGEST.md`、`docs/REGISTRY.md`。
+
+## 剧本管理
+
+```bash
+uv run imms script list --status normalized
+uv run imms script show --script-id rpg_last_train
+uv run imms script skeleton --script-id rpg_last_train --version 1
+uv run imms script history --script-id rpg_last_train
+uv run imms script promote --script-id rpg_last_train --status ready --notes "audit passed"
+```
+
+每个本子有生命周期（staged → normalized → ready → archived，或 rejected）、按版本追加的骨架和事件日志。`parse` / `import-corpus` 会自动登记；详见 `docs/REGISTRY.md`。
+
 ## 单测
 
 ```bash
@@ -92,6 +117,8 @@ uv run python -m unittest discover -s tests
 - `docs/INFOGUARD.md` — 信息边界四层引擎与参考取舍
 - `docs/BOXED.md` — 100 套盒装本批量导入与映射
 - `docs/CORPUS.md` — 自持语料库、准入门禁与缺陷补全
+- `docs/INGEST.md` — 统一摄入管线、格式适配与自持存储
+- `docs/REGISTRY.md` — 骨架夹具、LLM 边界与剧本生命周期管理
 - `docs/SOLVER.md` — 可解性求解器、真值模型规则与时间线系统
 - `docs/GM.md` — GM 决策策略、分支树、合并回滚与叙事 diff
 - `docs/RETRO.md` — 复盘回溯评估指标与决策时点复核
@@ -119,3 +146,6 @@ uv run python -m unittest discover -s tests
 - 完整真相是证据链合成的结果，不该要求单条线索逐字揭示；但"只回指完整真相"的 R3/R5 补全是提示而不是证据链接，必须单独标记。
 - 时间线没有时间戳只是 warning，不是矛盾；只有真实的时间倒挂才阻断可解性判定。
 - 复盘评分里的动机指认必须显式提供（`scripted.motive_fact_id`）；不能替玩家把"投中凶手"自动算成"动机也正确"。
+- 骨架必须先于归一化：LLM 只做槽内摘要，任何未在原文逐字出现的句子都丢弃；否则"补全"会变成编剧情。
+- 结构化本子在 `admit` 之后才调用下游 parser；否则 `no_case` 这类叙事片段会用解析异常盖掉真正的门禁原因。
+- manifest 汇总必须在每次 upsert 后重算；两个不同 SKIP 文件可能哈希相同，不能只按哈希去重。

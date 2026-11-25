@@ -1,19 +1,738 @@
 {
-  "schema_version": "0.4",
-  "script_id": "rpg_fog_harbor_clocktower",
-  "title": "雾港档案·钟楼夜宴",
   "brief": "来源：RolePlayingGame/fog_harbor_clocktower；4人；3幕",
-  "world": {
-    "mode": "truth_reconstruction",
-    "stages": 3,
-    "player_selectable": "shen_zhiwei,gu_linchuan,zhou_jiming,xu_yanzhou",
-    "source_kind": "RolePlayingGame JSON",
-    "source_provenance": {
-      "kind": "unknown",
-      "creator": "项目既有内置样例（作者未登记）",
-      "source": "原有《雾港档案·钟楼夜宴》剧本；本次仅规范字段和证据引用，未据此认定外部出处或授权。"
+  "characters": [
+    {
+      "backstory": "查清死亡真相，同时隐瞒自己准备离开陆家的计划。",
+      "canon_evidence": [],
+      "goals": [
+        "查清死亡真相，同时隐瞒自己准备离开陆家的计划。"
+      ],
+      "id": "shen_zhiwei",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "szw_s1_private",
+        "szw_s2_label",
+        "szw_s3_serial"
+      ],
+      "lexicon": "",
+      "name": "沈知微",
+      "personality": "冷静敏锐，不轻易相信任何人，对细节有近乎苛刻的记忆。",
+      "public_identity": "文物修复师，陆绍庭的养女，也是遗产的第一顺位继承人。",
+      "public_profile": "文物修复师，陆绍庭的养女，也是遗产的第一顺位继承人。",
+      "role": "文物修复师，陆绍庭的养女，也是遗产的第一顺位继承人。",
+      "speaking_style": "冷静敏锐，不轻易相信任何人，对细节有近乎苛刻的记忆。",
+      "timeline": []
+    },
+    {
+      "backstory": "隐藏自己调换急救药并伪造义诊账目的事实。",
+      "canon_evidence": [],
+      "goals": [
+        "隐藏自己调换急救药并伪造义诊账目的事实。"
+      ],
+      "id": "gu_linchuan",
+      "is_killer": true,
+      "is_victim": false,
+      "known_fact_ids": [
+        "glc_s1_visit",
+        "glc_s2_poison",
+        "glc_s3_motive"
+      ],
+      "lexicon": "",
+      "name": "顾临川",
+      "personality": "克制、礼貌、善于转移问题，面对医学细节时极有控制欲。",
+      "public_identity": "陆家的私人医生，负责陆绍庭多年的心脏病治疗。",
+      "public_profile": "陆家的私人医生，负责陆绍庭多年的心脏病治疗。",
+      "role": "陆家的私人医生，负责陆绍庭多年的心脏病治疗。",
+      "speaking_style": "克制、礼貌、善于转移问题，面对医学细节时极有控制欲。",
+      "timeline": []
+    },
+    {
+      "backstory": "保护自己私自复制账本的行为，并让真正的凶手承担责任。",
+      "canon_evidence": [],
+      "goals": [
+        "保护自己私自复制账本的行为，并让真正的凶手承担责任。"
+      ],
+      "id": "zhou_jiming",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "zjm_s1_will",
+        "zjm_s2_ledger",
+        "zjm_s3_photo"
+      ],
+      "lexicon": "",
+      "name": "周既明",
+      "personality": "谨慎圆滑，习惯保留证据，说话总给自己留下余地。",
+      "public_identity": "陆家的法律顾问，负责遗嘱与基金会账目。",
+      "public_profile": "陆家的法律顾问，负责遗嘱与基金会账目。",
+      "role": "陆家的法律顾问，负责遗嘱与基金会账目。",
+      "speaking_style": "谨慎圆滑，习惯保留证据，说话总给自己留下余地。",
+      "timeline": []
+    },
+    {
+      "backstory": "证明密室没有机关，并解释自己为何调整过钟楼时间。",
+      "canon_evidence": [],
+      "goals": [
+        "证明密室没有机关，并解释自己为何调整过钟楼时间。"
+      ],
+      "id": "xu_yanzhou",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "xyz_s1_clock",
+        "xyz_s2_doctor",
+        "xyz_s3_time"
+      ],
+      "lexicon": "",
+      "name": "许砚舟",
+      "personality": "沉默稳重，忠于事实，但会为了陆家的体面隐瞒丑闻。",
+      "public_identity": "临潮公馆管家，熟悉宅邸钥匙、钟表和每个人的生活习惯。",
+      "public_profile": "临潮公馆管家，熟悉宅邸钥匙、钟表和每个人的生活习惯。",
+      "role": "临潮公馆管家，熟悉宅邸钥匙、钟表和每个人的生活习惯。",
+      "speaking_style": "沉默稳重，忠于事实，但会为了陆家的体面隐瞒丑闻。",
+      "timeline": []
     }
+  ],
+  "clue_fact_map": {
+    "clue_aconite": [
+      "f_rpg_fog_harbor_clocktower_chain01"
+    ],
+    "clue_aconite 药柜夹层发现少量乌头碱粉末，登记册上最后一次领用签名模仿得很像陆绍庭。|logLR:gu_linchuan=2.0": [
+      "f_rpg_fog_harbor_clocktower_chain01"
+    ],
+    "clue_burned_ledger": [
+      "f_rpg_fog_harbor_clocktower_chain02"
+    ],
+    "clue_burned_ledger 未烧尽的账页记录了三笔义诊基金支出，收款公司的联系人缩写为 G.L.C。|logLR:gu_linchuan=2.0": [
+      "f_rpg_fog_harbor_clocktower_chain02"
+    ],
+    "clue_clock_offset": [
+      "f_rpg_fog_harbor_clocktower_chain03"
+    ],
+    "clue_clock_offset 维护记录确认钟楼当晚慢了十四分钟。怀表显示的是二十三点二十六分，对应真实时间二十三点四十分。|logLR:gu_linchuan=2.0": [
+      "f_rpg_fog_harbor_clocktower_chain03"
+    ],
+    "clue_locked_door": [
+      "f_rpg_fog_harbor_clocktower_chain01"
+    ],
+    "clue_locked_door 门锁只能从室内转动，锁舌与窗框都没有工具痕迹。密室本身并非机关。|logLR:gu_linchuan=1.5": [
+      "f_rpg_fog_harbor_clocktower_chain01"
+    ],
+    "clue_medicine_seal": [
+      "f_rpg_fog_harbor_clocktower_chain01"
+    ],
+    "clue_medicine_seal 死者随身药瓶的封签被重新粘贴过，瓶盖内侧残留极淡的苦杏仁气味。|logLR:gu_linchuan=1.5": [
+      "f_rpg_fog_harbor_clocktower_chain01"
+    ],
+    "clue_passport_case": [
+      "f_rpg_fog_harbor_clocktower_truth"
+    ],
+    "clue_passport_case 抽屉里有一个空护照袋和当天购买的离港船票，持有人是沈知微。|logLR:gu_linchuan=1.5": [
+      "f_rpg_fog_harbor_clocktower_truth"
+    ],
+    "rpg_fog_harbor_clocktower_gap_inquiry": [
+      "f_rpg_fog_harbor_clocktower_truth"
+    ]
   },
+  "clue_pool": [
+    "clue_medicine_seal 死者随身药瓶的封签被重新粘贴过，瓶盖内侧残留极淡的苦杏仁气味。|logLR:gu_linchuan=1.5",
+    "clue_locked_door 门锁只能从室内转动，锁舌与窗框都没有工具痕迹。密室本身并非机关。|logLR:gu_linchuan=1.5",
+    "clue_passport_case 抽屉里有一个空护照袋和当天购买的离港船票，持有人是沈知微。|logLR:gu_linchuan=1.5",
+    "clue_aconite 药柜夹层发现少量乌头碱粉末，登记册上最后一次领用签名模仿得很像陆绍庭。|logLR:gu_linchuan=2.0",
+    "clue_burned_ledger 未烧尽的账页记录了三笔义诊基金支出，收款公司的联系人缩写为 G.L.C。|logLR:gu_linchuan=2.0",
+    "clue_clock_offset 维护记录确认钟楼当晚慢了十四分钟。怀表显示的是二十三点二十六分，对应真实时间二十三点四十分。|logLR:gu_linchuan=2.0",
+    "rpg_fog_harbor_clocktower_gap_inquiry 证据链要求核对“账本照片”与“药柜行踪”。相关细节只存在于个别角色的私有记忆中，不会自动公开；请通过问询/私聊取得，不要|logLR:gu_linchuan=2.0"
+  ],
+  "clues": [
+    {
+      "content": "死者随身药瓶的封签被重新粘贴过，瓶盖内侧残留极淡的苦杏仁气味。",
+      "id": "clue_medicine_seal",
+      "reveals_fact_ids": [
+        "f_rpg_fog_harbor_clocktower_chain01"
+      ],
+      "source_target": "archive_desk",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "档案室书桌",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "门锁只能从室内转动，锁舌与窗框都没有工具痕迹。密室本身并非机关。",
+      "id": "clue_locked_door",
+      "reveals_fact_ids": [
+        "f_rpg_fog_harbor_clocktower_chain01"
+      ],
+      "source_target": "archive_desk",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "档案室书桌",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "抽屉里有一个空护照袋和当天购买的离港船票，持有人是沈知微。",
+      "id": "clue_passport_case",
+      "reveals_fact_ids": [
+        "f_rpg_fog_harbor_clocktower_truth"
+      ],
+      "source_target": "restoration_room",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "文物修复室",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "药柜夹层发现少量乌头碱粉末，登记册上最后一次领用签名模仿得很像陆绍庭。",
+      "id": "clue_aconite",
+      "reveals_fact_ids": [
+        "f_rpg_fog_harbor_clocktower_chain01"
+      ],
+      "source_target": "medicine_cabinet",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "走廊药柜",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "未烧尽的账页记录了三笔义诊基金支出，收款公司的联系人缩写为 G.L.C。",
+      "id": "clue_burned_ledger",
+      "reveals_fact_ids": [
+        "f_rpg_fog_harbor_clocktower_chain02"
+      ],
+      "source_target": "fireplace",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "档案室壁炉",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "维护记录确认钟楼当晚慢了十四分钟。怀表显示的是二十三点二十六分，对应真实时间二十三点四十分。",
+      "id": "clue_clock_offset",
+      "reveals_fact_ids": [
+        "f_rpg_fog_harbor_clocktower_chain03"
+      ],
+      "source_target": "clocktower_log",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "钟楼维护记录",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "completion": "R5_inquiry_gap",
+      "content": "证据链要求核对“账本照片”与“药柜行踪”。相关细节只存在于个别角色的私有记忆中，不会自动公开；请通过问询/私聊取得，不要凭臆测补造。",
+      "id": "rpg_fog_harbor_clocktower_gap_inquiry",
+      "reveals_fact_ids": [
+        "f_rpg_fog_harbor_clocktower_truth"
+      ],
+      "stage": 1,
+      "title": "待核对的证词缺口",
+      "truth_value": true,
+      "type": "inquiry",
+      "visibility": "finder"
+    }
+  ],
+  "completions": [
+    {
+      "basis": "source_text_annotation",
+      "field": "evaluation.victim_name",
+      "rule": "R1_victim_annotation",
+      "value": "陆绍庭"
+    },
+    {
+      "basis": "clue not named in evidence_chain; linked to full truth fact",
+      "field": "clues[clue_passport_case].reveals_fact_ids",
+      "rule": "R3_clue_truth_fallback",
+      "value": [
+        "f_rpg_fog_harbor_clocktower_truth"
+      ]
+    },
+    {
+      "basis": "evidence chain names material held only in private memory; prompt added, content not leaked",
+      "field": "clues[]",
+      "rule": "R5_inquiry_gap",
+      "value": "rpg_fog_harbor_clocktower_gap_inquiry"
+    }
+  ],
+  "endings": [
+    "正确指认：最终指认成立。你们找到了真正的凶手，DM 恭喜仍坚持调查的人，并将公开完整作案过程。",
+    "错误指认：最终指认未能成立。{selected_role_name}并非真正的凶手，案件以错误指认告终，真正的作案者仍藏在未被闭合的证据链后。"
+  ],
+  "evaluation": {
+    "culprit_basis": "truth.culprit_role_id",
+    "has_murder": true,
+    "killer_id": "gu_linchuan",
+    "required_fact_ids": [
+      "f_rpg_fog_harbor_clocktower_truth",
+      "f_rpg_fog_harbor_clocktower_victim",
+      "f_rpg_fog_harbor_clocktower_chain01",
+      "f_rpg_fog_harbor_clocktower_chain02",
+      "f_rpg_fog_harbor_clocktower_chain03"
+    ],
+    "role_kind": "declared_killer",
+    "source_id": "fog_harbor_clocktower",
+    "victim_basis": "source_text_annotation",
+    "victim_name": "陆绍庭"
+  },
+  "facts": [
+    {
+      "content": "暴雨封锁雾港，收藏家陆绍庭在临潮公馆的档案室内离奇死亡。房门从内部反锁，壁炉里有未烧尽的账页，桌上的怀表停在二十三点二十六分。留在公馆里的四个人都与死者有秘密，也都没有完整的不在场证明。",
+      "core": true,
+      "id": "f_rpg_fog_harbor_clocktower_pub",
+      "keywords": [
+        "暴雨封锁雾港",
+        "房门从内部反锁",
+        "壁炉里有未烧尽的账页",
+        "桌上的怀表停在二十三点二十六分",
+        "留在公馆里的四个人都与死者有秘密",
+        "也都没有完整的不在场证明"
+      ],
+      "type": "background",
+      "visibility": "public"
+    },
+    {
+      "content": "死者：陆绍庭。依据：source_text_annotation。",
+      "core": true,
+      "id": "f_rpg_fog_harbor_clocktower_victim",
+      "keywords": [
+        "死者",
+        "陆绍庭",
+        "依据"
+      ],
+      "type": "victim",
+      "visibility": "public"
+    },
+    {
+      "content": "顾临川长期侵吞义诊基金。陆绍庭发现账目问题并准备报警后，顾临川提前调换了他的急救药。陆绍庭独自进入档案室后心脏不适，服下含乌头碱的假药死亡，因此房门始终从内部反锁。怀表受压停在二十三点二十六分，是因为公馆钟表慢了十四分钟；真实死亡时间为二十三点四十分。密室只是毒杀造成的假象。",
+      "core": true,
+      "id": "f_rpg_fog_harbor_clocktower_truth",
+      "keywords": [
+        "顾临川长期侵吞义诊基金",
+        "陆绍庭发现账目问题并准备报警后",
+        "顾临川提前调换了他的急救药",
+        "陆绍庭独自进入档案室后心脏不适",
+        "服下含乌头碱的假药死亡",
+        "因此房门始终从内部反锁",
+        "怀表受压停在二十三点二十六分",
+        "是因为公馆钟表慢了十四分钟",
+        "真实死亡时间为二十三点四十分",
+        "密室只是毒杀造成的假象"
+      ],
+      "type": "truth",
+      "visibility": "truth"
+    },
+    {
+      "content": "stage_1 众人确认档案室没有外部入侵痕迹，开始核对停电前后的行踪与时间。",
+      "core": false,
+      "id": "f_rpg_fog_harbor_clocktower_t01",
+      "keywords": [
+        "stage_1",
+        "众人确认档案室没有外部入侵痕迹",
+        "开始核对停电前后的行踪与时间"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "stage_2 药柜、账页和证词把调查方向指向被调换的急救药与义诊基金。",
+      "core": false,
+      "id": "f_rpg_fog_harbor_clocktower_t02",
+      "keywords": [
+        "stage_2",
+        "药柜"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "stage_3 药瓶批号、账本照片和钟楼时差闭合证据链，证明顾临川提前布置了毒杀。",
+      "core": false,
+      "id": "f_rpg_fog_harbor_clocktower_t03",
+      "keywords": [
+        "stage_3",
+        "药瓶批号",
+        "账本照片和钟楼时差闭合证据链",
+        "证明顾临川提前布置了毒杀"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "密室可由提前调换急救药形成，不要求凶手在死亡时进入房间。 封签重贴、药柜毒物与从内反锁且无破坏的门窗共同支持提前布置毒杀；药瓶封签本身不能单独指认凶手。",
+      "core": true,
+      "id": "f_rpg_fog_harbor_clocktower_chain01",
+      "keywords": [
+        "密室可由提前调换急救药形成",
+        "不要求凶手在死亡时进入房间",
+        "封签重贴",
+        "药瓶封签本身不能单独指认凶手"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "义诊基金账目提供顾临川的作案动机线索。 残账联系人缩写 G.L.C. 与顾临川相符，需要结合角色提供的账本照片及药柜行踪核对，不能只凭缩写定罪。",
+      "core": true,
+      "id": "f_rpg_fog_harbor_clocktower_chain02",
+      "keywords": [
+        "残账联系人缩写",
+        "G.L.C.",
+        "与顾临川相符",
+        "不能只凭缩写定罪"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "怀表显示时间必须校准后再用于比对证词。 维护记录记录十四分钟误差，可将二十三点二十六分校准为二十三点四十分，再核对各角色不在场证明。",
+      "core": true,
+      "id": "f_rpg_fog_harbor_clocktower_chain03",
+      "keywords": [
+        "维护记录记录十四分钟误差",
+        "再核对各角色不在场证明"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "{'role_id': '*', 'until_stage': 2, 'keywords': ['乌头碱', '调换急救药', '药瓶被调换'], 'message': '第一阶段尚未完成药物检验，不能提前确认毒物或换药事实。'}",
+      "core": false,
+      "id": "f_rpg_fog_harbor_clocktower_lock01",
+      "keywords": [
+        "role_id",
+        "until_stage",
+        "2,",
+        "keywords",
+        "乌头碱",
+        "调换急救药",
+        "药瓶被调换",
+        "message",
+        "第一阶段尚未完成药物检验",
+        "不能提前确认毒物或换药事实"
+      ],
+      "type": "plot_lock",
+      "visibility": "truth"
+    },
+    {
+      "content": "{'role_id': '*', 'until_stage': 3, 'keywords': ['顾临川是凶手', '凶手是顾临川', '侵吞义诊基金'], 'message': '当前证据链尚未闭合，不能提前公布凶手与完整动机。'}",
+      "core": false,
+      "id": "f_rpg_fog_harbor_clocktower_lock02",
+      "keywords": [
+        "role_id",
+        "until_stage",
+        "3,",
+        "keywords",
+        "顾临川是凶手",
+        "凶手是顾临川",
+        "侵吞义诊基金",
+        "message",
+        "当前证据链尚未闭合",
+        "不能提前公布凶手与完整动机"
+      ],
+      "type": "plot_lock",
+      "visibility": "truth"
+    },
+    {
+      "content": "晚宴前你与陆绍庭激烈争吵，因为他扣下了你的护照。停电时你独自在修复室，没有人能证明。",
+      "core": false,
+      "id": "szw_s1_private",
+      "keywords": [
+        "晚宴前你与陆绍庭激烈争吵",
+        "因为他扣下了你的护照",
+        "停电时你独自在修复室",
+        "没有人能证明"
+      ],
+      "owner": "shen_zhiwei",
+      "type": "secret",
+      "visibility": "private"
+    },
+    {
+      "content": "陆绍庭死于反锁的档案室，门窗没有破坏痕迹，书桌上的怀表停在二十三点二十六分。",
+      "core": false,
+      "id": "public_s1_case",
+      "keywords": [
+        "陆绍庭死于反锁的档案室",
+        "门窗没有破坏痕迹",
+        "书桌上的怀表停在二十三点二十六分"
+      ],
+      "owner": "dm",
+      "type": "public",
+      "visibility": "public"
+    },
+    {
+      "content": "你想起晚宴前看见顾临川独自在药柜旁。他离开后，陆绍庭随身药瓶的封签方向与平时相反。",
+      "core": false,
+      "id": "szw_s2_label",
+      "keywords": [
+        "他离开后"
+      ],
+      "owner": "shen_zhiwei",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你修复过药瓶上的旧标签，记得原瓶批号末尾是 17；尸体旁药瓶的批号末尾却是 71，说明药瓶被调换过。",
+      "core": false,
+      "id": "szw_s3_serial",
+      "keywords": [
+        "你修复过药瓶上的旧标签",
+        "记得原瓶批号末尾是",
+        "17",
+        "尸体旁药瓶的批号末尾却是",
+        "71",
+        "说明药瓶被调换过"
+      ],
+      "owner": "shen_zhiwei",
+      "type": "reveal",
+      "visibility": "private"
+    },
+    {
+      "content": "你在二十二点五十分为陆绍庭做过检查，并告诉所有人他的心脏状况稳定。你隐瞒了自己随后又返回药柜。",
+      "core": false,
+      "id": "glc_s1_visit",
+      "keywords": [
+        "并告诉所有人他的心脏状况稳定",
+        "你隐瞒了自己随后又返回药柜"
+      ],
+      "owner": "gu_linchuan",
+      "type": "secret",
+      "visibility": "private"
+    },
+    {
+      "content": "陆绍庭死于反锁的档案室，门窗没有破坏痕迹，书桌上的怀表停在二十三点二十六分。",
+      "core": false,
+      "id": "gu_linchuan_public_s1_case",
+      "keywords": [
+        "陆绍庭死于反锁的档案室",
+        "门窗没有破坏痕迹",
+        "书桌上的怀表停在二十三点二十六分"
+      ],
+      "owner": "dm",
+      "type": "public",
+      "visibility": "public"
+    },
+    {
+      "content": "你提前把陆绍庭的急救药换成含乌头碱的药片。他在档案室发病后主动服药，因此密室不需要有人进出。",
+      "core": false,
+      "id": "glc_s2_poison",
+      "keywords": [
+        "他在档案室发病后主动服药",
+        "因此密室不需要有人进出"
+      ],
+      "owner": "gu_linchuan",
+      "type": "culprit_secret",
+      "visibility": "private"
+    },
+    {
+      "content": "陆绍庭掌握你侵吞义诊基金的完整账本，并准备在第二天报警。你可以继续嫁祸他人，也可以选择承认。",
+      "core": false,
+      "id": "glc_s3_motive",
+      "keywords": [
+        "并准备在第二天报警",
+        "你可以继续嫁祸他人",
+        "也可以选择承认"
+      ],
+      "owner": "gu_linchuan",
+      "type": "reveal",
+      "visibility": "private"
+    },
+    {
+      "content": "你知道陆绍庭当晚准备修改遗嘱，沈知微可能失去继承权。你偷偷拍下了旧遗嘱，但没有告诉任何人。",
+      "core": false,
+      "id": "zjm_s1_will",
+      "keywords": [
+        "你知道陆绍庭当晚准备修改遗嘱",
+        "沈知微可能失去继承权",
+        "你偷偷拍下了旧遗嘱",
+        "但没有告诉任何人"
+      ],
+      "owner": "zhou_jiming",
+      "type": "secret",
+      "visibility": "private"
+    },
+    {
+      "content": "陆绍庭死于反锁的档案室，门窗没有破坏痕迹，书桌上的怀表停在二十三点二十六分。",
+      "core": false,
+      "id": "zhou_jiming_public_s1_case",
+      "keywords": [
+        "陆绍庭死于反锁的档案室",
+        "门窗没有破坏痕迹",
+        "书桌上的怀表停在二十三点二十六分"
+      ],
+      "owner": "dm",
+      "type": "public",
+      "visibility": "public"
+    },
+    {
+      "content": "你复制过义诊基金账本，发现三笔款项最终进入顾临川控制的空壳公司。壁炉里的残页正来自这本账。",
+      "core": false,
+      "id": "zjm_s2_ledger",
+      "keywords": [
+        "你复制过义诊基金账本",
+        "壁炉里的残页正来自这本账"
+      ],
+      "owner": "zhou_jiming",
+      "type": "evidence",
+      "visibility": "private"
+    },
+    {
+      "content": "你的照片拍到了原药瓶，批号末尾为 17。你一直保留这张照片，是因为陆绍庭曾要求你调查药品采购。",
+      "core": false,
+      "id": "zjm_s3_photo",
+      "keywords": [
+        "你的照片拍到了原药瓶",
+        "批号末尾为",
+        "17",
+        "你一直保留这张照片",
+        "是因为陆绍庭曾要求你调查药品采购"
+      ],
+      "owner": "zhou_jiming",
+      "type": "reveal",
+      "visibility": "private"
+    },
+    {
+      "content": "你在停电前调整过钟楼慢了十四分钟的机械钟，却没有来得及同步档案室的小钟。你担心这会让自己看起来在伪造时间。",
+      "core": false,
+      "id": "xyz_s1_clock",
+      "keywords": [
+        "却没有来得及同步档案室的小钟",
+        "你担心这会让自己看起来在伪造时间"
+      ],
+      "owner": "xu_yanzhou",
+      "type": "secret",
+      "visibility": "private"
+    },
+    {
+      "content": "陆绍庭死于反锁的档案室，门窗没有破坏痕迹，书桌上的怀表停在二十三点二十六分。",
+      "core": false,
+      "id": "xu_yanzhou_public_s1_case",
+      "keywords": [
+        "陆绍庭死于反锁的档案室",
+        "门窗没有破坏痕迹",
+        "书桌上的怀表停在二十三点二十六分"
+      ],
+      "owner": "dm",
+      "type": "public",
+      "visibility": "public"
+    },
+    {
+      "content": "你在二十二点五十五分看见顾临川从药柜方向返回客厅。他声称自己一直在露台打电话。",
+      "core": false,
+      "id": "xyz_s2_doctor",
+      "keywords": [
+        "他声称自己一直在露台打电话"
+      ],
+      "owner": "xu_yanzhou",
+      "type": "witness",
+      "visibility": "private"
+    },
+    {
+      "content": "怀表是在陆绍庭倒下时被压停，真实时间是二十三点四十分；停在二十三点二十六分，恰好与钟楼慢十四分钟一致。",
+      "core": false,
+      "id": "xyz_s3_time",
+      "keywords": [
+        "怀表是在陆绍庭倒下时被压停",
+        "真实时间是二十三点四十分",
+        "停在二十三点二十六分",
+        "恰好与钟楼慢十四分钟一致"
+      ],
+      "owner": "xu_yanzhou",
+      "type": "reveal",
+      "visibility": "private"
+    },
+    {
+      "content": "文物修复师，陆绍庭的养女，也是遗产的第一顺位继承人。",
+      "core": false,
+      "id": "f_shen_zhiwei_identity",
+      "keywords": [
+        "文物修复师",
+        "陆绍庭的养女",
+        "也是遗产的第一顺位继承人"
+      ],
+      "owner": "shen_zhiwei",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "陆家的私人医生，负责陆绍庭多年的心脏病治疗。",
+      "core": false,
+      "id": "f_gu_linchuan_identity",
+      "keywords": [
+        "陆家的私人医生",
+        "负责陆绍庭多年的心脏病治疗"
+      ],
+      "owner": "gu_linchuan",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "陆家的法律顾问，负责遗嘱与基金会账目。",
+      "core": false,
+      "id": "f_zhou_jiming_identity",
+      "keywords": [
+        "陆家的法律顾问",
+        "负责遗嘱与基金会账目"
+      ],
+      "owner": "zhou_jiming",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "临潮公馆管家，熟悉宅邸钥匙、钟表和每个人的生活习惯。",
+      "core": false,
+      "id": "f_xu_yanzhou_identity",
+      "keywords": [
+        "临潮公馆管家",
+        "熟悉宅邸钥匙",
+        "钟表和每个人的生活习惯"
+      ],
+      "owner": "xu_yanzhou",
+      "type": "identity",
+      "visibility": "public"
+    }
+  ],
+  "ingest": {
+    "adapter": "rpg_json",
+    "checks": {
+      "canonical_fields": true,
+      "clue_refs_valid": true,
+      "clue_weights_parseable": true
+    },
+    "detected_evidence": [
+      "script_meta",
+      "roles",
+      "truth"
+    ],
+    "ingested_at": "2026-11-25T04:54:21+00:00",
+    "source_path": "corpus\\raw\\rpg\\fog_harbor_clocktower.json",
+    "source_sha256": "44f3575826417b7c9c42f9762e260f87a612ef4f4b8c2197c1a4ef6eba1ff037"
+  },
+  "plot_locks": [
+    "{'role_id': '*', 'until_stage': 2, 'keywords': ['乌头碱', '调换急救药', '药瓶被调换'], 'message': '第一阶段尚未完成药物检验，不能提前确认毒物或换药事实。'}",
+    "{'role_id': '*', 'until_stage': 3, 'keywords': ['顾临川是凶手', '凶手是顾临川', '侵吞义诊基金'], 'message': '当前证据链尚未闭合，不能提前公布凶手与完整动机。'}"
+  ],
+  "schema_version": "1.0",
+  "script_id": "rpg_fog_harbor_clocktower",
+  "source_files": [
+    "raw/rpg/fog_harbor_clocktower.json"
+  ],
+  "timeline_true": [
+    "stage_1 众人确认档案室没有外部入侵痕迹，开始核对停电前后的行踪与时间。",
+    "stage_2 药柜、账页和证词把调查方向指向被调换的急救药与义诊基金。",
+    "stage_3 药瓶批号、账本照片和钟楼时差闭合证据链，证明顾临川提前布置了毒杀。"
+  ],
+  "title": "雾港档案·钟楼夜宴",
   "truth_graph": [
     "暴雨封锁雾港，收藏家陆绍庭在临潮公馆的档案室内离奇死亡。房门从内部反锁，壁炉里有未烧尽的账页，桌上的怀表停在二十三点二十六分。留在公馆里的四个人都与死者有秘密，也都没有完整的不在场证明。",
     "死者：陆绍庭。依据：source_text_annotation。",
@@ -47,718 +766,15 @@
     "陆家的法律顾问，负责遗嘱与基金会账目。",
     "临潮公馆管家，熟悉宅邸钥匙、钟表和每个人的生活习惯。"
   ],
-  "facts": [
-    {
-      "id": "f_rpg_fog_harbor_clocktower_pub",
-      "type": "background",
-      "content": "暴雨封锁雾港，收藏家陆绍庭在临潮公馆的档案室内离奇死亡。房门从内部反锁，壁炉里有未烧尽的账页，桌上的怀表停在二十三点二十六分。留在公馆里的四个人都与死者有秘密，也都没有完整的不在场证明。",
-      "visibility": "public",
-      "core": true,
-      "keywords": [
-        "暴雨封锁雾港",
-        "房门从内部反锁",
-        "壁炉里有未烧尽的账页",
-        "桌上的怀表停在二十三点二十六分",
-        "留在公馆里的四个人都与死者有秘密",
-        "也都没有完整的不在场证明"
-      ]
+  "world": {
+    "mode": "truth_reconstruction",
+    "player_selectable": "shen_zhiwei,gu_linchuan,zhou_jiming,xu_yanzhou",
+    "source_kind": "RolePlayingGame JSON",
+    "source_provenance": {
+      "creator": "项目既有内置样例（作者未登记）",
+      "kind": "unknown",
+      "source": "原有《雾港档案·钟楼夜宴》剧本；本次仅规范字段和证据引用，未据此认定外部出处或授权。"
     },
-    {
-      "id": "f_rpg_fog_harbor_clocktower_victim",
-      "type": "victim",
-      "content": "死者：陆绍庭。依据：source_text_annotation。",
-      "visibility": "public",
-      "core": true,
-      "keywords": [
-        "死者",
-        "陆绍庭",
-        "依据"
-      ]
-    },
-    {
-      "id": "f_rpg_fog_harbor_clocktower_truth",
-      "type": "truth",
-      "content": "顾临川长期侵吞义诊基金。陆绍庭发现账目问题并准备报警后，顾临川提前调换了他的急救药。陆绍庭独自进入档案室后心脏不适，服下含乌头碱的假药死亡，因此房门始终从内部反锁。怀表受压停在二十三点二十六分，是因为公馆钟表慢了十四分钟；真实死亡时间为二十三点四十分。密室只是毒杀造成的假象。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "顾临川长期侵吞义诊基金",
-        "陆绍庭发现账目问题并准备报警后",
-        "顾临川提前调换了他的急救药",
-        "陆绍庭独自进入档案室后心脏不适",
-        "服下含乌头碱的假药死亡",
-        "因此房门始终从内部反锁",
-        "怀表受压停在二十三点二十六分",
-        "是因为公馆钟表慢了十四分钟",
-        "真实死亡时间为二十三点四十分",
-        "密室只是毒杀造成的假象"
-      ]
-    },
-    {
-      "id": "f_rpg_fog_harbor_clocktower_t01",
-      "type": "timeline",
-      "content": "stage_1 众人确认档案室没有外部入侵痕迹，开始核对停电前后的行踪与时间。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "stage_1",
-        "众人确认档案室没有外部入侵痕迹",
-        "开始核对停电前后的行踪与时间"
-      ]
-    },
-    {
-      "id": "f_rpg_fog_harbor_clocktower_t02",
-      "type": "timeline",
-      "content": "stage_2 药柜、账页和证词把调查方向指向被调换的急救药与义诊基金。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "stage_2",
-        "药柜"
-      ]
-    },
-    {
-      "id": "f_rpg_fog_harbor_clocktower_t03",
-      "type": "timeline",
-      "content": "stage_3 药瓶批号、账本照片和钟楼时差闭合证据链，证明顾临川提前布置了毒杀。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "stage_3",
-        "药瓶批号",
-        "账本照片和钟楼时差闭合证据链",
-        "证明顾临川提前布置了毒杀"
-      ]
-    },
-    {
-      "id": "f_rpg_fog_harbor_clocktower_chain01",
-      "type": "evidence_chain",
-      "content": "密室可由提前调换急救药形成，不要求凶手在死亡时进入房间。 封签重贴、药柜毒物与从内反锁且无破坏的门窗共同支持提前布置毒杀；药瓶封签本身不能单独指认凶手。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "密室可由提前调换急救药形成",
-        "不要求凶手在死亡时进入房间",
-        "封签重贴",
-        "药瓶封签本身不能单独指认凶手"
-      ]
-    },
-    {
-      "id": "f_rpg_fog_harbor_clocktower_chain02",
-      "type": "evidence_chain",
-      "content": "义诊基金账目提供顾临川的作案动机线索。 残账联系人缩写 G.L.C. 与顾临川相符，需要结合角色提供的账本照片及药柜行踪核对，不能只凭缩写定罪。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "残账联系人缩写",
-        "G.L.C.",
-        "与顾临川相符",
-        "不能只凭缩写定罪"
-      ]
-    },
-    {
-      "id": "f_rpg_fog_harbor_clocktower_chain03",
-      "type": "evidence_chain",
-      "content": "怀表显示时间必须校准后再用于比对证词。 维护记录记录十四分钟误差，可将二十三点二十六分校准为二十三点四十分，再核对各角色不在场证明。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "维护记录记录十四分钟误差",
-        "再核对各角色不在场证明"
-      ]
-    },
-    {
-      "id": "f_rpg_fog_harbor_clocktower_lock01",
-      "type": "plot_lock",
-      "content": "{'role_id': '*', 'until_stage': 2, 'keywords': ['乌头碱', '调换急救药', '药瓶被调换'], 'message': '第一阶段尚未完成药物检验，不能提前确认毒物或换药事实。'}",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "role_id",
-        "until_stage",
-        "2,",
-        "keywords",
-        "乌头碱",
-        "调换急救药",
-        "药瓶被调换",
-        "message",
-        "第一阶段尚未完成药物检验",
-        "不能提前确认毒物或换药事实"
-      ]
-    },
-    {
-      "id": "f_rpg_fog_harbor_clocktower_lock02",
-      "type": "plot_lock",
-      "content": "{'role_id': '*', 'until_stage': 3, 'keywords': ['顾临川是凶手', '凶手是顾临川', '侵吞义诊基金'], 'message': '当前证据链尚未闭合，不能提前公布凶手与完整动机。'}",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "role_id",
-        "until_stage",
-        "3,",
-        "keywords",
-        "顾临川是凶手",
-        "凶手是顾临川",
-        "侵吞义诊基金",
-        "message",
-        "当前证据链尚未闭合",
-        "不能提前公布凶手与完整动机"
-      ]
-    },
-    {
-      "id": "szw_s1_private",
-      "type": "secret",
-      "content": "晚宴前你与陆绍庭激烈争吵，因为他扣下了你的护照。停电时你独自在修复室，没有人能证明。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "晚宴前你与陆绍庭激烈争吵",
-        "因为他扣下了你的护照",
-        "停电时你独自在修复室",
-        "没有人能证明"
-      ],
-      "owner": "shen_zhiwei"
-    },
-    {
-      "id": "public_s1_case",
-      "type": "public",
-      "content": "陆绍庭死于反锁的档案室，门窗没有破坏痕迹，书桌上的怀表停在二十三点二十六分。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "陆绍庭死于反锁的档案室",
-        "门窗没有破坏痕迹",
-        "书桌上的怀表停在二十三点二十六分"
-      ],
-      "owner": "dm"
-    },
-    {
-      "id": "szw_s2_label",
-      "type": "memory",
-      "content": "你想起晚宴前看见顾临川独自在药柜旁。他离开后，陆绍庭随身药瓶的封签方向与平时相反。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "他离开后"
-      ],
-      "owner": "shen_zhiwei"
-    },
-    {
-      "id": "szw_s3_serial",
-      "type": "reveal",
-      "content": "你修复过药瓶上的旧标签，记得原瓶批号末尾是 17；尸体旁药瓶的批号末尾却是 71，说明药瓶被调换过。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你修复过药瓶上的旧标签",
-        "记得原瓶批号末尾是",
-        "17",
-        "尸体旁药瓶的批号末尾却是",
-        "71",
-        "说明药瓶被调换过"
-      ],
-      "owner": "shen_zhiwei"
-    },
-    {
-      "id": "glc_s1_visit",
-      "type": "secret",
-      "content": "你在二十二点五十分为陆绍庭做过检查，并告诉所有人他的心脏状况稳定。你隐瞒了自己随后又返回药柜。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "并告诉所有人他的心脏状况稳定",
-        "你隐瞒了自己随后又返回药柜"
-      ],
-      "owner": "gu_linchuan"
-    },
-    {
-      "id": "gu_linchuan_public_s1_case",
-      "type": "public",
-      "content": "陆绍庭死于反锁的档案室，门窗没有破坏痕迹，书桌上的怀表停在二十三点二十六分。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "陆绍庭死于反锁的档案室",
-        "门窗没有破坏痕迹",
-        "书桌上的怀表停在二十三点二十六分"
-      ],
-      "owner": "dm"
-    },
-    {
-      "id": "glc_s2_poison",
-      "type": "culprit_secret",
-      "content": "你提前把陆绍庭的急救药换成含乌头碱的药片。他在档案室发病后主动服药，因此密室不需要有人进出。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "他在档案室发病后主动服药",
-        "因此密室不需要有人进出"
-      ],
-      "owner": "gu_linchuan"
-    },
-    {
-      "id": "glc_s3_motive",
-      "type": "reveal",
-      "content": "陆绍庭掌握你侵吞义诊基金的完整账本，并准备在第二天报警。你可以继续嫁祸他人，也可以选择承认。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "并准备在第二天报警",
-        "你可以继续嫁祸他人",
-        "也可以选择承认"
-      ],
-      "owner": "gu_linchuan"
-    },
-    {
-      "id": "zjm_s1_will",
-      "type": "secret",
-      "content": "你知道陆绍庭当晚准备修改遗嘱，沈知微可能失去继承权。你偷偷拍下了旧遗嘱，但没有告诉任何人。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你知道陆绍庭当晚准备修改遗嘱",
-        "沈知微可能失去继承权",
-        "你偷偷拍下了旧遗嘱",
-        "但没有告诉任何人"
-      ],
-      "owner": "zhou_jiming"
-    },
-    {
-      "id": "zhou_jiming_public_s1_case",
-      "type": "public",
-      "content": "陆绍庭死于反锁的档案室，门窗没有破坏痕迹，书桌上的怀表停在二十三点二十六分。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "陆绍庭死于反锁的档案室",
-        "门窗没有破坏痕迹",
-        "书桌上的怀表停在二十三点二十六分"
-      ],
-      "owner": "dm"
-    },
-    {
-      "id": "zjm_s2_ledger",
-      "type": "evidence",
-      "content": "你复制过义诊基金账本，发现三笔款项最终进入顾临川控制的空壳公司。壁炉里的残页正来自这本账。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你复制过义诊基金账本",
-        "壁炉里的残页正来自这本账"
-      ],
-      "owner": "zhou_jiming"
-    },
-    {
-      "id": "zjm_s3_photo",
-      "type": "reveal",
-      "content": "你的照片拍到了原药瓶，批号末尾为 17。你一直保留这张照片，是因为陆绍庭曾要求你调查药品采购。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你的照片拍到了原药瓶",
-        "批号末尾为",
-        "17",
-        "你一直保留这张照片",
-        "是因为陆绍庭曾要求你调查药品采购"
-      ],
-      "owner": "zhou_jiming"
-    },
-    {
-      "id": "xyz_s1_clock",
-      "type": "secret",
-      "content": "你在停电前调整过钟楼慢了十四分钟的机械钟，却没有来得及同步档案室的小钟。你担心这会让自己看起来在伪造时间。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "却没有来得及同步档案室的小钟",
-        "你担心这会让自己看起来在伪造时间"
-      ],
-      "owner": "xu_yanzhou"
-    },
-    {
-      "id": "xu_yanzhou_public_s1_case",
-      "type": "public",
-      "content": "陆绍庭死于反锁的档案室，门窗没有破坏痕迹，书桌上的怀表停在二十三点二十六分。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "陆绍庭死于反锁的档案室",
-        "门窗没有破坏痕迹",
-        "书桌上的怀表停在二十三点二十六分"
-      ],
-      "owner": "dm"
-    },
-    {
-      "id": "xyz_s2_doctor",
-      "type": "witness",
-      "content": "你在二十二点五十五分看见顾临川从药柜方向返回客厅。他声称自己一直在露台打电话。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "他声称自己一直在露台打电话"
-      ],
-      "owner": "xu_yanzhou"
-    },
-    {
-      "id": "xyz_s3_time",
-      "type": "reveal",
-      "content": "怀表是在陆绍庭倒下时被压停，真实时间是二十三点四十分；停在二十三点二十六分，恰好与钟楼慢十四分钟一致。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "怀表是在陆绍庭倒下时被压停",
-        "真实时间是二十三点四十分",
-        "停在二十三点二十六分",
-        "恰好与钟楼慢十四分钟一致"
-      ],
-      "owner": "xu_yanzhou"
-    },
-    {
-      "id": "f_shen_zhiwei_identity",
-      "type": "identity",
-      "content": "文物修复师，陆绍庭的养女，也是遗产的第一顺位继承人。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "文物修复师",
-        "陆绍庭的养女",
-        "也是遗产的第一顺位继承人"
-      ],
-      "owner": "shen_zhiwei"
-    },
-    {
-      "id": "f_gu_linchuan_identity",
-      "type": "identity",
-      "content": "陆家的私人医生，负责陆绍庭多年的心脏病治疗。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "陆家的私人医生",
-        "负责陆绍庭多年的心脏病治疗"
-      ],
-      "owner": "gu_linchuan"
-    },
-    {
-      "id": "f_zhou_jiming_identity",
-      "type": "identity",
-      "content": "陆家的法律顾问，负责遗嘱与基金会账目。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "陆家的法律顾问",
-        "负责遗嘱与基金会账目"
-      ],
-      "owner": "zhou_jiming"
-    },
-    {
-      "id": "f_xu_yanzhou_identity",
-      "type": "identity",
-      "content": "临潮公馆管家，熟悉宅邸钥匙、钟表和每个人的生活习惯。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "临潮公馆管家",
-        "熟悉宅邸钥匙",
-        "钟表和每个人的生活习惯"
-      ],
-      "owner": "xu_yanzhou"
-    }
-  ],
-  "timeline_true": [
-    "stage_1 众人确认档案室没有外部入侵痕迹，开始核对停电前后的行踪与时间。",
-    "stage_2 药柜、账页和证词把调查方向指向被调换的急救药与义诊基金。",
-    "stage_3 药瓶批号、账本照片和钟楼时差闭合证据链，证明顾临川提前布置了毒杀。"
-  ],
-  "characters": [
-    {
-      "id": "shen_zhiwei",
-      "name": "沈知微",
-      "role": "文物修复师，陆绍庭的养女，也是遗产的第一顺位继承人。",
-      "public_identity": "文物修复师，陆绍庭的养女，也是遗产的第一顺位继承人。",
-      "public_profile": "文物修复师，陆绍庭的养女，也是遗产的第一顺位继承人。",
-      "personality": "冷静敏锐，不轻易相信任何人，对细节有近乎苛刻的记忆。",
-      "speaking_style": "冷静敏锐，不轻易相信任何人，对细节有近乎苛刻的记忆。",
-      "lexicon": "",
-      "backstory": "查清死亡真相，同时隐瞒自己准备离开陆家的计划。",
-      "goals": [
-        "查清死亡真相，同时隐瞒自己准备离开陆家的计划。"
-      ],
-      "known_fact_ids": [
-        "szw_s1_private",
-        "szw_s2_label",
-        "szw_s3_serial"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "gu_linchuan",
-      "name": "顾临川",
-      "role": "陆家的私人医生，负责陆绍庭多年的心脏病治疗。",
-      "public_identity": "陆家的私人医生，负责陆绍庭多年的心脏病治疗。",
-      "public_profile": "陆家的私人医生，负责陆绍庭多年的心脏病治疗。",
-      "personality": "克制、礼貌、善于转移问题，面对医学细节时极有控制欲。",
-      "speaking_style": "克制、礼貌、善于转移问题，面对医学细节时极有控制欲。",
-      "lexicon": "",
-      "backstory": "隐藏自己调换急救药并伪造义诊账目的事实。",
-      "goals": [
-        "隐藏自己调换急救药并伪造义诊账目的事实。"
-      ],
-      "known_fact_ids": [
-        "glc_s1_visit",
-        "glc_s2_poison",
-        "glc_s3_motive"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": true
-    },
-    {
-      "id": "zhou_jiming",
-      "name": "周既明",
-      "role": "陆家的法律顾问，负责遗嘱与基金会账目。",
-      "public_identity": "陆家的法律顾问，负责遗嘱与基金会账目。",
-      "public_profile": "陆家的法律顾问，负责遗嘱与基金会账目。",
-      "personality": "谨慎圆滑，习惯保留证据，说话总给自己留下余地。",
-      "speaking_style": "谨慎圆滑，习惯保留证据，说话总给自己留下余地。",
-      "lexicon": "",
-      "backstory": "保护自己私自复制账本的行为，并让真正的凶手承担责任。",
-      "goals": [
-        "保护自己私自复制账本的行为，并让真正的凶手承担责任。"
-      ],
-      "known_fact_ids": [
-        "zjm_s1_will",
-        "zjm_s2_ledger",
-        "zjm_s3_photo"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "xu_yanzhou",
-      "name": "许砚舟",
-      "role": "临潮公馆管家，熟悉宅邸钥匙、钟表和每个人的生活习惯。",
-      "public_identity": "临潮公馆管家，熟悉宅邸钥匙、钟表和每个人的生活习惯。",
-      "public_profile": "临潮公馆管家，熟悉宅邸钥匙、钟表和每个人的生活习惯。",
-      "personality": "沉默稳重，忠于事实，但会为了陆家的体面隐瞒丑闻。",
-      "speaking_style": "沉默稳重，忠于事实，但会为了陆家的体面隐瞒丑闻。",
-      "lexicon": "",
-      "backstory": "证明密室没有机关，并解释自己为何调整过钟楼时间。",
-      "goals": [
-        "证明密室没有机关，并解释自己为何调整过钟楼时间。"
-      ],
-      "known_fact_ids": [
-        "xyz_s1_clock",
-        "xyz_s2_doctor",
-        "xyz_s3_time"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    }
-  ],
-  "clue_pool": [
-    "clue_medicine_seal 死者随身药瓶的封签被重新粘贴过，瓶盖内侧残留极淡的苦杏仁气味。|logLR:gu_linchuan=1.5",
-    "clue_locked_door 门锁只能从室内转动，锁舌与窗框都没有工具痕迹。密室本身并非机关。|logLR:gu_linchuan=1.5",
-    "clue_passport_case 抽屉里有一个空护照袋和当天购买的离港船票，持有人是沈知微。|logLR:gu_linchuan=1.5",
-    "clue_aconite 药柜夹层发现少量乌头碱粉末，登记册上最后一次领用签名模仿得很像陆绍庭。|logLR:gu_linchuan=2.0",
-    "clue_burned_ledger 未烧尽的账页记录了三笔义诊基金支出，收款公司的联系人缩写为 G.L.C。|logLR:gu_linchuan=2.0",
-    "clue_clock_offset 维护记录确认钟楼当晚慢了十四分钟。怀表显示的是二十三点二十六分，对应真实时间二十三点四十分。|logLR:gu_linchuan=2.0",
-    "rpg_fog_harbor_clocktower_gap_inquiry 证据链要求核对“账本照片”与“药柜行踪”。相关细节只存在于个别角色的私有记忆中，不会自动公开；请通过问询/私聊取得，不要|logLR:gu_linchuan=2.0"
-  ],
-  "clues": [
-    {
-      "id": "clue_medicine_seal",
-      "title": "档案室书桌",
-      "content": "死者随身药瓶的封签被重新粘贴过，瓶盖内侧残留极淡的苦杏仁气味。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_fog_harbor_clocktower_chain01"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "archive_desk"
-    },
-    {
-      "id": "clue_locked_door",
-      "title": "档案室书桌",
-      "content": "门锁只能从室内转动，锁舌与窗框都没有工具痕迹。密室本身并非机关。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_fog_harbor_clocktower_chain01"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "archive_desk"
-    },
-    {
-      "id": "clue_passport_case",
-      "title": "文物修复室",
-      "content": "抽屉里有一个空护照袋和当天购买的离港船票，持有人是沈知微。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_fog_harbor_clocktower_truth"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "restoration_room"
-    },
-    {
-      "id": "clue_aconite",
-      "title": "走廊药柜",
-      "content": "药柜夹层发现少量乌头碱粉末，登记册上最后一次领用签名模仿得很像陆绍庭。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_fog_harbor_clocktower_chain01"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "medicine_cabinet"
-    },
-    {
-      "id": "clue_burned_ledger",
-      "title": "档案室壁炉",
-      "content": "未烧尽的账页记录了三笔义诊基金支出，收款公司的联系人缩写为 G.L.C。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_fog_harbor_clocktower_chain02"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "fireplace"
-    },
-    {
-      "id": "clue_clock_offset",
-      "title": "钟楼维护记录",
-      "content": "维护记录确认钟楼当晚慢了十四分钟。怀表显示的是二十三点二十六分，对应真实时间二十三点四十分。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_fog_harbor_clocktower_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "clocktower_log"
-    },
-    {
-      "id": "rpg_fog_harbor_clocktower_gap_inquiry",
-      "title": "待核对的证词缺口",
-      "content": "证据链要求核对“账本照片”与“药柜行踪”。相关细节只存在于个别角色的私有记忆中，不会自动公开；请通过问询/私聊取得，不要凭臆测补造。",
-      "type": "inquiry",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_fog_harbor_clocktower_truth"
-      ],
-      "visibility": "finder",
-      "completion": "R5_inquiry_gap"
-    }
-  ],
-  "clue_fact_map": {
-    "clue_medicine_seal 死者随身药瓶的封签被重新粘贴过，瓶盖内侧残留极淡的苦杏仁气味。|logLR:gu_linchuan=1.5": [
-      "f_rpg_fog_harbor_clocktower_chain01"
-    ],
-    "clue_medicine_seal": [
-      "f_rpg_fog_harbor_clocktower_chain01"
-    ],
-    "clue_locked_door 门锁只能从室内转动，锁舌与窗框都没有工具痕迹。密室本身并非机关。|logLR:gu_linchuan=1.5": [
-      "f_rpg_fog_harbor_clocktower_chain01"
-    ],
-    "clue_locked_door": [
-      "f_rpg_fog_harbor_clocktower_chain01"
-    ],
-    "clue_passport_case 抽屉里有一个空护照袋和当天购买的离港船票，持有人是沈知微。|logLR:gu_linchuan=1.5": [
-      "f_rpg_fog_harbor_clocktower_truth"
-    ],
-    "clue_passport_case": [
-      "f_rpg_fog_harbor_clocktower_truth"
-    ],
-    "clue_aconite 药柜夹层发现少量乌头碱粉末，登记册上最后一次领用签名模仿得很像陆绍庭。|logLR:gu_linchuan=2.0": [
-      "f_rpg_fog_harbor_clocktower_chain01"
-    ],
-    "clue_aconite": [
-      "f_rpg_fog_harbor_clocktower_chain01"
-    ],
-    "clue_burned_ledger 未烧尽的账页记录了三笔义诊基金支出，收款公司的联系人缩写为 G.L.C。|logLR:gu_linchuan=2.0": [
-      "f_rpg_fog_harbor_clocktower_chain02"
-    ],
-    "clue_burned_ledger": [
-      "f_rpg_fog_harbor_clocktower_chain02"
-    ],
-    "clue_clock_offset 维护记录确认钟楼当晚慢了十四分钟。怀表显示的是二十三点二十六分，对应真实时间二十三点四十分。|logLR:gu_linchuan=2.0": [
-      "f_rpg_fog_harbor_clocktower_chain03"
-    ],
-    "clue_clock_offset": [
-      "f_rpg_fog_harbor_clocktower_chain03"
-    ],
-    "rpg_fog_harbor_clocktower_gap_inquiry": [
-      "f_rpg_fog_harbor_clocktower_truth"
-    ]
-  },
-  "plot_locks": [
-    "{'role_id': '*', 'until_stage': 2, 'keywords': ['乌头碱', '调换急救药', '药瓶被调换'], 'message': '第一阶段尚未完成药物检验，不能提前确认毒物或换药事实。'}",
-    "{'role_id': '*', 'until_stage': 3, 'keywords': ['顾临川是凶手', '凶手是顾临川', '侵吞义诊基金'], 'message': '当前证据链尚未闭合，不能提前公布凶手与完整动机。'}"
-  ],
-  "endings": [
-    "正确指认：最终指认成立。你们找到了真正的凶手，DM 恭喜仍坚持调查的人，并将公开完整作案过程。",
-    "错误指认：最终指认未能成立。{selected_role_name}并非真正的凶手，案件以错误指认告终，真正的作案者仍藏在未被闭合的证据链后。"
-  ],
-  "evaluation": {
-    "killer_id": "gu_linchuan",
-    "required_fact_ids": [
-      "f_rpg_fog_harbor_clocktower_truth",
-      "f_rpg_fog_harbor_clocktower_victim",
-      "f_rpg_fog_harbor_clocktower_chain01",
-      "f_rpg_fog_harbor_clocktower_chain02",
-      "f_rpg_fog_harbor_clocktower_chain03"
-    ],
-    "culprit_basis": "truth.culprit_role_id",
-    "role_kind": "declared_killer",
-    "has_murder": true,
-    "victim_name": "陆绍庭",
-    "victim_basis": "source_text_annotation",
-    "source_id": "fog_harbor_clocktower"
-  },
-  "completions": [
-    {
-      "rule": "R1_victim_annotation",
-      "field": "evaluation.victim_name",
-      "value": "陆绍庭",
-      "basis": "source_text_annotation"
-    },
-    {
-      "rule": "R3_clue_truth_fallback",
-      "field": "clues[clue_passport_case].reveals_fact_ids",
-      "value": [
-        "f_rpg_fog_harbor_clocktower_truth"
-      ],
-      "basis": "clue not named in evidence_chain; linked to full truth fact"
-    },
-    {
-      "rule": "R5_inquiry_gap",
-      "field": "clues[]",
-      "value": "rpg_fog_harbor_clocktower_gap_inquiry",
-      "basis": "evidence chain names material held only in private memory; prompt added, content not leaked"
-    }
-  ],
-  "source_files": [
-    "raw/rpg/fog_harbor_clocktower.json"
-  ]
+    "stages": 3
+  }
 }

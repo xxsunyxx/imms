@@ -79,3 +79,14 @@
 - `runtime.py` 加 `gm_policy` hook 与 `gm_decision` 事件；`_vote` 记录 `motive_fact_id`；输出护栏事件补 `leaks[].severity`。
 - 新增 `src/imms/retro.py` + CLI `retro` / `replay --with-eval`：lockedroom 5 指标与评分公式，加决策时点离线信息复核、转折点归因、可解性、证据指向强度、真实 GM 分支 diff 与时间线检查。不移植 LLM 推理链（不可复现且不参与评分）。
 - 验证：53 个 unittest 全通过（新增 test_solver.py / test_gm.py / test_retro.py）；雪夜山庄端到端评分 57.5/C、覆盖 50%、可解性 unique；GM 分支把 heat 策略改为 information 并让玩家改口后，赢家由 `ai:zhou_muchen` 翻转为 `human:lin_wanqiu`，diff 记录 2 线索/5 台词/3 怀疑变化；merge/rollback 与复盘分支对照均跑通。详见 docs/SOLVER.md / docs/GM.md / docs/RETRO.md。
+
+## 2026-11-25 · 统一摄入体系：骨架夹具与剧本管理
+
+- 用户要求"把各种乱七八糟的本子转换成自己能保存的本子格式"，随后补充"先用夹具把输入骨架化，LLM 先总结骨架、按骨架补全，再归一化存储"，并要剧本管理系统。
+- 新增 `src/imms/ingest.py`：所有来源走 `detect → parse → admit → skeleton → complete → repair → canonical`。适配器复用现有 YAML/RPG/盒装本/分段文本解析器，不重复实现；交互式场景游戏（room/spot/image）直接 SKIP。
+- 自持存储 `corpus/raw`（来源字节）、`corpus/skeletons`（固定槽位）、`corpus/scripts`（sort_keys 确定性 Ontology）、`manifest.json`（SHA256/准入/补全/汇总）；同来源 upsert 幂等，id 冲突追加后缀。
+- 新增 `src/imms/skeleton.py`：固定九槽位夹具；LLM 只允许摘要 brief/summary/endings 且每句必须逐字来自原文，未知槽位/人物/事实/线索一律丢弃并记 `llm.rejected`；`template` 离线兜底。补全规则 S1–S4，规范化规则 G1–G6。
+- 新增 `src/imms/registry.py` 与三张 SQLite 表：剧本生命周期、版本化骨架、事件日志；生命周期 staged→normalized→ready→archived / rejected，非法跃迁报错。`parse` 与 `import-corpus` 自动登记。
+- CLI：`ingest detect/skeleton/convert/add/batch/report/validate`、`script list/show/skeleton/history/promote`；`parse` 收敛到同一链路。
+- 修复：RPG 叙事片段的解析异常曾盖掉 `no_culprit` 等真正门禁原因，改为先 admit 再 parse；manifest 汇总每次 upsert 后重算；两个不同 SKIP 文件哈希相同时按来源路径分别保留；盒装本单文件需暂存为目录再解析。
+- 验证：69 个 unittest 全通过（新增 test_ingest.py / test_skeleton.py）；6 个真实 RPG 本从 raw 重新摄入→导入→装配→对局（solved=True），脚本管理 list/skeleton/promote/history 跑通。详见 docs/INGEST.md / docs/REGISTRY.md。

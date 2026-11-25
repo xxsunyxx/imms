@@ -12,8 +12,10 @@ from . import db as db_mod
 from . import derive as derive_mod
 from . import gm as gm_mod
 from . import infoguard as infoguard_mod
+from . import ingest as ingest_mod
 from . import normalize as normalize_mod
 from . import ontology as ontology_mod
+from . import registry as registry_mod
 from . import replay as replay_mod
 from . import retro as retro_mod
 from . import runtime as runtime_mod
@@ -100,7 +102,52 @@ def build_parser():
     corpus_report_p = sub.add_parser("corpus-report", help="Show admission decisions from the corpus manifest")
     corpus_report_p.add_argument("--dir", default=str(ROOT / "corpus"))
 
+    ing_p = sub.add_parser("ingest", help="Convert arbitrary script sources into canonical Ontology JSON")
+    ing_sp = ing_p.add_subparsers(dest="ingest_action", required=True)
+    ing_d = ing_sp.add_parser("detect", help="Detect a source format without converting it")
+    ing_d.add_argument("--path", required=True)
+    ing_c = ing_sp.add_parser("convert", help="Dry-run a conversion and optionally export canonical JSON")
+    ing_c.add_argument("--path", required=True)
+    ing_c.add_argument("--out")
+    ing_c.add_argument("--llm", choices=["auto", "template", "http"], default="auto")
+    ing_s = ing_sp.add_parser("skeleton", help="Show the fixed skeleton for a source without storing it")
+    ing_s.add_argument("--path", required=True)
+    ing_s.add_argument("--out")
+    ing_s.add_argument("--llm", choices=["auto", "template", "http"], default="auto")
+    ing_a = ing_sp.add_parser("add", help="Ingest one source into the self-contained corpus")
+    ing_a.add_argument("--path", required=True)
+    ing_a.add_argument("--root", default=str(ROOT / "corpus"))
+    ing_a.add_argument("--force", action="store_true")
+    ing_a.add_argument("--llm", choices=["auto", "template", "http"], default="auto")
+    ing_b = ing_sp.add_parser("batch", help="Ingest every recognised source under a directory")
+    ing_b.add_argument("--path", required=True)
+    ing_b.add_argument("--root", default=str(ROOT / "corpus"))
+    ing_b.add_argument("--limit", type=int)
+    ing_b.add_argument("--force", action="store_true")
+    ing_b.add_argument("--llm", choices=["auto", "template", "http"], default="auto")
+    ing_r = ing_sp.add_parser("report", help="Summarise ingestion decisions")
+    ing_r.add_argument("--root", default=str(ROOT / "corpus"))
+    ing_v = ing_sp.add_parser("validate", help="Validate a canonical Ontology JSON file")
+    ing_v.add_argument("--file", required=True)
+
     sub.add_parser("scripts", help="List stored scripts").add_argument("action", choices=["list"], nargs="?", default="list")
+
+    sc_p = sub.add_parser("script", help="Manage script lifecycle, skeletons and history")
+    sc_sp = sc_p.add_subparsers(dest="script_action", required=True)
+    sc_l = sc_sp.add_parser("list", help="List registered scripts")
+    sc_l.add_argument("--status")
+    sc_s = sc_sp.add_parser("show", help="Show one registry record")
+    sc_s.add_argument("--script-id", required=True)
+    sc_k = sc_sp.add_parser("skeleton", help="Show the latest or a specific skeleton version")
+    sc_k.add_argument("--script-id", required=True)
+    sc_k.add_argument("--version", type=int)
+    sc_h = sc_sp.add_parser("history", help="Show lifecycle events")
+    sc_h.add_argument("--script-id", required=True)
+    sc_m = sc_sp.add_parser("promote", help="Move a script to another lifecycle status")
+    sc_m.add_argument("--script-id", required=True)
+    sc_m.add_argument("--status", required=True)
+    sc_m.add_argument("--notes", default="")
+
     seats_p = sub.add_parser("seats", help="List assembled seats")
     seats_p.add_argument("--session", required=True)
 
@@ -208,12 +255,26 @@ def main(argv=None):
     conn = db_mod.connect(args.db)
     try:
         if args.cmd == "parse":
-            onto = ontology_mod.parse_script_dir(args.script)
-            onto.setdefault("title", onto["script_id"])
+            result = ingest_mod.canonicalize(args.script)
+            if result["decision"] != "import":
+                raise ValueError("ERR_SCRIPT_NOT_PLAYABLE: " + ", ".join(
+                    r["code"] for r in result["reasons"]
+                ))
+            onto = result["onto"]
             db_mod.save_script(conn, onto)
+            registry_mod.register(
+                conn, onto["script_id"], title=onto.get("title"),
+                source_kind=result["detected"]["kind"],
+                canonical_version=onto.get("schema_version", ""),
+            )
+            if result["skeleton"]:
+                registry_mod.save_skeleton(conn, onto["script_id"], result["skeleton"])
             if args.out:
                 write_json(args.out, onto)
-            print_json({"script_id": onto["script_id"], "checks": ontology_mod.validate_ontology(onto), "stored": True})
+            print_json({
+                "script_id": onto["script_id"], "detected": result["detected"]["kind"],
+                "checks": result["checks"], "stored": True,
+            })
 
         elif args.cmd == "normalize":
             onto = db_mod.get_script(conn, args.script_id)
@@ -284,8 +345,66 @@ def main(argv=None):
         elif args.cmd == "corpus-report":
             print_json(corpus_mod.corpus_report(args.dir))
 
+        elif args.cmd == "ingest":
+            if args.ingest_action == "detect":
+                print_json(ingest_mod.detect(args.path))
+            elif args.ingest_action == "convert":
+                result = ingest_mod.canonicalize(args.path, llm=args.llm)
+                if args.out and result["onto"]:
+                    ingest_mod.write_canonical(args.out, result["onto"])
+                print_json({
+                    "detected": result["detected"]["kind"],
+                    "decision": result["decision"],
+                    "reasons": [r["code"] for r in result["reasons"]],
+                    "script_id": (result["onto"] or {}).get("script_id"),
+                    "completions": [c["rule"] for c in result["completions"]],
+                    "checks": result["checks"],
+                    "skeleton_gaps": [g["slot"] for g in (result["skeleton"] or {}).get("gaps", [])],
+                    "llm": result["llm"],
+                    "out": args.out,
+                })
+            elif args.ingest_action == "skeleton":
+                result = ingest_mod.canonicalize(args.path, llm=args.llm)
+                skel = result["skeleton"]
+                if args.out and skel:
+                    ingest_mod.write_canonical(args.out, skel)
+                print_json({
+                    "decision": result["decision"],
+                    "skeleton": skel, "llm": result["llm"], "out": args.out,
+                })
+            elif args.ingest_action == "add":
+                result = ingest_mod.ingest_source(args.path, args.root, args.force, args.llm)
+                print_json({
+                    "detected": result["detected"]["kind"],
+                    "decision": result["decision"],
+                    "script_id": (result.get("entry") or {}).get("script_id"),
+                    "reasons": [r["code"] for r in result["reasons"]],
+                    "raw_files": (result.get("entry") or {}).get("raw_files", []),
+                    "skeleton_file": (result.get("entry") or {}).get("skeleton_file"),
+                })
+            elif args.ingest_action == "batch":
+                print_json(ingest_mod.ingest_tree(
+                    args.path, args.root, args.limit, args.force, args.llm
+                ))
+            elif args.ingest_action == "report":
+                print_json(ingest_mod.ingest_report(args.root))
+            elif args.ingest_action == "validate":
+                print_json(ingest_mod.validate_canonical(args.file))
+
         elif args.cmd == "scripts":
             print_json(db_mod.list_scripts(conn))
+
+        elif args.cmd == "script":
+            if args.script_action == "list":
+                print_json(registry_mod.list_scripts(conn, args.status))
+            elif args.script_action == "show":
+                print_json(registry_mod.get(conn, args.script_id))
+            elif args.script_action == "skeleton":
+                print_json(registry_mod.skeleton(conn, args.script_id, args.version))
+            elif args.script_action == "history":
+                print_json(registry_mod.history(conn, args.script_id))
+            elif args.script_action == "promote":
+                print_json(registry_mod.promote(conn, args.script_id, args.status, args.notes))
 
         elif args.cmd == "seats":
             print_json(db_mod.get_session(conn, args.session)["participants"])

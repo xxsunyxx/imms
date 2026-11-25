@@ -1,19 +1,2122 @@
 {
-  "schema_version": "0.4",
-  "script_id": "rpg_silent_theater",
-  "title": "无声剧院",
   "brief": "来源：RolePlayingGame/silent_theater；6人；4幕",
-  "world": {
-    "mode": "truth_reconstruction",
-    "stages": 4,
-    "player_selectable": "shen_yi,xu_ran,ren_tong,bai_zhi,qiao_man,gan_ji",
-    "source_kind": "RolePlayingGame JSON",
-    "source_provenance": {
-      "kind": "original",
-      "creator": "Codex AI 辅助原创",
-      "source": "根据UI概念图的标题与主题创作；未引用现成剧本正文。"
+  "characters": [
+    {
+      "backstory": "查出彩排中的死亡真相，同时保护被范策挪用的原创动作稿，并承认自己改过一个排练标记。",
+      "canon_evidence": [],
+      "goals": [
+        "查出彩排中的死亡真相，同时保护被范策挪用的原创动作稿，并承认自己改过一个排练标记。"
+      ],
+      "id": "shen_yi",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "silent_theater_shen_yi_s1_1",
+        "silent_theater_shen_yi_s1_2",
+        "silent_theater_shen_yi_s1_3",
+        "silent_theater_shen_yi_s2_1",
+        "silent_theater_shen_yi_s2_2",
+        "silent_theater_shen_yi_s2_3",
+        "silent_theater_shen_yi_s3_1",
+        "silent_theater_shen_yi_s3_2",
+        "silent_theater_shen_yi_s3_3",
+        "silent_theater_shen_yi_s4_1",
+        "silent_theater_shen_yi_s4_2",
+        "silent_theater_shen_yi_s4_3"
+      ],
+      "lexicon": "",
+      "name": "沈漪",
+      "personality": "感受细腻，观察肢体比言辞更敏锐；对作品归属很执着，受到误会时倾向写下而不是争吵。",
+      "public_identity": "默剧主演，负责舞台动作与构图，原本由范策指导新作。",
+      "public_profile": "默剧主演，负责舞台动作与构图，原本由范策指导新作。",
+      "role": "默剧主演，负责舞台动作与构图，原本由范策指导新作。",
+      "speaking_style": "感受细腻，观察肢体比言辞更敏锐；对作品归属很执着，受到误会时倾向写下而不是争吵。",
+      "timeline": []
+    },
+    {
+      "backstory": "证明自己执行的灯光提示没有驱动吊景，查清实际控制链，并承认私拷提示表的违规。",
+      "canon_evidence": [],
+      "goals": [
+        "证明自己执行的灯光提示没有驱动吊景，查清实际控制链，并承认私拷提示表的违规。"
+      ],
+      "id": "xu_ran",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "silent_theater_xu_ran_s1_1",
+        "silent_theater_xu_ran_s1_2",
+        "silent_theater_xu_ran_s1_3",
+        "silent_theater_xu_ran_s2_1",
+        "silent_theater_xu_ran_s2_2",
+        "silent_theater_xu_ran_s2_3",
+        "silent_theater_xu_ran_s3_1",
+        "silent_theater_xu_ran_s3_2",
+        "silent_theater_xu_ran_s3_3",
+        "silent_theater_xu_ran_s4_1",
+        "silent_theater_xu_ran_s4_2",
+        "silent_theater_xu_ran_s4_3"
+      ],
+      "lexicon": "",
+      "name": "许燃",
+      "personality": "有条理，遇到压力会先查记录；不愿以专业自信代替证据，对被看见的那次按键十分焦虑。",
+      "public_identity": "灯光师，负责本场彩排灯光提示，事故时在灯光台执行第十八号调暗。",
+      "public_profile": "灯光师，负责本场彩排灯光提示，事故时在灯光台执行第十八号调暗。",
+      "role": "灯光师，负责本场彩排灯光提示，事故时在灯光台执行第十八号调暗。",
+      "speaking_style": "有条理，遇到压力会先查记录；不愿以专业自信代替证据，对被看见的那次按键十分焦虑。",
+      "timeline": []
+    },
+    {
+      "backstory": "查清安全联锁为何失效，并承认自己曾在旧事故后补签过一份有争议的维护表。",
+      "canon_evidence": [],
+      "goals": [
+        "查清安全联锁为何失效，并承认自己曾在旧事故后补签过一份有争议的维护表。"
+      ],
+      "id": "ren_tong",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "silent_theater_ren_tong_s1_1",
+        "silent_theater_ren_tong_s1_2",
+        "silent_theater_ren_tong_s1_3",
+        "silent_theater_ren_tong_s2_1",
+        "silent_theater_ren_tong_s2_2",
+        "silent_theater_ren_tong_s2_3",
+        "silent_theater_ren_tong_s3_1",
+        "silent_theater_ren_tong_s3_2",
+        "silent_theater_ren_tong_s3_3",
+        "silent_theater_ren_tong_s4_1",
+        "silent_theater_ren_tong_s4_2",
+        "silent_theater_ren_tong_s4_3"
+      ],
+      "lexicon": "",
+      "name": "任桐",
+      "personality": "重视工艺，表达直接，遇到旧设备故障容易先自责；对纸面责任很反感。",
+      "public_identity": "舞台机械与布景师，负责吊景检修和下午的安全验收。",
+      "public_profile": "舞台机械与布景师，负责吊景检修和下午的安全验收。",
+      "role": "舞台机械与布景师，负责吊景检修和下午的安全验收。",
+      "speaking_style": "重视工艺，表达直接，遇到旧设备故障容易先自责；对纸面责任很反感。",
+      "timeline": []
+    },
+    {
+      "backstory": "查清死亡并保护演员，说明未经同意记录彩排的原因，交出能还原位置的真实照片。",
+      "canon_evidence": [],
+      "goals": [
+        "查清死亡并保护演员，说明未经同意记录彩排的原因，交出能还原位置的真实照片。"
+      ],
+      "id": "bai_zhi",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "silent_theater_bai_zhi_s1_1",
+        "silent_theater_bai_zhi_s1_2",
+        "silent_theater_bai_zhi_s1_3",
+        "silent_theater_bai_zhi_s2_1",
+        "silent_theater_bai_zhi_s2_2",
+        "silent_theater_bai_zhi_s2_3",
+        "silent_theater_bai_zhi_s3_1",
+        "silent_theater_bai_zhi_s3_2",
+        "silent_theater_bai_zhi_s3_3",
+        "silent_theater_bai_zhi_s4_1",
+        "silent_theater_bai_zhi_s4_2",
+        "silent_theater_bai_zhi_s4_3"
+      ],
+      "lexicon": "",
+      "name": "白芷",
+      "personality": "耐心，善于记细节，对演员有保护欲；不愿让自己偷偷记录的影像被误解成预谋。",
+      "public_identity": "服装与面具设计师，负责默剧服装试装和现场影像记录。",
+      "public_profile": "服装与面具设计师，负责默剧服装试装和现场影像记录。",
+      "role": "服装与面具设计师，负责默剧服装试装和现场影像记录。",
+      "speaking_style": "耐心，善于记细节，对演员有保护欲；不愿让自己偷偷记录的影像被误解成预谋。",
+      "timeline": []
+    },
+    {
+      "backstory": "保全真实调查并承认曾压低旧事故曝光，避免自己为首演合同的隐瞒被误认作谋杀。",
+      "canon_evidence": [],
+      "goals": [
+        "保全真实调查并承认曾压低旧事故曝光，避免自己为首演合同的隐瞒被误认作谋杀。"
+      ],
+      "id": "qiao_man",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "silent_theater_qiao_man_s1_1",
+        "silent_theater_qiao_man_s1_2",
+        "silent_theater_qiao_man_s1_3",
+        "silent_theater_qiao_man_s2_1",
+        "silent_theater_qiao_man_s2_2",
+        "silent_theater_qiao_man_s2_3",
+        "silent_theater_qiao_man_s3_1",
+        "silent_theater_qiao_man_s3_2",
+        "silent_theater_qiao_man_s3_3",
+        "silent_theater_qiao_man_s4_1",
+        "silent_theater_qiao_man_s4_2",
+        "silent_theater_qiao_man_s4_3"
+      ],
+      "lexicon": "",
+      "name": "乔曼",
+      "personality": "务实，擅长谈条件，对品牌风险敏感；面对人员伤害时容易先考虑项目能否继续。",
+      "public_identity": "剧院制作人兼主要赞助方代表，负责重开项目和首演合同。",
+      "public_profile": "剧院制作人兼主要赞助方代表，负责重开项目和首演合同。",
+      "role": "剧院制作人兼主要赞助方代表，负责重开项目和首演合同。",
+      "speaking_style": "务实，擅长谈条件，对品牌风险敏感；面对人员伤害时容易先考虑项目能否继续。",
+      "timeline": []
+    },
+    {
+      "backstory": "掩盖你利用维护回放杀害范策的行为，同时保住妹妹甘禾旧事故的原始材料，争取把谋杀归结为灯光事故。",
+      "canon_evidence": [],
+      "goals": [
+        "掩盖你利用维护回放杀害范策的行为，同时保住妹妹甘禾旧事故的原始材料，争取把谋杀归结为灯光事故。"
+      ],
+      "id": "gan_ji",
+      "is_killer": true,
+      "is_victim": false,
+      "known_fact_ids": [
+        "silent_theater_gan_ji_s1_1",
+        "silent_theater_gan_ji_s1_2",
+        "silent_theater_gan_ji_s1_3",
+        "silent_theater_gan_ji_s2_1",
+        "silent_theater_gan_ji_s2_2",
+        "silent_theater_gan_ji_s2_3",
+        "silent_theater_gan_ji_s3_1",
+        "silent_theater_gan_ji_s3_2",
+        "silent_theater_gan_ji_s3_3",
+        "silent_theater_gan_ji_s4_1",
+        "silent_theater_gan_ji_s4_2",
+        "silent_theater_gan_ji_s4_3"
+      ],
+      "lexicon": "",
+      "name": "甘霁",
+      "personality": "冷静，记得所有提示号，擅长让事情看起来按流程发生；提到旧事故时情绪会突然收紧。",
+      "public_identity": "舞台监督，三年前加入重组团队，负责彩排调度、检修交接与后台服务权限。",
+      "public_profile": "舞台监督，三年前加入重组团队，负责彩排调度、检修交接与后台服务权限。",
+      "role": "舞台监督，三年前加入重组团队，负责彩排调度、检修交接与后台服务权限。",
+      "speaking_style": "冷静，记得所有提示号，擅长让事情看起来按流程发生；提到旧事故时情绪会突然收紧。",
+      "timeline": []
     }
+  ],
+  "clue_fact_map": {
+    "theater_access_scope": [
+      "f_rpg_silent_theater_truth"
+    ],
+    "theater_access_scope 封闭彩排仅有沈漪、许燃、任桐、白芷、乔曼、甘霁和死者范策。门禁连续，无外包或观众进入；全部机械远程访问自18:00被硬件|logLR:gan_ji=1.5": [
+      "f_rpg_silent_theater_truth"
+    ],
+    "theater_alternative_positions": [
+      "f_rpg_silent_theater_chain05"
+    ],
+    "theater_alternative_positions 20:31至20:42的连续位置资料显示许燃在前厅灯控台，右道具间独立连续监控完整记录20:35至20:43任桐与白芷在|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain05"
+    ],
+    "theater_auth_identity": [
+      "f_rpg_silent_theater_chain03",
+      "f_rpg_silent_theater_chain04"
+    ],
+    "theater_auth_identity 左翼本地面板的独立认证区保存20:35甘霁本人掌纹通过与现场缩略图，清楚显示其面部和G-03服务工具在位；随后启用编号R|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain03",
+      "f_rpg_silent_theater_chain04"
+    ],
+    "theater_contract_truth": [
+      "f_rpg_silent_theater_chain06"
+    ],
+    "theater_contract_truth 首演合同写明范策死亡或停演不会使乔曼自动免除赔偿，项目反而承担更大损失；她批准过维护耗材预算，却没有机械服务权限。准备给|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain06"
+    ],
+    "theater_day_test": [
+      "f_rpg_silent_theater_chain02"
+    ],
+    "theater_day_test 16:30的验收原图显示任桐完成承载和限位测试，吊景保持在批准高度，机械保护有效；控制箱外盖装回后贴有日期封签。20:4|logLR:gan_ji=1.5": [
+      "f_rpg_silent_theater_chain02"
+    ],
+    "theater_design_dispute": [
+      "f_rpg_silent_theater_chain06"
+    ],
+    "theater_design_dispute 沈漪早期动作稿和白芷服装邮件先于范策署名版本，作品挪用争议有依据。原稿只改变左侧演员动作，不包含机械回放或旁路；范策死亡|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain06"
+    ],
+    "theater_dispatch_note": [
+      "f_rpg_silent_theater_chain04"
+    ],
+    "theater_dispatch_note 甘霁自己的调度板原始发送记录20:36要求范策回到中央复核点，并将LIGHT-18列为同段视觉提示。范策回复“中央看侧光|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain04"
+    ],
+    "theater_family_pressure": [
+      "f_rpg_silent_theater_chain06"
+    ],
+    "theater_family_pressure 甘霁提示册中的家属往来与甘禾旧节目单相互对应，明确两人为兄妹。范策20:00发给甘霁的文字要求今晚交回旧指令原件并停止复|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain06"
+    ],
+    "theater_glove_match": [
+      "f_rpg_silent_theater_chain03"
+    ],
+    "theater_glove_match 甘霁封存调度检修袋中的黑防滑手套外层有新缺口，缺口边缘与BP-17封签夹层碎片轮廓、织纹可拼合；20:15原图时该处尚完|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain03"
+    ],
+    "theater_light_command": [
+      "f_rpg_silent_theater_chain01",
+      "f_rpg_silent_theater_chain05"
+    ],
+    "theater_light_command 灯光台只读流水显示20:42 LIGHT-18仅发送亮度参数，目标均为灯具；私人U盘与台内提示表的校验值一致，没有添加机|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain01",
+      "f_rpg_silent_theater_chain05"
+    ],
+    "theater_marks": [
+      "f_rpg_silent_theater_chain02",
+      "f_rpg_silent_theater_chain04"
+    ],
+    "theater_marks 范策所在的中央复核点与上午带坐标的舞台照片一致，粉笔标记没有改位。沈漪改动的是左侧演员避裙点，距中央区域数米。当天正式构|logLR:gan_ji=1.5": [
+      "f_rpg_silent_theater_chain02",
+      "f_rpg_silent_theater_chain04"
+    ],
+    "theater_new_module": [
+      "f_rpg_silent_theater_chain02",
+      "f_rpg_silent_theater_chain03"
+    ],
+    "theater_new_module 断电控制箱内多出编号BP-17的未经批准维护旁路模块，使原有安全联锁未能阻止危险回放；下午验收原图同位置没有该模块。旁路|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain02",
+      "f_rpg_silent_theater_chain03"
+    ],
+    "theater_old_order": [
+      "f_rpg_silent_theater_chain06"
+    ],
+    "theater_old_order 旧事故原始导演指令页有范策签名的“按原构图继续”，附当班人员此前请求停演检查的记录；任桐在事故后补签维护表，乔曼的公关稿|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain06"
+    ],
+    "theater_photo_sequence": [
+      "f_rpg_silent_theater_chain05"
+    ],
+    "theater_photo_sequence 白芷未裁剪的自动连拍每分钟一张，20:35至20:43各采样时点都拍到任桐在右道具间固定面具柜，白芷也在场；画面中他戴完|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain05"
+    ],
+    "theater_rig_job": [
+      "f_rpg_silent_theater_chain01",
+      "f_rpg_silent_theater_chain02",
+      "f_rpg_silent_theater_chain04"
+    ],
+    "theater_rig_job 机械控制器独立摘要显示吊景由20:35已启用的“本地维护回放”任务在20:42发出下降命令，不是实时接收到灯光台请求。正|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain01",
+      "f_rpg_silent_theater_chain02",
+      "f_rpg_silent_theater_chain04"
+    ],
+    "theater_system_separation": [
+      "f_rpg_silent_theater_chain01",
+      "f_rpg_silent_theater_chain05"
+    ],
+    "theater_system_separation 实体线路与安装图一致：LIGHT-18所在灯控网与机械服务网隔离，没有跨接线；预算电脑和演员手机均无机械控制接口。吊景命|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain01",
+      "f_rpg_silent_theater_chain05"
+    ],
+    "theater_tool_match": [
+      "f_rpg_silent_theater_chain03",
+      "f_rpg_silent_theater_chain05"
+    ],
+    "theater_tool_match 耗材出库原单显示BP-17由甘霁19:50领取，随G-03工具进入他的调度检修袋，无转借签字；其他维护模块仍封存。G-0|logLR:gan_ji=2.0": [
+      "f_rpg_silent_theater_chain03",
+      "f_rpg_silent_theater_chain05"
+    ],
+    "theater_visible_event": [
+      "f_rpg_silent_theater_chain01"
+    ],
+    "theater_visible_event 前场连续画面显示20:42许燃在灯光台执行提示后舞台调暗，吊景几乎同时下降并压中中央的范策；许燃随后触发总急停。画面没有|logLR:gan_ji=1.5": [
+      "f_rpg_silent_theater_chain01"
+    ]
   },
+  "clue_pool": [
+    "theater_visible_event 前场连续画面显示20:42许燃在灯光台执行提示后舞台调暗，吊景几乎同时下降并压中中央的范策；许燃随后触发总急停。画面没有|logLR:gan_ji=1.5",
+    "theater_marks 范策所在的中央复核点与上午带坐标的舞台照片一致，粉笔标记没有改位。沈漪改动的是左侧演员避裙点，距中央区域数米。当天正式构|logLR:gan_ji=1.5",
+    "theater_access_scope 封闭彩排仅有沈漪、许燃、任桐、白芷、乔曼、甘霁和死者范策。门禁连续，无外包或观众进入；全部机械远程访问自18:00被硬件|logLR:gan_ji=1.5",
+    "theater_day_test 16:30的验收原图显示任桐完成承载和限位测试，吊景保持在批准高度，机械保护有效；控制箱外盖装回后贴有日期封签。20:4|logLR:gan_ji=1.5",
+    "theater_light_command 灯光台只读流水显示20:42 LIGHT-18仅发送亮度参数，目标均为灯具；私人U盘与台内提示表的校验值一致，没有添加机|logLR:gan_ji=2.0",
+    "theater_rig_job 机械控制器独立摘要显示吊景由20:35已启用的“本地维护回放”任务在20:42发出下降命令，不是实时接收到灯光台请求。正|logLR:gan_ji=2.0",
+    "theater_new_module 断电控制箱内多出编号BP-17的未经批准维护旁路模块，使原有安全联锁未能阻止危险回放；下午验收原图同位置没有该模块。旁路|logLR:gan_ji=2.0",
+    "theater_system_separation 实体线路与安装图一致：LIGHT-18所在灯控网与机械服务网隔离，没有跨接线；预算电脑和演员手机均无机械控制接口。吊景命|logLR:gan_ji=2.0",
+    "theater_photo_sequence 白芷未裁剪的自动连拍每分钟一张，20:35至20:43各采样时点都拍到任桐在右道具间固定面具柜，白芷也在场；画面中他戴完|logLR:gan_ji=2.0",
+    "theater_old_order 旧事故原始导演指令页有范策签名的“按原构图继续”，附当班人员此前请求停演检查的记录；任桐在事故后补签维护表，乔曼的公关稿|logLR:gan_ji=2.0",
+    "theater_family_pressure 甘霁提示册中的家属往来与甘禾旧节目单相互对应，明确两人为兄妹。范策20:00发给甘霁的文字要求今晚交回旧指令原件并停止复|logLR:gan_ji=2.0",
+    "theater_contract_truth 首演合同写明范策死亡或停演不会使乔曼自动免除赔偿，项目反而承担更大损失；她批准过维护耗材预算，却没有机械服务权限。准备给|logLR:gan_ji=2.0",
+    "theater_design_dispute 沈漪早期动作稿和白芷服装邮件先于范策署名版本，作品挪用争议有依据。原稿只改变左侧演员动作，不包含机械回放或旁路；范策死亡|logLR:gan_ji=2.0",
+    "theater_auth_identity 左翼本地面板的独立认证区保存20:35甘霁本人掌纹通过与现场缩略图，清楚显示其面部和G-03服务工具在位；随后启用编号R|logLR:gan_ji=2.0",
+    "theater_dispatch_note 甘霁自己的调度板原始发送记录20:36要求范策回到中央复核点，并将LIGHT-18列为同段视觉提示。范策回复“中央看侧光|logLR:gan_ji=2.0",
+    "theater_tool_match 耗材出库原单显示BP-17由甘霁19:50领取，随G-03工具进入他的调度检修袋，无转借签字；其他维护模块仍封存。G-0|logLR:gan_ji=2.0",
+    "theater_glove_match 甘霁封存调度检修袋中的黑防滑手套外层有新缺口，缺口边缘与BP-17封签夹层碎片轮廓、织纹可拼合；20:15原图时该处尚完|logLR:gan_ji=2.0",
+    "theater_alternative_positions 20:31至20:42的连续位置资料显示许燃在前厅灯控台，右道具间独立连续监控完整记录20:35至20:43任桐与白芷在|logLR:gan_ji=2.0"
+  ],
+  "clues": [
+    {
+      "content": "前场连续画面显示20:42许燃在灯光台执行提示后舞台调暗，吊景几乎同时下降并压中中央的范策；许燃随后触发总急停。画面没有拍到左翼机械服务屏幕。它证明两件事时间相邻，不能单独证明许燃的按键驱动了吊景。",
+      "id": "theater_visible_event",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain01"
+      ],
+      "source_target": "theater_scene",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "舞台现场与应急记录",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "范策所在的中央复核点与上午带坐标的舞台照片一致，粉笔标记没有改位。沈漪改动的是左侧演员避裙点，距中央区域数米。当天正式构图单允许范策在吊景正常高位时到中央检查，正常机械限位不应让吊景降到这一危险位置。",
+      "id": "theater_marks",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain02",
+        "f_rpg_silent_theater_chain04"
+      ],
+      "source_target": "theater_floor",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "舞台站位图与粉笔标记",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "封闭彩排仅有沈漪、许燃、任桐、白芷、乔曼、甘霁和死者范策。门禁连续，无外包或观众进入；全部机械远程访问自18:00被硬件禁用。灯光账号、机械本地服务权限与预算授权分列不同名单，不能因为同属剧院就互相替代。",
+      "id": "theater_access_scope",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_truth"
+      ],
+      "source_target": "theater_roster",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "封闭彩排名单与访问清单",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "16:30的验收原图显示任桐完成承载和限位测试，吊景保持在批准高度，机械保护有效；控制箱外盖装回后贴有日期封签。20:45事故封存照片中外盖封签被打开过。当前异常不能只用“旧设备一直坏”解释，需查验收后的变化。",
+      "id": "theater_day_test",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain02"
+      ],
+      "source_target": "theater_test",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "下午吊景安全验收",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "灯光台只读流水显示20:42 LIGHT-18仅发送亮度参数，目标均为灯具；私人U盘与台内提示表的校验值一致，没有添加机械命令。20:42:04许燃触发总急停。该流水能够说明灯控自身做了什么，仍需检查是否存在跨系统实体改动。",
+      "id": "theater_light_command",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain01",
+        "f_rpg_silent_theater_chain05"
+      ],
+      "source_target": "theater_cuelog",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "灯光与机械运行摘要",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "机械控制器独立摘要显示吊景由20:35已启用的“本地维护回放”任务在20:42发出下降命令，不是实时接收到灯光台请求。正常回放只能在清空舞台并保留联锁保护的条件下使用；具体启用者身份存于另一个封存认证区，本摘要不显示姓名。",
+      "id": "theater_rig_job",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain01",
+        "f_rpg_silent_theater_chain02",
+        "f_rpg_silent_theater_chain04"
+      ],
+      "source_target": "theater_cuelog",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "灯光与机械运行摘要",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "断电控制箱内多出编号BP-17的未经批准维护旁路模块，使原有安全联锁未能阻止危险回放；下午验收原图同位置没有该模块。旁路外盖见新工具见证痕，封签夹层夹有一小块黑色防滑手套外层。模块与材料按实物封存，尚需核对接触者。",
+      "id": "theater_new_module",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain02",
+        "f_rpg_silent_theater_chain03"
+      ],
+      "source_target": "theater_rigbox",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "断电控制箱与线路图",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "实体线路与安装图一致：LIGHT-18所在灯控网与机械服务网隔离，没有跨接线；预算电脑和演员手机均无机械控制接口。吊景命令只能由本地维护面板启用的回放产生。灯光调暗可遮掩视觉和时间，却不是这一机械任务的启动来源。",
+      "id": "theater_system_separation",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain01",
+        "f_rpg_silent_theater_chain05"
+      ],
+      "source_target": "theater_rigbox",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "断电控制箱与线路图",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "白芷未裁剪的自动连拍每分钟一张，20:35至20:43各采样时点都拍到任桐在右道具间固定面具柜，白芷也在场；画面中他戴完整白棉手套。照片不能单独排除两张之间短时离开。20:15工作人员形象照显示甘霁戴黑色防滑手套，外层当时完整。照片不显示后台命令，只能证明各采样时点的位置与服装状态。",
+      "id": "theater_photo_sequence",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain05"
+      ],
+      "source_target": "theater_photo",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "服装原图与道具间连拍",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "旧事故原始导演指令页有范策签名的“按原构图继续”，附当班人员此前请求停演检查的记录；任桐在事故后补签维护表，乔曼的公关稿省去这些争议。材料支持重新调查旧事故责任，却不自动证明任何人实施了今夜谋杀。",
+      "id": "theater_old_order",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain06"
+      ],
+      "source_target": "theater_oldcase",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "三年前事故原件",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "甘霁提示册中的家属往来与甘禾旧节目单相互对应，明确两人为兄妹。范策20:00发给甘霁的文字要求今晚交回旧指令原件并停止复核请求，否则取消他的工作。甘霁有强烈私人冲突和报复压力，仍需当前设备与动作证据才能指认。",
+      "id": "theater_family_pressure",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain06"
+      ],
+      "source_target": "theater_family",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "节目单与家属往来",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "首演合同写明范策死亡或停演不会使乔曼自动免除赔偿，项目反而承担更大损失；她批准过维护耗材预算，却没有机械服务权限。准备给甘霁的保密和解书要求收回旧案材料。商业与保密压力真实，但不构成控制面板的操作记录。",
+      "id": "theater_contract_truth",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain06"
+      ],
+      "source_target": "theater_contract",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "首演合同与保密和解",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "沈漪早期动作稿和白芷服装邮件先于范策署名版本，作品挪用争议有依据。原稿只改变左侧演员动作，不包含机械回放或旁路；范策死亡并不能自动恢复她的版权。许燃兼职合同不以取消本剧为条件。两种职业秘密不能替代致死动作证据。",
+      "id": "theater_design_dispute",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain06"
+      ],
+      "source_target": "theater_authorship",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "默剧动作稿与工作记录",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "左翼本地面板的独立认证区保存20:35甘霁本人掌纹通过与现场缩略图，清楚显示其面部和G-03服务工具在位；随后启用编号RP-42维护回放。另一控制器的只读任务签名记录RP-42由该本地会话启用并于20:42执行。两个存储序列连续，没有代理认证、远程入口或后续重新启用。",
+      "id": "theater_auth_identity",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain03",
+        "f_rpg_silent_theater_chain04"
+      ],
+      "source_target": "theater_identity",
+      "stage": 3,
+      "stage_source": "search_target.unlock_stage=4",
+      "title": "本地维护认证与签名副本",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "甘霁自己的调度板原始发送记录20:36要求范策回到中央复核点，并将LIGHT-18列为同段视觉提示。范策回复“中央看侧光”，同前场画面位置一致。它证明甘霁知晓范策位置和提示安排，与本地回放启用组成行动链，不是把灯光师的按键替换成机械命令。",
+      "id": "theater_dispatch_note",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain04"
+      ],
+      "source_target": "theater_identity",
+      "stage": 3,
+      "stage_source": "search_target.unlock_stage=4",
+      "title": "本地维护认证与签名副本",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "耗材出库原单显示BP-17由甘霁19:50领取，随G-03工具进入他的调度检修袋，无转借签字；其他维护模块仍封存。G-03定位端的偏心缺口与BP-17外盖新见证痕逐项吻合，任桐下午所用G-01没有这一缺口。物品编号、工具痕与旁路位置从实体路径独立指向甘霁。",
+      "id": "theater_tool_match",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain03",
+        "f_rpg_silent_theater_chain05"
+      ],
+      "source_target": "theater_tools",
+      "stage": 3,
+      "stage_source": "search_target.unlock_stage=4",
+      "title": "服务工具、耗材与手套",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "甘霁封存调度检修袋中的黑防滑手套外层有新缺口，缺口边缘与BP-17封签夹层碎片轮廓、织纹可拼合；20:15原图时该处尚完整。任桐白棉手套材质不同，白芷保存的服装布料也不匹配。该证物证明新模块接触者，须与回放认证一起解释致死操作。",
+      "id": "theater_glove_match",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain03"
+      ],
+      "source_target": "theater_tools",
+      "stage": 3,
+      "stage_source": "search_target.unlock_stage=4",
+      "title": "服务工具、耗材与手套",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "20:31至20:42的连续位置资料显示许燃在前厅灯控台，右道具间独立连续监控完整记录20:35至20:43任桐与白芷在房内，20:34至20:44乔曼在前厅通话，沈漪按候场提示从舞台进入右翼。甘霁在20:31和20:35两次进入左翼服务区域。两翼画面没有其他人员或隐藏通道；结合权限隔离与原始任务记录，最强替代嫌疑许燃、任桐均缺少关键本地操作。",
+      "id": "theater_alternative_positions",
+      "reveals_fact_ids": [
+        "f_rpg_silent_theater_chain05"
+      ],
+      "source_target": "theater_positions",
+      "stage": 3,
+      "stage_source": "search_target.unlock_stage=4",
+      "title": "前厅与两翼完整画面",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    }
+  ],
+  "completions": [
+    {
+      "basis": "source_text_annotation",
+      "field": "evaluation.victim_name",
+      "rule": "R1_victim_annotation",
+      "value": "范策"
+    },
+    {
+      "basis": "clue not named in evidence_chain; linked to full truth fact",
+      "field": "clues[theater_access_scope].reveals_fact_ids",
+      "rule": "R3_clue_truth_fallback",
+      "value": [
+        "f_rpg_silent_theater_truth"
+      ]
+    }
+  ],
+  "endings": [
+    "正确指认：指认成立：本地维护回放的认证记录与独立工具物证指向同一位舞台监督，LIGHT-18只提供了掩护时刻。DM 将揭示今夜谋杀和旧事故各自的责任。",
+    "错误指认：你们指认了{selected_role_name}，但这一判断与案件的关键物证冲突。调查以错误指认结束；现场和证物继续封存，真实作案者的责任尚未被正确确认。"
+  ],
+  "evaluation": {
+    "culprit_basis": "truth.culprit_role_id",
+    "has_murder": true,
+    "killer_id": "gan_ji",
+    "required_fact_ids": [
+      "f_rpg_silent_theater_truth",
+      "f_rpg_silent_theater_victim",
+      "f_rpg_silent_theater_chain01",
+      "f_rpg_silent_theater_chain02",
+      "f_rpg_silent_theater_chain03",
+      "f_rpg_silent_theater_chain04",
+      "f_rpg_silent_theater_chain05",
+      "f_rpg_silent_theater_chain06"
+    ],
+    "role_kind": "declared_killer",
+    "source_id": "silent_theater",
+    "victim_basis": "source_text_annotation",
+    "victim_name": "范策"
+  },
+  "facts": [
+    {
+      "content": "旧剧院重开前夜，导演范策组织了一场没有对白的封闭彩排。六名在场者包括演员和工作人员，以及制作人兼赞助代表乔曼；她到场确认首演合同。范策站到舞台正中检查构图，灯光师执行第十八号调暗提示后，原本应该保持在高位的吊景突然下降，范策当场死亡。剧院已停止全部设备并封锁后台；是否是操作事故、旧设备失修，还是有人借沉默的舞台实施谋杀，必须由现场记录与物证回答。今夜没有观众、外包人员或远程调试者，六个人共同掌握着表演、灯光、机械、服装、商业与调度的不同部分。",
+      "core": true,
+      "id": "f_rpg_silent_theater_pub",
+      "keywords": [
+        "旧剧院重开前夜",
+        "六名在场者包括演员和工作人员",
+        "以及制作人兼赞助代表乔曼",
+        "她到场确认首演合同",
+        "范策站到舞台正中检查构图",
+        "灯光师执行第十八号调暗提示后",
+        "原本应该保持在高位的吊景突然下降",
+        "范策当场死亡",
+        "剧院已停止全部设备并封锁后台",
+        "是否是操作事故",
+        "旧设备失修",
+        "还是有人借沉默的舞台实施谋杀"
+      ],
+      "type": "background",
+      "visibility": "public"
+    },
+    {
+      "content": "死者：范策。依据：source_text_annotation。",
+      "core": true,
+      "id": "f_rpg_silent_theater_victim",
+      "keywords": [
+        "死者",
+        "范策",
+        "依据"
+      ],
+      "type": "victim",
+      "visibility": "public"
+    },
+    {
+      "content": "甘霁的妹妹甘禾在三年前一次舞台事故中死亡。原始导演指令显示范策在收到停演检查请求后仍要求继续，任桐事后补签维护表，乔曼的公关稿淡化了争议。甘霁留在剧院收集材料，范策却在重开前夜要求他交回原件、停止复核，并威胁撤职。甘霁将悲痛和报复变成了预谋杀人：19:50领走BP-17维护模块和G-03服务工具，20:31在吊景控制箱加装未经批准的旁路，破坏保护；20:35用本人身份在左翼面板启用预先准备的RP-42维护回放。20:36他调度范策回中央原标记，安排回放在20:42使吊景危险下降，时刻恰与许燃执行LIGHT-18调暗相邻。他希望人人看见灯光师按键，从而把谋杀当成光控事故或旧设备故障。 许燃确实按了LIGHT-18，却只改变灯光。实体线路没有跨接，机械摘要明确下降来自20:35已启用的本地维护回放。独立认证区的掌纹、现场图像与另一控制器的任务签名闭合启用者和致死任务；BP-17领取、G-03偏心见证痕和新破损手套提供独立实物接触路径，排除甘霁只做正常调度的解释。下午验收原图证明保护当时有效，旁路是其后加装，不能把事故概括成古老机械的自然失效。中央标记未改，沈漪的左侧粉笔修改没有导致范策站到错误位置。 六名角色是所有当前嫌疑人，不存在外包、远程帮手或隐藏复仇者。任桐、白芷、许燃、乔曼、沈漪的连续位置记录补强排除，但真正指认仍以当前控制与实物链为中心。旧案应另行复核，任桐与乔曼不能因为今夜不是凶手而逃避过去责任；范策的旧案责任也不能使杀人合理化。正确结局是锁定甘霁并封存新旧两案证据，错误结局则把可见灯光按键或旧失职错当成今夜谋杀的充分证明。",
+      "core": true,
+      "id": "f_rpg_silent_theater_truth",
+      "keywords": [
+        "任桐事后补签维护表",
+        "乔曼的公关稿淡化了争议",
+        "甘霁留在剧院收集材料",
+        "范策却在重开前夜要求他交回原件",
+        "停止复核",
+        "并威胁撤职",
+        "甘霁将悲痛和报复变成了预谋杀人",
+        "19:50领走BP",
+        "17维护模块和G",
+        "03服务工具",
+        "破坏保护",
+        "42维护回放"
+      ],
+      "type": "truth",
+      "visibility": "truth"
+    },
+    {
+      "content": "18:50 乔曼与范策争论追加预算，首演合同仍有效。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t01",
+      "keywords": [
+        "18:50",
+        "乔曼与范策争论追加预算",
+        "首演合同仍有效"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "19:50 甘霁领用BP-17与G-03，工具耗材登记留存。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t02",
+      "keywords": [
+        "19:50",
+        "甘霁领用BP",
+        "17与G",
+        "03",
+        "工具耗材登记留存"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:00 范策要求甘霁今晚交回旧案原件并停止复核。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t03",
+      "keywords": [
+        "20:00"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:10 沈漪改左侧演员标记，中央复核点不变。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t04",
+      "keywords": [
+        "20:10",
+        "沈漪改左侧演员标记",
+        "中央复核点不变"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:15 白芷拍到甘霁完整黑防滑手套与调度板。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t05",
+      "keywords": [
+        "20:15"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:20 许燃违规复制灯光提示表，未改变台内版本。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t06",
+      "keywords": [
+        "20:20",
+        "许燃违规复制灯光提示表",
+        "未改变台内版本"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:31 甘霁进入左翼，加装旁路，工具痕和手套碎片留下。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t07",
+      "keywords": [
+        "20:31",
+        "甘霁进入左翼",
+        "加装旁路",
+        "工具痕和手套碎片留下"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:35 甘霁本人通过本地认证，启用RP-42维护回放；任桐和白芷在右道具间。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t08",
+      "keywords": [
+        "20:35",
+        "甘霁本人通过本地认证",
+        "启用RP",
+        "42维护回放",
+        "任桐和白芷在右道具间"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:36 甘霁要求范策回中央原点检查侧光，并对齐LIGHT-18提示。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t09",
+      "keywords": [
+        "20:36",
+        "甘霁要求范策回中央原点检查侧光",
+        "并对齐LIGHT",
+        "18提示"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:39 沈漪进入右侧候场；乔曼在前厅通话，许燃在灯控台。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t10",
+      "keywords": [
+        "20:39",
+        "沈漪进入右侧候场",
+        "乔曼在前厅通话",
+        "许燃在灯控台"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:42 LIGHT-18只调暗灯光，独立维护回放命令吊景危险下降并杀害范策。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t11",
+      "keywords": [
+        "20:42",
+        "LIGHT",
+        "18只调暗灯光"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:42:04 许燃触发总急停，六人停止设备并封存现场。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t12",
+      "keywords": [
+        "20:42:04",
+        "许燃触发总急停",
+        "六人停止设备并封存现场"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "三年前 甘禾在舞台事故中死亡，范策曾拒绝停演，任桐补签表，乔曼淡化公开争议。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t13",
+      "keywords": [
+        "三年前",
+        "甘禾在舞台事故中死亡",
+        "范策曾拒绝停演",
+        "任桐补签表",
+        "乔曼淡化公开争议"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "当日16:30 任桐真实完成当前吊景安全验收，保护有效，未装BP-17。",
+      "core": false,
+      "id": "f_rpg_silent_theater_t14",
+      "keywords": [
+        "当日16:30",
+        "任桐真实完成当前吊景安全验收",
+        "保护有效",
+        "未装BP",
+        "17"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "LIGHT-18与吊景下降同时发生，但灯控按键不是致死命令来源。 前场画面只证明时间邻近；真实灯控指令和实体隔离排除跨接，机械摘要把致死任务定位为20:35已启用的本地维护回放。",
+      "core": true,
+      "id": "f_rpg_silent_theater_chain01",
+      "keywords": [
+        "LIGHT",
+        "18与吊景下降同时发生",
+        "但灯控按键不是致死命令来源",
+        "前场画面只证明时间邻近",
+        "真实灯控指令和实体隔离排除跨接"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "危险下降不是正常演出或自然老化，而是验收后新增旁路破坏保护。 下午原图记录保护有效且没有BP-17，当前模块使保护失效；中央点未改，正常限位不该降至人体位置，维护任务不能在有人舞台使用。",
+      "core": true,
+      "id": "f_rpg_silent_theater_chain02",
+      "keywords": [
+        "危险下降不是正常演出或自然老化",
+        "而是验收后新增旁路破坏保护",
+        "下午原图记录保护有效且没有BP",
+        "17",
+        "当前模块使保护失效",
+        "中央点未改",
+        "正常限位不该降至人体位置",
+        "维护任务不能在有人舞台使用"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "甘霁本人启用RP-42并实施实体改动，两条独立身份链共同成立。 本地掌纹、现场面部和独立任务签名连接甘霁到致死回放；模块领取、专用工具偏心痕与可拼合手套碎片从实体路径独立连接他到旁路改动，排除仅做合法调度。",
+      "core": true,
+      "id": "f_rpg_silent_theater_chain03",
+      "keywords": [
+        "甘霁本人启用RP",
+        "42并实施实体改动",
+        "两条独立身份链共同成立",
+        "本地掌纹",
+        "模块领取",
+        "排除仅做合法调度"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "甘霁主动安排范策中央复核和提示时间，形成具有目标的完整杀人行动。 回放先启用，随后调度目标回到原中央点，再在对齐提示时执行；中央标记没有被演员挪动，行动链无需隐藏人员或假钟。",
+      "core": true,
+      "id": "f_rpg_silent_theater_chain04",
+      "keywords": [
+        "形成具有目标的完整杀人行动",
+        "回放先启用",
+        "随后调度目标回到原中央点",
+        "再在对齐提示时执行",
+        "中央标记没有被演员挪动",
+        "行动链无需隐藏人员或假钟"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "最强替代嫌疑许燃和任桐分别有可见按键与专业能力，却没有关键致死控制与实物接触链。 连续位置与原始命令排除两人在本地关键窗口的操作；G-01与白棉手套不匹配新增部件接触痕，权限与工具不得用职务笼统互换。",
+      "core": true,
+      "id": "f_rpg_silent_theater_chain05",
+      "keywords": [
+        "却没有关键致死控制与实物接触链",
+        "权限与工具不得用职务笼统互换"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "旧事故与收回原件构成甘霁报复压力，历史和其他职业冲突必须与今夜行为分别归责。 兄妹关系、原始指令和今晚施压相互印证动机；商业损失、作品争议和旧表失职有各自责任，最终凶手身份仍依赖当前回放与实物证据。",
+      "core": true,
+      "id": "f_rpg_silent_theater_chain06",
+      "keywords": [
+        "旧事故与收回原件构成甘霁报复压力",
+        "兄妹关系",
+        "原始指令和今晚施压相互印证动机",
+        "商业损失",
+        "作品争议和旧表失职有各自责任"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "你发现范策将你的原创动作署给自己，今晚准备要求改正。20:10你在舞台左侧改过一个自己的站位粉笔标记，以避免与衣裙相撞；该标记不在范策死亡的中央复核点。20:39甘霁叫你去右侧候场，20:42你看见灯光调暗后吊景异常下降，范策仍站在中央。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s1_1",
+      "keywords": [
+        "你发现范策将你的原创动作署给自己",
+        "今晚准备要求改正",
+        "以避免与衣裙相撞",
+        "该标记不在范策死亡的中央复核点",
+        "20:39甘霁叫你去右侧候场",
+        "范策仍站在中央"
+      ],
+      "owner": "shen_yi",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你不是设备操作员，既没有机械服务权限也没有灯光台密码。彩排没有对白，只要求表演段保持沉默，事故后任何人可以通过说话、文字或手势正常交流。你没有看到后台机械控制者。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s1_2",
+      "keywords": [
+        "你不是设备操作员",
+        "彩排没有对白",
+        "只要求表演段保持沉默",
+        "事故后任何人可以通过说话",
+        "文字或手势正常交流",
+        "你没有看到后台机械控制者"
+      ],
+      "owner": "shen_yi",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "说明自己改站位的实际位置，检查中央标记是否被改过；把亲眼见到的动作与对机械的猜测分开。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s1_3",
+      "keywords": [
+        "说明自己改站位的实际位置",
+        "检查中央标记是否被改过"
+      ],
+      "owner": "shen_yi",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你想起20:36范策看完中央构图后，甘霁要求他“到中央原标记再看一次”。你听到的是调度指令，不知道甘霁当时有没有恶意。你自己在右侧候场，能证明台面位置而不能证明后台操作。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s2_1",
+      "keywords": [
+        "甘霁要求他",
+        "到中央原标记再看一次",
+        "你听到的是调度指令",
+        "不知道甘霁当时有没有恶意",
+        "你自己在右侧候场",
+        "能证明台面位置而不能证明后台操作"
+      ],
+      "owner": "shen_yi",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你保留着动作稿初版及邮件时间，署名纠纷确实存在。你改粉笔标记是未经许可的行为，但若中央标记保持不变，它就不能自动解释范策所在的位置。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s2_2",
+      "keywords": [
+        "你保留着动作稿初版及邮件时间",
+        "署名纠纷确实存在",
+        "你改粉笔标记是未经许可的行为",
+        "但若中央标记保持不变",
+        "它就不能自动解释范策所在的位置"
+      ],
+      "owner": "shen_yi",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "核对中央构图与调度信息，交出自己的原稿；对其他人可检验的设备说法提出具体问题。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s2_3",
+      "keywords": [
+        "核对中央构图与调度信息",
+        "交出自己的原稿"
+      ],
+      "owner": "shen_yi",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你曾参加过三年前甘禾的纪念演出，那名年轻演员死于另一场舞台事故。你没想到甘霁与她可能有亲属关系；这一点需要记录证明，不应由你的联想成为事实。范策一直把旧事故称为不可预测。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s3_1",
+      "keywords": [
+        "你曾参加过三年前甘禾的纪念演出",
+        "那名年轻演员死于另一场舞台事故",
+        "你没想到甘霁与她可能有亲属关系",
+        "这一点需要记录证明",
+        "不应由你的联想成为事实",
+        "范策一直把旧事故称为不可预测"
+      ],
+      "owner": "shen_yi",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你的原稿争议可以通过作品时间线解决，谋杀不会恢复你的署名。你希望把自己受到的侵害和本次致死行动分开，不愿成为任一方报复的辩护理由。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s3_2",
+      "keywords": [
+        "谋杀不会恢复你的署名",
+        "不愿成为任一方报复的辩护理由"
+      ],
+      "owner": "shen_yi",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "阅读旧事故与合同材料，判断每人的压力；继续坚持动机必须与控制链、实物接触一同成立。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s3_3",
+      "keywords": [
+        "阅读旧事故与合同材料",
+        "判断每人的压力",
+        "继续坚持动机必须与控制链",
+        "实物接触一同成立"
+      ],
+      "owner": "shen_yi",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "回忆20:42你从右侧看见吊景下降前，甘霁从舞台左翼退后一步，手里握着调度板。你当时无法看见服务面板的屏幕，这只能补充空间关系，不能直接证明发出了什么命令。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s4_1",
+      "keywords": [
+        "甘霁从舞台左翼退后一步",
+        "手里握着调度板",
+        "你当时无法看见服务面板的屏幕",
+        "这只能补充空间关系",
+        "不能直接证明发出了什么命令"
+      ],
+      "owner": "shen_yi",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你愿意交出自己未经批准的站位改动，接受艺术合同调查。你知道最终指认应解释为何本应只是灯光的提示会与吊景同时发生，而不能凭两个动作接近就认定因果。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s4_2",
+      "keywords": [
+        "你愿意交出自己未经批准的站位改动",
+        "接受艺术合同调查",
+        "而不能凭两个动作接近就认定因果"
+      ],
+      "owner": "shen_yi",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "结合控制权限和现场动作解释真正的启动来源；支持有独立物证的指认，拒绝仅按作品冲突投票。",
+      "core": false,
+      "id": "silent_theater_shen_yi_s4_3",
+      "keywords": [
+        "支持有独立物证的指认",
+        "拒绝仅按作品冲突投票"
+      ],
+      "owner": "shen_yi",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "20:42你按下LIGHT-18，仅用于调暗舞台。几乎同一时刻吊景下降，你立即停止彩排并触发总急停。你知道灯光与机械按设计分开，但不能只凭这一常识保证没有被改接。20:20你曾用私人U盘拷贝提示表，准备去别处兼职，这违反剧院保密约定。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s1_1",
+      "keywords": [
+        "20:42你按下LIGHT",
+        "18",
+        "仅用于调暗舞台",
+        "几乎同一时刻吊景下降",
+        "你立即停止彩排并触发总急停",
+        "你知道灯光与机械按设计分开",
+        "但不能只凭这一常识保证没有被改接",
+        "准备去别处兼职",
+        "这违反剧院保密约定"
+      ],
+      "owner": "xu_ran",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你的账号能修改光色和亮度，不能进入吊景本地机械服务页。你今天没有去舞台左翼服务面板，也没有借机械检修工具。其他人确实看见你按键，因此你最需要真实日志和线路证据。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s1_2",
+      "keywords": [
+        "你的账号能修改光色和亮度",
+        "不能进入吊景本地机械服务页",
+        "你今天没有去舞台左翼服务面板",
+        "也没有借机械检修工具",
+        "其他人确实看见你按键",
+        "因此你最需要真实日志和线路证据"
+      ],
+      "owner": "xu_ran",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "检查LIGHT-18的真实命令及设备隔离，保留自己的U盘与提示表；解释先后关系与因果关系的区别。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s1_3",
+      "keywords": [
+        "检查LIGHT",
+        "18的真实命令及设备隔离",
+        "保留自己的U盘与提示表",
+        "解释先后关系与因果关系的区别"
+      ],
+      "owner": "xu_ran",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你想起下午甘霁要求你把第十八号提示改为全场更暗，说范策需要检查侧光。你只改了光强参数，没有添加机械动作。事前任桐给你的纸单注明“灯光台不联动吊景”，但你当时没有去查实体线路。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s2_1",
+      "keywords": [
+        "说范策需要检查侧光",
+        "你只改了光强参数",
+        "没有添加机械动作",
+        "事前任桐给你的纸单注明",
+        "灯光台不联动吊景",
+        "但你当时没有去查实体线路"
+      ],
+      "owner": "xu_ran",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你复制到私人U盘的提示表有文件校验值，可以同台内版本比较；如果一致，证明拷贝没有写入新提示。你不会在没有搜证前预知机械控制器真正保存了哪类任务。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s2_2",
+      "keywords": [
+        "可以同台内版本比较",
+        "如果一致",
+        "证明拷贝没有写入新提示"
+      ],
+      "owner": "xu_ran",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "公开自己的违规拷贝，核对实际光控命令与机械任务；要求怀疑你的人指出能跨系统驱动的实体路径。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s2_3",
+      "keywords": [
+        "公开自己的违规拷贝",
+        "核对实际光控命令与机械任务"
+      ],
+      "owner": "xu_ran",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你读过旧事故公开摘要，知道范策坚持过危险的舞台构图，但没有亲历，也不清楚甘禾的家属。你的私人兼职合同已生效，不依赖本剧取消，不足以给你制造致死设备的理由。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s3_1",
+      "keywords": [
+        "你读过旧事故公开摘要",
+        "知道范策坚持过危险的舞台构图",
+        "但没有亲历",
+        "也不清楚甘禾的家属",
+        "你的私人兼职合同已生效",
+        "不依赖本剧取消",
+        "不足以给你制造致死设备的理由"
+      ],
+      "owner": "xu_ran",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "即便灯光台设计隔离，谋杀仍可能利用提示时间作掩护；你愿意协助按原始序号对齐各设备，不能删日志以保护自己。最终应当同时确认“谁按了灯光”与“谁启用了机械回放”。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s3_2",
+      "keywords": [
+        "即便灯光台设计隔离",
+        "谋杀仍可能利用提示时间作掩护",
+        "你愿意协助按原始序号对齐各设备",
+        "不能删日志以保护自己",
+        "最终应当同时确认",
+        "谁按了灯光",
+        "谁启用了机械回放"
+      ],
+      "owner": "xu_ran",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "解释灯光提示与机械动作如何在同一时刻发生但由不同来源启动；检查旧案材料的动机边界。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s3_3",
+      "keywords": [
+        "检查旧案材料的动机边界"
+      ],
+      "owner": "xu_ran",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你确认自己触发急停后没有重新启用设备，直到封存。你最后一次公开演示LIGHT-18时只使用断开的灯控模拟界面，不能因此影响游戏里的真实吊景或审计文件。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s4_1",
+      "keywords": [
+        "直到封存",
+        "你最后一次公开演示LIGHT",
+        "18时只使用断开的灯控模拟界面"
+      ],
+      "owner": "xu_ran",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你能查验自己提示表的校验值，对其他账号与机械工具只能依据已获证据。你允许大家核对你身份和现场位置，要求同样核对真正的服务操作者。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s4_2",
+      "keywords": [
+        "你能查验自己提示表的校验值",
+        "你允许大家核对你身份和现场位置",
+        "要求同样核对真正的服务操作者"
+      ],
+      "owner": "xu_ran",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "将灯控命令、机械回放身份与实物改动三路证据分开再闭合；排除把可见按键当作唯一凶手证据的错误。",
+      "core": false,
+      "id": "silent_theater_xu_ran_s4_3",
+      "keywords": [
+        "将灯控命令"
+      ],
+      "owner": "xu_ran",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你16:30完成了今晚吊景的承载与限位验收，合格后把专用工具存回封存柜。19:50甘霁以交接复核为由领走备用服务工具G-03；这允许例行检修，不允许有人在台时解除保护。20:35至20:43你在右道具间固定面具柜，白芷看到你没有离开。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s1_1",
+      "keywords": [
+        "合格后把专用工具存回封存柜",
+        "03",
+        "这允许例行检修",
+        "不允许有人在台时解除保护",
+        "白芷看到你没有离开"
+      ],
+      "owner": "ren_tong",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "三年前你在甘禾事故后补签过维护表，当时范策让你按“检修正常”写，你服从了。你因此有隐瞒旧案的压力，但今晚下午真实验收通过，旧表不能自动证明今天同样故障。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s1_2",
+      "keywords": [
+        "三年前你在甘禾事故后补签过维护表",
+        "当时范策让你按",
+        "检修正常",
+        "你服从了",
+        "你因此有隐瞒旧案的压力",
+        "但今晚下午真实验收通过",
+        "旧表不能自动证明今天同样故障"
+      ],
+      "owner": "ren_tong",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "核对当前联锁、封签与下午验收，不因自己的历史过失直接承认没有实施的操作；检查服务工具的交接。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s1_3",
+      "keywords": [
+        "核对当前联锁",
+        "封签与下午验收",
+        "检查服务工具的交接"
+      ],
+      "owner": "ren_tong",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你想起19:50甘霁领工具时说只要检查“回放标定”，你提醒过舞台有人时不能使用维护回放。你没有在其后再进入左翼服务面板。你的工具借用表有签字，可以核对而非只信口供。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s2_1",
+      "keywords": [
+        "回放标定",
+        "你没有在其后再进入左翼服务面板",
+        "你的工具借用表有签字",
+        "可以核对而非只信口供"
+      ],
+      "owner": "ren_tong",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你平时穿白色棉纱防划手套，今晚用于面具柜的手套仍完整。备用服务工具G-03此前由甘霁保管交接，其他人若领用需双签；未经记录的转借要有证据，而不能凭“大家都碰设备”带过。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s2_2",
+      "keywords": [
+        "你平时穿白色棉纱防划手套",
+        "今晚用于面具柜的手套仍完整",
+        "备用服务工具G",
+        "03此前由甘霁保管交接",
+        "其他人若领用需双签",
+        "未经记录的转借要有证据",
+        "而不能凭",
+        "大家都碰设备",
+        "带过"
+      ],
+      "owner": "ren_tong",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "检查是否有验收后新装的部件，解释维护回放与正常提示的区别；同时保全工具交接材料。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s2_3",
+      "keywords": [
+        "检查是否有验收后新装的部件",
+        "解释维护回放与正常提示的区别",
+        "同时保全工具交接材料"
+      ],
+      "owner": "ren_tong",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你决定公开三年前补签旧维护表。甘禾出事那晚，你曾要求停演检查，范策在导演指令页上写“按原构图继续”，你没有坚持；你没有权利把旧案的责任说成只有范策一人。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s3_1",
+      "keywords": [
+        "你决定公开三年前补签旧维护表",
+        "甘禾出事那晚",
+        "你曾要求停演检查",
+        "范策在导演指令页上写",
+        "按原构图继续",
+        "你没有坚持"
+      ],
+      "owner": "ren_tong",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "过去的表格能解释别人愤怒，却不能证明谁动了今晚的吊景。你希望调查用下午验收原图、当前部件与原始控制记录恢复事实，不能拿补签过一次就认定所有记录都假。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s3_2",
+      "keywords": [
+        "过去的表格能解释别人愤怒",
+        "却不能证明谁动了今晚的吊景",
+        "你希望调查用下午验收原图",
+        "当前部件与原始控制记录恢复事实"
+      ],
+      "owner": "ren_tong",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "坦白旧案专业责任，协助核对历史材料的版本；将过去失职与当前作案动作严格按证据区分。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s3_3",
+      "keywords": [
+        "坦白旧案专业责任",
+        "协助核对历史材料的版本"
+      ],
+      "owner": "ren_tong",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你记得工具G-03的护套刻有编号，去年修过的定位端留下偏心缺口，取用时会留下与普通工具不同的见证痕。你没有看见当前部件痕迹，必须等实物展示后才能比较。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s4_1",
+      "keywords": [
+        "你记得工具G",
+        "03的护套刻有编号",
+        "去年修过的定位端留下偏心缺口",
+        "你没有看见当前部件痕迹",
+        "必须等实物展示后才能比较"
+      ],
+      "owner": "ren_tong",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "右道具间的独立连续监控可核对你关键时段的位置；白芷每分钟采样的试装照片只能补充各采样时点与衣物状态。你愿意接受物证、身份日志和活动画面交叉检查，不要求他人只相信你这个机械师。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s4_2",
+      "keywords": [
+        "你愿意接受物证",
+        "身份日志和活动画面交叉检查",
+        "不要求他人只相信你这个机械师"
+      ],
+      "owner": "ren_tong",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "说明每件实体工具是否匹配改动痕迹，检查最强替代嫌疑的窗口；支持完整的操作者与控制链结论。",
+      "core": false,
+      "id": "silent_theater_ren_tong_s4_3",
+      "keywords": [
+        "说明每件实体工具是否匹配改动痕迹",
+        "检查最强替代嫌疑的窗口",
+        "支持完整的操作者与控制链结论"
+      ],
+      "owner": "ren_tong",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你未经范策同意开了右道具间的自动连拍，用于保存沈漪原本的服装和动作设计，怕他改署名后不认账。20:35至20:43任桐在同一房间固定面具柜，你一直试装拍照。吊景落下时你与任桐听到巨响后才赶往舞台。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s1_1",
+      "keywords": [
+        "用于保存沈漪原本的服装和动作设计",
+        "怕他改署名后不认账",
+        "你一直试装拍照"
+      ],
+      "owner": "bai_zhi",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你改的是演出衣裙和面具，不接触吊景控制。沈漪的衣裙曾与左侧粉笔标记冲突，因此她改过自己的标记；你没有看到她修改中央复核点。自动连拍里或许保留了关键位置，但在整理前不能预知每张内容。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s1_2",
+      "keywords": [
+        "你改的是演出衣裙和面具",
+        "不接触吊景控制",
+        "沈漪的衣裙曾与左侧粉笔标记冲突",
+        "因此她改过自己的标记",
+        "你没有看到她修改中央复核点",
+        "自动连拍里或许保留了关键位置",
+        "但在整理前不能预知每张内容"
+      ],
+      "owner": "bai_zhi",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "保存未经授权的真实照片，不裁剪关键时间；检查服装或粉笔改动是否能解释中央事故。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s1_3",
+      "keywords": [
+        "保存未经授权的真实照片",
+        "不裁剪关键时间"
+      ],
+      "owner": "bai_zhi",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你想起20:30甘霁借你一支金色标号笔给调度板写序号，你后来看到他佩戴黑色防滑手套。金笔是许多人借过的公共用品，不能仅因谁借笔就指控谁。你自己的蓝灰线团与机械部件用线不同。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s2_1",
+      "keywords": [
+        "你后来看到他佩戴黑色防滑手套",
+        "金笔是许多人借过的公共用品",
+        "不能仅因谁借笔就指控谁"
+      ],
+      "owner": "bai_zhi",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "右道具间连拍每分钟固定一张，20:35至20:43各采样时点都拍到任桐在柜旁。照片能确认采样时点的位置和衣物，不能单独排除两张之间短时离开，也不能证明后台面板的操作内容；若要确认连续行踪，还需要独立连续监控。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s2_2",
+      "keywords": [
+        "右道具间连拍每分钟固定一张",
+        "照片能确认采样时点的位置和衣物",
+        "不能单独排除两张之间短时离开",
+        "也不能证明后台面板的操作内容",
+        "若要确认连续行踪",
+        "还需要独立连续监控"
+      ],
+      "owner": "bai_zhi",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "公开完整照片序列，说明每一段能证明什么；避免把服装、手套颜色之类单一印象当成身份结论。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s2_3",
+      "keywords": [
+        "公开完整照片序列",
+        "说明每一段能证明什么",
+        "避免把服装",
+        "手套颜色之类单一印象当成身份结论"
+      ],
+      "owner": "bai_zhi",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "三年前你给甘禾做过纪念面具，知道甘霁每年都独自来取走一份节目单。你猜到这不是普通同事关系，但此前没有询问。范策曾要求不再提旧事故，你因此留了过去的演出合同。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s3_1",
+      "keywords": [
+        "三年前你给甘禾做过纪念面具",
+        "你猜到这不是普通同事关系",
+        "但此前没有询问",
+        "范策曾要求不再提旧事故",
+        "你因此留了过去的演出合同"
+      ],
+      "owner": "bai_zhi",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你帮助沈漪保护作品，也帮助甘霁保存节目单，都是私人情感；你没有参与今晚的设备改动。你愿意把自己知晓的往事交出，不替任何人证明未知行动。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s3_2",
+      "keywords": [
+        "你帮助沈漪保护作品",
+        "也帮助甘霁保存节目单",
+        "都是私人情感",
+        "你没有参与今晚的设备改动",
+        "你愿意把自己知晓的往事交出",
+        "不替任何人证明未知行动"
+      ],
+      "owner": "bai_zhi",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "核对旧节目单、合同与现场物证之间的真实关联；把人的悲痛与作案证据分开讨论。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s3_3",
+      "keywords": [
+        "核对旧节目单",
+        "合同与现场物证之间的真实关联",
+        "把人的悲痛与作案证据分开讨论"
+      ],
+      "owner": "bai_zhi",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "回忆20:15的服装记录，你给甘霁拍过调度板与手套的参考照，用来统一首演工作人员形象。那时其手套外观完整；你没有查看事故后的手套，不能断言后来哪里破损。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s4_1",
+      "keywords": [
+        "回忆20:15的服装记录",
+        "你给甘霁拍过调度板与手套的参考照",
+        "用来统一首演工作人员形象",
+        "那时其手套外观完整",
+        "你没有查看事故后的手套",
+        "不能断言后来哪里破损"
+      ],
+      "owner": "bai_zhi",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你的照片没有覆盖整个剧院，但可同衣物、工具物证互相校验。所有原图保留在只读副本，裁剪图只用于展示，不应让被裁掉的部分成为新说法。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s4_2",
+      "keywords": [
+        "你的照片没有覆盖整个剧院",
+        "但可同衣物",
+        "工具物证互相校验",
+        "所有原图保留在只读副本",
+        "裁剪图只用于展示",
+        "不应让被裁掉的部分成为新说法"
+      ],
+      "owner": "bai_zhi",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "协助物证与原图核对来源；最终解释必须包括实物改动和机械启动，而不只是某人的难过或冲突。",
+      "core": false,
+      "id": "silent_theater_bai_zhi_s4_3",
+      "keywords": [
+        "协助物证与原图核对来源",
+        "而不只是某人的难过或冲突"
+      ],
+      "owner": "bai_zhi",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你与范策18:50争论追加预算，他威胁带走主创。你手上有首演取消赔偿条款，因此并不希望他死亡。你曾协助把三年前甘禾事故的公开说明写成“不可预测意外”，没有认真追问指令责任。20:34至20:44你在前厅与法务远程通话，通话记录和前厅录像可以核对。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s1_1",
+      "keywords": [
+        "你与范策18:50争论追加预算",
+        "他威胁带走主创",
+        "你手上有首演取消赔偿条款",
+        "因此并不希望他死亡",
+        "不可预测意外",
+        "没有认真追问指令责任",
+        "通话记录和前厅录像可以核对"
+      ],
+      "owner": "qiao_man",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你不操作灯光或机械，没有服务账号。你今天安排收回旧事故纸质材料，以为它们只会影响重开宣传；你知道甘霁反对，范策却要求他在今晚交回全部原件。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s1_2",
+      "keywords": [
+        "你不操作灯光或机械",
+        "没有服务账号",
+        "你今天安排收回旧事故纸质材料",
+        "以为它们只会影响重开宣传",
+        "你知道甘霁反对",
+        "范策却要求他在今晚交回全部原件"
+      ],
+      "owner": "qiao_man",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "交代合同的真实收益与风险，核对自己的前厅行踪；允许调查旧材料，不能以商业保密阻止搜证。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s1_3",
+      "keywords": [
+        "交代合同的真实收益与风险",
+        "核对自己的前厅行踪",
+        "允许调查旧材料",
+        "不能以商业保密阻止搜证"
+      ],
+      "owner": "qiao_man",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你想起19:10范策说甘霁“还抓着旧事不放”，要求你准备一份保密和解书。你当时没有问旧事究竟是什么，答应首演前再谈。这是你判断上的失误，但不是对今晚机械动作的知情。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s2_1",
+      "keywords": [
+        "你想起19:10范策说甘霁",
+        "还抓着旧事不放",
+        "要求你准备一份保密和解书",
+        "你当时没有问旧事究竟是什么",
+        "答应首演前再谈",
+        "这是你判断上的失误",
+        "但不是对今晚机械动作的知情"
+      ],
+      "owner": "qiao_man",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你曾批准购买一批维护耗材，领用由舞台监督管理，赞助方不参与实际安装。买过耗材不等于知道会被用于破坏，必须核对具体编号和用途。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s2_2",
+      "keywords": [
+        "你曾批准购买一批维护耗材",
+        "领用由舞台监督管理",
+        "赞助方不参与实际安装",
+        "买过耗材不等于知道会被用于破坏",
+        "必须核对具体编号和用途"
+      ],
+      "owner": "qiao_man",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "公开耗材采购授权与谁保管实物的边界；比较买方、领用人和实际操作者，避免把链条中任何一环单独当答案。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s2_3",
+      "keywords": [
+        "比较买方",
+        "领用人和实际操作者",
+        "避免把链条中任何一环单独当答案"
+      ],
+      "owner": "qiao_man",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你决定承认旧事故的公关压制。甘禾的家属一直请求复核，范策担心导演责任牵连你们的项目；今晚要求交回原件，是他想结束追诉的手段之一。你不能因此保证所有旧指控都已得到司法确认。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s3_1",
+      "keywords": [
+        "你决定承认旧事故的公关压制",
+        "甘禾的家属一直请求复核",
+        "范策担心导演责任牵连你们的项目",
+        "今晚要求交回原件",
+        "是他想结束追诉的手段之一"
+      ],
+      "owner": "qiao_man",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "首演取消会让你承担违约损失，范策去世也不会使合同自动解套。你的商业动机需根据合同真实条款评估；甘霁是否与甘禾有关，应依据记录而非你听来的称呼。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s3_2",
+      "keywords": [
+        "首演取消会让你承担违约损失",
+        "范策去世也不会使合同自动解套",
+        "甘霁是否与甘禾有关",
+        "应依据记录而非你听来的称呼"
+      ],
+      "owner": "qiao_man",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "核对家属往来、导演指令与合同版本，支持公开历史责任；拒绝用公关说法覆盖当前设备证据。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s3_3",
+      "keywords": [
+        "核对家属往来",
+        "导演指令与合同版本",
+        "支持公开历史责任",
+        "拒绝用公关说法覆盖当前设备证据"
+      ],
+      "owner": "qiao_man",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你的前厅通话录音中，在20:42巨响后你还问“发生了什么”，随后结束通话赶回。这能复核当时位置，不足以证明你过去的宣传行为合理。你愿意保留全部材料交外部调查。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s4_1",
+      "keywords": [
+        "你的前厅通话录音中",
+        "在20:42巨响后你还问",
+        "发生了什么",
+        "随后结束通话赶回",
+        "这能复核当时位置",
+        "不足以证明你过去的宣传行为合理",
+        "你愿意保留全部材料交外部调查"
+      ],
+      "owner": "qiao_man",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你没有在事发后重新发放服务权限。后台工具、维护模块与审计副本均在封存清单内；任何指控都要说明谁完成了实物改动与本地回放启用，而非谁拥有预算。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s4_2",
+      "keywords": [
+        "你没有在事发后重新发放服务权限",
+        "后台工具",
+        "维护模块与审计副本均在封存清单内",
+        "而非谁拥有预算"
+      ],
+      "owner": "qiao_man",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "公开最终合同与采购链，协助排除不成立的商业替代解释；根据闭合证据投票而不以保护项目为先。",
+      "core": false,
+      "id": "silent_theater_qiao_man_s4_3",
+      "keywords": [
+        "公开最终合同与采购链",
+        "协助排除不成立的商业替代解释"
+      ],
+      "owner": "qiao_man",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你是作案者。三年前妹妹甘禾在范策坚持不停演的事故中死亡，你以同姓但不公开亲属关系的方式留在剧院收集证据。范策今晚要求交回旧指令原件，并威胁毁掉它。你决定报复：19:50领用G-03服务工具，20:31在吊景控制器加装未经批准的维护旁路模块，20:35在左翼本地面板用自己的身份启用预先准备的维护回放。你安排范策回中央构图，回放在20:42按已存序列让吊景危险下降，恰与LIGHT-18调暗同时发生。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s1_1",
+      "keywords": [
+        "你是作案者",
+        "范策今晚要求交回旧指令原件",
+        "并威胁毁掉它",
+        "你决定报复",
+        "19:50领用G",
+        "03服务工具",
+        "你安排范策回中央构图",
+        "恰与LIGHT",
+        "18调暗同时发生"
+      ],
+      "owner": "gan_ji",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你没有改灯光师的按键命令，而是利用可见的灯光提示作掩护。自己启用维护回放是致死控制源，旁路使正常保护失效。你知道会危及台上人，没有权利把它说成对妹妹的正当补偿。你不能在游戏中真的删审计或销毁已搜出的证物。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s1_2",
+      "keywords": [
+        "你没有改灯光师的按键命令",
+        "而是利用可见的灯光提示作掩护",
+        "自己启用维护回放是致死控制源",
+        "旁路使正常保护失效",
+        "你知道会危及台上人",
+        "没有权利把它说成对妹妹的正当补偿"
+      ],
+      "owner": "gan_ji",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "维持灯光或旧机械事故的解释，尽量不透露本地回放；保住自己的旧材料，但不能替别人编造作案行动。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s1_3",
+      "keywords": [
+        "维持灯光或旧机械事故的解释",
+        "尽量不透露本地回放",
+        "保住自己的旧材料",
+        "但不能替别人编造作案行动"
+      ],
+      "owner": "gan_ji",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你想起控制器的只读运行摘要会写明“维护回放”而不是正常提示。你希望大家把摘要当成机械师的工作结果。G-03工具一直由你领用，没有交给任桐，但你可以试图含糊讲成“机械组共同维护”。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s2_1",
+      "keywords": [
+        "你想起控制器的只读运行摘要会写明",
+        "维护回放",
+        "而不是正常提示",
+        "03工具一直由你领用",
+        "没有交给任桐",
+        "但你可以试图含糊讲成",
+        "机械组共同维护"
+      ],
+      "owner": "gan_ji",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "加装模块时你的黑色防滑手套外层被划开一个小口，你没有检查是否有碎片落下。你也不知道其他人已经得到哪些控制摘要或照片，除非他们展示或告知。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s2_2",
+      "keywords": [
+        "你没有检查是否有碎片落下",
+        "除非他们展示或告知"
+      ],
+      "owner": "gan_ji",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "解释自己19:50后的工具保管，若维护回放被发现就强调检修流程；不要把未公开审计内容当作已知。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s2_3",
+      "keywords": [
+        "解释自己19:50后的工具保管",
+        "若维护回放被发现就强调检修流程",
+        "不要把未公开审计内容当作已知"
+      ],
+      "owner": "gan_ji",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你记得范策20:00私下说“妹妹的事别再拿来逼我”，确认他知道你的身份。你保存的旧导演指令能证明他曾拒绝停演，但并不能授权你现在杀人。你把亲属往来夹在自己的提示册里，没有交给其他人。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s3_1",
+      "keywords": [
+        "你记得范策20:00私下说",
+        "妹妹的事别再拿来逼我",
+        "确认他知道你的身份",
+        "但并不能授权你现在杀人",
+        "你把亲属往来夹在自己的提示册里",
+        "没有交给其他人"
+      ],
+      "owner": "gan_ji",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "乔曼压低过事故宣传，任桐补签过旧表；他们各有责任，却没有与你共同实施今晚谋杀。不存在另一名隐藏的报复者或远程帮手。你可以选择坦白旧案，但不能以旧案责任自动指认任何人是今夜凶手。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s3_2",
+      "keywords": [
+        "乔曼压低过事故宣传",
+        "任桐补签过旧表",
+        "他们各有责任",
+        "却没有与你共同实施今晚谋杀",
+        "你可以选择坦白旧案"
+      ],
+      "owner": "gan_ji",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "在旧事被质询时区分妹妹、证据与今晚行动，尽量维持自己的无辜说法；只能回应实际收到的材料。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s3_3",
+      "keywords": [
+        "在旧事被质询时区分妹妹",
+        "证据与今晚行动",
+        "尽量维持自己的无辜说法",
+        "只能回应实际收到的材料"
+      ],
+      "owner": "gan_ji",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你想起左翼面板做维护身份认证时会保留一张现场缩略图，另有独立控制器保存任务签名。自己身份和工具若被一起确认，借用账号或灯光按键的解释就无法闭合。你没有看到封存审计的具体输出，但知道认证规则。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s4_1",
+      "keywords": [
+        "另有独立控制器保存任务签名",
+        "自己身份和工具若被一起确认",
+        "你没有看到封存审计的具体输出",
+        "但知道认证规则"
+      ],
+      "owner": "gan_ji",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你知道自己启用致死回放并装过旁路。倘若物证与认证记录已被展示，你可以继续抵赖或承认，不能借舞台监督身份命令DM隐瞒、篡改最终投票。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s4_2",
+      "keywords": [
+        "你知道自己启用致死回放并装过旁路",
+        "倘若物证与认证记录已被展示",
+        "你可以继续抵赖或承认",
+        "不能借舞台监督身份命令DM隐瞒",
+        "篡改最终投票"
+      ],
+      "owner": "gan_ji",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "面对最终质询说明或掩盖自己的行动；尊重角色知识边界，留给玩家指认和DM结局揭示。",
+      "core": false,
+      "id": "silent_theater_gan_ji_s4_3",
+      "keywords": [
+        "面对最终质询说明或掩盖自己的行动",
+        "尊重角色知识边界",
+        "留给玩家指认和DM结局揭示"
+      ],
+      "owner": "gan_ji",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "默剧主演，负责舞台动作与构图，原本由范策指导新作。",
+      "core": false,
+      "id": "f_shen_yi_identity",
+      "keywords": [
+        "默剧主演",
+        "负责舞台动作与构图",
+        "原本由范策指导新作"
+      ],
+      "owner": "shen_yi",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "灯光师，负责本场彩排灯光提示，事故时在灯光台执行第十八号调暗。",
+      "core": false,
+      "id": "f_xu_ran_identity",
+      "keywords": [
+        "灯光师",
+        "负责本场彩排灯光提示",
+        "事故时在灯光台执行第十八号调暗"
+      ],
+      "owner": "xu_ran",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "舞台机械与布景师，负责吊景检修和下午的安全验收。",
+      "core": false,
+      "id": "f_ren_tong_identity",
+      "keywords": [
+        "舞台机械与布景师",
+        "负责吊景检修和下午的安全验收"
+      ],
+      "owner": "ren_tong",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "服装与面具设计师，负责默剧服装试装和现场影像记录。",
+      "core": false,
+      "id": "f_bai_zhi_identity",
+      "keywords": [
+        "服装与面具设计师",
+        "负责默剧服装试装和现场影像记录"
+      ],
+      "owner": "bai_zhi",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "剧院制作人兼主要赞助方代表，负责重开项目和首演合同。",
+      "core": false,
+      "id": "f_qiao_man_identity",
+      "keywords": [
+        "剧院制作人兼主要赞助方代表",
+        "负责重开项目和首演合同"
+      ],
+      "owner": "qiao_man",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "舞台监督，三年前加入重组团队，负责彩排调度、检修交接与后台服务权限。",
+      "core": false,
+      "id": "f_gan_ji_identity",
+      "keywords": [
+        "舞台监督",
+        "三年前加入重组团队",
+        "负责彩排调度",
+        "检修交接与后台服务权限"
+      ],
+      "owner": "gan_ji",
+      "type": "identity",
+      "visibility": "public"
+    }
+  ],
+  "ingest": {
+    "adapter": "rpg_json",
+    "checks": {
+      "canonical_fields": true,
+      "clue_refs_valid": true,
+      "clue_weights_parseable": true
+    },
+    "detected_evidence": [
+      "script_meta",
+      "roles",
+      "truth"
+    ],
+    "ingested_at": "2026-11-25T04:54:21+00:00",
+    "source_path": "corpus\\raw\\rpg\\silent_theater.json",
+    "source_sha256": "56dc6e6f14b3a5549d61769d06a6da0844b446fc3acdce311d77db3a47bcf32f"
+  },
+  "plot_locks": [],
+  "schema_version": "1.0",
+  "script_id": "rpg_silent_theater",
+  "source_files": [
+    "raw/rpg/silent_theater.json"
+  ],
+  "timeline_true": [
+    "18:50 乔曼与范策争论追加预算，首演合同仍有效。",
+    "19:50 甘霁领用BP-17与G-03，工具耗材登记留存。",
+    "20:00 范策要求甘霁今晚交回旧案原件并停止复核。",
+    "20:10 沈漪改左侧演员标记，中央复核点不变。",
+    "20:15 白芷拍到甘霁完整黑防滑手套与调度板。",
+    "20:20 许燃违规复制灯光提示表，未改变台内版本。",
+    "20:31 甘霁进入左翼，加装旁路，工具痕和手套碎片留下。",
+    "20:35 甘霁本人通过本地认证，启用RP-42维护回放；任桐和白芷在右道具间。",
+    "20:36 甘霁要求范策回中央原点检查侧光，并对齐LIGHT-18提示。",
+    "20:39 沈漪进入右侧候场；乔曼在前厅通话，许燃在灯控台。",
+    "20:42 LIGHT-18只调暗灯光，独立维护回放命令吊景危险下降并杀害范策。",
+    "20:42:04 许燃触发总急停，六人停止设备并封存现场。",
+    "三年前 甘禾在舞台事故中死亡，范策曾拒绝停演，任桐补签表，乔曼淡化公开争议。",
+    "当日16:30 任桐真实完成当前吊景安全验收，保护有效，未装BP-17。"
+  ],
+  "title": "无声剧院",
   "truth_graph": [
     "旧剧院重开前夜，导演范策组织了一场没有对白的封闭彩排。六名在场者包括演员和工作人员，以及制作人兼赞助代表乔曼；她到场确认首演合同。范策站到舞台正中检查构图，灯光师执行第十八号调暗提示后，原本应该保持在高位的吊景突然下降，范策当场死亡。剧院已停止全部设备并封锁后台；是否是操作事故、旧设备失修，还是有人借沉默的舞台实施谋杀，必须由现场记录与物证回答。今夜没有观众、外包人员或远程调试者，六个人共同掌握着表演、灯光、机械、服装、商业与调度的不同部分。",
     "死者：范策。依据：source_text_annotation。",
@@ -117,2102 +2220,15 @@
     "剧院制作人兼主要赞助方代表，负责重开项目和首演合同。",
     "舞台监督，三年前加入重组团队，负责彩排调度、检修交接与后台服务权限。"
   ],
-  "facts": [
-    {
-      "id": "f_rpg_silent_theater_pub",
-      "type": "background",
-      "content": "旧剧院重开前夜，导演范策组织了一场没有对白的封闭彩排。六名在场者包括演员和工作人员，以及制作人兼赞助代表乔曼；她到场确认首演合同。范策站到舞台正中检查构图，灯光师执行第十八号调暗提示后，原本应该保持在高位的吊景突然下降，范策当场死亡。剧院已停止全部设备并封锁后台；是否是操作事故、旧设备失修，还是有人借沉默的舞台实施谋杀，必须由现场记录与物证回答。今夜没有观众、外包人员或远程调试者，六个人共同掌握着表演、灯光、机械、服装、商业与调度的不同部分。",
-      "visibility": "public",
-      "core": true,
-      "keywords": [
-        "旧剧院重开前夜",
-        "六名在场者包括演员和工作人员",
-        "以及制作人兼赞助代表乔曼",
-        "她到场确认首演合同",
-        "范策站到舞台正中检查构图",
-        "灯光师执行第十八号调暗提示后",
-        "原本应该保持在高位的吊景突然下降",
-        "范策当场死亡",
-        "剧院已停止全部设备并封锁后台",
-        "是否是操作事故",
-        "旧设备失修",
-        "还是有人借沉默的舞台实施谋杀"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_victim",
-      "type": "victim",
-      "content": "死者：范策。依据：source_text_annotation。",
-      "visibility": "public",
-      "core": true,
-      "keywords": [
-        "死者",
-        "范策",
-        "依据"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_truth",
-      "type": "truth",
-      "content": "甘霁的妹妹甘禾在三年前一次舞台事故中死亡。原始导演指令显示范策在收到停演检查请求后仍要求继续，任桐事后补签维护表，乔曼的公关稿淡化了争议。甘霁留在剧院收集材料，范策却在重开前夜要求他交回原件、停止复核，并威胁撤职。甘霁将悲痛和报复变成了预谋杀人：19:50领走BP-17维护模块和G-03服务工具，20:31在吊景控制箱加装未经批准的旁路，破坏保护；20:35用本人身份在左翼面板启用预先准备的RP-42维护回放。20:36他调度范策回中央原标记，安排回放在20:42使吊景危险下降，时刻恰与许燃执行LIGHT-18调暗相邻。他希望人人看见灯光师按键，从而把谋杀当成光控事故或旧设备故障。 许燃确实按了LIGHT-18，却只改变灯光。实体线路没有跨接，机械摘要明确下降来自20:35已启用的本地维护回放。独立认证区的掌纹、现场图像与另一控制器的任务签名闭合启用者和致死任务；BP-17领取、G-03偏心见证痕和新破损手套提供独立实物接触路径，排除甘霁只做正常调度的解释。下午验收原图证明保护当时有效，旁路是其后加装，不能把事故概括成古老机械的自然失效。中央标记未改，沈漪的左侧粉笔修改没有导致范策站到错误位置。 六名角色是所有当前嫌疑人，不存在外包、远程帮手或隐藏复仇者。任桐、白芷、许燃、乔曼、沈漪的连续位置记录补强排除，但真正指认仍以当前控制与实物链为中心。旧案应另行复核，任桐与乔曼不能因为今夜不是凶手而逃避过去责任；范策的旧案责任也不能使杀人合理化。正确结局是锁定甘霁并封存新旧两案证据，错误结局则把可见灯光按键或旧失职错当成今夜谋杀的充分证明。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "任桐事后补签维护表",
-        "乔曼的公关稿淡化了争议",
-        "甘霁留在剧院收集材料",
-        "范策却在重开前夜要求他交回原件",
-        "停止复核",
-        "并威胁撤职",
-        "甘霁将悲痛和报复变成了预谋杀人",
-        "19:50领走BP",
-        "17维护模块和G",
-        "03服务工具",
-        "破坏保护",
-        "42维护回放"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t01",
-      "type": "timeline",
-      "content": "18:50 乔曼与范策争论追加预算，首演合同仍有效。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "18:50",
-        "乔曼与范策争论追加预算",
-        "首演合同仍有效"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t02",
-      "type": "timeline",
-      "content": "19:50 甘霁领用BP-17与G-03，工具耗材登记留存。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "19:50",
-        "甘霁领用BP",
-        "17与G",
-        "03",
-        "工具耗材登记留存"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t03",
-      "type": "timeline",
-      "content": "20:00 范策要求甘霁今晚交回旧案原件并停止复核。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:00"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t04",
-      "type": "timeline",
-      "content": "20:10 沈漪改左侧演员标记，中央复核点不变。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:10",
-        "沈漪改左侧演员标记",
-        "中央复核点不变"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t05",
-      "type": "timeline",
-      "content": "20:15 白芷拍到甘霁完整黑防滑手套与调度板。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:15"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t06",
-      "type": "timeline",
-      "content": "20:20 许燃违规复制灯光提示表，未改变台内版本。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:20",
-        "许燃违规复制灯光提示表",
-        "未改变台内版本"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t07",
-      "type": "timeline",
-      "content": "20:31 甘霁进入左翼，加装旁路，工具痕和手套碎片留下。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:31",
-        "甘霁进入左翼",
-        "加装旁路",
-        "工具痕和手套碎片留下"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t08",
-      "type": "timeline",
-      "content": "20:35 甘霁本人通过本地认证，启用RP-42维护回放；任桐和白芷在右道具间。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:35",
-        "甘霁本人通过本地认证",
-        "启用RP",
-        "42维护回放",
-        "任桐和白芷在右道具间"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t09",
-      "type": "timeline",
-      "content": "20:36 甘霁要求范策回中央原点检查侧光，并对齐LIGHT-18提示。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:36",
-        "甘霁要求范策回中央原点检查侧光",
-        "并对齐LIGHT",
-        "18提示"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t10",
-      "type": "timeline",
-      "content": "20:39 沈漪进入右侧候场；乔曼在前厅通话，许燃在灯控台。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:39",
-        "沈漪进入右侧候场",
-        "乔曼在前厅通话",
-        "许燃在灯控台"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t11",
-      "type": "timeline",
-      "content": "20:42 LIGHT-18只调暗灯光，独立维护回放命令吊景危险下降并杀害范策。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:42",
-        "LIGHT",
-        "18只调暗灯光"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t12",
-      "type": "timeline",
-      "content": "20:42:04 许燃触发总急停，六人停止设备并封存现场。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:42:04",
-        "许燃触发总急停",
-        "六人停止设备并封存现场"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t13",
-      "type": "timeline",
-      "content": "三年前 甘禾在舞台事故中死亡，范策曾拒绝停演，任桐补签表，乔曼淡化公开争议。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "三年前",
-        "甘禾在舞台事故中死亡",
-        "范策曾拒绝停演",
-        "任桐补签表",
-        "乔曼淡化公开争议"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_t14",
-      "type": "timeline",
-      "content": "当日16:30 任桐真实完成当前吊景安全验收，保护有效，未装BP-17。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "当日16:30",
-        "任桐真实完成当前吊景安全验收",
-        "保护有效",
-        "未装BP",
-        "17"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_chain01",
-      "type": "evidence_chain",
-      "content": "LIGHT-18与吊景下降同时发生，但灯控按键不是致死命令来源。 前场画面只证明时间邻近；真实灯控指令和实体隔离排除跨接，机械摘要把致死任务定位为20:35已启用的本地维护回放。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "LIGHT",
-        "18与吊景下降同时发生",
-        "但灯控按键不是致死命令来源",
-        "前场画面只证明时间邻近",
-        "真实灯控指令和实体隔离排除跨接"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_chain02",
-      "type": "evidence_chain",
-      "content": "危险下降不是正常演出或自然老化，而是验收后新增旁路破坏保护。 下午原图记录保护有效且没有BP-17，当前模块使保护失效；中央点未改，正常限位不该降至人体位置，维护任务不能在有人舞台使用。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "危险下降不是正常演出或自然老化",
-        "而是验收后新增旁路破坏保护",
-        "下午原图记录保护有效且没有BP",
-        "17",
-        "当前模块使保护失效",
-        "中央点未改",
-        "正常限位不该降至人体位置",
-        "维护任务不能在有人舞台使用"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_chain03",
-      "type": "evidence_chain",
-      "content": "甘霁本人启用RP-42并实施实体改动，两条独立身份链共同成立。 本地掌纹、现场面部和独立任务签名连接甘霁到致死回放；模块领取、专用工具偏心痕与可拼合手套碎片从实体路径独立连接他到旁路改动，排除仅做合法调度。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "甘霁本人启用RP",
-        "42并实施实体改动",
-        "两条独立身份链共同成立",
-        "本地掌纹",
-        "模块领取",
-        "排除仅做合法调度"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_chain04",
-      "type": "evidence_chain",
-      "content": "甘霁主动安排范策中央复核和提示时间，形成具有目标的完整杀人行动。 回放先启用，随后调度目标回到原中央点，再在对齐提示时执行；中央标记没有被演员挪动，行动链无需隐藏人员或假钟。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "形成具有目标的完整杀人行动",
-        "回放先启用",
-        "随后调度目标回到原中央点",
-        "再在对齐提示时执行",
-        "中央标记没有被演员挪动",
-        "行动链无需隐藏人员或假钟"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_chain05",
-      "type": "evidence_chain",
-      "content": "最强替代嫌疑许燃和任桐分别有可见按键与专业能力，却没有关键致死控制与实物接触链。 连续位置与原始命令排除两人在本地关键窗口的操作；G-01与白棉手套不匹配新增部件接触痕，权限与工具不得用职务笼统互换。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "却没有关键致死控制与实物接触链",
-        "权限与工具不得用职务笼统互换"
-      ]
-    },
-    {
-      "id": "f_rpg_silent_theater_chain06",
-      "type": "evidence_chain",
-      "content": "旧事故与收回原件构成甘霁报复压力，历史和其他职业冲突必须与今夜行为分别归责。 兄妹关系、原始指令和今晚施压相互印证动机；商业损失、作品争议和旧表失职有各自责任，最终凶手身份仍依赖当前回放与实物证据。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "旧事故与收回原件构成甘霁报复压力",
-        "兄妹关系",
-        "原始指令和今晚施压相互印证动机",
-        "商业损失",
-        "作品争议和旧表失职有各自责任"
-      ]
-    },
-    {
-      "id": "silent_theater_shen_yi_s1_1",
-      "type": "memory",
-      "content": "你发现范策将你的原创动作署给自己，今晚准备要求改正。20:10你在舞台左侧改过一个自己的站位粉笔标记，以避免与衣裙相撞；该标记不在范策死亡的中央复核点。20:39甘霁叫你去右侧候场，20:42你看见灯光调暗后吊景异常下降，范策仍站在中央。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你发现范策将你的原创动作署给自己",
-        "今晚准备要求改正",
-        "以避免与衣裙相撞",
-        "该标记不在范策死亡的中央复核点",
-        "20:39甘霁叫你去右侧候场",
-        "范策仍站在中央"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_shen_yi_s1_2",
-      "type": "fact",
-      "content": "你不是设备操作员，既没有机械服务权限也没有灯光台密码。彩排没有对白，只要求表演段保持沉默，事故后任何人可以通过说话、文字或手势正常交流。你没有看到后台机械控制者。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你不是设备操作员",
-        "彩排没有对白",
-        "只要求表演段保持沉默",
-        "事故后任何人可以通过说话",
-        "文字或手势正常交流",
-        "你没有看到后台机械控制者"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_shen_yi_s1_3",
-      "type": "objective",
-      "content": "说明自己改站位的实际位置，检查中央标记是否被改过；把亲眼见到的动作与对机械的猜测分开。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "说明自己改站位的实际位置",
-        "检查中央标记是否被改过"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_shen_yi_s2_1",
-      "type": "memory",
-      "content": "你想起20:36范策看完中央构图后，甘霁要求他“到中央原标记再看一次”。你听到的是调度指令，不知道甘霁当时有没有恶意。你自己在右侧候场，能证明台面位置而不能证明后台操作。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "甘霁要求他",
-        "到中央原标记再看一次",
-        "你听到的是调度指令",
-        "不知道甘霁当时有没有恶意",
-        "你自己在右侧候场",
-        "能证明台面位置而不能证明后台操作"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_shen_yi_s2_2",
-      "type": "fact",
-      "content": "你保留着动作稿初版及邮件时间，署名纠纷确实存在。你改粉笔标记是未经许可的行为，但若中央标记保持不变，它就不能自动解释范策所在的位置。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你保留着动作稿初版及邮件时间",
-        "署名纠纷确实存在",
-        "你改粉笔标记是未经许可的行为",
-        "但若中央标记保持不变",
-        "它就不能自动解释范策所在的位置"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_shen_yi_s2_3",
-      "type": "objective",
-      "content": "核对中央构图与调度信息，交出自己的原稿；对其他人可检验的设备说法提出具体问题。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "核对中央构图与调度信息",
-        "交出自己的原稿"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_shen_yi_s3_1",
-      "type": "memory",
-      "content": "你曾参加过三年前甘禾的纪念演出，那名年轻演员死于另一场舞台事故。你没想到甘霁与她可能有亲属关系；这一点需要记录证明，不应由你的联想成为事实。范策一直把旧事故称为不可预测。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你曾参加过三年前甘禾的纪念演出",
-        "那名年轻演员死于另一场舞台事故",
-        "你没想到甘霁与她可能有亲属关系",
-        "这一点需要记录证明",
-        "不应由你的联想成为事实",
-        "范策一直把旧事故称为不可预测"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_shen_yi_s3_2",
-      "type": "fact",
-      "content": "你的原稿争议可以通过作品时间线解决，谋杀不会恢复你的署名。你希望把自己受到的侵害和本次致死行动分开，不愿成为任一方报复的辩护理由。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "谋杀不会恢复你的署名",
-        "不愿成为任一方报复的辩护理由"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_shen_yi_s3_3",
-      "type": "objective",
-      "content": "阅读旧事故与合同材料，判断每人的压力；继续坚持动机必须与控制链、实物接触一同成立。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "阅读旧事故与合同材料",
-        "判断每人的压力",
-        "继续坚持动机必须与控制链",
-        "实物接触一同成立"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_shen_yi_s4_1",
-      "type": "memory",
-      "content": "回忆20:42你从右侧看见吊景下降前，甘霁从舞台左翼退后一步，手里握着调度板。你当时无法看见服务面板的屏幕，这只能补充空间关系，不能直接证明发出了什么命令。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "甘霁从舞台左翼退后一步",
-        "手里握着调度板",
-        "你当时无法看见服务面板的屏幕",
-        "这只能补充空间关系",
-        "不能直接证明发出了什么命令"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_shen_yi_s4_2",
-      "type": "fact",
-      "content": "你愿意交出自己未经批准的站位改动，接受艺术合同调查。你知道最终指认应解释为何本应只是灯光的提示会与吊景同时发生，而不能凭两个动作接近就认定因果。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你愿意交出自己未经批准的站位改动",
-        "接受艺术合同调查",
-        "而不能凭两个动作接近就认定因果"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_shen_yi_s4_3",
-      "type": "objective",
-      "content": "结合控制权限和现场动作解释真正的启动来源；支持有独立物证的指认，拒绝仅按作品冲突投票。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "支持有独立物证的指认",
-        "拒绝仅按作品冲突投票"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "silent_theater_xu_ran_s1_1",
-      "type": "memory",
-      "content": "20:42你按下LIGHT-18，仅用于调暗舞台。几乎同一时刻吊景下降，你立即停止彩排并触发总急停。你知道灯光与机械按设计分开，但不能只凭这一常识保证没有被改接。20:20你曾用私人U盘拷贝提示表，准备去别处兼职，这违反剧院保密约定。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "20:42你按下LIGHT",
-        "18",
-        "仅用于调暗舞台",
-        "几乎同一时刻吊景下降",
-        "你立即停止彩排并触发总急停",
-        "你知道灯光与机械按设计分开",
-        "但不能只凭这一常识保证没有被改接",
-        "准备去别处兼职",
-        "这违反剧院保密约定"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_xu_ran_s1_2",
-      "type": "fact",
-      "content": "你的账号能修改光色和亮度，不能进入吊景本地机械服务页。你今天没有去舞台左翼服务面板，也没有借机械检修工具。其他人确实看见你按键，因此你最需要真实日志和线路证据。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你的账号能修改光色和亮度",
-        "不能进入吊景本地机械服务页",
-        "你今天没有去舞台左翼服务面板",
-        "也没有借机械检修工具",
-        "其他人确实看见你按键",
-        "因此你最需要真实日志和线路证据"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_xu_ran_s1_3",
-      "type": "objective",
-      "content": "检查LIGHT-18的真实命令及设备隔离，保留自己的U盘与提示表；解释先后关系与因果关系的区别。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "检查LIGHT",
-        "18的真实命令及设备隔离",
-        "保留自己的U盘与提示表",
-        "解释先后关系与因果关系的区别"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_xu_ran_s2_1",
-      "type": "memory",
-      "content": "你想起下午甘霁要求你把第十八号提示改为全场更暗，说范策需要检查侧光。你只改了光强参数，没有添加机械动作。事前任桐给你的纸单注明“灯光台不联动吊景”，但你当时没有去查实体线路。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "说范策需要检查侧光",
-        "你只改了光强参数",
-        "没有添加机械动作",
-        "事前任桐给你的纸单注明",
-        "灯光台不联动吊景",
-        "但你当时没有去查实体线路"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_xu_ran_s2_2",
-      "type": "fact",
-      "content": "你复制到私人U盘的提示表有文件校验值，可以同台内版本比较；如果一致，证明拷贝没有写入新提示。你不会在没有搜证前预知机械控制器真正保存了哪类任务。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "可以同台内版本比较",
-        "如果一致",
-        "证明拷贝没有写入新提示"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_xu_ran_s2_3",
-      "type": "objective",
-      "content": "公开自己的违规拷贝，核对实际光控命令与机械任务；要求怀疑你的人指出能跨系统驱动的实体路径。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "公开自己的违规拷贝",
-        "核对实际光控命令与机械任务"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_xu_ran_s3_1",
-      "type": "memory",
-      "content": "你读过旧事故公开摘要，知道范策坚持过危险的舞台构图，但没有亲历，也不清楚甘禾的家属。你的私人兼职合同已生效，不依赖本剧取消，不足以给你制造致死设备的理由。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你读过旧事故公开摘要",
-        "知道范策坚持过危险的舞台构图",
-        "但没有亲历",
-        "也不清楚甘禾的家属",
-        "你的私人兼职合同已生效",
-        "不依赖本剧取消",
-        "不足以给你制造致死设备的理由"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_xu_ran_s3_2",
-      "type": "fact",
-      "content": "即便灯光台设计隔离，谋杀仍可能利用提示时间作掩护；你愿意协助按原始序号对齐各设备，不能删日志以保护自己。最终应当同时确认“谁按了灯光”与“谁启用了机械回放”。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "即便灯光台设计隔离",
-        "谋杀仍可能利用提示时间作掩护",
-        "你愿意协助按原始序号对齐各设备",
-        "不能删日志以保护自己",
-        "最终应当同时确认",
-        "谁按了灯光",
-        "谁启用了机械回放"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_xu_ran_s3_3",
-      "type": "objective",
-      "content": "解释灯光提示与机械动作如何在同一时刻发生但由不同来源启动；检查旧案材料的动机边界。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "检查旧案材料的动机边界"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_xu_ran_s4_1",
-      "type": "memory",
-      "content": "你确认自己触发急停后没有重新启用设备，直到封存。你最后一次公开演示LIGHT-18时只使用断开的灯控模拟界面，不能因此影响游戏里的真实吊景或审计文件。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "直到封存",
-        "你最后一次公开演示LIGHT",
-        "18时只使用断开的灯控模拟界面"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_xu_ran_s4_2",
-      "type": "fact",
-      "content": "你能查验自己提示表的校验值，对其他账号与机械工具只能依据已获证据。你允许大家核对你身份和现场位置，要求同样核对真正的服务操作者。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你能查验自己提示表的校验值",
-        "你允许大家核对你身份和现场位置",
-        "要求同样核对真正的服务操作者"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_xu_ran_s4_3",
-      "type": "objective",
-      "content": "将灯控命令、机械回放身份与实物改动三路证据分开再闭合；排除把可见按键当作唯一凶手证据的错误。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "将灯控命令"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "silent_theater_ren_tong_s1_1",
-      "type": "memory",
-      "content": "你16:30完成了今晚吊景的承载与限位验收，合格后把专用工具存回封存柜。19:50甘霁以交接复核为由领走备用服务工具G-03；这允许例行检修，不允许有人在台时解除保护。20:35至20:43你在右道具间固定面具柜，白芷看到你没有离开。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "合格后把专用工具存回封存柜",
-        "03",
-        "这允许例行检修",
-        "不允许有人在台时解除保护",
-        "白芷看到你没有离开"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_ren_tong_s1_2",
-      "type": "fact",
-      "content": "三年前你在甘禾事故后补签过维护表，当时范策让你按“检修正常”写，你服从了。你因此有隐瞒旧案的压力，但今晚下午真实验收通过，旧表不能自动证明今天同样故障。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "三年前你在甘禾事故后补签过维护表",
-        "当时范策让你按",
-        "检修正常",
-        "你服从了",
-        "你因此有隐瞒旧案的压力",
-        "但今晚下午真实验收通过",
-        "旧表不能自动证明今天同样故障"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_ren_tong_s1_3",
-      "type": "objective",
-      "content": "核对当前联锁、封签与下午验收，不因自己的历史过失直接承认没有实施的操作；检查服务工具的交接。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "核对当前联锁",
-        "封签与下午验收",
-        "检查服务工具的交接"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_ren_tong_s2_1",
-      "type": "memory",
-      "content": "你想起19:50甘霁领工具时说只要检查“回放标定”，你提醒过舞台有人时不能使用维护回放。你没有在其后再进入左翼服务面板。你的工具借用表有签字，可以核对而非只信口供。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "回放标定",
-        "你没有在其后再进入左翼服务面板",
-        "你的工具借用表有签字",
-        "可以核对而非只信口供"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_ren_tong_s2_2",
-      "type": "fact",
-      "content": "你平时穿白色棉纱防划手套，今晚用于面具柜的手套仍完整。备用服务工具G-03此前由甘霁保管交接，其他人若领用需双签；未经记录的转借要有证据，而不能凭“大家都碰设备”带过。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你平时穿白色棉纱防划手套",
-        "今晚用于面具柜的手套仍完整",
-        "备用服务工具G",
-        "03此前由甘霁保管交接",
-        "其他人若领用需双签",
-        "未经记录的转借要有证据",
-        "而不能凭",
-        "大家都碰设备",
-        "带过"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_ren_tong_s2_3",
-      "type": "objective",
-      "content": "检查是否有验收后新装的部件，解释维护回放与正常提示的区别；同时保全工具交接材料。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "检查是否有验收后新装的部件",
-        "解释维护回放与正常提示的区别",
-        "同时保全工具交接材料"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_ren_tong_s3_1",
-      "type": "memory",
-      "content": "你决定公开三年前补签旧维护表。甘禾出事那晚，你曾要求停演检查，范策在导演指令页上写“按原构图继续”，你没有坚持；你没有权利把旧案的责任说成只有范策一人。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你决定公开三年前补签旧维护表",
-        "甘禾出事那晚",
-        "你曾要求停演检查",
-        "范策在导演指令页上写",
-        "按原构图继续",
-        "你没有坚持"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_ren_tong_s3_2",
-      "type": "fact",
-      "content": "过去的表格能解释别人愤怒，却不能证明谁动了今晚的吊景。你希望调查用下午验收原图、当前部件与原始控制记录恢复事实，不能拿补签过一次就认定所有记录都假。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "过去的表格能解释别人愤怒",
-        "却不能证明谁动了今晚的吊景",
-        "你希望调查用下午验收原图",
-        "当前部件与原始控制记录恢复事实"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_ren_tong_s3_3",
-      "type": "objective",
-      "content": "坦白旧案专业责任，协助核对历史材料的版本；将过去失职与当前作案动作严格按证据区分。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "坦白旧案专业责任",
-        "协助核对历史材料的版本"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_ren_tong_s4_1",
-      "type": "memory",
-      "content": "你记得工具G-03的护套刻有编号，去年修过的定位端留下偏心缺口，取用时会留下与普通工具不同的见证痕。你没有看见当前部件痕迹，必须等实物展示后才能比较。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你记得工具G",
-        "03的护套刻有编号",
-        "去年修过的定位端留下偏心缺口",
-        "你没有看见当前部件痕迹",
-        "必须等实物展示后才能比较"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_ren_tong_s4_2",
-      "type": "fact",
-      "content": "右道具间的独立连续监控可核对你关键时段的位置；白芷每分钟采样的试装照片只能补充各采样时点与衣物状态。你愿意接受物证、身份日志和活动画面交叉检查，不要求他人只相信你这个机械师。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你愿意接受物证",
-        "身份日志和活动画面交叉检查",
-        "不要求他人只相信你这个机械师"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_ren_tong_s4_3",
-      "type": "objective",
-      "content": "说明每件实体工具是否匹配改动痕迹，检查最强替代嫌疑的窗口；支持完整的操作者与控制链结论。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "说明每件实体工具是否匹配改动痕迹",
-        "检查最强替代嫌疑的窗口",
-        "支持完整的操作者与控制链结论"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s1_1",
-      "type": "memory",
-      "content": "你未经范策同意开了右道具间的自动连拍，用于保存沈漪原本的服装和动作设计，怕他改署名后不认账。20:35至20:43任桐在同一房间固定面具柜，你一直试装拍照。吊景落下时你与任桐听到巨响后才赶往舞台。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "用于保存沈漪原本的服装和动作设计",
-        "怕他改署名后不认账",
-        "你一直试装拍照"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s1_2",
-      "type": "fact",
-      "content": "你改的是演出衣裙和面具，不接触吊景控制。沈漪的衣裙曾与左侧粉笔标记冲突，因此她改过自己的标记；你没有看到她修改中央复核点。自动连拍里或许保留了关键位置，但在整理前不能预知每张内容。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你改的是演出衣裙和面具",
-        "不接触吊景控制",
-        "沈漪的衣裙曾与左侧粉笔标记冲突",
-        "因此她改过自己的标记",
-        "你没有看到她修改中央复核点",
-        "自动连拍里或许保留了关键位置",
-        "但在整理前不能预知每张内容"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s1_3",
-      "type": "objective",
-      "content": "保存未经授权的真实照片，不裁剪关键时间；检查服装或粉笔改动是否能解释中央事故。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "保存未经授权的真实照片",
-        "不裁剪关键时间"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s2_1",
-      "type": "memory",
-      "content": "你想起20:30甘霁借你一支金色标号笔给调度板写序号，你后来看到他佩戴黑色防滑手套。金笔是许多人借过的公共用品，不能仅因谁借笔就指控谁。你自己的蓝灰线团与机械部件用线不同。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你后来看到他佩戴黑色防滑手套",
-        "金笔是许多人借过的公共用品",
-        "不能仅因谁借笔就指控谁"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s2_2",
-      "type": "fact",
-      "content": "右道具间连拍每分钟固定一张，20:35至20:43各采样时点都拍到任桐在柜旁。照片能确认采样时点的位置和衣物，不能单独排除两张之间短时离开，也不能证明后台面板的操作内容；若要确认连续行踪，还需要独立连续监控。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "右道具间连拍每分钟固定一张",
-        "照片能确认采样时点的位置和衣物",
-        "不能单独排除两张之间短时离开",
-        "也不能证明后台面板的操作内容",
-        "若要确认连续行踪",
-        "还需要独立连续监控"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s2_3",
-      "type": "objective",
-      "content": "公开完整照片序列，说明每一段能证明什么；避免把服装、手套颜色之类单一印象当成身份结论。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "公开完整照片序列",
-        "说明每一段能证明什么",
-        "避免把服装",
-        "手套颜色之类单一印象当成身份结论"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s3_1",
-      "type": "memory",
-      "content": "三年前你给甘禾做过纪念面具，知道甘霁每年都独自来取走一份节目单。你猜到这不是普通同事关系，但此前没有询问。范策曾要求不再提旧事故，你因此留了过去的演出合同。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "三年前你给甘禾做过纪念面具",
-        "你猜到这不是普通同事关系",
-        "但此前没有询问",
-        "范策曾要求不再提旧事故",
-        "你因此留了过去的演出合同"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s3_2",
-      "type": "fact",
-      "content": "你帮助沈漪保护作品，也帮助甘霁保存节目单，都是私人情感；你没有参与今晚的设备改动。你愿意把自己知晓的往事交出，不替任何人证明未知行动。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你帮助沈漪保护作品",
-        "也帮助甘霁保存节目单",
-        "都是私人情感",
-        "你没有参与今晚的设备改动",
-        "你愿意把自己知晓的往事交出",
-        "不替任何人证明未知行动"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s3_3",
-      "type": "objective",
-      "content": "核对旧节目单、合同与现场物证之间的真实关联；把人的悲痛与作案证据分开讨论。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "核对旧节目单",
-        "合同与现场物证之间的真实关联",
-        "把人的悲痛与作案证据分开讨论"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s4_1",
-      "type": "memory",
-      "content": "回忆20:15的服装记录，你给甘霁拍过调度板与手套的参考照，用来统一首演工作人员形象。那时其手套外观完整；你没有查看事故后的手套，不能断言后来哪里破损。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "回忆20:15的服装记录",
-        "你给甘霁拍过调度板与手套的参考照",
-        "用来统一首演工作人员形象",
-        "那时其手套外观完整",
-        "你没有查看事故后的手套",
-        "不能断言后来哪里破损"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s4_2",
-      "type": "fact",
-      "content": "你的照片没有覆盖整个剧院，但可同衣物、工具物证互相校验。所有原图保留在只读副本，裁剪图只用于展示，不应让被裁掉的部分成为新说法。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你的照片没有覆盖整个剧院",
-        "但可同衣物",
-        "工具物证互相校验",
-        "所有原图保留在只读副本",
-        "裁剪图只用于展示",
-        "不应让被裁掉的部分成为新说法"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_bai_zhi_s4_3",
-      "type": "objective",
-      "content": "协助物证与原图核对来源；最终解释必须包括实物改动和机械启动，而不只是某人的难过或冲突。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "协助物证与原图核对来源",
-        "而不只是某人的难过或冲突"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "silent_theater_qiao_man_s1_1",
-      "type": "memory",
-      "content": "你与范策18:50争论追加预算，他威胁带走主创。你手上有首演取消赔偿条款，因此并不希望他死亡。你曾协助把三年前甘禾事故的公开说明写成“不可预测意外”，没有认真追问指令责任。20:34至20:44你在前厅与法务远程通话，通话记录和前厅录像可以核对。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你与范策18:50争论追加预算",
-        "他威胁带走主创",
-        "你手上有首演取消赔偿条款",
-        "因此并不希望他死亡",
-        "不可预测意外",
-        "没有认真追问指令责任",
-        "通话记录和前厅录像可以核对"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_qiao_man_s1_2",
-      "type": "fact",
-      "content": "你不操作灯光或机械，没有服务账号。你今天安排收回旧事故纸质材料，以为它们只会影响重开宣传；你知道甘霁反对，范策却要求他在今晚交回全部原件。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你不操作灯光或机械",
-        "没有服务账号",
-        "你今天安排收回旧事故纸质材料",
-        "以为它们只会影响重开宣传",
-        "你知道甘霁反对",
-        "范策却要求他在今晚交回全部原件"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_qiao_man_s1_3",
-      "type": "objective",
-      "content": "交代合同的真实收益与风险，核对自己的前厅行踪；允许调查旧材料，不能以商业保密阻止搜证。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "交代合同的真实收益与风险",
-        "核对自己的前厅行踪",
-        "允许调查旧材料",
-        "不能以商业保密阻止搜证"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_qiao_man_s2_1",
-      "type": "memory",
-      "content": "你想起19:10范策说甘霁“还抓着旧事不放”，要求你准备一份保密和解书。你当时没有问旧事究竟是什么，答应首演前再谈。这是你判断上的失误，但不是对今晚机械动作的知情。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你想起19:10范策说甘霁",
-        "还抓着旧事不放",
-        "要求你准备一份保密和解书",
-        "你当时没有问旧事究竟是什么",
-        "答应首演前再谈",
-        "这是你判断上的失误",
-        "但不是对今晚机械动作的知情"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_qiao_man_s2_2",
-      "type": "fact",
-      "content": "你曾批准购买一批维护耗材，领用由舞台监督管理，赞助方不参与实际安装。买过耗材不等于知道会被用于破坏，必须核对具体编号和用途。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你曾批准购买一批维护耗材",
-        "领用由舞台监督管理",
-        "赞助方不参与实际安装",
-        "买过耗材不等于知道会被用于破坏",
-        "必须核对具体编号和用途"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_qiao_man_s2_3",
-      "type": "objective",
-      "content": "公开耗材采购授权与谁保管实物的边界；比较买方、领用人和实际操作者，避免把链条中任何一环单独当答案。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "比较买方",
-        "领用人和实际操作者",
-        "避免把链条中任何一环单独当答案"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_qiao_man_s3_1",
-      "type": "memory",
-      "content": "你决定承认旧事故的公关压制。甘禾的家属一直请求复核，范策担心导演责任牵连你们的项目；今晚要求交回原件，是他想结束追诉的手段之一。你不能因此保证所有旧指控都已得到司法确认。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你决定承认旧事故的公关压制",
-        "甘禾的家属一直请求复核",
-        "范策担心导演责任牵连你们的项目",
-        "今晚要求交回原件",
-        "是他想结束追诉的手段之一"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_qiao_man_s3_2",
-      "type": "fact",
-      "content": "首演取消会让你承担违约损失，范策去世也不会使合同自动解套。你的商业动机需根据合同真实条款评估；甘霁是否与甘禾有关，应依据记录而非你听来的称呼。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "首演取消会让你承担违约损失",
-        "范策去世也不会使合同自动解套",
-        "甘霁是否与甘禾有关",
-        "应依据记录而非你听来的称呼"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_qiao_man_s3_3",
-      "type": "objective",
-      "content": "核对家属往来、导演指令与合同版本，支持公开历史责任；拒绝用公关说法覆盖当前设备证据。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "核对家属往来",
-        "导演指令与合同版本",
-        "支持公开历史责任",
-        "拒绝用公关说法覆盖当前设备证据"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_qiao_man_s4_1",
-      "type": "memory",
-      "content": "你的前厅通话录音中，在20:42巨响后你还问“发生了什么”，随后结束通话赶回。这能复核当时位置，不足以证明你过去的宣传行为合理。你愿意保留全部材料交外部调查。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你的前厅通话录音中",
-        "在20:42巨响后你还问",
-        "发生了什么",
-        "随后结束通话赶回",
-        "这能复核当时位置",
-        "不足以证明你过去的宣传行为合理",
-        "你愿意保留全部材料交外部调查"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_qiao_man_s4_2",
-      "type": "fact",
-      "content": "你没有在事发后重新发放服务权限。后台工具、维护模块与审计副本均在封存清单内；任何指控都要说明谁完成了实物改动与本地回放启用，而非谁拥有预算。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你没有在事发后重新发放服务权限",
-        "后台工具",
-        "维护模块与审计副本均在封存清单内",
-        "而非谁拥有预算"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_qiao_man_s4_3",
-      "type": "objective",
-      "content": "公开最终合同与采购链，协助排除不成立的商业替代解释；根据闭合证据投票而不以保护项目为先。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "公开最终合同与采购链",
-        "协助排除不成立的商业替代解释"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "silent_theater_gan_ji_s1_1",
-      "type": "memory",
-      "content": "你是作案者。三年前妹妹甘禾在范策坚持不停演的事故中死亡，你以同姓但不公开亲属关系的方式留在剧院收集证据。范策今晚要求交回旧指令原件，并威胁毁掉它。你决定报复：19:50领用G-03服务工具，20:31在吊景控制器加装未经批准的维护旁路模块，20:35在左翼本地面板用自己的身份启用预先准备的维护回放。你安排范策回中央构图，回放在20:42按已存序列让吊景危险下降，恰与LIGHT-18调暗同时发生。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你是作案者",
-        "范策今晚要求交回旧指令原件",
-        "并威胁毁掉它",
-        "你决定报复",
-        "19:50领用G",
-        "03服务工具",
-        "你安排范策回中央构图",
-        "恰与LIGHT",
-        "18调暗同时发生"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "silent_theater_gan_ji_s1_2",
-      "type": "fact",
-      "content": "你没有改灯光师的按键命令，而是利用可见的灯光提示作掩护。自己启用维护回放是致死控制源，旁路使正常保护失效。你知道会危及台上人，没有权利把它说成对妹妹的正当补偿。你不能在游戏中真的删审计或销毁已搜出的证物。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你没有改灯光师的按键命令",
-        "而是利用可见的灯光提示作掩护",
-        "自己启用维护回放是致死控制源",
-        "旁路使正常保护失效",
-        "你知道会危及台上人",
-        "没有权利把它说成对妹妹的正当补偿"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "silent_theater_gan_ji_s1_3",
-      "type": "objective",
-      "content": "维持灯光或旧机械事故的解释，尽量不透露本地回放；保住自己的旧材料，但不能替别人编造作案行动。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "维持灯光或旧机械事故的解释",
-        "尽量不透露本地回放",
-        "保住自己的旧材料",
-        "但不能替别人编造作案行动"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "silent_theater_gan_ji_s2_1",
-      "type": "memory",
-      "content": "你想起控制器的只读运行摘要会写明“维护回放”而不是正常提示。你希望大家把摘要当成机械师的工作结果。G-03工具一直由你领用，没有交给任桐，但你可以试图含糊讲成“机械组共同维护”。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你想起控制器的只读运行摘要会写明",
-        "维护回放",
-        "而不是正常提示",
-        "03工具一直由你领用",
-        "没有交给任桐",
-        "但你可以试图含糊讲成",
-        "机械组共同维护"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "silent_theater_gan_ji_s2_2",
-      "type": "fact",
-      "content": "加装模块时你的黑色防滑手套外层被划开一个小口，你没有检查是否有碎片落下。你也不知道其他人已经得到哪些控制摘要或照片，除非他们展示或告知。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你没有检查是否有碎片落下",
-        "除非他们展示或告知"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "silent_theater_gan_ji_s2_3",
-      "type": "objective",
-      "content": "解释自己19:50后的工具保管，若维护回放被发现就强调检修流程；不要把未公开审计内容当作已知。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "解释自己19:50后的工具保管",
-        "若维护回放被发现就强调检修流程",
-        "不要把未公开审计内容当作已知"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "silent_theater_gan_ji_s3_1",
-      "type": "memory",
-      "content": "你记得范策20:00私下说“妹妹的事别再拿来逼我”，确认他知道你的身份。你保存的旧导演指令能证明他曾拒绝停演，但并不能授权你现在杀人。你把亲属往来夹在自己的提示册里，没有交给其他人。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你记得范策20:00私下说",
-        "妹妹的事别再拿来逼我",
-        "确认他知道你的身份",
-        "但并不能授权你现在杀人",
-        "你把亲属往来夹在自己的提示册里",
-        "没有交给其他人"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "silent_theater_gan_ji_s3_2",
-      "type": "fact",
-      "content": "乔曼压低过事故宣传，任桐补签过旧表；他们各有责任，却没有与你共同实施今晚谋杀。不存在另一名隐藏的报复者或远程帮手。你可以选择坦白旧案，但不能以旧案责任自动指认任何人是今夜凶手。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "乔曼压低过事故宣传",
-        "任桐补签过旧表",
-        "他们各有责任",
-        "却没有与你共同实施今晚谋杀",
-        "你可以选择坦白旧案"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "silent_theater_gan_ji_s3_3",
-      "type": "objective",
-      "content": "在旧事被质询时区分妹妹、证据与今晚行动，尽量维持自己的无辜说法；只能回应实际收到的材料。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "在旧事被质询时区分妹妹",
-        "证据与今晚行动",
-        "尽量维持自己的无辜说法",
-        "只能回应实际收到的材料"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "silent_theater_gan_ji_s4_1",
-      "type": "memory",
-      "content": "你想起左翼面板做维护身份认证时会保留一张现场缩略图，另有独立控制器保存任务签名。自己身份和工具若被一起确认，借用账号或灯光按键的解释就无法闭合。你没有看到封存审计的具体输出，但知道认证规则。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "另有独立控制器保存任务签名",
-        "自己身份和工具若被一起确认",
-        "你没有看到封存审计的具体输出",
-        "但知道认证规则"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "silent_theater_gan_ji_s4_2",
-      "type": "fact",
-      "content": "你知道自己启用致死回放并装过旁路。倘若物证与认证记录已被展示，你可以继续抵赖或承认，不能借舞台监督身份命令DM隐瞒、篡改最终投票。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你知道自己启用致死回放并装过旁路",
-        "倘若物证与认证记录已被展示",
-        "你可以继续抵赖或承认",
-        "不能借舞台监督身份命令DM隐瞒",
-        "篡改最终投票"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "silent_theater_gan_ji_s4_3",
-      "type": "objective",
-      "content": "面对最终质询说明或掩盖自己的行动；尊重角色知识边界，留给玩家指认和DM结局揭示。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "面对最终质询说明或掩盖自己的行动",
-        "尊重角色知识边界",
-        "留给玩家指认和DM结局揭示"
-      ],
-      "owner": "gan_ji"
-    },
-    {
-      "id": "f_shen_yi_identity",
-      "type": "identity",
-      "content": "默剧主演，负责舞台动作与构图，原本由范策指导新作。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "默剧主演",
-        "负责舞台动作与构图",
-        "原本由范策指导新作"
-      ],
-      "owner": "shen_yi"
-    },
-    {
-      "id": "f_xu_ran_identity",
-      "type": "identity",
-      "content": "灯光师，负责本场彩排灯光提示，事故时在灯光台执行第十八号调暗。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "灯光师",
-        "负责本场彩排灯光提示",
-        "事故时在灯光台执行第十八号调暗"
-      ],
-      "owner": "xu_ran"
-    },
-    {
-      "id": "f_ren_tong_identity",
-      "type": "identity",
-      "content": "舞台机械与布景师，负责吊景检修和下午的安全验收。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "舞台机械与布景师",
-        "负责吊景检修和下午的安全验收"
-      ],
-      "owner": "ren_tong"
-    },
-    {
-      "id": "f_bai_zhi_identity",
-      "type": "identity",
-      "content": "服装与面具设计师，负责默剧服装试装和现场影像记录。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "服装与面具设计师",
-        "负责默剧服装试装和现场影像记录"
-      ],
-      "owner": "bai_zhi"
-    },
-    {
-      "id": "f_qiao_man_identity",
-      "type": "identity",
-      "content": "剧院制作人兼主要赞助方代表，负责重开项目和首演合同。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "剧院制作人兼主要赞助方代表",
-        "负责重开项目和首演合同"
-      ],
-      "owner": "qiao_man"
-    },
-    {
-      "id": "f_gan_ji_identity",
-      "type": "identity",
-      "content": "舞台监督，三年前加入重组团队，负责彩排调度、检修交接与后台服务权限。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "舞台监督",
-        "三年前加入重组团队",
-        "负责彩排调度",
-        "检修交接与后台服务权限"
-      ],
-      "owner": "gan_ji"
-    }
-  ],
-  "timeline_true": [
-    "18:50 乔曼与范策争论追加预算，首演合同仍有效。",
-    "19:50 甘霁领用BP-17与G-03，工具耗材登记留存。",
-    "20:00 范策要求甘霁今晚交回旧案原件并停止复核。",
-    "20:10 沈漪改左侧演员标记，中央复核点不变。",
-    "20:15 白芷拍到甘霁完整黑防滑手套与调度板。",
-    "20:20 许燃违规复制灯光提示表，未改变台内版本。",
-    "20:31 甘霁进入左翼，加装旁路，工具痕和手套碎片留下。",
-    "20:35 甘霁本人通过本地认证，启用RP-42维护回放；任桐和白芷在右道具间。",
-    "20:36 甘霁要求范策回中央原点检查侧光，并对齐LIGHT-18提示。",
-    "20:39 沈漪进入右侧候场；乔曼在前厅通话，许燃在灯控台。",
-    "20:42 LIGHT-18只调暗灯光，独立维护回放命令吊景危险下降并杀害范策。",
-    "20:42:04 许燃触发总急停，六人停止设备并封存现场。",
-    "三年前 甘禾在舞台事故中死亡，范策曾拒绝停演，任桐补签表，乔曼淡化公开争议。",
-    "当日16:30 任桐真实完成当前吊景安全验收，保护有效，未装BP-17。"
-  ],
-  "characters": [
-    {
-      "id": "shen_yi",
-      "name": "沈漪",
-      "role": "默剧主演，负责舞台动作与构图，原本由范策指导新作。",
-      "public_identity": "默剧主演，负责舞台动作与构图，原本由范策指导新作。",
-      "public_profile": "默剧主演，负责舞台动作与构图，原本由范策指导新作。",
-      "personality": "感受细腻，观察肢体比言辞更敏锐；对作品归属很执着，受到误会时倾向写下而不是争吵。",
-      "speaking_style": "感受细腻，观察肢体比言辞更敏锐；对作品归属很执着，受到误会时倾向写下而不是争吵。",
-      "lexicon": "",
-      "backstory": "查出彩排中的死亡真相，同时保护被范策挪用的原创动作稿，并承认自己改过一个排练标记。",
-      "goals": [
-        "查出彩排中的死亡真相，同时保护被范策挪用的原创动作稿，并承认自己改过一个排练标记。"
-      ],
-      "known_fact_ids": [
-        "silent_theater_shen_yi_s1_1",
-        "silent_theater_shen_yi_s1_2",
-        "silent_theater_shen_yi_s1_3",
-        "silent_theater_shen_yi_s2_1",
-        "silent_theater_shen_yi_s2_2",
-        "silent_theater_shen_yi_s2_3",
-        "silent_theater_shen_yi_s3_1",
-        "silent_theater_shen_yi_s3_2",
-        "silent_theater_shen_yi_s3_3",
-        "silent_theater_shen_yi_s4_1",
-        "silent_theater_shen_yi_s4_2",
-        "silent_theater_shen_yi_s4_3"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "xu_ran",
-      "name": "许燃",
-      "role": "灯光师，负责本场彩排灯光提示，事故时在灯光台执行第十八号调暗。",
-      "public_identity": "灯光师，负责本场彩排灯光提示，事故时在灯光台执行第十八号调暗。",
-      "public_profile": "灯光师，负责本场彩排灯光提示，事故时在灯光台执行第十八号调暗。",
-      "personality": "有条理，遇到压力会先查记录；不愿以专业自信代替证据，对被看见的那次按键十分焦虑。",
-      "speaking_style": "有条理，遇到压力会先查记录；不愿以专业自信代替证据，对被看见的那次按键十分焦虑。",
-      "lexicon": "",
-      "backstory": "证明自己执行的灯光提示没有驱动吊景，查清实际控制链，并承认私拷提示表的违规。",
-      "goals": [
-        "证明自己执行的灯光提示没有驱动吊景，查清实际控制链，并承认私拷提示表的违规。"
-      ],
-      "known_fact_ids": [
-        "silent_theater_xu_ran_s1_1",
-        "silent_theater_xu_ran_s1_2",
-        "silent_theater_xu_ran_s1_3",
-        "silent_theater_xu_ran_s2_1",
-        "silent_theater_xu_ran_s2_2",
-        "silent_theater_xu_ran_s2_3",
-        "silent_theater_xu_ran_s3_1",
-        "silent_theater_xu_ran_s3_2",
-        "silent_theater_xu_ran_s3_3",
-        "silent_theater_xu_ran_s4_1",
-        "silent_theater_xu_ran_s4_2",
-        "silent_theater_xu_ran_s4_3"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "ren_tong",
-      "name": "任桐",
-      "role": "舞台机械与布景师，负责吊景检修和下午的安全验收。",
-      "public_identity": "舞台机械与布景师，负责吊景检修和下午的安全验收。",
-      "public_profile": "舞台机械与布景师，负责吊景检修和下午的安全验收。",
-      "personality": "重视工艺，表达直接，遇到旧设备故障容易先自责；对纸面责任很反感。",
-      "speaking_style": "重视工艺，表达直接，遇到旧设备故障容易先自责；对纸面责任很反感。",
-      "lexicon": "",
-      "backstory": "查清安全联锁为何失效，并承认自己曾在旧事故后补签过一份有争议的维护表。",
-      "goals": [
-        "查清安全联锁为何失效，并承认自己曾在旧事故后补签过一份有争议的维护表。"
-      ],
-      "known_fact_ids": [
-        "silent_theater_ren_tong_s1_1",
-        "silent_theater_ren_tong_s1_2",
-        "silent_theater_ren_tong_s1_3",
-        "silent_theater_ren_tong_s2_1",
-        "silent_theater_ren_tong_s2_2",
-        "silent_theater_ren_tong_s2_3",
-        "silent_theater_ren_tong_s3_1",
-        "silent_theater_ren_tong_s3_2",
-        "silent_theater_ren_tong_s3_3",
-        "silent_theater_ren_tong_s4_1",
-        "silent_theater_ren_tong_s4_2",
-        "silent_theater_ren_tong_s4_3"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "bai_zhi",
-      "name": "白芷",
-      "role": "服装与面具设计师，负责默剧服装试装和现场影像记录。",
-      "public_identity": "服装与面具设计师，负责默剧服装试装和现场影像记录。",
-      "public_profile": "服装与面具设计师，负责默剧服装试装和现场影像记录。",
-      "personality": "耐心，善于记细节，对演员有保护欲；不愿让自己偷偷记录的影像被误解成预谋。",
-      "speaking_style": "耐心，善于记细节，对演员有保护欲；不愿让自己偷偷记录的影像被误解成预谋。",
-      "lexicon": "",
-      "backstory": "查清死亡并保护演员，说明未经同意记录彩排的原因，交出能还原位置的真实照片。",
-      "goals": [
-        "查清死亡并保护演员，说明未经同意记录彩排的原因，交出能还原位置的真实照片。"
-      ],
-      "known_fact_ids": [
-        "silent_theater_bai_zhi_s1_1",
-        "silent_theater_bai_zhi_s1_2",
-        "silent_theater_bai_zhi_s1_3",
-        "silent_theater_bai_zhi_s2_1",
-        "silent_theater_bai_zhi_s2_2",
-        "silent_theater_bai_zhi_s2_3",
-        "silent_theater_bai_zhi_s3_1",
-        "silent_theater_bai_zhi_s3_2",
-        "silent_theater_bai_zhi_s3_3",
-        "silent_theater_bai_zhi_s4_1",
-        "silent_theater_bai_zhi_s4_2",
-        "silent_theater_bai_zhi_s4_3"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "qiao_man",
-      "name": "乔曼",
-      "role": "剧院制作人兼主要赞助方代表，负责重开项目和首演合同。",
-      "public_identity": "剧院制作人兼主要赞助方代表，负责重开项目和首演合同。",
-      "public_profile": "剧院制作人兼主要赞助方代表，负责重开项目和首演合同。",
-      "personality": "务实，擅长谈条件，对品牌风险敏感；面对人员伤害时容易先考虑项目能否继续。",
-      "speaking_style": "务实，擅长谈条件，对品牌风险敏感；面对人员伤害时容易先考虑项目能否继续。",
-      "lexicon": "",
-      "backstory": "保全真实调查并承认曾压低旧事故曝光，避免自己为首演合同的隐瞒被误认作谋杀。",
-      "goals": [
-        "保全真实调查并承认曾压低旧事故曝光，避免自己为首演合同的隐瞒被误认作谋杀。"
-      ],
-      "known_fact_ids": [
-        "silent_theater_qiao_man_s1_1",
-        "silent_theater_qiao_man_s1_2",
-        "silent_theater_qiao_man_s1_3",
-        "silent_theater_qiao_man_s2_1",
-        "silent_theater_qiao_man_s2_2",
-        "silent_theater_qiao_man_s2_3",
-        "silent_theater_qiao_man_s3_1",
-        "silent_theater_qiao_man_s3_2",
-        "silent_theater_qiao_man_s3_3",
-        "silent_theater_qiao_man_s4_1",
-        "silent_theater_qiao_man_s4_2",
-        "silent_theater_qiao_man_s4_3"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "gan_ji",
-      "name": "甘霁",
-      "role": "舞台监督，三年前加入重组团队，负责彩排调度、检修交接与后台服务权限。",
-      "public_identity": "舞台监督，三年前加入重组团队，负责彩排调度、检修交接与后台服务权限。",
-      "public_profile": "舞台监督，三年前加入重组团队，负责彩排调度、检修交接与后台服务权限。",
-      "personality": "冷静，记得所有提示号，擅长让事情看起来按流程发生；提到旧事故时情绪会突然收紧。",
-      "speaking_style": "冷静，记得所有提示号，擅长让事情看起来按流程发生；提到旧事故时情绪会突然收紧。",
-      "lexicon": "",
-      "backstory": "掩盖你利用维护回放杀害范策的行为，同时保住妹妹甘禾旧事故的原始材料，争取把谋杀归结为灯光事故。",
-      "goals": [
-        "掩盖你利用维护回放杀害范策的行为，同时保住妹妹甘禾旧事故的原始材料，争取把谋杀归结为灯光事故。"
-      ],
-      "known_fact_ids": [
-        "silent_theater_gan_ji_s1_1",
-        "silent_theater_gan_ji_s1_2",
-        "silent_theater_gan_ji_s1_3",
-        "silent_theater_gan_ji_s2_1",
-        "silent_theater_gan_ji_s2_2",
-        "silent_theater_gan_ji_s2_3",
-        "silent_theater_gan_ji_s3_1",
-        "silent_theater_gan_ji_s3_2",
-        "silent_theater_gan_ji_s3_3",
-        "silent_theater_gan_ji_s4_1",
-        "silent_theater_gan_ji_s4_2",
-        "silent_theater_gan_ji_s4_3"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": true
-    }
-  ],
-  "clue_pool": [
-    "theater_visible_event 前场连续画面显示20:42许燃在灯光台执行提示后舞台调暗，吊景几乎同时下降并压中中央的范策；许燃随后触发总急停。画面没有|logLR:gan_ji=1.5",
-    "theater_marks 范策所在的中央复核点与上午带坐标的舞台照片一致，粉笔标记没有改位。沈漪改动的是左侧演员避裙点，距中央区域数米。当天正式构|logLR:gan_ji=1.5",
-    "theater_access_scope 封闭彩排仅有沈漪、许燃、任桐、白芷、乔曼、甘霁和死者范策。门禁连续，无外包或观众进入；全部机械远程访问自18:00被硬件|logLR:gan_ji=1.5",
-    "theater_day_test 16:30的验收原图显示任桐完成承载和限位测试，吊景保持在批准高度，机械保护有效；控制箱外盖装回后贴有日期封签。20:4|logLR:gan_ji=1.5",
-    "theater_light_command 灯光台只读流水显示20:42 LIGHT-18仅发送亮度参数，目标均为灯具；私人U盘与台内提示表的校验值一致，没有添加机|logLR:gan_ji=2.0",
-    "theater_rig_job 机械控制器独立摘要显示吊景由20:35已启用的“本地维护回放”任务在20:42发出下降命令，不是实时接收到灯光台请求。正|logLR:gan_ji=2.0",
-    "theater_new_module 断电控制箱内多出编号BP-17的未经批准维护旁路模块，使原有安全联锁未能阻止危险回放；下午验收原图同位置没有该模块。旁路|logLR:gan_ji=2.0",
-    "theater_system_separation 实体线路与安装图一致：LIGHT-18所在灯控网与机械服务网隔离，没有跨接线；预算电脑和演员手机均无机械控制接口。吊景命|logLR:gan_ji=2.0",
-    "theater_photo_sequence 白芷未裁剪的自动连拍每分钟一张，20:35至20:43各采样时点都拍到任桐在右道具间固定面具柜，白芷也在场；画面中他戴完|logLR:gan_ji=2.0",
-    "theater_old_order 旧事故原始导演指令页有范策签名的“按原构图继续”，附当班人员此前请求停演检查的记录；任桐在事故后补签维护表，乔曼的公关稿|logLR:gan_ji=2.0",
-    "theater_family_pressure 甘霁提示册中的家属往来与甘禾旧节目单相互对应，明确两人为兄妹。范策20:00发给甘霁的文字要求今晚交回旧指令原件并停止复|logLR:gan_ji=2.0",
-    "theater_contract_truth 首演合同写明范策死亡或停演不会使乔曼自动免除赔偿，项目反而承担更大损失；她批准过维护耗材预算，却没有机械服务权限。准备给|logLR:gan_ji=2.0",
-    "theater_design_dispute 沈漪早期动作稿和白芷服装邮件先于范策署名版本，作品挪用争议有依据。原稿只改变左侧演员动作，不包含机械回放或旁路；范策死亡|logLR:gan_ji=2.0",
-    "theater_auth_identity 左翼本地面板的独立认证区保存20:35甘霁本人掌纹通过与现场缩略图，清楚显示其面部和G-03服务工具在位；随后启用编号R|logLR:gan_ji=2.0",
-    "theater_dispatch_note 甘霁自己的调度板原始发送记录20:36要求范策回到中央复核点，并将LIGHT-18列为同段视觉提示。范策回复“中央看侧光|logLR:gan_ji=2.0",
-    "theater_tool_match 耗材出库原单显示BP-17由甘霁19:50领取，随G-03工具进入他的调度检修袋，无转借签字；其他维护模块仍封存。G-0|logLR:gan_ji=2.0",
-    "theater_glove_match 甘霁封存调度检修袋中的黑防滑手套外层有新缺口，缺口边缘与BP-17封签夹层碎片轮廓、织纹可拼合；20:15原图时该处尚完|logLR:gan_ji=2.0",
-    "theater_alternative_positions 20:31至20:42的连续位置资料显示许燃在前厅灯控台，右道具间独立连续监控完整记录20:35至20:43任桐与白芷在|logLR:gan_ji=2.0"
-  ],
-  "clues": [
-    {
-      "id": "theater_visible_event",
-      "title": "舞台现场与应急记录",
-      "content": "前场连续画面显示20:42许燃在灯光台执行提示后舞台调暗，吊景几乎同时下降并压中中央的范策；许燃随后触发总急停。画面没有拍到左翼机械服务屏幕。它证明两件事时间相邻，不能单独证明许燃的按键驱动了吊景。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain01"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "theater_scene"
-    },
-    {
-      "id": "theater_marks",
-      "title": "舞台站位图与粉笔标记",
-      "content": "范策所在的中央复核点与上午带坐标的舞台照片一致，粉笔标记没有改位。沈漪改动的是左侧演员避裙点，距中央区域数米。当天正式构图单允许范策在吊景正常高位时到中央检查，正常机械限位不应让吊景降到这一危险位置。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain02",
-        "f_rpg_silent_theater_chain04"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "theater_floor"
-    },
-    {
-      "id": "theater_access_scope",
-      "title": "封闭彩排名单与访问清单",
-      "content": "封闭彩排仅有沈漪、许燃、任桐、白芷、乔曼、甘霁和死者范策。门禁连续，无外包或观众进入；全部机械远程访问自18:00被硬件禁用。灯光账号、机械本地服务权限与预算授权分列不同名单，不能因为同属剧院就互相替代。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_truth"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "theater_roster"
-    },
-    {
-      "id": "theater_day_test",
-      "title": "下午吊景安全验收",
-      "content": "16:30的验收原图显示任桐完成承载和限位测试，吊景保持在批准高度，机械保护有效；控制箱外盖装回后贴有日期封签。20:45事故封存照片中外盖封签被打开过。当前异常不能只用“旧设备一直坏”解释，需查验收后的变化。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain02"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "theater_test"
-    },
-    {
-      "id": "theater_light_command",
-      "title": "灯光与机械运行摘要",
-      "content": "灯光台只读流水显示20:42 LIGHT-18仅发送亮度参数，目标均为灯具；私人U盘与台内提示表的校验值一致，没有添加机械命令。20:42:04许燃触发总急停。该流水能够说明灯控自身做了什么，仍需检查是否存在跨系统实体改动。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain01",
-        "f_rpg_silent_theater_chain05"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "theater_cuelog"
-    },
-    {
-      "id": "theater_rig_job",
-      "title": "灯光与机械运行摘要",
-      "content": "机械控制器独立摘要显示吊景由20:35已启用的“本地维护回放”任务在20:42发出下降命令，不是实时接收到灯光台请求。正常回放只能在清空舞台并保留联锁保护的条件下使用；具体启用者身份存于另一个封存认证区，本摘要不显示姓名。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain01",
-        "f_rpg_silent_theater_chain02",
-        "f_rpg_silent_theater_chain04"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "theater_cuelog"
-    },
-    {
-      "id": "theater_new_module",
-      "title": "断电控制箱与线路图",
-      "content": "断电控制箱内多出编号BP-17的未经批准维护旁路模块，使原有安全联锁未能阻止危险回放；下午验收原图同位置没有该模块。旁路外盖见新工具见证痕，封签夹层夹有一小块黑色防滑手套外层。模块与材料按实物封存，尚需核对接触者。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain02",
-        "f_rpg_silent_theater_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "theater_rigbox"
-    },
-    {
-      "id": "theater_system_separation",
-      "title": "断电控制箱与线路图",
-      "content": "实体线路与安装图一致：LIGHT-18所在灯控网与机械服务网隔离，没有跨接线；预算电脑和演员手机均无机械控制接口。吊景命令只能由本地维护面板启用的回放产生。灯光调暗可遮掩视觉和时间，却不是这一机械任务的启动来源。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain01",
-        "f_rpg_silent_theater_chain05"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "theater_rigbox"
-    },
-    {
-      "id": "theater_photo_sequence",
-      "title": "服装原图与道具间连拍",
-      "content": "白芷未裁剪的自动连拍每分钟一张，20:35至20:43各采样时点都拍到任桐在右道具间固定面具柜，白芷也在场；画面中他戴完整白棉手套。照片不能单独排除两张之间短时离开。20:15工作人员形象照显示甘霁戴黑色防滑手套，外层当时完整。照片不显示后台命令，只能证明各采样时点的位置与服装状态。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain05"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "theater_photo"
-    },
-    {
-      "id": "theater_old_order",
-      "title": "三年前事故原件",
-      "content": "旧事故原始导演指令页有范策签名的“按原构图继续”，附当班人员此前请求停演检查的记录；任桐在事故后补签维护表，乔曼的公关稿省去这些争议。材料支持重新调查旧事故责任，却不自动证明任何人实施了今夜谋杀。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain06"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "theater_oldcase"
-    },
-    {
-      "id": "theater_family_pressure",
-      "title": "节目单与家属往来",
-      "content": "甘霁提示册中的家属往来与甘禾旧节目单相互对应，明确两人为兄妹。范策20:00发给甘霁的文字要求今晚交回旧指令原件并停止复核请求，否则取消他的工作。甘霁有强烈私人冲突和报复压力，仍需当前设备与动作证据才能指认。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain06"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "theater_family"
-    },
-    {
-      "id": "theater_contract_truth",
-      "title": "首演合同与保密和解",
-      "content": "首演合同写明范策死亡或停演不会使乔曼自动免除赔偿，项目反而承担更大损失；她批准过维护耗材预算，却没有机械服务权限。准备给甘霁的保密和解书要求收回旧案材料。商业与保密压力真实，但不构成控制面板的操作记录。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain06"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "theater_contract"
-    },
-    {
-      "id": "theater_design_dispute",
-      "title": "默剧动作稿与工作记录",
-      "content": "沈漪早期动作稿和白芷服装邮件先于范策署名版本，作品挪用争议有依据。原稿只改变左侧演员动作，不包含机械回放或旁路；范策死亡并不能自动恢复她的版权。许燃兼职合同不以取消本剧为条件。两种职业秘密不能替代致死动作证据。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain06"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "theater_authorship"
-    },
-    {
-      "id": "theater_auth_identity",
-      "title": "本地维护认证与签名副本",
-      "content": "左翼本地面板的独立认证区保存20:35甘霁本人掌纹通过与现场缩略图，清楚显示其面部和G-03服务工具在位；随后启用编号RP-42维护回放。另一控制器的只读任务签名记录RP-42由该本地会话启用并于20:42执行。两个存储序列连续，没有代理认证、远程入口或后续重新启用。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 3,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain03",
-        "f_rpg_silent_theater_chain04"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=4",
-      "source_target": "theater_identity"
-    },
-    {
-      "id": "theater_dispatch_note",
-      "title": "本地维护认证与签名副本",
-      "content": "甘霁自己的调度板原始发送记录20:36要求范策回到中央复核点，并将LIGHT-18列为同段视觉提示。范策回复“中央看侧光”，同前场画面位置一致。它证明甘霁知晓范策位置和提示安排，与本地回放启用组成行动链，不是把灯光师的按键替换成机械命令。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 3,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain04"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=4",
-      "source_target": "theater_identity"
-    },
-    {
-      "id": "theater_tool_match",
-      "title": "服务工具、耗材与手套",
-      "content": "耗材出库原单显示BP-17由甘霁19:50领取，随G-03工具进入他的调度检修袋，无转借签字；其他维护模块仍封存。G-03定位端的偏心缺口与BP-17外盖新见证痕逐项吻合，任桐下午所用G-01没有这一缺口。物品编号、工具痕与旁路位置从实体路径独立指向甘霁。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 3,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain03",
-        "f_rpg_silent_theater_chain05"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=4",
-      "source_target": "theater_tools"
-    },
-    {
-      "id": "theater_glove_match",
-      "title": "服务工具、耗材与手套",
-      "content": "甘霁封存调度检修袋中的黑防滑手套外层有新缺口，缺口边缘与BP-17封签夹层碎片轮廓、织纹可拼合；20:15原图时该处尚完整。任桐白棉手套材质不同，白芷保存的服装布料也不匹配。该证物证明新模块接触者，须与回放认证一起解释致死操作。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 3,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=4",
-      "source_target": "theater_tools"
-    },
-    {
-      "id": "theater_alternative_positions",
-      "title": "前厅与两翼完整画面",
-      "content": "20:31至20:42的连续位置资料显示许燃在前厅灯控台，右道具间独立连续监控完整记录20:35至20:43任桐与白芷在房内，20:34至20:44乔曼在前厅通话，沈漪按候场提示从舞台进入右翼。甘霁在20:31和20:35两次进入左翼服务区域。两翼画面没有其他人员或隐藏通道；结合权限隔离与原始任务记录，最强替代嫌疑许燃、任桐均缺少关键本地操作。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 3,
-      "reveals_fact_ids": [
-        "f_rpg_silent_theater_chain05"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=4",
-      "source_target": "theater_positions"
-    }
-  ],
-  "clue_fact_map": {
-    "theater_visible_event 前场连续画面显示20:42许燃在灯光台执行提示后舞台调暗，吊景几乎同时下降并压中中央的范策；许燃随后触发总急停。画面没有|logLR:gan_ji=1.5": [
-      "f_rpg_silent_theater_chain01"
-    ],
-    "theater_visible_event": [
-      "f_rpg_silent_theater_chain01"
-    ],
-    "theater_marks 范策所在的中央复核点与上午带坐标的舞台照片一致，粉笔标记没有改位。沈漪改动的是左侧演员避裙点，距中央区域数米。当天正式构|logLR:gan_ji=1.5": [
-      "f_rpg_silent_theater_chain02",
-      "f_rpg_silent_theater_chain04"
-    ],
-    "theater_marks": [
-      "f_rpg_silent_theater_chain02",
-      "f_rpg_silent_theater_chain04"
-    ],
-    "theater_access_scope 封闭彩排仅有沈漪、许燃、任桐、白芷、乔曼、甘霁和死者范策。门禁连续，无外包或观众进入；全部机械远程访问自18:00被硬件|logLR:gan_ji=1.5": [
-      "f_rpg_silent_theater_truth"
-    ],
-    "theater_access_scope": [
-      "f_rpg_silent_theater_truth"
-    ],
-    "theater_day_test 16:30的验收原图显示任桐完成承载和限位测试，吊景保持在批准高度，机械保护有效；控制箱外盖装回后贴有日期封签。20:4|logLR:gan_ji=1.5": [
-      "f_rpg_silent_theater_chain02"
-    ],
-    "theater_day_test": [
-      "f_rpg_silent_theater_chain02"
-    ],
-    "theater_light_command 灯光台只读流水显示20:42 LIGHT-18仅发送亮度参数，目标均为灯具；私人U盘与台内提示表的校验值一致，没有添加机|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain01",
-      "f_rpg_silent_theater_chain05"
-    ],
-    "theater_light_command": [
-      "f_rpg_silent_theater_chain01",
-      "f_rpg_silent_theater_chain05"
-    ],
-    "theater_rig_job 机械控制器独立摘要显示吊景由20:35已启用的“本地维护回放”任务在20:42发出下降命令，不是实时接收到灯光台请求。正|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain01",
-      "f_rpg_silent_theater_chain02",
-      "f_rpg_silent_theater_chain04"
-    ],
-    "theater_rig_job": [
-      "f_rpg_silent_theater_chain01",
-      "f_rpg_silent_theater_chain02",
-      "f_rpg_silent_theater_chain04"
-    ],
-    "theater_new_module 断电控制箱内多出编号BP-17的未经批准维护旁路模块，使原有安全联锁未能阻止危险回放；下午验收原图同位置没有该模块。旁路|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain02",
-      "f_rpg_silent_theater_chain03"
-    ],
-    "theater_new_module": [
-      "f_rpg_silent_theater_chain02",
-      "f_rpg_silent_theater_chain03"
-    ],
-    "theater_system_separation 实体线路与安装图一致：LIGHT-18所在灯控网与机械服务网隔离，没有跨接线；预算电脑和演员手机均无机械控制接口。吊景命|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain01",
-      "f_rpg_silent_theater_chain05"
-    ],
-    "theater_system_separation": [
-      "f_rpg_silent_theater_chain01",
-      "f_rpg_silent_theater_chain05"
-    ],
-    "theater_photo_sequence 白芷未裁剪的自动连拍每分钟一张，20:35至20:43各采样时点都拍到任桐在右道具间固定面具柜，白芷也在场；画面中他戴完|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain05"
-    ],
-    "theater_photo_sequence": [
-      "f_rpg_silent_theater_chain05"
-    ],
-    "theater_old_order 旧事故原始导演指令页有范策签名的“按原构图继续”，附当班人员此前请求停演检查的记录；任桐在事故后补签维护表，乔曼的公关稿|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain06"
-    ],
-    "theater_old_order": [
-      "f_rpg_silent_theater_chain06"
-    ],
-    "theater_family_pressure 甘霁提示册中的家属往来与甘禾旧节目单相互对应，明确两人为兄妹。范策20:00发给甘霁的文字要求今晚交回旧指令原件并停止复|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain06"
-    ],
-    "theater_family_pressure": [
-      "f_rpg_silent_theater_chain06"
-    ],
-    "theater_contract_truth 首演合同写明范策死亡或停演不会使乔曼自动免除赔偿，项目反而承担更大损失；她批准过维护耗材预算，却没有机械服务权限。准备给|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain06"
-    ],
-    "theater_contract_truth": [
-      "f_rpg_silent_theater_chain06"
-    ],
-    "theater_design_dispute 沈漪早期动作稿和白芷服装邮件先于范策署名版本，作品挪用争议有依据。原稿只改变左侧演员动作，不包含机械回放或旁路；范策死亡|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain06"
-    ],
-    "theater_design_dispute": [
-      "f_rpg_silent_theater_chain06"
-    ],
-    "theater_auth_identity 左翼本地面板的独立认证区保存20:35甘霁本人掌纹通过与现场缩略图，清楚显示其面部和G-03服务工具在位；随后启用编号R|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain03",
-      "f_rpg_silent_theater_chain04"
-    ],
-    "theater_auth_identity": [
-      "f_rpg_silent_theater_chain03",
-      "f_rpg_silent_theater_chain04"
-    ],
-    "theater_dispatch_note 甘霁自己的调度板原始发送记录20:36要求范策回到中央复核点，并将LIGHT-18列为同段视觉提示。范策回复“中央看侧光|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain04"
-    ],
-    "theater_dispatch_note": [
-      "f_rpg_silent_theater_chain04"
-    ],
-    "theater_tool_match 耗材出库原单显示BP-17由甘霁19:50领取，随G-03工具进入他的调度检修袋，无转借签字；其他维护模块仍封存。G-0|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain03",
-      "f_rpg_silent_theater_chain05"
-    ],
-    "theater_tool_match": [
-      "f_rpg_silent_theater_chain03",
-      "f_rpg_silent_theater_chain05"
-    ],
-    "theater_glove_match 甘霁封存调度检修袋中的黑防滑手套外层有新缺口，缺口边缘与BP-17封签夹层碎片轮廓、织纹可拼合；20:15原图时该处尚完|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain03"
-    ],
-    "theater_glove_match": [
-      "f_rpg_silent_theater_chain03"
-    ],
-    "theater_alternative_positions 20:31至20:42的连续位置资料显示许燃在前厅灯控台，右道具间独立连续监控完整记录20:35至20:43任桐与白芷在|logLR:gan_ji=2.0": [
-      "f_rpg_silent_theater_chain05"
-    ],
-    "theater_alternative_positions": [
-      "f_rpg_silent_theater_chain05"
-    ]
-  },
-  "plot_locks": [],
-  "endings": [
-    "正确指认：指认成立：本地维护回放的认证记录与独立工具物证指向同一位舞台监督，LIGHT-18只提供了掩护时刻。DM 将揭示今夜谋杀和旧事故各自的责任。",
-    "错误指认：你们指认了{selected_role_name}，但这一判断与案件的关键物证冲突。调查以错误指认结束；现场和证物继续封存，真实作案者的责任尚未被正确确认。"
-  ],
-  "evaluation": {
-    "killer_id": "gan_ji",
-    "required_fact_ids": [
-      "f_rpg_silent_theater_truth",
-      "f_rpg_silent_theater_victim",
-      "f_rpg_silent_theater_chain01",
-      "f_rpg_silent_theater_chain02",
-      "f_rpg_silent_theater_chain03",
-      "f_rpg_silent_theater_chain04",
-      "f_rpg_silent_theater_chain05",
-      "f_rpg_silent_theater_chain06"
-    ],
-    "culprit_basis": "truth.culprit_role_id",
-    "role_kind": "declared_killer",
-    "has_murder": true,
-    "victim_name": "范策",
-    "victim_basis": "source_text_annotation",
-    "source_id": "silent_theater"
-  },
-  "completions": [
-    {
-      "rule": "R1_victim_annotation",
-      "field": "evaluation.victim_name",
-      "value": "范策",
-      "basis": "source_text_annotation"
-    },
-    {
-      "rule": "R3_clue_truth_fallback",
-      "field": "clues[theater_access_scope].reveals_fact_ids",
-      "value": [
-        "f_rpg_silent_theater_truth"
-      ],
-      "basis": "clue not named in evidence_chain; linked to full truth fact"
-    }
-  ],
-  "source_files": [
-    "raw/rpg/silent_theater.json"
-  ]
+  "world": {
+    "mode": "truth_reconstruction",
+    "player_selectable": "shen_yi,xu_ran,ren_tong,bai_zhi,qiao_man,gan_ji",
+    "source_kind": "RolePlayingGame JSON",
+    "source_provenance": {
+      "creator": "Codex AI 辅助原创",
+      "kind": "original",
+      "source": "根据UI概念图的标题与主题创作；未引用现成剧本正文。"
+    },
+    "stages": 4
+  }
 }

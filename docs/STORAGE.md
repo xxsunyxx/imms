@@ -16,6 +16,9 @@
 | `game_events` | 每轮 SpeechAct，含 utterance / inner_intent；公开与私聊共用全局 `seq` | 对局引擎 / `imms private say` |
 | `game_state` | runtime / round / revealed_clues / result / llm_stats | 对局引擎 |
 | `private_rooms` | 私聊房间席位、轮次、opened_seq / closed_seq | `imms private open/close` |
+| `script_registry` | 剧本生命周期（staged/normalized/ready/archived/rejected）与来源指纹 | `imms ingest` / `import-corpus` / `script promote` |
+| `script_skeletons` | 骨架版本（追加，不覆盖） | `imms ingest` / `import-corpus` |
+| `script_events` | 剧本注册、骨架保存、状态迁移的事件日志 | 剧本管理 CLI |
 
 ## 2. L1 只读
 

@@ -132,6 +132,39 @@ CREATE TABLE IF NOT EXISTS gm_branches (
 
 CREATE INDEX IF NOT EXISTS idx_gm_branches_session ON gm_branches(session_id);
 
+CREATE TABLE IF NOT EXISTS script_registry (
+    script_id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    source_kind TEXT NOT NULL DEFAULT '',
+    source_sha256 TEXT NOT NULL DEFAULT '',
+    status TEXT NOT NULL DEFAULT 'staged',
+    skeleton_version TEXT NOT NULL DEFAULT '',
+    canonical_version TEXT NOT NULL DEFAULT '',
+    skeleton_file TEXT NOT NULL DEFAULT '',
+    script_file TEXT NOT NULL DEFAULT '',
+    notes TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS script_skeletons (
+    script_id TEXT NOT NULL,
+    version INTEGER NOT NULL,
+    skeleton_json TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (script_id, version)
+);
+
+CREATE TABLE IF NOT EXISTS script_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    script_id TEXT NOT NULL,
+    action TEXT NOT NULL,
+    detail_json TEXT NOT NULL DEFAULT '{}',
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_script_events ON script_events(script_id, id);
+
 CREATE INDEX IF NOT EXISTS idx_l1_lookup ON persona_l1(script_id, character_id, extraction_version);
 CREATE INDEX IF NOT EXISTS idx_events_session ON attribute_events(session_id, seq);
 CREATE INDEX IF NOT EXISTS idx_game_events_session ON game_events(session_id, seq);

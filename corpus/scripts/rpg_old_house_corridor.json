@@ -1,19 +1,1498 @@
 {
-  "schema_version": "0.4",
-  "script_id": "rpg_old_house_corridor",
-  "title": "旧宅回廊",
   "brief": "来源：RolePlayingGame/old_house_corridor；5人；3幕",
-  "world": {
-    "mode": "truth_reconstruction",
-    "stages": 3,
-    "player_selectable": "jiang_li,jiang_qiao,tang_tang,meng_lan,pei_yan",
-    "source_kind": "RolePlayingGame JSON",
-    "source_provenance": {
-      "kind": "original",
-      "creator": "Codex AI 辅助原创",
-      "source": "根据UI概念图的标题与主题创作；未引用现成剧本正文。"
+  "characters": [
+    {
+      "backstory": "查明父亲死亡并争取保存旧宅，避免自己擅自复制遗嘱被当成杀人准备。",
+      "canon_evidence": [],
+      "goals": [
+        "查明父亲死亡并争取保存旧宅，避免自己擅自复制遗嘱被当成杀人准备。"
+      ],
+      "id": "jiang_li",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "old_house_corridor_jiang_li_s1_1",
+        "old_house_corridor_jiang_li_s1_2",
+        "old_house_corridor_jiang_li_s1_3",
+        "old_house_corridor_jiang_li_s2_1",
+        "old_house_corridor_jiang_li_s2_2",
+        "old_house_corridor_jiang_li_s2_3",
+        "old_house_corridor_jiang_li_s3_1",
+        "old_house_corridor_jiang_li_s3_2",
+        "old_house_corridor_jiang_li_s3_3"
+      ],
+      "lexicon": "",
+      "name": "姜梨",
+      "personality": "观察细，感情克制，对被质疑继承资格尤其敏感，但愿意为了事实承担代价。",
+      "public_identity": "姜慎的养女，文史专业毕业，回旧宅协助整理家族档案。",
+      "public_profile": "姜慎的养女，文史专业毕业，回旧宅协助整理家族档案。",
+      "role": "姜慎的养女，文史专业毕业，回旧宅协助整理家族档案。",
+      "speaking_style": "观察细，感情克制，对被质疑继承资格尤其敏感，但愿意为了事实承担代价。",
+      "timeline": []
+    },
+    {
+      "backstory": "避免债务与私翻文件曝光，同时找出真正凶手，使自己不因继承动机承担谋杀罪。",
+      "canon_evidence": [],
+      "goals": [
+        "避免债务与私翻文件曝光，同时找出真正凶手，使自己不因继承动机承担谋杀罪。"
+      ],
+      "id": "jiang_qiao",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "old_house_corridor_jiang_qiao_s1_1",
+        "old_house_corridor_jiang_qiao_s1_2",
+        "old_house_corridor_jiang_qiao_s1_3",
+        "old_house_corridor_jiang_qiao_s2_1",
+        "old_house_corridor_jiang_qiao_s2_2",
+        "old_house_corridor_jiang_qiao_s2_3",
+        "old_house_corridor_jiang_qiao_s3_1",
+        "old_house_corridor_jiang_qiao_s3_2",
+        "old_house_corridor_jiang_qiao_s3_3"
+      ],
+      "lexicon": "",
+      "name": "姜峤",
+      "personality": "反应快，善辩，遇到经济问题容易虚张声势；对家族感情又并非全无真心。",
+      "public_identity": "姜慎的侄子，经营周转困难的古玩店，长期期待旧宅财产能解决债务。",
+      "public_profile": "姜慎的侄子，经营周转困难的古玩店，长期期待旧宅财产能解决债务。",
+      "role": "姜慎的侄子，经营周转困难的古玩店，长期期待旧宅财产能解决债务。",
+      "speaking_style": "反应快，善辩，遇到经济问题容易虚张声势；对家族感情又并非全无真心。",
+      "timeline": []
+    },
+    {
+      "backstory": "查清死亡并保全文书，同时说明你与旧宅潜在买方的关系，避免利益冲突被误判为杀人。",
+      "canon_evidence": [],
+      "goals": [
+        "查清死亡并保全文书，同时说明你与旧宅潜在买方的关系，避免利益冲突被误判为杀人。"
+      ],
+      "id": "tang_tang",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "old_house_corridor_tang_tang_s1_1",
+        "old_house_corridor_tang_tang_s1_2",
+        "old_house_corridor_tang_tang_s1_3",
+        "old_house_corridor_tang_tang_s2_1",
+        "old_house_corridor_tang_tang_s2_2",
+        "old_house_corridor_tang_tang_s2_3",
+        "old_house_corridor_tang_tang_s3_1",
+        "old_house_corridor_tang_tang_s3_2",
+        "old_house_corridor_tang_tang_s3_3"
+      ],
+      "lexicon": "",
+      "name": "唐棠",
+      "personality": "说话有边界，重视文书证据，习惯保护委托人；面对利益冲突会过分谨慎。",
+      "public_identity": "家族律师，负责旧宅捐赠意向与多版遗嘱的效力审查。",
+      "public_profile": "家族律师，负责旧宅捐赠意向与多版遗嘱的效力审查。",
+      "role": "家族律师，负责旧宅捐赠意向与多版遗嘱的效力审查。",
+      "speaking_style": "说话有边界，重视文书证据，习惯保护委托人；面对利益冲突会过分谨慎。",
+      "timeline": []
+    },
+    {
+      "backstory": "找出杀害姜慎的人，保住女主人留下的家族档案，并承认自己藏匿过一页藏品来历记录。",
+      "canon_evidence": [],
+      "goals": [
+        "找出杀害姜慎的人，保住女主人留下的家族档案，并承认自己藏匿过一页藏品来历记录。"
+      ],
+      "id": "meng_lan",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "old_house_corridor_meng_lan_s1_1",
+        "old_house_corridor_meng_lan_s1_2",
+        "old_house_corridor_meng_lan_s1_3",
+        "old_house_corridor_meng_lan_s2_1",
+        "old_house_corridor_meng_lan_s2_2",
+        "old_house_corridor_meng_lan_s2_3",
+        "old_house_corridor_meng_lan_s3_1",
+        "old_house_corridor_meng_lan_s3_2",
+        "old_house_corridor_meng_lan_s3_3"
+      ],
+      "lexicon": "",
+      "name": "孟岚",
+      "personality": "耐心却防备，记人情比记规则更牢；为了保护亡故女主人会隐瞒旧事。",
+      "public_identity": "旧宅管家，服务姜家二十年，管理钥匙、门禁与日常护理。",
+      "public_profile": "旧宅管家，服务姜家二十年，管理钥匙、门禁与日常护理。",
+      "role": "旧宅管家，服务姜家二十年，管理钥匙、门禁与日常护理。",
+      "speaking_style": "耐心却防备，记人情比记规则更牢；为了保护亡故女主人会隐瞒旧事。",
+      "timeline": []
+    },
+    {
+      "backstory": "掩盖你替换藏品并杀害姜慎的行为，让死亡被接受为失足，或使侄子的债务动机成为主要解释。",
+      "canon_evidence": [],
+      "goals": [
+        "掩盖你替换藏品并杀害姜慎的行为，让死亡被接受为失足，或使侄子的债务动机成为主要解释。"
+      ],
+      "id": "pei_yan",
+      "is_killer": true,
+      "is_victim": false,
+      "known_fact_ids": [
+        "old_house_corridor_pei_yan_s1_1",
+        "old_house_corridor_pei_yan_s1_2",
+        "old_house_corridor_pei_yan_s1_3",
+        "old_house_corridor_pei_yan_s2_1",
+        "old_house_corridor_pei_yan_s2_2",
+        "old_house_corridor_pei_yan_s2_3",
+        "old_house_corridor_pei_yan_s3_1",
+        "old_house_corridor_pei_yan_s3_2",
+        "old_house_corridor_pei_yan_s3_3"
+      ],
+      "lexicon": "",
+      "name": "裴砚",
+      "personality": "礼貌且自负，习惯用专业差异掌控谈话；在编号与照片问题上尤其紧张。",
+      "public_identity": "旧宅修复师，负责北回廊墙面、楼梯与藏品的修复验收。",
+      "public_profile": "旧宅修复师，负责北回廊墙面、楼梯与藏品的修复验收。",
+      "role": "旧宅修复师，负责北回廊墙面、楼梯与藏品的修复验收。",
+      "speaking_style": "礼貌且自负，习惯用专业差异掌控谈话；在编号与照片问题上尤其紧张。",
+      "timeline": []
     }
+  ],
+  "clue_fact_map": {
+    "house_alt_check": [
+      "f_rpg_old_house_corridor_chain04"
+    ],
+    "house_alt_check 南档案房走廊摄像记录姜峤20:01进去，20:13出来并在院井洗红印泥，期间未往北回廊。厨房门禁和走廊画面显示孟岚20:|logLR:pei_yan=2.0": [
+      "f_rpg_old_house_corridor_chain04"
+    ],
+    "house_other_secrets": [
+      "f_rpg_old_house_corridor_chain04"
+    ],
+    "house_other_secrets 南档案房红印泥与姜峤纸页、衣袖污点的颜色、印章图案对应，纸页是未签的产权询价稿。孟岚护理袋内藏的是早年藏品来源账页，纸张|logLR:pei_yan=2.0": [
+      "f_rpg_old_house_corridor_chain04"
+    ],
+    "house_paint_transfer": [
+      "f_rpg_old_house_corridor_chain02",
+      "f_rpg_old_house_corridor_chain04"
+    ],
+    "house_paint_transfer 北回廊当晚只在墙边托盘使用蓝绿色未固化漆。姜慎衣背与拖擦带均带此漆，裴砚工作靴的右后底也有相同新漆与拖向楼梯的鞋纹；登记|logLR:pei_yan=2.0": [
+      "f_rpg_old_house_corridor_chain02",
+      "f_rpg_old_house_corridor_chain04"
+    ],
+    "house_rail_before": [
+      "f_rpg_old_house_corridor_chain01"
+    ],
+    "house_rail_before 当日17:50清洁照片完整拍到同一扶手接头：螺丝在位，扶手固定。下午验收页写“扶手承载复核通过”，由裴砚签名。20:15|logLR:pei_yan=2.0": [
+      "f_rpg_old_house_corridor_chain01"
+    ],
+    "house_schedule": [
+      "f_rpg_old_house_corridor_chain04"
+    ],
+    "house_schedule 宅内门禁与当晚日程一致：只有姜梨、姜峤、唐棠、孟岚、裴砚五人在场。姜梨与唐棠19:55至20:12在东书房会谈，录音连续|logLR:pei_yan=1.5": [
+      "f_rpg_old_house_corridor_chain04"
+    ],
+    "house_stair_scene": [
+      "f_rpg_old_house_corridor_chain01"
+    ],
+    "house_stair_scene 现场照片显示姜慎倒在楼梯下，扶手一处接头松脱，但螺纹末端没有长期磨耗或锈蚀，周围有新鲜工具划痕。楼梯踏面没有大范围连续滑|logLR:pei_yan=1.5": [
+      "f_rpg_old_house_corridor_chain01"
+    ],
+    "house_swap_audit": [
+      "f_rpg_old_house_corridor_chain05"
+    ],
+    "house_swap_audit 原藏品早年照片有独特窑裂，当前验收物却没有；裴砚的修复记录声称只做表面清理，没有改变器型的依据。其个人交易夹中有原藏品出|logLR:pei_yan=2.0": [
+      "f_rpg_old_house_corridor_chain05"
+    ],
+    "house_tool_custody": [
+      "f_rpg_old_house_corridor_chain02",
+      "f_rpg_old_house_corridor_chain03"
+    ],
+    "house_tool_custody 保险工具登记表显示该配重及长木箱当晚由裴砚19:30签名领用，禁止转借；北工具间出入口记录与借用照片显示20:13由他本|logLR:pei_yan=2.0": [
+      "f_rpg_old_house_corridor_chain02",
+      "f_rpg_old_house_corridor_chain03"
+    ],
+    "house_upper_marks": [
+      "f_rpg_old_house_corridor_chain01"
+    ],
+    "house_upper_marks 北回廊上层墙边有一小片暗红凝结痕与带棱角的擦碰点，墙边到楼梯口形成断续拖擦带；姜慎衣背见同色摩擦印。痕迹位于楼梯上方而非|logLR:pei_yan=1.5": [
+      "f_rpg_old_house_corridor_chain01"
+    ],
+    "house_video_action": [
+      "f_rpg_old_house_corridor_chain03"
+    ],
+    "house_video_action 保险封签完好的本地卡记录连续，网络故障只影响远程显示。20:04姜慎与裴砚进入北回廊；20:08画面清楚显示裴砚从长木箱|logLR:pei_yan=2.0": [
+      "f_rpg_old_house_corridor_chain03"
+    ],
+    "house_video_departure": [
+      "f_rpg_old_house_corridor_chain03"
+    ],
+    "house_video_departure 同卡后续画面显示20:12裴砚合上木箱，向从厨房方向来的孟岚示意改走侧楼梯，20:13独自带箱离开；20:15孟岚从楼下|logLR:pei_yan=2.0": [
+      "f_rpg_old_house_corridor_chain03"
+    ],
+    "house_weight_trace": [
+      "f_rpg_old_house_corridor_chain02",
+      "f_rpg_old_house_corridor_chain03"
+    ],
+    "house_weight_trace 长木箱内的黄铜修复配重为长方体，边角与姜慎头部照片中的棱角创口形状相近；外侧被擦拭，底部毡垫与缝隙仍有暗红组织样残留，并|logLR:pei_yan=2.0": [
+      "f_rpg_old_house_corridor_chain02",
+      "f_rpg_old_house_corridor_chain03"
+    ],
+    "house_will_status": [
+      "f_rpg_old_house_corridor_chain05"
+    ],
+    "house_will_status 旧遗嘱把部分收藏分给姜梨与姜峤，新捐赠草案尚未签署，出售意向已经撤回，死亡并不能使房产立即变成现金。姜峤的债务催款短信真|logLR:pei_yan=1.5": [
+      "f_rpg_old_house_corridor_chain05"
+    ]
   },
+  "clue_pool": [
+    "house_stair_scene 现场照片显示姜慎倒在楼梯下，扶手一处接头松脱，但螺纹末端没有长期磨耗或锈蚀，周围有新鲜工具划痕。楼梯踏面没有大范围连续滑|logLR:pei_yan=1.5",
+    "house_upper_marks 北回廊上层墙边有一小片暗红凝结痕与带棱角的擦碰点，墙边到楼梯口形成断续拖擦带；姜慎衣背见同色摩擦印。痕迹位于楼梯上方而非|logLR:pei_yan=1.5",
+    "house_schedule 宅内门禁与当晚日程一致：只有姜梨、姜峤、唐棠、孟岚、裴砚五人在场。姜梨与唐棠19:55至20:12在东书房会谈，录音连续|logLR:pei_yan=1.5",
+    "house_will_status 旧遗嘱把部分收藏分给姜梨与姜峤，新捐赠草案尚未签署，出售意向已经撤回，死亡并不能使房产立即变成现金。姜峤的债务催款短信真|logLR:pei_yan=1.5",
+    "house_weight_trace 长木箱内的黄铜修复配重为长方体，边角与姜慎头部照片中的棱角创口形状相近；外侧被擦拭，底部毡垫与缝隙仍有暗红组织样残留，并|logLR:pei_yan=2.0",
+    "house_tool_custody 保险工具登记表显示该配重及长木箱当晚由裴砚19:30签名领用，禁止转借；北工具间出入口记录与借用照片显示20:13由他本|logLR:pei_yan=2.0",
+    "house_rail_before 当日17:50清洁照片完整拍到同一扶手接头：螺丝在位，扶手固定。下午验收页写“扶手承载复核通过”，由裴砚签名。20:15|logLR:pei_yan=2.0",
+    "house_paint_transfer 北回廊当晚只在墙边托盘使用蓝绿色未固化漆。姜慎衣背与拖擦带均带此漆，裴砚工作靴的右后底也有相同新漆与拖向楼梯的鞋纹；登记|logLR:pei_yan=2.0",
+    "house_other_secrets 南档案房红印泥与姜峤纸页、衣袖污点的颜色、印章图案对应，纸页是未签的产权询价稿。孟岚护理袋内藏的是早年藏品来源账页，纸张|logLR:pei_yan=2.0",
+    "house_video_action 保险封签完好的本地卡记录连续，网络故障只影响远程显示。20:04姜慎与裴砚进入北回廊；20:08画面清楚显示裴砚从长木箱|logLR:pei_yan=2.0",
+    "house_video_departure 同卡后续画面显示20:12裴砚合上木箱，向从厨房方向来的孟岚示意改走侧楼梯，20:13独自带箱离开；20:15孟岚从楼下|logLR:pei_yan=2.0",
+    "house_swap_audit 原藏品早年照片有独特窑裂，当前验收物却没有；裴砚的修复记录声称只做表面清理，没有改变器型的依据。其个人交易夹中有原藏品出|logLR:pei_yan=2.0",
+    "house_alt_check 南档案房走廊摄像记录姜峤20:01进去，20:13出来并在院井洗红印泥，期间未往北回廊。厨房门禁和走廊画面显示孟岚20:|logLR:pei_yan=2.0"
+  ],
+  "clues": [
+    {
+      "content": "现场照片显示姜慎倒在楼梯下，扶手一处接头松脱，但螺纹末端没有长期磨耗或锈蚀，周围有新鲜工具划痕。楼梯踏面没有大范围连续滑落印痕。仅凭这些观察不能确定完整死因，但“自然老化”并非无需检验的解释。",
+      "id": "house_stair_scene",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain01"
+      ],
+      "source_target": "house_stairs",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "北楼梯与扶手",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "北回廊上层墙边有一小片暗红凝结痕与带棱角的擦碰点，墙边到楼梯口形成断续拖擦带；姜慎衣背见同色摩擦印。痕迹位于楼梯上方而非发现落点，说明仅检查楼梯下会遗漏一个重要接触位置。",
+      "id": "house_upper_marks",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain01"
+      ],
+      "source_target": "house_upper",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "北回廊上层地面",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "宅内门禁与当晚日程一致：只有姜梨、姜峤、唐棠、孟岚、裴砚五人在场。姜梨与唐棠19:55至20:12在东书房会谈，录音连续。20:02姜慎在工作便笺上写“20:04北回廊与裴验收”。姜峤19:35曾索要资助并说过气话，但没有记录证明他进入北回廊。",
+      "id": "house_schedule",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain04"
+      ],
+      "source_target": "house_agenda",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "晚间会谈安排",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "旧遗嘱把部分收藏分给姜梨与姜峤，新捐赠草案尚未签署，出售意向已经撤回，死亡并不能使房产立即变成现金。姜峤的债务催款短信真实存在，唐棠替买方收费也有转账记录。这些材料提供利益压力，不记录致死行动。",
+      "id": "house_will_status",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain05"
+      ],
+      "source_target": "house_inheritance",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "旧遗嘱与债务材料",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "长木箱内的黄铜修复配重为长方体，边角与姜慎头部照片中的棱角创口形状相近；外侧被擦拭，底部毡垫与缝隙仍有暗红组织样残留，并粘有姜慎围巾的白色纤维。残留与物体形状支持近距离接触，不能只靠“红色”认定血液来源。",
+      "id": "house_weight_trace",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain02",
+        "f_rpg_old_house_corridor_chain03"
+      ],
+      "source_target": "house_weightbox",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "修复长木箱",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "保险工具登记表显示该配重及长木箱当晚由裴砚19:30签名领用，禁止转借；北工具间出入口记录与借用照片显示20:13由他本人送回，配重没有登记给其他四人。箱子回到侧楼梯平台工具间后，20:13孟岚与刚结束书房会谈的唐棠按普通保险归还流程，仅核箱外观后共同贴封签，没有打开清点；此时还未发现死亡。归还与封签照片连续。",
+      "id": "house_tool_custody",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain02",
+        "f_rpg_old_house_corridor_chain03"
+      ],
+      "source_target": "house_weightbox",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "修复长木箱",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "当日17:50清洁照片完整拍到同一扶手接头：螺丝在位，扶手固定。下午验收页写“扶手承载复核通过”，由裴砚签名。20:15接头出现新工具痕，表面没有断裂承载损伤；需解释为什么“已通过验收”的接头后来被旋松。",
+      "id": "house_rail_before",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain01"
+      ],
+      "source_target": "house_cleaning",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "下午清洁与验收照片",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "北回廊当晚只在墙边托盘使用蓝绿色未固化漆。姜慎衣背与拖擦带均带此漆，裴砚工作靴的右后底也有相同新漆与拖向楼梯的鞋纹；登记的姜峤橡胶底样本为横纹，不匹配拖擦带旁的菱形工作靴纹。漆与鞋纹支持行动路径，仍需其他身份资料交叉印证。",
+      "id": "house_paint_transfer",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain02",
+        "f_rpg_old_house_corridor_chain04"
+      ],
+      "source_target": "house_cleaning",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "下午清洁与验收照片",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "南档案房红印泥与姜峤纸页、衣袖污点的颜色、印章图案对应，纸页是未签的产权询价稿。孟岚护理袋内藏的是早年藏品来源账页，纸张旧折痕与装订孔吻合，没有当晚北回廊新漆。两人的隐瞒真实存在，但没有因此形成与修复配重或拖动的连接。",
+      "id": "house_other_secrets",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain04"
+      ],
+      "source_target": "house_southarchive",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "南档案房与护理袋",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "保险封签完好的本地卡记录连续，网络故障只影响远程显示。20:04姜慎与裴砚进入北回廊；20:08画面清楚显示裴砚从长木箱取出黄铜配重，击中姜慎头部；20:10他拖动姜慎到楼梯口并推下，随后对扶手接头使用工具。画面可辨裴砚面部，其他四人未进入该区域。",
+      "id": "house_video_action",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain03"
+      ],
+      "source_target": "house_localvideo",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "北回廊本地存储卡",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "同卡后续画面显示20:12裴砚合上木箱，向从厨房方向来的孟岚示意改走侧楼梯，20:13独自带箱离开；20:15孟岚从楼下发现姜慎并呼喊。画面与工具归还流水、发现顺序一致，覆盖袭击至发现之间的空档。",
+      "id": "house_video_departure",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain03"
+      ],
+      "source_target": "house_localvideo",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "北回廊本地存储卡",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "原藏品早年照片有独特窑裂，当前验收物却没有；裴砚的修复记录声称只做表面清理，没有改变器型的依据。其个人交易夹中有原藏品出售照片，窑裂与旧照片吻合，收款账户属于裴砚。姜慎的验收批注要求次日逐件复核编号，直接威胁调包获利。",
+      "id": "house_swap_audit",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain05"
+      ],
+      "source_target": "house_collectionaudit",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "藏品编号与出售记录",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "南档案房走廊摄像记录姜峤20:01进去，20:13出来并在院井洗红印泥，期间未往北回廊。厨房门禁和走廊画面显示孟岚20:00至20:11备热水，20:12走到北入口后改走侧楼梯。结合东书房会谈记录，其余四人均未出现在20:08至20:10袭击与拖动位置。",
+      "id": "house_alt_check",
+      "reveals_fact_ids": [
+        "f_rpg_old_house_corridor_chain04"
+      ],
+      "source_target": "house_doorbackup",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "侧门与档案房流水",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    }
+  ],
+  "completions": [
+    {
+      "basis": "source_text_annotation",
+      "field": "evaluation.victim_name",
+      "rule": "R1_victim_annotation",
+      "value": "姜慎"
+    }
+  ],
+  "endings": [
+    "正确指认：指认成立：北回廊的原始影像与修复配重物证相互印证，楼梯事故是事后伪装。DM 将揭示真实袭击、拖动与遗产争议的区别。",
+    "错误指认：你们指认了{selected_role_name}，但这一判断与案件的关键物证冲突。调查以错误指认结束；现场和证物继续封存，真实作案者的责任尚未被正确确认。"
+  ],
+  "evaluation": {
+    "culprit_basis": "truth.culprit_role_id",
+    "has_murder": true,
+    "killer_id": "pei_yan",
+    "required_fact_ids": [
+      "f_rpg_old_house_corridor_truth",
+      "f_rpg_old_house_corridor_victim",
+      "f_rpg_old_house_corridor_chain01",
+      "f_rpg_old_house_corridor_chain02",
+      "f_rpg_old_house_corridor_chain03",
+      "f_rpg_old_house_corridor_chain04",
+      "f_rpg_old_house_corridor_chain05"
+    ],
+    "role_kind": "declared_killer",
+    "source_id": "old_house_corridor",
+    "victim_basis": "source_text_annotation",
+    "victim_name": "姜慎"
+  },
+  "facts": [
+    {
+      "content": "姜家旧宅的修复验收与遗嘱说明安排在同一晚。宅主姜慎宣布，次日将逐件复核收藏、重新处分旧宅，引起继承人、律师、管家与修复师的不安。二十点十五分，他被发现倒在北回廊楼梯下，扶手一段松脱，众人最初以为他失足坠楼。山路因塌方封闭，警方要求五名在场者保护现场，等待道路恢复。宅内没有其他来客；长期互相隐瞒的账、遗嘱与修复旧事，现在都成了他们必须面对的疑点。",
+      "core": true,
+      "id": "f_rpg_old_house_corridor_pub",
+      "keywords": [
+        "宅主姜慎宣布",
+        "次日将逐件复核收藏",
+        "重新处分旧宅",
+        "引起继承人",
+        "律师",
+        "管家与修复师的不安",
+        "二十点十五分",
+        "他被发现倒在北回廊楼梯下",
+        "扶手一段松脱",
+        "众人最初以为他失足坠楼",
+        "山路因塌方封闭",
+        "警方要求五名在场者保护现场"
+      ],
+      "type": "background",
+      "visibility": "public"
+    },
+    {
+      "content": "死者：姜慎。依据：source_text_annotation。",
+      "core": true,
+      "id": "f_rpg_old_house_corridor_victim",
+      "keywords": [
+        "死者",
+        "姜慎",
+        "依据"
+      ],
+      "type": "victim",
+      "visibility": "public"
+    },
+    {
+      "content": "裴砚利用修复项目把原藏品换成复制品，私售原件。姜慎原本要讨论旧宅捐赠、撤回出售意向，同时坚持逐件复核编号和历史照片；裴砚知道验收会揭穿自己。20:04他以验收为名把姜慎带到北回廊，20:08从自己领用的长木箱取出黄铜修复配重，击打姜慎头部造成致命袭击，20:10将失去反应的姜慎拖到楼梯口推下，再旋松一处扶手接头，企图把谋杀伪装为失足坠楼。20:12他支开经过的孟岚，20:13把箱子送回侧楼梯平台工具间。孟岚与唐棠不知死亡，按普通保险归还流程只核外观后贴封签，孟岚再下楼于20:15发现尸体。这里不存在失准钟表或复杂暗道，所有记录用同一设备校时。 裴砚擦了配重外侧，却漏掉底部毡垫缝隙中的残留与围巾纤维。上层回廊的痕迹和新漆转移先推翻“只在楼梯下发生事故”的完整性；下午扶手验收与新划痕指向事后伪装。最后，本地摄像卡清楚记录裴砚本人取配重袭击、拖动和松扶手，这是区别于口供的独立身份链。借用照片、配重残留与归还流水提供另一条工具接触链；两条相互印证，不依赖裴砚或其他角色承认。网络损坏没有停止本地录像，凶手误判了设备。 姜峤确实负债、说过气话并私翻材料，红污点却来自印泥，走廊录像覆盖他在南档案房的关键时段。孟岚藏页保护已故女主人，姜梨私拍旧遗嘱，唐棠存在利益冲突；这些行为都应分别追责，却没有参与当晚袭击。正确结局是指认裴砚，保全调包与杀人证据、等待警方；错误结局是用遗产动机替代行动证据，把责任推给无辜者。",
+      "core": true,
+      "id": "f_rpg_old_house_corridor_truth",
+      "keywords": [
+        "私售原件",
+        "姜慎原本要讨论旧宅捐赠",
+        "撤回出售意向",
+        "同时坚持逐件复核编号和历史照片",
+        "裴砚知道验收会揭穿自己",
+        "击打姜慎头部造成致命袭击",
+        "再旋松一处扶手接头",
+        "企图把谋杀伪装为失足坠楼",
+        "20:12他支开经过的孟岚",
+        "孟岚与唐棠不知死亡",
+        "孟岚再下楼于20:15发现尸体",
+        "这里不存在失准钟表或复杂暗道"
+      ],
+      "type": "truth",
+      "visibility": "truth"
+    },
+    {
+      "content": "19:20 姜梨与姜慎争论旧宅捐赠，并于19:28上传旧遗嘱照片。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t01",
+      "keywords": [
+        "19:20",
+        "姜梨与姜慎争论旧宅捐赠",
+        "并于19:28上传旧遗嘱照片"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "19:30 裴砚领用配重和长木箱，签字与照片留存。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t02",
+      "keywords": [
+        "19:30",
+        "裴砚领用配重和长木箱",
+        "签字与照片留存"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "19:35 姜峤索要资助遭拒，留下威胁气话。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t03",
+      "keywords": [
+        "19:35",
+        "姜峤索要资助遭拒",
+        "留下威胁气话"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "19:45 孟岚为家族名誉藏起早年藏品来源账页。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t04",
+      "keywords": [
+        "19:45"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "19:55—20:12 姜梨和唐棠在东书房讨论草案，记录连续。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t05",
+      "keywords": [
+        "19:55—20:12",
+        "姜梨和唐棠在东书房讨论草案",
+        "记录连续"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:01—20:13 姜峤进入南档案房翻产权材料，随后在院井洗掉印泥。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t06",
+      "keywords": [
+        "20:01—20:13",
+        "姜峤进入南档案房翻产权材料",
+        "随后在院井洗掉印泥"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:04 姜慎按验收便笺与裴砚进入北回廊。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t07",
+      "keywords": [
+        "20:04",
+        "姜慎按验收便笺与裴砚进入北回廊"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:08 裴砚用黄铜修复配重击打姜慎。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t08",
+      "keywords": [
+        "20:08",
+        "裴砚用黄铜修复配重击打姜慎"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:10 裴砚把人拖到楼梯口推下，并松扶手伪造失足。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t09",
+      "keywords": [
+        "20:10",
+        "裴砚把人拖到楼梯口推下",
+        "并松扶手伪造失足"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:12—20:13 裴砚支开孟岚，送回工具箱；孟岚与唐棠按普通保险归还流程只核外观后贴封签，随后孟岚下楼。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t10",
+      "keywords": [
+        "20:12—20:13",
+        "裴砚支开孟岚",
+        "送回工具箱",
+        "随后孟岚下楼"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "20:15 孟岚发现姜慎，五人停止作业并保护现场。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t11",
+      "keywords": [
+        "20:15",
+        "孟岚发现姜慎",
+        "五人停止作业并保护现场"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "前一个月 裴砚在修复期间调换原藏品并私售。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t12",
+      "keywords": [
+        "前一个月",
+        "裴砚在修复期间调换原藏品并私售"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "当日17:50 清洁照片与验收表证明北扶手当时固定，裴砚签名确认。",
+      "core": false,
+      "id": "f_rpg_old_house_corridor_t13",
+      "keywords": [
+        "当日17:50",
+        "裴砚签名确认"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "仅以扶手松脱解释自然坠楼不成立，现场存在上层接触和事后工具改动。 上层凝结痕与拖擦带早于发现落点的叙述，下午固定扶手与新旋松痕相矛盾；需要调查人为袭击和伪装而非直接把意外当结论。",
+      "core": true,
+      "id": "f_rpg_old_house_corridor_chain01",
+      "keywords": [
+        "仅以扶手松脱解释自然坠楼不成立",
+        "现场存在上层接触和事后工具改动",
+        "下午固定扶手与新旋松痕相矛盾"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "袭击工具是裴砚领用的黄铜配重，实物痕迹与保管路径独立支持接触。 致伤形状、垫内残留和围巾纤维支持配重接触，签字照片确认工具归属，新漆和鞋纹连接上层拖动路径；这些物证不能单凭颜色作血液鉴定，需与行动录像印证。",
+      "core": true,
+      "id": "f_rpg_old_house_corridor_chain02",
+      "keywords": [
+        "袭击工具是裴砚领用的黄铜配重",
+        "实物痕迹与保管路径独立支持接触",
+        "致伤形状",
+        "垫内残留和围巾纤维支持配重接触",
+        "签字照片确认工具归属",
+        "新漆和鞋纹连接上层拖动路径",
+        "这些物证不能单凭颜色作血液鉴定",
+        "需与行动录像印证"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "裴砚本人袭击、拖动并松扶手，原始录像与实物工具两路证据闭合身份。 面部清晰的连续画面直接证明实际动作，归还流水与垫内残留从独立实物保管路径印证，排除只接触过工具却未作案的解释。",
+      "core": true,
+      "id": "f_rpg_old_house_corridor_chain03",
+      "keywords": [
+        "裴砚本人袭击",
+        "拖动并松扶手",
+        "排除只接触过工具却未作案的解释"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "姜峤的债务与管家的藏页不是本次致死行动，最强替代嫌疑被客观行动记录排除。 非核心角色被连续画面定位在其他区域，红污点与印泥相符，侄子鞋纹不匹配拖擦路径；继承利益只给动机，不能覆盖缺失的作案行动。",
+      "core": true,
+      "id": "f_rpg_old_house_corridor_chain04",
+      "keywords": [
+        "最强替代嫌疑被客观行动记录排除",
+        "红污点与印泥相符",
+        "侄子鞋纹不匹配拖擦路径",
+        "继承利益只给动机",
+        "不能覆盖缺失的作案行动"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "作案动机是避免原藏品调包被验收揭露，而非继承争议本身。 原件特征、出售照片与实际收款相互对应，次日编号验收将揭穿裴砚；遗产尚未兑现与房产出售撤回，反而说明不应只靠继承大小投票。",
+      "core": true,
+      "id": "f_rpg_old_house_corridor_chain05",
+      "keywords": [
+        "而非继承争议本身",
+        "原件特征",
+        "出售照片与实际收款相互对应",
+        "次日编号验收将揭穿裴砚",
+        "遗产尚未兑现与房产出售撤回",
+        "反而说明不应只靠继承大小投票"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "19:20你与父亲因旧宅处置争吵。他并非要取消你的养女身份，而是考虑把宅子捐成公共档案馆。你未经许可拍过一份旧遗嘱，照片仍在自己手机里。19:55至20:12，你与唐棠在东书房整理捐赠条款，彼此都能证明这一段行踪。",
+      "core": false,
+      "id": "old_house_corridor_jiang_li_s1_1",
+      "keywords": [
+        "19:20你与父亲因旧宅处置争吵",
+        "他并非要取消你的养女身份",
+        "而是考虑把宅子捐成公共档案馆",
+        "你未经许可拍过一份旧遗嘱",
+        "照片仍在自己手机里",
+        "19:55至20:12",
+        "你与唐棠在东书房整理捐赠条款",
+        "彼此都能证明这一段行踪"
+      ],
+      "owner": "jiang_li",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你知道北回廊的墙面近期由裴砚修复，楼梯与扶手也在同一验收清单中。你没有看到父亲如何倒下，20:15听见孟岚呼喊后才赶到楼梯口。父亲出事前没有把最终遗嘱交给你。",
+      "core": false,
+      "id": "old_house_corridor_jiang_li_s1_2",
+      "keywords": [
+        "你知道北回廊的墙面近期由裴砚修复",
+        "楼梯与扶手也在同一验收清单中",
+        "你没有看到父亲如何倒下",
+        "父亲出事前没有把最终遗嘱交给你"
+      ],
+      "owner": "jiang_li",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "分别检查坠落现场与旧宅处置材料；说明自己与父亲的真实分歧，不把继承人的秘密等同于凶手证据。",
+      "core": false,
+      "id": "old_house_corridor_jiang_li_s1_3",
+      "keywords": [
+        "分别检查坠落现场与旧宅处置材料",
+        "说明自己与父亲的真实分歧",
+        "不把继承人的秘密等同于凶手证据"
+      ],
+      "owner": "jiang_li",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你想起19:40父亲对你说“房子怎么留可以谈，验收必须明算”。当时你以为他在谈修缮预算，现在意识到他可能将收藏验收和遗嘱分开。你与唐棠讨论时，裴砚曾把一只长木箱从门外推向北回廊，你不知道箱内是什么。",
+      "core": false,
+      "id": "old_house_corridor_jiang_li_s2_1",
+      "keywords": [
+        "你想起19:40父亲对你说",
+        "房子怎么留可以谈",
+        "验收必须明算",
+        "当时你以为他在谈修缮预算",
+        "你与唐棠讨论时",
+        "你不知道箱内是什么"
+      ],
+      "owner": "jiang_li",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你手机上的遗嘱照片有自动上传时间19:28，早于死亡；照片记录的是旧版，不足以证明后来谁会继承。你担心公开照片被追责，但删掉照片会破坏调查。",
+      "core": false,
+      "id": "old_house_corridor_jiang_li_s2_2",
+      "keywords": [
+        "早于死亡",
+        "照片记录的是旧版",
+        "不足以证明后来谁会继承",
+        "你担心公开照片被追责",
+        "但删掉照片会破坏调查"
+      ],
+      "owner": "jiang_li",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "公开自己的遗嘱照片和时间，核对修复工具如何进入北回廊；把父亲最后的工作安排与继承争吵分开。",
+      "core": false,
+      "id": "old_house_corridor_jiang_li_s2_3",
+      "keywords": [
+        "公开自己的遗嘱照片和时间",
+        "核对修复工具如何进入北回廊"
+      ],
+      "owner": "jiang_li",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你愿意在警方到来后放弃以旧遗嘱优势争夺房产。父亲真正留下的要求是核对家族收藏是否应当归还，未必能让任何继承人获利。你希望孟岚也能说明她藏过什么，而不是把她的沉默简单当成杀人。",
+      "core": false,
+      "id": "old_house_corridor_jiang_li_s3_1",
+      "keywords": [
+        "未必能让任何继承人获利",
+        "你希望孟岚也能说明她藏过什么",
+        "而不是把她的沉默简单当成杀人"
+      ],
+      "owner": "jiang_li",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你可以交出自己的手机与东书房行踪作核对；对其他人是否触碰武器，只能依据实际获得的线索。最后指认应同时解释上层回廊的异常和楼梯下的场景。",
+      "core": false,
+      "id": "old_house_corridor_jiang_li_s3_2",
+      "keywords": [
+        "对其他人是否触碰武器",
+        "只能依据实际获得的线索"
+      ],
+      "owner": "jiang_li",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "把上层现场、修复工具与连续行动资料连接成证据链，检验最强替代嫌疑是否具有同样的行动窗口。",
+      "core": false,
+      "id": "old_house_corridor_jiang_li_s3_3",
+      "keywords": [
+        "把上层现场"
+      ],
+      "owner": "jiang_li",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你欠了一笔近期到期的债，19:35向叔父索要资助遭拒，气话是“你死后房子总要有人接”。20:01你溜进南侧档案房找抵押文件，直到20:13才出来，随后在院井旁洗去手上的红色印泥。你没有去北回廊，但这段时间无人全程陪伴。",
+      "core": false,
+      "id": "old_house_corridor_jiang_qiao_s1_1",
+      "keywords": [
+        "你欠了一笔近期到期的债",
+        "19:35向叔父索要资助遭拒",
+        "气话是",
+        "你死后房子总要有人接",
+        "直到20:13才出来",
+        "随后在院井旁洗去手上的红色印泥",
+        "你没有去北回廊",
+        "但这段时间无人全程陪伴"
+      ],
+      "owner": "jiang_qiao",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你翻文件使用的是档案房红印泥，夹走一张尚未签署的产权询价页，页上有你自己的指印。你知道裴砚与叔父曾争论一件古董，但没有听清内容。你确有继承动机，因此需要物证而非只靠否认。",
+      "core": false,
+      "id": "old_house_corridor_jiang_qiao_s1_2",
+      "keywords": [
+        "你翻文件使用的是档案房红印泥",
+        "夹走一张尚未签署的产权询价页",
+        "页上有你自己的指印",
+        "你知道裴砚与叔父曾争论一件古董",
+        "但没有听清内容",
+        "你确有继承动机",
+        "因此需要物证而非只靠否认"
+      ],
+      "owner": "jiang_qiao",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "核对南侧档案房和楼梯现场，说明红色手印来源；尽量保住债务隐私，但不要编造其他人作案。",
+      "core": false,
+      "id": "old_house_corridor_jiang_qiao_s1_3",
+      "keywords": [
+        "核对南侧档案房和楼梯现场",
+        "说明红色手印来源",
+        "尽量保住债务隐私",
+        "但不要编造其他人作案"
+      ],
+      "owner": "jiang_qiao",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "回忆翻档案的过程，你在20:08听到北侧一声闷响，以为是修复搬动家具。你当时站在南档案房内，声音无法确定来自哪层或何种物体。你注意到叔父的最新财产条款旁写了“收藏复核后生效”，因此所谓巨额现成遗产可能并不存在。",
+      "core": false,
+      "id": "old_house_corridor_jiang_qiao_s2_1",
+      "keywords": [
+        "回忆翻档案的过程",
+        "你在20:08听到北侧一声闷响",
+        "以为是修复搬动家具",
+        "你当时站在南档案房内",
+        "声音无法确定来自哪层或何种物体",
+        "你注意到叔父的最新财产条款旁写了",
+        "收藏复核后生效",
+        "因此所谓巨额现成遗产可能并不存在"
+      ],
+      "owner": "jiang_qiao",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你今天穿的是黑色橡胶底皮鞋，进宅时被要求踩了防潮检验纸，留下足底样本。你没有修复工具领用资格，但管家知道你偷翻文件，可能会为了自保质疑你。",
+      "core": false,
+      "id": "old_house_corridor_jiang_qiao_s2_2",
+      "keywords": [
+        "你今天穿的是黑色橡胶底皮鞋",
+        "进宅时被要求踩了防潮检验纸",
+        "留下足底样本",
+        "你没有修复工具领用资格",
+        "但管家知道你偷翻文件",
+        "可能会为了自保质疑你"
+      ],
+      "owner": "jiang_qiao",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "交出带红印泥的纸页并接受鞋底对照；说明自己听到的声音只是观察，避免把它加工成目击证词。",
+      "core": false,
+      "id": "old_house_corridor_jiang_qiao_s2_3",
+      "keywords": [
+        "交出带红印泥的纸页并接受鞋底对照",
+        "说明自己听到的声音只是观察",
+        "避免把它加工成目击证词"
+      ],
+      "owner": "jiang_qiao",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你决定认下债务和私翻产权材料。即便最终证明不是凶手，你也无权继续藏走文件。你担心修复师把你的气话和无陪伴时间拼成故事，却没有提供真正的致死物证。",
+      "core": false,
+      "id": "old_house_corridor_jiang_qiao_s3_1",
+      "keywords": [
+        "你决定认下债务和私翻产权材料",
+        "即便最终证明不是凶手",
+        "你也无权继续藏走文件",
+        "却没有提供真正的致死物证"
+      ],
+      "owner": "jiang_qiao",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你身上的红色污点可以同档案房印泥比对，不能凭颜色称作死者血迹。你愿意接受门禁、物品借用与后续录像核对，并要求任何指控说明你如何接触那件致伤物。",
+      "core": false,
+      "id": "old_house_corridor_jiang_qiao_s3_2",
+      "keywords": [
+        "不能凭颜色称作死者血迹",
+        "你愿意接受门禁",
+        "物品借用与后续录像核对"
+      ],
+      "owner": "jiang_qiao",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "以可验证材料解释自己的最大疑点；最终投票优先选择完整行动证据，不能为了摆脱嫌疑随意指认。",
+      "core": false,
+      "id": "old_house_corridor_jiang_qiao_s3_3",
+      "keywords": [
+        "以可验证材料解释自己的最大疑点",
+        "最终投票优先选择完整行动证据",
+        "不能为了摆脱嫌疑随意指认"
+      ],
+      "owner": "jiang_qiao",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你私下替旧宅意向买方咨询过产权，收取费用，尚未向姜慎披露。今天19:50姜慎要求你撤回一份旧售房意向，重新拟定捐赠草案。19:55至20:12你与姜梨都在东书房，她复制遗嘱时你并不知情。20:13你应孟岚招呼，在侧楼梯平台工具间按普通保险归还流程，只核长木箱外观后共同贴封签；20:15才听到发现死亡的呼喊。",
+      "core": false,
+      "id": "old_house_corridor_tang_tang_s1_1",
+      "keywords": [
+        "你私下替旧宅意向买方咨询过产权",
+        "收取费用",
+        "尚未向姜慎披露",
+        "重新拟定捐赠草案",
+        "她复制遗嘱时你并不知情",
+        "20:13你应孟岚招呼",
+        "只核长木箱外观后共同贴封签",
+        "20:15才听到发现死亡的呼喊"
+      ],
+      "owner": "tang_tang",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "旧宅出售没有完成，继承也不能在死亡后直接跳过法定程序变成现金。你带来的文件夹只装纸质材料与印章，没有重物。北回廊的验收是裴砚负责的专业工作，不是你经手。",
+      "core": false,
+      "id": "old_house_corridor_tang_tang_s1_2",
+      "keywords": [
+        "旧宅出售没有完成",
+        "你带来的文件夹只装纸质材料与印章",
+        "没有重物",
+        "北回廊的验收是裴砚负责的专业工作",
+        "不是你经手"
+      ],
+      "owner": "tang_tang",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "保全所有文书版本，澄清继承与出售状态；将自己的利益冲突如实解释，协助建立每个人的可核实时间线。",
+      "core": false,
+      "id": "old_house_corridor_tang_tang_s1_3",
+      "keywords": [
+        "保全所有文书版本",
+        "澄清继承与出售状态",
+        "将自己的利益冲突如实解释",
+        "协助建立每个人的可核实时间线"
+      ],
+      "owner": "tang_tang",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你想起姜慎当晚要求在验收签字页加上“原件编号与历次照片一致”的条款，裴砚随即建议延后到明天。姜慎拒绝了。你当时认为是合同严谨性的争论，并不知道收藏是否被调包。",
+      "core": false,
+      "id": "old_house_corridor_tang_tang_s2_1",
+      "keywords": [
+        "原件编号与历次照片一致",
+        "的条款",
+        "裴砚随即建议延后到明天",
+        "姜慎拒绝了",
+        "你当时认为是合同严谨性的争论",
+        "并不知道收藏是否被调包"
+      ],
+      "owner": "tang_tang",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "姜慎未签的新草案要求归还来源不清的藏品，和继承人分配无直接关系。你能解释条款的用途，不能把法律文本当成凶手指认。买方给你的报酬有转账记录，应该一并保留。",
+      "core": false,
+      "id": "old_house_corridor_tang_tang_s2_2",
+      "keywords": [
+        "和继承人分配无直接关系",
+        "你能解释条款的用途",
+        "不能把法律文本当成凶手指认",
+        "买方给你的报酬有转账记录",
+        "应该一并保留"
+      ],
+      "owner": "tang_tang",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "比较继承文件与验收条款，追问谁最害怕编号复核；依据已获得的材料区分经济动机与实际接触凶器。",
+      "core": false,
+      "id": "old_house_corridor_tang_tang_s2_3",
+      "keywords": [
+        "比较继承文件与验收条款",
+        "追问谁最害怕编号复核"
+      ],
+      "owner": "tang_tang",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你决定公开双重收费，愿意退出后续代理。你确认今天随身记录仪只覆盖东书房会谈，不能替院落或北回廊提供全程证明。你可以见证线索封存，但不可以凭律师身份替警方做确定的法医学结论。",
+      "core": false,
+      "id": "old_house_corridor_tang_tang_s3_1",
+      "keywords": [
+        "你决定公开双重收费",
+        "愿意退出后续代理",
+        "不能替院落或北回廊提供全程证明",
+        "你可以见证线索封存"
+      ],
+      "owner": "tang_tang",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你最擅长核对借用签字、委托范围与文件版本。裴砚若声称任何人都能领用修复配重，应当要求拿出交接材料；若有人说录像“必然存在”，也要看真实导出的片段。",
+      "core": false,
+      "id": "old_house_corridor_tang_tang_s3_2",
+      "keywords": [
+        "你最擅长核对借用签字",
+        "委托范围与文件版本",
+        "裴砚若声称任何人都能领用修复配重",
+        "应当要求拿出交接材料",
+        "若有人说录像",
+        "必然存在",
+        "也要看真实导出的片段"
+      ],
+      "owner": "tang_tang",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "主持证据版本与保管路径核对；提出需要被最终解释排除的侄子、管家等替代嫌疑。",
+      "core": false,
+      "id": "old_house_corridor_tang_tang_s3_3",
+      "keywords": [
+        "主持证据版本与保管路径核对",
+        "提出需要被最终解释排除的侄子",
+        "管家等替代嫌疑"
+      ],
+      "owner": "tang_tang",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "19:45你把一页写有早年收购争议的原始账页从北资料柜移入自己的护理袋，怕旧宅捐赠暴露亡故女主人当年的错误。20:00至20:11你在后厨房备姜慎的热水，20:12经过北回廊门口看见裴砚的长木箱，20:13在侧楼梯平台工具间与唐棠按普通保险归还流程，仅核箱外观并贴封签；当时还不知道发生死亡。20:15下楼时发现姜慎倒在楼梯下。",
+      "core": false,
+      "id": "old_house_corridor_meng_lan_s1_1",
+      "keywords": [
+        "仅核箱外观并贴封签",
+        "当时还不知道发生死亡"
+      ],
+      "owner": "meng_lan",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你有普通门钥匙，可开资料柜和档案房，但修复箱的领用由保险登记管理。下午你清理过楼梯，扶手当时稳定；你没有专业资格判断一处后来松脱的接头为何改变。",
+      "core": false,
+      "id": "old_house_corridor_meng_lan_s1_2",
+      "keywords": [
+        "你有普通门钥匙",
+        "可开资料柜和档案房",
+        "但修复箱的领用由保险登记管理",
+        "下午你清理过楼梯",
+        "扶手当时稳定"
+      ],
+      "owner": "meng_lan",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "检查钥匙与楼梯日常状态；如实说明发现尸体的顺序，避免为掩盖旧账而改动当晚行踪。",
+      "core": false,
+      "id": "old_house_corridor_meng_lan_s1_3",
+      "keywords": [
+        "检查钥匙与楼梯日常状态",
+        "如实说明发现尸体的顺序",
+        "避免为掩盖旧账而改动当晚行踪"
+      ],
+      "owner": "meng_lan",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你想起20:12在北回廊门口见裴砚正合上箱盖，他说“先别让人踩新漆”，让你走侧楼梯。你因此没走到楼梯上层，只能证明这句话与箱子，不能说自己看到他杀人。",
+      "core": false,
+      "id": "old_house_corridor_meng_lan_s2_1",
+      "keywords": [
+        "他说",
+        "先别让人踩新漆",
+        "让你走侧楼梯",
+        "你因此没走到楼梯上层",
+        "只能证明这句话与箱子",
+        "不能说自己看到他杀人"
+      ],
+      "owner": "meng_lan",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "护理袋中的旧账页与今天的致死行为无直接关系。你保存它是为了家族名誉，不是与裴砚共谋；但若拒绝交出，容易让调查误以为你阻挠来源审计。你可以说明楼梯白天确实牢固。",
+      "core": false,
+      "id": "old_house_corridor_meng_lan_s2_2",
+      "keywords": [
+        "你保存它是为了家族名誉",
+        "不是与裴砚共谋",
+        "但若拒绝交出",
+        "容易让调查误以为你阻挠来源审计",
+        "你可以说明楼梯白天确实牢固"
+      ],
+      "owner": "meng_lan",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "交出藏匿的旧账页，解释被支开的路线；用下午记录与当晚现场对照判断事故说法。",
+      "core": false,
+      "id": "old_house_corridor_meng_lan_s2_3",
+      "keywords": [
+        "交出藏匿的旧账页",
+        "解释被支开的路线"
+      ],
+      "owner": "meng_lan",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你决定把女主人的旧账完整交还。你回忆20:15呼喊后五名在场者都来到楼梯口，你没有见任何人后来靠近北资料柜；因此自己藏页的旧事不能替别人解释后续设备或工具记录。",
+      "core": false,
+      "id": "old_house_corridor_meng_lan_s3_1",
+      "keywords": [
+        "你决定把女主人的旧账完整交还",
+        "你没有见任何人后来靠近北资料柜"
+      ],
+      "owner": "meng_lan",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "旧宅保安摄像采用本地循环卡，即使网络故障也继续录像；你知道保管流程，却无法在拿到存储卡前预知画面。北回廊摄像修复完后一直由保险封签保护。",
+      "core": false,
+      "id": "old_house_corridor_meng_lan_s3_2",
+      "keywords": [
+        "旧宅保安摄像采用本地循环卡",
+        "即使网络故障也继续录像",
+        "你知道保管流程",
+        "却无法在拿到存储卡前预知画面"
+      ],
+      "owner": "meng_lan",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "帮助核对录像与工具的封存路径；给出自己确实看到的动作和位置，支持证据链闭合。",
+      "core": false,
+      "id": "old_house_corridor_meng_lan_s3_3",
+      "keywords": [
+        "帮助核对录像与工具的封存路径",
+        "给出自己确实看到的动作和位置",
+        "支持证据链闭合"
+      ],
+      "owner": "meng_lan",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你是作案者。你在修复期间把一件原藏品换成复制品并出售原件，姜慎决定逐件比对早年照片，会让你身败名裂。20:04你以验收为名请他来到北回廊，20:08用自己领用的黄铜修复配重锤击打他的头部，20:10把失去反应的他拖到楼梯边推下，再松开一段扶手接头，伪装失足。你将配重放回长木箱。",
+      "core": false,
+      "id": "old_house_corridor_pei_yan_s1_1",
+      "keywords": [
+        "你是作案者",
+        "姜慎决定逐件比对早年照片",
+        "会让你身败名裂",
+        "再松开一段扶手接头",
+        "伪装失足",
+        "你将配重放回长木箱"
+      ],
+      "owner": "pei_yan",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你领用配重时使用个人签名；配重底部有粘毡垫，你只擦拭了外侧，可能没处理垫下缝隙。你知道侄子欠债且威胁过姜慎，适合作为转移怀疑的对象，但游戏中你不能真的销毁已经封存或搜出的证据。",
+      "core": false,
+      "id": "old_house_corridor_pei_yan_s1_2",
+      "keywords": [
+        "你领用配重时使用个人签名",
+        "配重底部有粘毡垫",
+        "你只擦拭了外侧",
+        "可能没处理垫下缝隙",
+        "你知道侄子欠债且威胁过姜慎",
+        "适合作为转移怀疑的对象"
+      ],
+      "owner": "pei_yan",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "维持扶手老化造成意外的说法，必要时强调侄子的争吵；回应现场问题时不要虚构隐藏嫌疑人。",
+      "core": false,
+      "id": "old_house_corridor_pei_yan_s1_3",
+      "keywords": [
+        "维持扶手老化造成意外的说法",
+        "必要时强调侄子的争吵",
+        "回应现场问题时不要虚构隐藏嫌疑人"
+      ],
+      "owner": "pei_yan",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你记得拖动姜慎时靴底蹭过一小片尚未固化的蓝绿色修复漆，搬箱子也经过同处。你当时没有检查尸体衣背或楼梯上的痕迹。你可以试图解释痕迹为工作接触，但不应声称已看过尚未公开的照片。",
+      "core": false,
+      "id": "old_house_corridor_pei_yan_s2_1",
+      "keywords": [
+        "搬箱子也经过同处",
+        "你可以试图解释痕迹为工作接触",
+        "但不应声称已看过尚未公开的照片"
+      ],
+      "owner": "pei_yan",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "北回廊摄像因网络损坏停止远程显示，你误以为摄像本身没有工作。你没有拆开保险封签里的本地卡，也不知道它是否记录到你。你不能把摄像真正保存的内容读入自己的角色知识。",
+      "core": false,
+      "id": "old_house_corridor_pei_yan_s2_2",
+      "keywords": [
+        "北回廊摄像因网络损坏停止远程显示",
+        "你误以为摄像本身没有工作",
+        "你没有拆开保险封签里的本地卡",
+        "也不知道它是否记录到你"
+      ],
+      "owner": "pei_yan",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "解释长木箱、配重和新漆的合理工作用途；对确实被公开的物证回应，继续试图把失足与债务嫌疑连起来。",
+      "core": false,
+      "id": "old_house_corridor_pei_yan_s2_3",
+      "keywords": [
+        "解释长木箱",
+        "配重和新漆的合理工作用途",
+        "对确实被公开的物证回应",
+        "继续试图把失足与债务嫌疑连起来"
+      ],
+      "owner": "pei_yan",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你想到下午培训时孟岚说过：本地录像与宅内网络独立，只在取卡后恢复查看。你的赌注可能失败。你保留着原件出售付款单，买方不是当晚在场人物；对方只参与过去交易，不是本次谋杀的隐藏协犯。",
+      "core": false,
+      "id": "old_house_corridor_pei_yan_s3_1",
+      "keywords": [
+        "你想到下午培训时孟岚说过",
+        "本地录像与宅内网络独立",
+        "只在取卡后恢复查看",
+        "你的赌注可能失败",
+        "你保留着原件出售付款单",
+        "买方不是当晚在场人物",
+        "对方只参与过去交易",
+        "不是本次谋杀的隐藏协犯"
+      ],
+      "owner": "pei_yan",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你知道自己犯下杀人和调包，但只能知道自己曾采取的行动，以及当前收到的证据。倘若画面确认你动手，专业解释无法使凶器、拖动与松扶手变成事故。",
+      "core": false,
+      "id": "old_house_corridor_pei_yan_s3_2",
+      "keywords": [
+        "你知道自己犯下杀人和调包",
+        "但只能知道自己曾采取的行动",
+        "以及当前收到的证据",
+        "倘若画面确认你动手",
+        "专业解释无法使凶器",
+        "拖动与松扶手变成事故"
+      ],
+      "owner": "pei_yan",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "面对最终质询选择抵赖或承认；不要替其他角色补写回忆，不抢在最终指认前替DM揭底。",
+      "core": false,
+      "id": "old_house_corridor_pei_yan_s3_3",
+      "keywords": [
+        "面对最终质询选择抵赖或承认",
+        "不要替其他角色补写回忆",
+        "不抢在最终指认前替DM揭底"
+      ],
+      "owner": "pei_yan",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "姜慎的养女，文史专业毕业，回旧宅协助整理家族档案。",
+      "core": false,
+      "id": "f_jiang_li_identity",
+      "keywords": [
+        "姜慎的养女",
+        "文史专业毕业",
+        "回旧宅协助整理家族档案"
+      ],
+      "owner": "jiang_li",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "姜慎的侄子，经营周转困难的古玩店，长期期待旧宅财产能解决债务。",
+      "core": false,
+      "id": "f_jiang_qiao_identity",
+      "keywords": [
+        "姜慎的侄子",
+        "经营周转困难的古玩店",
+        "长期期待旧宅财产能解决债务"
+      ],
+      "owner": "jiang_qiao",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "家族律师，负责旧宅捐赠意向与多版遗嘱的效力审查。",
+      "core": false,
+      "id": "f_tang_tang_identity",
+      "keywords": [
+        "家族律师"
+      ],
+      "owner": "tang_tang",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "旧宅管家，服务姜家二十年，管理钥匙、门禁与日常护理。",
+      "core": false,
+      "id": "f_meng_lan_identity",
+      "keywords": [
+        "旧宅管家",
+        "服务姜家二十年",
+        "管理钥匙",
+        "门禁与日常护理"
+      ],
+      "owner": "meng_lan",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "旧宅修复师，负责北回廊墙面、楼梯与藏品的修复验收。",
+      "core": false,
+      "id": "f_pei_yan_identity",
+      "keywords": [
+        "旧宅修复师",
+        "负责北回廊墙面",
+        "楼梯与藏品的修复验收"
+      ],
+      "owner": "pei_yan",
+      "type": "identity",
+      "visibility": "public"
+    }
+  ],
+  "ingest": {
+    "adapter": "rpg_json",
+    "checks": {
+      "canonical_fields": true,
+      "clue_refs_valid": true,
+      "clue_weights_parseable": true
+    },
+    "detected_evidence": [
+      "script_meta",
+      "roles",
+      "truth"
+    ],
+    "ingested_at": "2026-11-25T04:54:21+00:00",
+    "source_path": "corpus\\raw\\rpg\\old_house_corridor.json",
+    "source_sha256": "824db5a4ac73b78f3bde769f19aedbfac846feb0533248bd15677d597bdeef22"
+  },
+  "plot_locks": [],
+  "schema_version": "1.0",
+  "script_id": "rpg_old_house_corridor",
+  "source_files": [
+    "raw/rpg/old_house_corridor.json"
+  ],
+  "timeline_true": [
+    "19:20 姜梨与姜慎争论旧宅捐赠，并于19:28上传旧遗嘱照片。",
+    "19:30 裴砚领用配重和长木箱，签字与照片留存。",
+    "19:35 姜峤索要资助遭拒，留下威胁气话。",
+    "19:45 孟岚为家族名誉藏起早年藏品来源账页。",
+    "19:55—20:12 姜梨和唐棠在东书房讨论草案，记录连续。",
+    "20:01—20:13 姜峤进入南档案房翻产权材料，随后在院井洗掉印泥。",
+    "20:04 姜慎按验收便笺与裴砚进入北回廊。",
+    "20:08 裴砚用黄铜修复配重击打姜慎。",
+    "20:10 裴砚把人拖到楼梯口推下，并松扶手伪造失足。",
+    "20:12—20:13 裴砚支开孟岚，送回工具箱；孟岚与唐棠按普通保险归还流程只核外观后贴封签，随后孟岚下楼。",
+    "20:15 孟岚发现姜慎，五人停止作业并保护现场。",
+    "前一个月 裴砚在修复期间调换原藏品并私售。",
+    "当日17:50 清洁照片与验收表证明北扶手当时固定，裴砚签名确认。"
+  ],
+  "title": "旧宅回廊",
   "truth_graph": [
     "姜家旧宅的修复验收与遗嘱说明安排在同一晚。宅主姜慎宣布，次日将逐件复核收藏、重新处分旧宅，引起继承人、律师、管家与修复师的不安。二十点十五分，他被发现倒在北回廊楼梯下，扶手一段松脱，众人最初以为他失足坠楼。山路因塌方封闭，警方要求五名在场者保护现场，等待道路恢复。宅内没有其他来客；长期互相隐瞒的账、遗嘱与修复旧事，现在都成了他们必须面对的疑点。",
     "死者：姜慎。依据：source_text_annotation。",
@@ -87,1478 +1566,15 @@
     "旧宅管家，服务姜家二十年，管理钥匙、门禁与日常护理。",
     "旧宅修复师，负责北回廊墙面、楼梯与藏品的修复验收。"
   ],
-  "facts": [
-    {
-      "id": "f_rpg_old_house_corridor_pub",
-      "type": "background",
-      "content": "姜家旧宅的修复验收与遗嘱说明安排在同一晚。宅主姜慎宣布，次日将逐件复核收藏、重新处分旧宅，引起继承人、律师、管家与修复师的不安。二十点十五分，他被发现倒在北回廊楼梯下，扶手一段松脱，众人最初以为他失足坠楼。山路因塌方封闭，警方要求五名在场者保护现场，等待道路恢复。宅内没有其他来客；长期互相隐瞒的账、遗嘱与修复旧事，现在都成了他们必须面对的疑点。",
-      "visibility": "public",
-      "core": true,
-      "keywords": [
-        "宅主姜慎宣布",
-        "次日将逐件复核收藏",
-        "重新处分旧宅",
-        "引起继承人",
-        "律师",
-        "管家与修复师的不安",
-        "二十点十五分",
-        "他被发现倒在北回廊楼梯下",
-        "扶手一段松脱",
-        "众人最初以为他失足坠楼",
-        "山路因塌方封闭",
-        "警方要求五名在场者保护现场"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_victim",
-      "type": "victim",
-      "content": "死者：姜慎。依据：source_text_annotation。",
-      "visibility": "public",
-      "core": true,
-      "keywords": [
-        "死者",
-        "姜慎",
-        "依据"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_truth",
-      "type": "truth",
-      "content": "裴砚利用修复项目把原藏品换成复制品，私售原件。姜慎原本要讨论旧宅捐赠、撤回出售意向，同时坚持逐件复核编号和历史照片；裴砚知道验收会揭穿自己。20:04他以验收为名把姜慎带到北回廊，20:08从自己领用的长木箱取出黄铜修复配重，击打姜慎头部造成致命袭击，20:10将失去反应的姜慎拖到楼梯口推下，再旋松一处扶手接头，企图把谋杀伪装为失足坠楼。20:12他支开经过的孟岚，20:13把箱子送回侧楼梯平台工具间。孟岚与唐棠不知死亡，按普通保险归还流程只核外观后贴封签，孟岚再下楼于20:15发现尸体。这里不存在失准钟表或复杂暗道，所有记录用同一设备校时。 裴砚擦了配重外侧，却漏掉底部毡垫缝隙中的残留与围巾纤维。上层回廊的痕迹和新漆转移先推翻“只在楼梯下发生事故”的完整性；下午扶手验收与新划痕指向事后伪装。最后，本地摄像卡清楚记录裴砚本人取配重袭击、拖动和松扶手，这是区别于口供的独立身份链。借用照片、配重残留与归还流水提供另一条工具接触链；两条相互印证，不依赖裴砚或其他角色承认。网络损坏没有停止本地录像，凶手误判了设备。 姜峤确实负债、说过气话并私翻材料，红污点却来自印泥，走廊录像覆盖他在南档案房的关键时段。孟岚藏页保护已故女主人，姜梨私拍旧遗嘱，唐棠存在利益冲突；这些行为都应分别追责，却没有参与当晚袭击。正确结局是指认裴砚，保全调包与杀人证据、等待警方；错误结局是用遗产动机替代行动证据，把责任推给无辜者。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "私售原件",
-        "姜慎原本要讨论旧宅捐赠",
-        "撤回出售意向",
-        "同时坚持逐件复核编号和历史照片",
-        "裴砚知道验收会揭穿自己",
-        "击打姜慎头部造成致命袭击",
-        "再旋松一处扶手接头",
-        "企图把谋杀伪装为失足坠楼",
-        "20:12他支开经过的孟岚",
-        "孟岚与唐棠不知死亡",
-        "孟岚再下楼于20:15发现尸体",
-        "这里不存在失准钟表或复杂暗道"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t01",
-      "type": "timeline",
-      "content": "19:20 姜梨与姜慎争论旧宅捐赠，并于19:28上传旧遗嘱照片。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "19:20",
-        "姜梨与姜慎争论旧宅捐赠",
-        "并于19:28上传旧遗嘱照片"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t02",
-      "type": "timeline",
-      "content": "19:30 裴砚领用配重和长木箱，签字与照片留存。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "19:30",
-        "裴砚领用配重和长木箱",
-        "签字与照片留存"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t03",
-      "type": "timeline",
-      "content": "19:35 姜峤索要资助遭拒，留下威胁气话。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "19:35",
-        "姜峤索要资助遭拒",
-        "留下威胁气话"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t04",
-      "type": "timeline",
-      "content": "19:45 孟岚为家族名誉藏起早年藏品来源账页。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "19:45"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t05",
-      "type": "timeline",
-      "content": "19:55—20:12 姜梨和唐棠在东书房讨论草案，记录连续。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "19:55—20:12",
-        "姜梨和唐棠在东书房讨论草案",
-        "记录连续"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t06",
-      "type": "timeline",
-      "content": "20:01—20:13 姜峤进入南档案房翻产权材料，随后在院井洗掉印泥。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:01—20:13",
-        "姜峤进入南档案房翻产权材料",
-        "随后在院井洗掉印泥"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t07",
-      "type": "timeline",
-      "content": "20:04 姜慎按验收便笺与裴砚进入北回廊。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:04",
-        "姜慎按验收便笺与裴砚进入北回廊"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t08",
-      "type": "timeline",
-      "content": "20:08 裴砚用黄铜修复配重击打姜慎。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:08",
-        "裴砚用黄铜修复配重击打姜慎"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t09",
-      "type": "timeline",
-      "content": "20:10 裴砚把人拖到楼梯口推下，并松扶手伪造失足。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:10",
-        "裴砚把人拖到楼梯口推下",
-        "并松扶手伪造失足"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t10",
-      "type": "timeline",
-      "content": "20:12—20:13 裴砚支开孟岚，送回工具箱；孟岚与唐棠按普通保险归还流程只核外观后贴封签，随后孟岚下楼。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:12—20:13",
-        "裴砚支开孟岚",
-        "送回工具箱",
-        "随后孟岚下楼"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t11",
-      "type": "timeline",
-      "content": "20:15 孟岚发现姜慎，五人停止作业并保护现场。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "20:15",
-        "孟岚发现姜慎",
-        "五人停止作业并保护现场"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t12",
-      "type": "timeline",
-      "content": "前一个月 裴砚在修复期间调换原藏品并私售。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "前一个月",
-        "裴砚在修复期间调换原藏品并私售"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_t13",
-      "type": "timeline",
-      "content": "当日17:50 清洁照片与验收表证明北扶手当时固定，裴砚签名确认。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "当日17:50",
-        "裴砚签名确认"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_chain01",
-      "type": "evidence_chain",
-      "content": "仅以扶手松脱解释自然坠楼不成立，现场存在上层接触和事后工具改动。 上层凝结痕与拖擦带早于发现落点的叙述，下午固定扶手与新旋松痕相矛盾；需要调查人为袭击和伪装而非直接把意外当结论。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "仅以扶手松脱解释自然坠楼不成立",
-        "现场存在上层接触和事后工具改动",
-        "下午固定扶手与新旋松痕相矛盾"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_chain02",
-      "type": "evidence_chain",
-      "content": "袭击工具是裴砚领用的黄铜配重，实物痕迹与保管路径独立支持接触。 致伤形状、垫内残留和围巾纤维支持配重接触，签字照片确认工具归属，新漆和鞋纹连接上层拖动路径；这些物证不能单凭颜色作血液鉴定，需与行动录像印证。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "袭击工具是裴砚领用的黄铜配重",
-        "实物痕迹与保管路径独立支持接触",
-        "致伤形状",
-        "垫内残留和围巾纤维支持配重接触",
-        "签字照片确认工具归属",
-        "新漆和鞋纹连接上层拖动路径",
-        "这些物证不能单凭颜色作血液鉴定",
-        "需与行动录像印证"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_chain03",
-      "type": "evidence_chain",
-      "content": "裴砚本人袭击、拖动并松扶手，原始录像与实物工具两路证据闭合身份。 面部清晰的连续画面直接证明实际动作，归还流水与垫内残留从独立实物保管路径印证，排除只接触过工具却未作案的解释。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "裴砚本人袭击",
-        "拖动并松扶手",
-        "排除只接触过工具却未作案的解释"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_chain04",
-      "type": "evidence_chain",
-      "content": "姜峤的债务与管家的藏页不是本次致死行动，最强替代嫌疑被客观行动记录排除。 非核心角色被连续画面定位在其他区域，红污点与印泥相符，侄子鞋纹不匹配拖擦路径；继承利益只给动机，不能覆盖缺失的作案行动。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "最强替代嫌疑被客观行动记录排除",
-        "红污点与印泥相符",
-        "侄子鞋纹不匹配拖擦路径",
-        "继承利益只给动机",
-        "不能覆盖缺失的作案行动"
-      ]
-    },
-    {
-      "id": "f_rpg_old_house_corridor_chain05",
-      "type": "evidence_chain",
-      "content": "作案动机是避免原藏品调包被验收揭露，而非继承争议本身。 原件特征、出售照片与实际收款相互对应，次日编号验收将揭穿裴砚；遗产尚未兑现与房产出售撤回，反而说明不应只靠继承大小投票。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "而非继承争议本身",
-        "原件特征",
-        "出售照片与实际收款相互对应",
-        "次日编号验收将揭穿裴砚",
-        "遗产尚未兑现与房产出售撤回",
-        "反而说明不应只靠继承大小投票"
-      ]
-    },
-    {
-      "id": "old_house_corridor_jiang_li_s1_1",
-      "type": "memory",
-      "content": "19:20你与父亲因旧宅处置争吵。他并非要取消你的养女身份，而是考虑把宅子捐成公共档案馆。你未经许可拍过一份旧遗嘱，照片仍在自己手机里。19:55至20:12，你与唐棠在东书房整理捐赠条款，彼此都能证明这一段行踪。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "19:20你与父亲因旧宅处置争吵",
-        "他并非要取消你的养女身份",
-        "而是考虑把宅子捐成公共档案馆",
-        "你未经许可拍过一份旧遗嘱",
-        "照片仍在自己手机里",
-        "19:55至20:12",
-        "你与唐棠在东书房整理捐赠条款",
-        "彼此都能证明这一段行踪"
-      ],
-      "owner": "jiang_li"
-    },
-    {
-      "id": "old_house_corridor_jiang_li_s1_2",
-      "type": "fact",
-      "content": "你知道北回廊的墙面近期由裴砚修复，楼梯与扶手也在同一验收清单中。你没有看到父亲如何倒下，20:15听见孟岚呼喊后才赶到楼梯口。父亲出事前没有把最终遗嘱交给你。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你知道北回廊的墙面近期由裴砚修复",
-        "楼梯与扶手也在同一验收清单中",
-        "你没有看到父亲如何倒下",
-        "父亲出事前没有把最终遗嘱交给你"
-      ],
-      "owner": "jiang_li"
-    },
-    {
-      "id": "old_house_corridor_jiang_li_s1_3",
-      "type": "objective",
-      "content": "分别检查坠落现场与旧宅处置材料；说明自己与父亲的真实分歧，不把继承人的秘密等同于凶手证据。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "分别检查坠落现场与旧宅处置材料",
-        "说明自己与父亲的真实分歧",
-        "不把继承人的秘密等同于凶手证据"
-      ],
-      "owner": "jiang_li"
-    },
-    {
-      "id": "old_house_corridor_jiang_li_s2_1",
-      "type": "memory",
-      "content": "你想起19:40父亲对你说“房子怎么留可以谈，验收必须明算”。当时你以为他在谈修缮预算，现在意识到他可能将收藏验收和遗嘱分开。你与唐棠讨论时，裴砚曾把一只长木箱从门外推向北回廊，你不知道箱内是什么。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你想起19:40父亲对你说",
-        "房子怎么留可以谈",
-        "验收必须明算",
-        "当时你以为他在谈修缮预算",
-        "你与唐棠讨论时",
-        "你不知道箱内是什么"
-      ],
-      "owner": "jiang_li"
-    },
-    {
-      "id": "old_house_corridor_jiang_li_s2_2",
-      "type": "fact",
-      "content": "你手机上的遗嘱照片有自动上传时间19:28，早于死亡；照片记录的是旧版，不足以证明后来谁会继承。你担心公开照片被追责，但删掉照片会破坏调查。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "早于死亡",
-        "照片记录的是旧版",
-        "不足以证明后来谁会继承",
-        "你担心公开照片被追责",
-        "但删掉照片会破坏调查"
-      ],
-      "owner": "jiang_li"
-    },
-    {
-      "id": "old_house_corridor_jiang_li_s2_3",
-      "type": "objective",
-      "content": "公开自己的遗嘱照片和时间，核对修复工具如何进入北回廊；把父亲最后的工作安排与继承争吵分开。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "公开自己的遗嘱照片和时间",
-        "核对修复工具如何进入北回廊"
-      ],
-      "owner": "jiang_li"
-    },
-    {
-      "id": "old_house_corridor_jiang_li_s3_1",
-      "type": "memory",
-      "content": "你愿意在警方到来后放弃以旧遗嘱优势争夺房产。父亲真正留下的要求是核对家族收藏是否应当归还，未必能让任何继承人获利。你希望孟岚也能说明她藏过什么，而不是把她的沉默简单当成杀人。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "未必能让任何继承人获利",
-        "你希望孟岚也能说明她藏过什么",
-        "而不是把她的沉默简单当成杀人"
-      ],
-      "owner": "jiang_li"
-    },
-    {
-      "id": "old_house_corridor_jiang_li_s3_2",
-      "type": "fact",
-      "content": "你可以交出自己的手机与东书房行踪作核对；对其他人是否触碰武器，只能依据实际获得的线索。最后指认应同时解释上层回廊的异常和楼梯下的场景。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "对其他人是否触碰武器",
-        "只能依据实际获得的线索"
-      ],
-      "owner": "jiang_li"
-    },
-    {
-      "id": "old_house_corridor_jiang_li_s3_3",
-      "type": "objective",
-      "content": "把上层现场、修复工具与连续行动资料连接成证据链，检验最强替代嫌疑是否具有同样的行动窗口。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "把上层现场"
-      ],
-      "owner": "jiang_li"
-    },
-    {
-      "id": "old_house_corridor_jiang_qiao_s1_1",
-      "type": "memory",
-      "content": "你欠了一笔近期到期的债，19:35向叔父索要资助遭拒，气话是“你死后房子总要有人接”。20:01你溜进南侧档案房找抵押文件，直到20:13才出来，随后在院井旁洗去手上的红色印泥。你没有去北回廊，但这段时间无人全程陪伴。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你欠了一笔近期到期的债",
-        "19:35向叔父索要资助遭拒",
-        "气话是",
-        "你死后房子总要有人接",
-        "直到20:13才出来",
-        "随后在院井旁洗去手上的红色印泥",
-        "你没有去北回廊",
-        "但这段时间无人全程陪伴"
-      ],
-      "owner": "jiang_qiao"
-    },
-    {
-      "id": "old_house_corridor_jiang_qiao_s1_2",
-      "type": "fact",
-      "content": "你翻文件使用的是档案房红印泥，夹走一张尚未签署的产权询价页，页上有你自己的指印。你知道裴砚与叔父曾争论一件古董，但没有听清内容。你确有继承动机，因此需要物证而非只靠否认。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你翻文件使用的是档案房红印泥",
-        "夹走一张尚未签署的产权询价页",
-        "页上有你自己的指印",
-        "你知道裴砚与叔父曾争论一件古董",
-        "但没有听清内容",
-        "你确有继承动机",
-        "因此需要物证而非只靠否认"
-      ],
-      "owner": "jiang_qiao"
-    },
-    {
-      "id": "old_house_corridor_jiang_qiao_s1_3",
-      "type": "objective",
-      "content": "核对南侧档案房和楼梯现场，说明红色手印来源；尽量保住债务隐私，但不要编造其他人作案。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "核对南侧档案房和楼梯现场",
-        "说明红色手印来源",
-        "尽量保住债务隐私",
-        "但不要编造其他人作案"
-      ],
-      "owner": "jiang_qiao"
-    },
-    {
-      "id": "old_house_corridor_jiang_qiao_s2_1",
-      "type": "memory",
-      "content": "回忆翻档案的过程，你在20:08听到北侧一声闷响，以为是修复搬动家具。你当时站在南档案房内，声音无法确定来自哪层或何种物体。你注意到叔父的最新财产条款旁写了“收藏复核后生效”，因此所谓巨额现成遗产可能并不存在。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "回忆翻档案的过程",
-        "你在20:08听到北侧一声闷响",
-        "以为是修复搬动家具",
-        "你当时站在南档案房内",
-        "声音无法确定来自哪层或何种物体",
-        "你注意到叔父的最新财产条款旁写了",
-        "收藏复核后生效",
-        "因此所谓巨额现成遗产可能并不存在"
-      ],
-      "owner": "jiang_qiao"
-    },
-    {
-      "id": "old_house_corridor_jiang_qiao_s2_2",
-      "type": "fact",
-      "content": "你今天穿的是黑色橡胶底皮鞋，进宅时被要求踩了防潮检验纸，留下足底样本。你没有修复工具领用资格，但管家知道你偷翻文件，可能会为了自保质疑你。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你今天穿的是黑色橡胶底皮鞋",
-        "进宅时被要求踩了防潮检验纸",
-        "留下足底样本",
-        "你没有修复工具领用资格",
-        "但管家知道你偷翻文件",
-        "可能会为了自保质疑你"
-      ],
-      "owner": "jiang_qiao"
-    },
-    {
-      "id": "old_house_corridor_jiang_qiao_s2_3",
-      "type": "objective",
-      "content": "交出带红印泥的纸页并接受鞋底对照；说明自己听到的声音只是观察，避免把它加工成目击证词。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "交出带红印泥的纸页并接受鞋底对照",
-        "说明自己听到的声音只是观察",
-        "避免把它加工成目击证词"
-      ],
-      "owner": "jiang_qiao"
-    },
-    {
-      "id": "old_house_corridor_jiang_qiao_s3_1",
-      "type": "memory",
-      "content": "你决定认下债务和私翻产权材料。即便最终证明不是凶手，你也无权继续藏走文件。你担心修复师把你的气话和无陪伴时间拼成故事，却没有提供真正的致死物证。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你决定认下债务和私翻产权材料",
-        "即便最终证明不是凶手",
-        "你也无权继续藏走文件",
-        "却没有提供真正的致死物证"
-      ],
-      "owner": "jiang_qiao"
-    },
-    {
-      "id": "old_house_corridor_jiang_qiao_s3_2",
-      "type": "fact",
-      "content": "你身上的红色污点可以同档案房印泥比对，不能凭颜色称作死者血迹。你愿意接受门禁、物品借用与后续录像核对，并要求任何指控说明你如何接触那件致伤物。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "不能凭颜色称作死者血迹",
-        "你愿意接受门禁",
-        "物品借用与后续录像核对"
-      ],
-      "owner": "jiang_qiao"
-    },
-    {
-      "id": "old_house_corridor_jiang_qiao_s3_3",
-      "type": "objective",
-      "content": "以可验证材料解释自己的最大疑点；最终投票优先选择完整行动证据，不能为了摆脱嫌疑随意指认。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "以可验证材料解释自己的最大疑点",
-        "最终投票优先选择完整行动证据",
-        "不能为了摆脱嫌疑随意指认"
-      ],
-      "owner": "jiang_qiao"
-    },
-    {
-      "id": "old_house_corridor_tang_tang_s1_1",
-      "type": "memory",
-      "content": "你私下替旧宅意向买方咨询过产权，收取费用，尚未向姜慎披露。今天19:50姜慎要求你撤回一份旧售房意向，重新拟定捐赠草案。19:55至20:12你与姜梨都在东书房，她复制遗嘱时你并不知情。20:13你应孟岚招呼，在侧楼梯平台工具间按普通保险归还流程，只核长木箱外观后共同贴封签；20:15才听到发现死亡的呼喊。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你私下替旧宅意向买方咨询过产权",
-        "收取费用",
-        "尚未向姜慎披露",
-        "重新拟定捐赠草案",
-        "她复制遗嘱时你并不知情",
-        "20:13你应孟岚招呼",
-        "只核长木箱外观后共同贴封签",
-        "20:15才听到发现死亡的呼喊"
-      ],
-      "owner": "tang_tang"
-    },
-    {
-      "id": "old_house_corridor_tang_tang_s1_2",
-      "type": "fact",
-      "content": "旧宅出售没有完成，继承也不能在死亡后直接跳过法定程序变成现金。你带来的文件夹只装纸质材料与印章，没有重物。北回廊的验收是裴砚负责的专业工作，不是你经手。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "旧宅出售没有完成",
-        "你带来的文件夹只装纸质材料与印章",
-        "没有重物",
-        "北回廊的验收是裴砚负责的专业工作",
-        "不是你经手"
-      ],
-      "owner": "tang_tang"
-    },
-    {
-      "id": "old_house_corridor_tang_tang_s1_3",
-      "type": "objective",
-      "content": "保全所有文书版本，澄清继承与出售状态；将自己的利益冲突如实解释，协助建立每个人的可核实时间线。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "保全所有文书版本",
-        "澄清继承与出售状态",
-        "将自己的利益冲突如实解释",
-        "协助建立每个人的可核实时间线"
-      ],
-      "owner": "tang_tang"
-    },
-    {
-      "id": "old_house_corridor_tang_tang_s2_1",
-      "type": "memory",
-      "content": "你想起姜慎当晚要求在验收签字页加上“原件编号与历次照片一致”的条款，裴砚随即建议延后到明天。姜慎拒绝了。你当时认为是合同严谨性的争论，并不知道收藏是否被调包。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "原件编号与历次照片一致",
-        "的条款",
-        "裴砚随即建议延后到明天",
-        "姜慎拒绝了",
-        "你当时认为是合同严谨性的争论",
-        "并不知道收藏是否被调包"
-      ],
-      "owner": "tang_tang"
-    },
-    {
-      "id": "old_house_corridor_tang_tang_s2_2",
-      "type": "fact",
-      "content": "姜慎未签的新草案要求归还来源不清的藏品，和继承人分配无直接关系。你能解释条款的用途，不能把法律文本当成凶手指认。买方给你的报酬有转账记录，应该一并保留。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "和继承人分配无直接关系",
-        "你能解释条款的用途",
-        "不能把法律文本当成凶手指认",
-        "买方给你的报酬有转账记录",
-        "应该一并保留"
-      ],
-      "owner": "tang_tang"
-    },
-    {
-      "id": "old_house_corridor_tang_tang_s2_3",
-      "type": "objective",
-      "content": "比较继承文件与验收条款，追问谁最害怕编号复核；依据已获得的材料区分经济动机与实际接触凶器。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "比较继承文件与验收条款",
-        "追问谁最害怕编号复核"
-      ],
-      "owner": "tang_tang"
-    },
-    {
-      "id": "old_house_corridor_tang_tang_s3_1",
-      "type": "memory",
-      "content": "你决定公开双重收费，愿意退出后续代理。你确认今天随身记录仪只覆盖东书房会谈，不能替院落或北回廊提供全程证明。你可以见证线索封存，但不可以凭律师身份替警方做确定的法医学结论。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你决定公开双重收费",
-        "愿意退出后续代理",
-        "不能替院落或北回廊提供全程证明",
-        "你可以见证线索封存"
-      ],
-      "owner": "tang_tang"
-    },
-    {
-      "id": "old_house_corridor_tang_tang_s3_2",
-      "type": "fact",
-      "content": "你最擅长核对借用签字、委托范围与文件版本。裴砚若声称任何人都能领用修复配重，应当要求拿出交接材料；若有人说录像“必然存在”，也要看真实导出的片段。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你最擅长核对借用签字",
-        "委托范围与文件版本",
-        "裴砚若声称任何人都能领用修复配重",
-        "应当要求拿出交接材料",
-        "若有人说录像",
-        "必然存在",
-        "也要看真实导出的片段"
-      ],
-      "owner": "tang_tang"
-    },
-    {
-      "id": "old_house_corridor_tang_tang_s3_3",
-      "type": "objective",
-      "content": "主持证据版本与保管路径核对；提出需要被最终解释排除的侄子、管家等替代嫌疑。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "主持证据版本与保管路径核对",
-        "提出需要被最终解释排除的侄子",
-        "管家等替代嫌疑"
-      ],
-      "owner": "tang_tang"
-    },
-    {
-      "id": "old_house_corridor_meng_lan_s1_1",
-      "type": "memory",
-      "content": "19:45你把一页写有早年收购争议的原始账页从北资料柜移入自己的护理袋，怕旧宅捐赠暴露亡故女主人当年的错误。20:00至20:11你在后厨房备姜慎的热水，20:12经过北回廊门口看见裴砚的长木箱，20:13在侧楼梯平台工具间与唐棠按普通保险归还流程，仅核箱外观并贴封签；当时还不知道发生死亡。20:15下楼时发现姜慎倒在楼梯下。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "仅核箱外观并贴封签",
-        "当时还不知道发生死亡"
-      ],
-      "owner": "meng_lan"
-    },
-    {
-      "id": "old_house_corridor_meng_lan_s1_2",
-      "type": "fact",
-      "content": "你有普通门钥匙，可开资料柜和档案房，但修复箱的领用由保险登记管理。下午你清理过楼梯，扶手当时稳定；你没有专业资格判断一处后来松脱的接头为何改变。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你有普通门钥匙",
-        "可开资料柜和档案房",
-        "但修复箱的领用由保险登记管理",
-        "下午你清理过楼梯",
-        "扶手当时稳定"
-      ],
-      "owner": "meng_lan"
-    },
-    {
-      "id": "old_house_corridor_meng_lan_s1_3",
-      "type": "objective",
-      "content": "检查钥匙与楼梯日常状态；如实说明发现尸体的顺序，避免为掩盖旧账而改动当晚行踪。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "检查钥匙与楼梯日常状态",
-        "如实说明发现尸体的顺序",
-        "避免为掩盖旧账而改动当晚行踪"
-      ],
-      "owner": "meng_lan"
-    },
-    {
-      "id": "old_house_corridor_meng_lan_s2_1",
-      "type": "memory",
-      "content": "你想起20:12在北回廊门口见裴砚正合上箱盖，他说“先别让人踩新漆”，让你走侧楼梯。你因此没走到楼梯上层，只能证明这句话与箱子，不能说自己看到他杀人。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "他说",
-        "先别让人踩新漆",
-        "让你走侧楼梯",
-        "你因此没走到楼梯上层",
-        "只能证明这句话与箱子",
-        "不能说自己看到他杀人"
-      ],
-      "owner": "meng_lan"
-    },
-    {
-      "id": "old_house_corridor_meng_lan_s2_2",
-      "type": "fact",
-      "content": "护理袋中的旧账页与今天的致死行为无直接关系。你保存它是为了家族名誉，不是与裴砚共谋；但若拒绝交出，容易让调查误以为你阻挠来源审计。你可以说明楼梯白天确实牢固。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你保存它是为了家族名誉",
-        "不是与裴砚共谋",
-        "但若拒绝交出",
-        "容易让调查误以为你阻挠来源审计",
-        "你可以说明楼梯白天确实牢固"
-      ],
-      "owner": "meng_lan"
-    },
-    {
-      "id": "old_house_corridor_meng_lan_s2_3",
-      "type": "objective",
-      "content": "交出藏匿的旧账页，解释被支开的路线；用下午记录与当晚现场对照判断事故说法。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "交出藏匿的旧账页",
-        "解释被支开的路线"
-      ],
-      "owner": "meng_lan"
-    },
-    {
-      "id": "old_house_corridor_meng_lan_s3_1",
-      "type": "memory",
-      "content": "你决定把女主人的旧账完整交还。你回忆20:15呼喊后五名在场者都来到楼梯口，你没有见任何人后来靠近北资料柜；因此自己藏页的旧事不能替别人解释后续设备或工具记录。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你决定把女主人的旧账完整交还",
-        "你没有见任何人后来靠近北资料柜"
-      ],
-      "owner": "meng_lan"
-    },
-    {
-      "id": "old_house_corridor_meng_lan_s3_2",
-      "type": "fact",
-      "content": "旧宅保安摄像采用本地循环卡，即使网络故障也继续录像；你知道保管流程，却无法在拿到存储卡前预知画面。北回廊摄像修复完后一直由保险封签保护。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "旧宅保安摄像采用本地循环卡",
-        "即使网络故障也继续录像",
-        "你知道保管流程",
-        "却无法在拿到存储卡前预知画面"
-      ],
-      "owner": "meng_lan"
-    },
-    {
-      "id": "old_house_corridor_meng_lan_s3_3",
-      "type": "objective",
-      "content": "帮助核对录像与工具的封存路径；给出自己确实看到的动作和位置，支持证据链闭合。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "帮助核对录像与工具的封存路径",
-        "给出自己确实看到的动作和位置",
-        "支持证据链闭合"
-      ],
-      "owner": "meng_lan"
-    },
-    {
-      "id": "old_house_corridor_pei_yan_s1_1",
-      "type": "memory",
-      "content": "你是作案者。你在修复期间把一件原藏品换成复制品并出售原件，姜慎决定逐件比对早年照片，会让你身败名裂。20:04你以验收为名请他来到北回廊，20:08用自己领用的黄铜修复配重锤击打他的头部，20:10把失去反应的他拖到楼梯边推下，再松开一段扶手接头，伪装失足。你将配重放回长木箱。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你是作案者",
-        "姜慎决定逐件比对早年照片",
-        "会让你身败名裂",
-        "再松开一段扶手接头",
-        "伪装失足",
-        "你将配重放回长木箱"
-      ],
-      "owner": "pei_yan"
-    },
-    {
-      "id": "old_house_corridor_pei_yan_s1_2",
-      "type": "fact",
-      "content": "你领用配重时使用个人签名；配重底部有粘毡垫，你只擦拭了外侧，可能没处理垫下缝隙。你知道侄子欠债且威胁过姜慎，适合作为转移怀疑的对象，但游戏中你不能真的销毁已经封存或搜出的证据。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你领用配重时使用个人签名",
-        "配重底部有粘毡垫",
-        "你只擦拭了外侧",
-        "可能没处理垫下缝隙",
-        "你知道侄子欠债且威胁过姜慎",
-        "适合作为转移怀疑的对象"
-      ],
-      "owner": "pei_yan"
-    },
-    {
-      "id": "old_house_corridor_pei_yan_s1_3",
-      "type": "objective",
-      "content": "维持扶手老化造成意外的说法，必要时强调侄子的争吵；回应现场问题时不要虚构隐藏嫌疑人。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "维持扶手老化造成意外的说法",
-        "必要时强调侄子的争吵",
-        "回应现场问题时不要虚构隐藏嫌疑人"
-      ],
-      "owner": "pei_yan"
-    },
-    {
-      "id": "old_house_corridor_pei_yan_s2_1",
-      "type": "memory",
-      "content": "你记得拖动姜慎时靴底蹭过一小片尚未固化的蓝绿色修复漆，搬箱子也经过同处。你当时没有检查尸体衣背或楼梯上的痕迹。你可以试图解释痕迹为工作接触，但不应声称已看过尚未公开的照片。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "搬箱子也经过同处",
-        "你可以试图解释痕迹为工作接触",
-        "但不应声称已看过尚未公开的照片"
-      ],
-      "owner": "pei_yan"
-    },
-    {
-      "id": "old_house_corridor_pei_yan_s2_2",
-      "type": "fact",
-      "content": "北回廊摄像因网络损坏停止远程显示，你误以为摄像本身没有工作。你没有拆开保险封签里的本地卡，也不知道它是否记录到你。你不能把摄像真正保存的内容读入自己的角色知识。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "北回廊摄像因网络损坏停止远程显示",
-        "你误以为摄像本身没有工作",
-        "你没有拆开保险封签里的本地卡",
-        "也不知道它是否记录到你"
-      ],
-      "owner": "pei_yan"
-    },
-    {
-      "id": "old_house_corridor_pei_yan_s2_3",
-      "type": "objective",
-      "content": "解释长木箱、配重和新漆的合理工作用途；对确实被公开的物证回应，继续试图把失足与债务嫌疑连起来。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "解释长木箱",
-        "配重和新漆的合理工作用途",
-        "对确实被公开的物证回应",
-        "继续试图把失足与债务嫌疑连起来"
-      ],
-      "owner": "pei_yan"
-    },
-    {
-      "id": "old_house_corridor_pei_yan_s3_1",
-      "type": "memory",
-      "content": "你想到下午培训时孟岚说过：本地录像与宅内网络独立，只在取卡后恢复查看。你的赌注可能失败。你保留着原件出售付款单，买方不是当晚在场人物；对方只参与过去交易，不是本次谋杀的隐藏协犯。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你想到下午培训时孟岚说过",
-        "本地录像与宅内网络独立",
-        "只在取卡后恢复查看",
-        "你的赌注可能失败",
-        "你保留着原件出售付款单",
-        "买方不是当晚在场人物",
-        "对方只参与过去交易",
-        "不是本次谋杀的隐藏协犯"
-      ],
-      "owner": "pei_yan"
-    },
-    {
-      "id": "old_house_corridor_pei_yan_s3_2",
-      "type": "fact",
-      "content": "你知道自己犯下杀人和调包，但只能知道自己曾采取的行动，以及当前收到的证据。倘若画面确认你动手，专业解释无法使凶器、拖动与松扶手变成事故。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你知道自己犯下杀人和调包",
-        "但只能知道自己曾采取的行动",
-        "以及当前收到的证据",
-        "倘若画面确认你动手",
-        "专业解释无法使凶器",
-        "拖动与松扶手变成事故"
-      ],
-      "owner": "pei_yan"
-    },
-    {
-      "id": "old_house_corridor_pei_yan_s3_3",
-      "type": "objective",
-      "content": "面对最终质询选择抵赖或承认；不要替其他角色补写回忆，不抢在最终指认前替DM揭底。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "面对最终质询选择抵赖或承认",
-        "不要替其他角色补写回忆",
-        "不抢在最终指认前替DM揭底"
-      ],
-      "owner": "pei_yan"
-    },
-    {
-      "id": "f_jiang_li_identity",
-      "type": "identity",
-      "content": "姜慎的养女，文史专业毕业，回旧宅协助整理家族档案。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "姜慎的养女",
-        "文史专业毕业",
-        "回旧宅协助整理家族档案"
-      ],
-      "owner": "jiang_li"
-    },
-    {
-      "id": "f_jiang_qiao_identity",
-      "type": "identity",
-      "content": "姜慎的侄子，经营周转困难的古玩店，长期期待旧宅财产能解决债务。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "姜慎的侄子",
-        "经营周转困难的古玩店",
-        "长期期待旧宅财产能解决债务"
-      ],
-      "owner": "jiang_qiao"
-    },
-    {
-      "id": "f_tang_tang_identity",
-      "type": "identity",
-      "content": "家族律师，负责旧宅捐赠意向与多版遗嘱的效力审查。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "家族律师"
-      ],
-      "owner": "tang_tang"
-    },
-    {
-      "id": "f_meng_lan_identity",
-      "type": "identity",
-      "content": "旧宅管家，服务姜家二十年，管理钥匙、门禁与日常护理。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "旧宅管家",
-        "服务姜家二十年",
-        "管理钥匙",
-        "门禁与日常护理"
-      ],
-      "owner": "meng_lan"
-    },
-    {
-      "id": "f_pei_yan_identity",
-      "type": "identity",
-      "content": "旧宅修复师，负责北回廊墙面、楼梯与藏品的修复验收。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "旧宅修复师",
-        "负责北回廊墙面",
-        "楼梯与藏品的修复验收"
-      ],
-      "owner": "pei_yan"
-    }
-  ],
-  "timeline_true": [
-    "19:20 姜梨与姜慎争论旧宅捐赠，并于19:28上传旧遗嘱照片。",
-    "19:30 裴砚领用配重和长木箱，签字与照片留存。",
-    "19:35 姜峤索要资助遭拒，留下威胁气话。",
-    "19:45 孟岚为家族名誉藏起早年藏品来源账页。",
-    "19:55—20:12 姜梨和唐棠在东书房讨论草案，记录连续。",
-    "20:01—20:13 姜峤进入南档案房翻产权材料，随后在院井洗掉印泥。",
-    "20:04 姜慎按验收便笺与裴砚进入北回廊。",
-    "20:08 裴砚用黄铜修复配重击打姜慎。",
-    "20:10 裴砚把人拖到楼梯口推下，并松扶手伪造失足。",
-    "20:12—20:13 裴砚支开孟岚，送回工具箱；孟岚与唐棠按普通保险归还流程只核外观后贴封签，随后孟岚下楼。",
-    "20:15 孟岚发现姜慎，五人停止作业并保护现场。",
-    "前一个月 裴砚在修复期间调换原藏品并私售。",
-    "当日17:50 清洁照片与验收表证明北扶手当时固定，裴砚签名确认。"
-  ],
-  "characters": [
-    {
-      "id": "jiang_li",
-      "name": "姜梨",
-      "role": "姜慎的养女，文史专业毕业，回旧宅协助整理家族档案。",
-      "public_identity": "姜慎的养女，文史专业毕业，回旧宅协助整理家族档案。",
-      "public_profile": "姜慎的养女，文史专业毕业，回旧宅协助整理家族档案。",
-      "personality": "观察细，感情克制，对被质疑继承资格尤其敏感，但愿意为了事实承担代价。",
-      "speaking_style": "观察细，感情克制，对被质疑继承资格尤其敏感，但愿意为了事实承担代价。",
-      "lexicon": "",
-      "backstory": "查明父亲死亡并争取保存旧宅，避免自己擅自复制遗嘱被当成杀人准备。",
-      "goals": [
-        "查明父亲死亡并争取保存旧宅，避免自己擅自复制遗嘱被当成杀人准备。"
-      ],
-      "known_fact_ids": [
-        "old_house_corridor_jiang_li_s1_1",
-        "old_house_corridor_jiang_li_s1_2",
-        "old_house_corridor_jiang_li_s1_3",
-        "old_house_corridor_jiang_li_s2_1",
-        "old_house_corridor_jiang_li_s2_2",
-        "old_house_corridor_jiang_li_s2_3",
-        "old_house_corridor_jiang_li_s3_1",
-        "old_house_corridor_jiang_li_s3_2",
-        "old_house_corridor_jiang_li_s3_3"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "jiang_qiao",
-      "name": "姜峤",
-      "role": "姜慎的侄子，经营周转困难的古玩店，长期期待旧宅财产能解决债务。",
-      "public_identity": "姜慎的侄子，经营周转困难的古玩店，长期期待旧宅财产能解决债务。",
-      "public_profile": "姜慎的侄子，经营周转困难的古玩店，长期期待旧宅财产能解决债务。",
-      "personality": "反应快，善辩，遇到经济问题容易虚张声势；对家族感情又并非全无真心。",
-      "speaking_style": "反应快，善辩，遇到经济问题容易虚张声势；对家族感情又并非全无真心。",
-      "lexicon": "",
-      "backstory": "避免债务与私翻文件曝光，同时找出真正凶手，使自己不因继承动机承担谋杀罪。",
-      "goals": [
-        "避免债务与私翻文件曝光，同时找出真正凶手，使自己不因继承动机承担谋杀罪。"
-      ],
-      "known_fact_ids": [
-        "old_house_corridor_jiang_qiao_s1_1",
-        "old_house_corridor_jiang_qiao_s1_2",
-        "old_house_corridor_jiang_qiao_s1_3",
-        "old_house_corridor_jiang_qiao_s2_1",
-        "old_house_corridor_jiang_qiao_s2_2",
-        "old_house_corridor_jiang_qiao_s2_3",
-        "old_house_corridor_jiang_qiao_s3_1",
-        "old_house_corridor_jiang_qiao_s3_2",
-        "old_house_corridor_jiang_qiao_s3_3"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "tang_tang",
-      "name": "唐棠",
-      "role": "家族律师，负责旧宅捐赠意向与多版遗嘱的效力审查。",
-      "public_identity": "家族律师，负责旧宅捐赠意向与多版遗嘱的效力审查。",
-      "public_profile": "家族律师，负责旧宅捐赠意向与多版遗嘱的效力审查。",
-      "personality": "说话有边界，重视文书证据，习惯保护委托人；面对利益冲突会过分谨慎。",
-      "speaking_style": "说话有边界，重视文书证据，习惯保护委托人；面对利益冲突会过分谨慎。",
-      "lexicon": "",
-      "backstory": "查清死亡并保全文书，同时说明你与旧宅潜在买方的关系，避免利益冲突被误判为杀人。",
-      "goals": [
-        "查清死亡并保全文书，同时说明你与旧宅潜在买方的关系，避免利益冲突被误判为杀人。"
-      ],
-      "known_fact_ids": [
-        "old_house_corridor_tang_tang_s1_1",
-        "old_house_corridor_tang_tang_s1_2",
-        "old_house_corridor_tang_tang_s1_3",
-        "old_house_corridor_tang_tang_s2_1",
-        "old_house_corridor_tang_tang_s2_2",
-        "old_house_corridor_tang_tang_s2_3",
-        "old_house_corridor_tang_tang_s3_1",
-        "old_house_corridor_tang_tang_s3_2",
-        "old_house_corridor_tang_tang_s3_3"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "meng_lan",
-      "name": "孟岚",
-      "role": "旧宅管家，服务姜家二十年，管理钥匙、门禁与日常护理。",
-      "public_identity": "旧宅管家，服务姜家二十年，管理钥匙、门禁与日常护理。",
-      "public_profile": "旧宅管家，服务姜家二十年，管理钥匙、门禁与日常护理。",
-      "personality": "耐心却防备，记人情比记规则更牢；为了保护亡故女主人会隐瞒旧事。",
-      "speaking_style": "耐心却防备，记人情比记规则更牢；为了保护亡故女主人会隐瞒旧事。",
-      "lexicon": "",
-      "backstory": "找出杀害姜慎的人，保住女主人留下的家族档案，并承认自己藏匿过一页藏品来历记录。",
-      "goals": [
-        "找出杀害姜慎的人，保住女主人留下的家族档案，并承认自己藏匿过一页藏品来历记录。"
-      ],
-      "known_fact_ids": [
-        "old_house_corridor_meng_lan_s1_1",
-        "old_house_corridor_meng_lan_s1_2",
-        "old_house_corridor_meng_lan_s1_3",
-        "old_house_corridor_meng_lan_s2_1",
-        "old_house_corridor_meng_lan_s2_2",
-        "old_house_corridor_meng_lan_s2_3",
-        "old_house_corridor_meng_lan_s3_1",
-        "old_house_corridor_meng_lan_s3_2",
-        "old_house_corridor_meng_lan_s3_3"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "pei_yan",
-      "name": "裴砚",
-      "role": "旧宅修复师，负责北回廊墙面、楼梯与藏品的修复验收。",
-      "public_identity": "旧宅修复师，负责北回廊墙面、楼梯与藏品的修复验收。",
-      "public_profile": "旧宅修复师，负责北回廊墙面、楼梯与藏品的修复验收。",
-      "personality": "礼貌且自负，习惯用专业差异掌控谈话；在编号与照片问题上尤其紧张。",
-      "speaking_style": "礼貌且自负，习惯用专业差异掌控谈话；在编号与照片问题上尤其紧张。",
-      "lexicon": "",
-      "backstory": "掩盖你替换藏品并杀害姜慎的行为，让死亡被接受为失足，或使侄子的债务动机成为主要解释。",
-      "goals": [
-        "掩盖你替换藏品并杀害姜慎的行为，让死亡被接受为失足，或使侄子的债务动机成为主要解释。"
-      ],
-      "known_fact_ids": [
-        "old_house_corridor_pei_yan_s1_1",
-        "old_house_corridor_pei_yan_s1_2",
-        "old_house_corridor_pei_yan_s1_3",
-        "old_house_corridor_pei_yan_s2_1",
-        "old_house_corridor_pei_yan_s2_2",
-        "old_house_corridor_pei_yan_s2_3",
-        "old_house_corridor_pei_yan_s3_1",
-        "old_house_corridor_pei_yan_s3_2",
-        "old_house_corridor_pei_yan_s3_3"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": true
-    }
-  ],
-  "clue_pool": [
-    "house_stair_scene 现场照片显示姜慎倒在楼梯下，扶手一处接头松脱，但螺纹末端没有长期磨耗或锈蚀，周围有新鲜工具划痕。楼梯踏面没有大范围连续滑|logLR:pei_yan=1.5",
-    "house_upper_marks 北回廊上层墙边有一小片暗红凝结痕与带棱角的擦碰点，墙边到楼梯口形成断续拖擦带；姜慎衣背见同色摩擦印。痕迹位于楼梯上方而非|logLR:pei_yan=1.5",
-    "house_schedule 宅内门禁与当晚日程一致：只有姜梨、姜峤、唐棠、孟岚、裴砚五人在场。姜梨与唐棠19:55至20:12在东书房会谈，录音连续|logLR:pei_yan=1.5",
-    "house_will_status 旧遗嘱把部分收藏分给姜梨与姜峤，新捐赠草案尚未签署，出售意向已经撤回，死亡并不能使房产立即变成现金。姜峤的债务催款短信真|logLR:pei_yan=1.5",
-    "house_weight_trace 长木箱内的黄铜修复配重为长方体，边角与姜慎头部照片中的棱角创口形状相近；外侧被擦拭，底部毡垫与缝隙仍有暗红组织样残留，并|logLR:pei_yan=2.0",
-    "house_tool_custody 保险工具登记表显示该配重及长木箱当晚由裴砚19:30签名领用，禁止转借；北工具间出入口记录与借用照片显示20:13由他本|logLR:pei_yan=2.0",
-    "house_rail_before 当日17:50清洁照片完整拍到同一扶手接头：螺丝在位，扶手固定。下午验收页写“扶手承载复核通过”，由裴砚签名。20:15|logLR:pei_yan=2.0",
-    "house_paint_transfer 北回廊当晚只在墙边托盘使用蓝绿色未固化漆。姜慎衣背与拖擦带均带此漆，裴砚工作靴的右后底也有相同新漆与拖向楼梯的鞋纹；登记|logLR:pei_yan=2.0",
-    "house_other_secrets 南档案房红印泥与姜峤纸页、衣袖污点的颜色、印章图案对应，纸页是未签的产权询价稿。孟岚护理袋内藏的是早年藏品来源账页，纸张|logLR:pei_yan=2.0",
-    "house_video_action 保险封签完好的本地卡记录连续，网络故障只影响远程显示。20:04姜慎与裴砚进入北回廊；20:08画面清楚显示裴砚从长木箱|logLR:pei_yan=2.0",
-    "house_video_departure 同卡后续画面显示20:12裴砚合上木箱，向从厨房方向来的孟岚示意改走侧楼梯，20:13独自带箱离开；20:15孟岚从楼下|logLR:pei_yan=2.0",
-    "house_swap_audit 原藏品早年照片有独特窑裂，当前验收物却没有；裴砚的修复记录声称只做表面清理，没有改变器型的依据。其个人交易夹中有原藏品出|logLR:pei_yan=2.0",
-    "house_alt_check 南档案房走廊摄像记录姜峤20:01进去，20:13出来并在院井洗红印泥，期间未往北回廊。厨房门禁和走廊画面显示孟岚20:|logLR:pei_yan=2.0"
-  ],
-  "clues": [
-    {
-      "id": "house_stair_scene",
-      "title": "北楼梯与扶手",
-      "content": "现场照片显示姜慎倒在楼梯下，扶手一处接头松脱，但螺纹末端没有长期磨耗或锈蚀，周围有新鲜工具划痕。楼梯踏面没有大范围连续滑落印痕。仅凭这些观察不能确定完整死因，但“自然老化”并非无需检验的解释。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain01"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "house_stairs"
-    },
-    {
-      "id": "house_upper_marks",
-      "title": "北回廊上层地面",
-      "content": "北回廊上层墙边有一小片暗红凝结痕与带棱角的擦碰点，墙边到楼梯口形成断续拖擦带；姜慎衣背见同色摩擦印。痕迹位于楼梯上方而非发现落点，说明仅检查楼梯下会遗漏一个重要接触位置。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain01"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "house_upper"
-    },
-    {
-      "id": "house_schedule",
-      "title": "晚间会谈安排",
-      "content": "宅内门禁与当晚日程一致：只有姜梨、姜峤、唐棠、孟岚、裴砚五人在场。姜梨与唐棠19:55至20:12在东书房会谈，录音连续。20:02姜慎在工作便笺上写“20:04北回廊与裴验收”。姜峤19:35曾索要资助并说过气话，但没有记录证明他进入北回廊。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain04"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "house_agenda"
-    },
-    {
-      "id": "house_will_status",
-      "title": "旧遗嘱与债务材料",
-      "content": "旧遗嘱把部分收藏分给姜梨与姜峤，新捐赠草案尚未签署，出售意向已经撤回，死亡并不能使房产立即变成现金。姜峤的债务催款短信真实存在，唐棠替买方收费也有转账记录。这些材料提供利益压力，不记录致死行动。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain05"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "house_inheritance"
-    },
-    {
-      "id": "house_weight_trace",
-      "title": "修复长木箱",
-      "content": "长木箱内的黄铜修复配重为长方体，边角与姜慎头部照片中的棱角创口形状相近；外侧被擦拭，底部毡垫与缝隙仍有暗红组织样残留，并粘有姜慎围巾的白色纤维。残留与物体形状支持近距离接触，不能只靠“红色”认定血液来源。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain02",
-        "f_rpg_old_house_corridor_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "house_weightbox"
-    },
-    {
-      "id": "house_tool_custody",
-      "title": "修复长木箱",
-      "content": "保险工具登记表显示该配重及长木箱当晚由裴砚19:30签名领用，禁止转借；北工具间出入口记录与借用照片显示20:13由他本人送回，配重没有登记给其他四人。箱子回到侧楼梯平台工具间后，20:13孟岚与刚结束书房会谈的唐棠按普通保险归还流程，仅核箱外观后共同贴封签，没有打开清点；此时还未发现死亡。归还与封签照片连续。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain02",
-        "f_rpg_old_house_corridor_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "house_weightbox"
-    },
-    {
-      "id": "house_rail_before",
-      "title": "下午清洁与验收照片",
-      "content": "当日17:50清洁照片完整拍到同一扶手接头：螺丝在位，扶手固定。下午验收页写“扶手承载复核通过”，由裴砚签名。20:15接头出现新工具痕，表面没有断裂承载损伤；需解释为什么“已通过验收”的接头后来被旋松。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain01"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "house_cleaning"
-    },
-    {
-      "id": "house_paint_transfer",
-      "title": "下午清洁与验收照片",
-      "content": "北回廊当晚只在墙边托盘使用蓝绿色未固化漆。姜慎衣背与拖擦带均带此漆，裴砚工作靴的右后底也有相同新漆与拖向楼梯的鞋纹；登记的姜峤橡胶底样本为横纹，不匹配拖擦带旁的菱形工作靴纹。漆与鞋纹支持行动路径，仍需其他身份资料交叉印证。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain02",
-        "f_rpg_old_house_corridor_chain04"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "house_cleaning"
-    },
-    {
-      "id": "house_other_secrets",
-      "title": "南档案房与护理袋",
-      "content": "南档案房红印泥与姜峤纸页、衣袖污点的颜色、印章图案对应，纸页是未签的产权询价稿。孟岚护理袋内藏的是早年藏品来源账页，纸张旧折痕与装订孔吻合，没有当晚北回廊新漆。两人的隐瞒真实存在，但没有因此形成与修复配重或拖动的连接。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain04"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "house_southarchive"
-    },
-    {
-      "id": "house_video_action",
-      "title": "北回廊本地存储卡",
-      "content": "保险封签完好的本地卡记录连续，网络故障只影响远程显示。20:04姜慎与裴砚进入北回廊；20:08画面清楚显示裴砚从长木箱取出黄铜配重，击中姜慎头部；20:10他拖动姜慎到楼梯口并推下，随后对扶手接头使用工具。画面可辨裴砚面部，其他四人未进入该区域。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "house_localvideo"
-    },
-    {
-      "id": "house_video_departure",
-      "title": "北回廊本地存储卡",
-      "content": "同卡后续画面显示20:12裴砚合上木箱，向从厨房方向来的孟岚示意改走侧楼梯，20:13独自带箱离开；20:15孟岚从楼下发现姜慎并呼喊。画面与工具归还流水、发现顺序一致，覆盖袭击至发现之间的空档。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "house_localvideo"
-    },
-    {
-      "id": "house_swap_audit",
-      "title": "藏品编号与出售记录",
-      "content": "原藏品早年照片有独特窑裂，当前验收物却没有；裴砚的修复记录声称只做表面清理，没有改变器型的依据。其个人交易夹中有原藏品出售照片，窑裂与旧照片吻合，收款账户属于裴砚。姜慎的验收批注要求次日逐件复核编号，直接威胁调包获利。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain05"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "house_collectionaudit"
-    },
-    {
-      "id": "house_alt_check",
-      "title": "侧门与档案房流水",
-      "content": "南档案房走廊摄像记录姜峤20:01进去，20:13出来并在院井洗红印泥，期间未往北回廊。厨房门禁和走廊画面显示孟岚20:00至20:11备热水，20:12走到北入口后改走侧楼梯。结合东书房会谈记录，其余四人均未出现在20:08至20:10袭击与拖动位置。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_old_house_corridor_chain04"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "house_doorbackup"
-    }
-  ],
-  "clue_fact_map": {
-    "house_stair_scene 现场照片显示姜慎倒在楼梯下，扶手一处接头松脱，但螺纹末端没有长期磨耗或锈蚀，周围有新鲜工具划痕。楼梯踏面没有大范围连续滑|logLR:pei_yan=1.5": [
-      "f_rpg_old_house_corridor_chain01"
-    ],
-    "house_stair_scene": [
-      "f_rpg_old_house_corridor_chain01"
-    ],
-    "house_upper_marks 北回廊上层墙边有一小片暗红凝结痕与带棱角的擦碰点，墙边到楼梯口形成断续拖擦带；姜慎衣背见同色摩擦印。痕迹位于楼梯上方而非|logLR:pei_yan=1.5": [
-      "f_rpg_old_house_corridor_chain01"
-    ],
-    "house_upper_marks": [
-      "f_rpg_old_house_corridor_chain01"
-    ],
-    "house_schedule 宅内门禁与当晚日程一致：只有姜梨、姜峤、唐棠、孟岚、裴砚五人在场。姜梨与唐棠19:55至20:12在东书房会谈，录音连续|logLR:pei_yan=1.5": [
-      "f_rpg_old_house_corridor_chain04"
-    ],
-    "house_schedule": [
-      "f_rpg_old_house_corridor_chain04"
-    ],
-    "house_will_status 旧遗嘱把部分收藏分给姜梨与姜峤，新捐赠草案尚未签署，出售意向已经撤回，死亡并不能使房产立即变成现金。姜峤的债务催款短信真|logLR:pei_yan=1.5": [
-      "f_rpg_old_house_corridor_chain05"
-    ],
-    "house_will_status": [
-      "f_rpg_old_house_corridor_chain05"
-    ],
-    "house_weight_trace 长木箱内的黄铜修复配重为长方体，边角与姜慎头部照片中的棱角创口形状相近；外侧被擦拭，底部毡垫与缝隙仍有暗红组织样残留，并|logLR:pei_yan=2.0": [
-      "f_rpg_old_house_corridor_chain02",
-      "f_rpg_old_house_corridor_chain03"
-    ],
-    "house_weight_trace": [
-      "f_rpg_old_house_corridor_chain02",
-      "f_rpg_old_house_corridor_chain03"
-    ],
-    "house_tool_custody 保险工具登记表显示该配重及长木箱当晚由裴砚19:30签名领用，禁止转借；北工具间出入口记录与借用照片显示20:13由他本|logLR:pei_yan=2.0": [
-      "f_rpg_old_house_corridor_chain02",
-      "f_rpg_old_house_corridor_chain03"
-    ],
-    "house_tool_custody": [
-      "f_rpg_old_house_corridor_chain02",
-      "f_rpg_old_house_corridor_chain03"
-    ],
-    "house_rail_before 当日17:50清洁照片完整拍到同一扶手接头：螺丝在位，扶手固定。下午验收页写“扶手承载复核通过”，由裴砚签名。20:15|logLR:pei_yan=2.0": [
-      "f_rpg_old_house_corridor_chain01"
-    ],
-    "house_rail_before": [
-      "f_rpg_old_house_corridor_chain01"
-    ],
-    "house_paint_transfer 北回廊当晚只在墙边托盘使用蓝绿色未固化漆。姜慎衣背与拖擦带均带此漆，裴砚工作靴的右后底也有相同新漆与拖向楼梯的鞋纹；登记|logLR:pei_yan=2.0": [
-      "f_rpg_old_house_corridor_chain02",
-      "f_rpg_old_house_corridor_chain04"
-    ],
-    "house_paint_transfer": [
-      "f_rpg_old_house_corridor_chain02",
-      "f_rpg_old_house_corridor_chain04"
-    ],
-    "house_other_secrets 南档案房红印泥与姜峤纸页、衣袖污点的颜色、印章图案对应，纸页是未签的产权询价稿。孟岚护理袋内藏的是早年藏品来源账页，纸张|logLR:pei_yan=2.0": [
-      "f_rpg_old_house_corridor_chain04"
-    ],
-    "house_other_secrets": [
-      "f_rpg_old_house_corridor_chain04"
-    ],
-    "house_video_action 保险封签完好的本地卡记录连续，网络故障只影响远程显示。20:04姜慎与裴砚进入北回廊；20:08画面清楚显示裴砚从长木箱|logLR:pei_yan=2.0": [
-      "f_rpg_old_house_corridor_chain03"
-    ],
-    "house_video_action": [
-      "f_rpg_old_house_corridor_chain03"
-    ],
-    "house_video_departure 同卡后续画面显示20:12裴砚合上木箱，向从厨房方向来的孟岚示意改走侧楼梯，20:13独自带箱离开；20:15孟岚从楼下|logLR:pei_yan=2.0": [
-      "f_rpg_old_house_corridor_chain03"
-    ],
-    "house_video_departure": [
-      "f_rpg_old_house_corridor_chain03"
-    ],
-    "house_swap_audit 原藏品早年照片有独特窑裂，当前验收物却没有；裴砚的修复记录声称只做表面清理，没有改变器型的依据。其个人交易夹中有原藏品出|logLR:pei_yan=2.0": [
-      "f_rpg_old_house_corridor_chain05"
-    ],
-    "house_swap_audit": [
-      "f_rpg_old_house_corridor_chain05"
-    ],
-    "house_alt_check 南档案房走廊摄像记录姜峤20:01进去，20:13出来并在院井洗红印泥，期间未往北回廊。厨房门禁和走廊画面显示孟岚20:|logLR:pei_yan=2.0": [
-      "f_rpg_old_house_corridor_chain04"
-    ],
-    "house_alt_check": [
-      "f_rpg_old_house_corridor_chain04"
-    ]
-  },
-  "plot_locks": [],
-  "endings": [
-    "正确指认：指认成立：北回廊的原始影像与修复配重物证相互印证，楼梯事故是事后伪装。DM 将揭示真实袭击、拖动与遗产争议的区别。",
-    "错误指认：你们指认了{selected_role_name}，但这一判断与案件的关键物证冲突。调查以错误指认结束；现场和证物继续封存，真实作案者的责任尚未被正确确认。"
-  ],
-  "evaluation": {
-    "killer_id": "pei_yan",
-    "required_fact_ids": [
-      "f_rpg_old_house_corridor_truth",
-      "f_rpg_old_house_corridor_victim",
-      "f_rpg_old_house_corridor_chain01",
-      "f_rpg_old_house_corridor_chain02",
-      "f_rpg_old_house_corridor_chain03",
-      "f_rpg_old_house_corridor_chain04",
-      "f_rpg_old_house_corridor_chain05"
-    ],
-    "culprit_basis": "truth.culprit_role_id",
-    "role_kind": "declared_killer",
-    "has_murder": true,
-    "victim_name": "姜慎",
-    "victim_basis": "source_text_annotation",
-    "source_id": "old_house_corridor"
-  },
-  "completions": [
-    {
-      "rule": "R1_victim_annotation",
-      "field": "evaluation.victim_name",
-      "value": "姜慎",
-      "basis": "source_text_annotation"
-    }
-  ],
-  "source_files": [
-    "raw/rpg/old_house_corridor.json"
-  ]
+  "world": {
+    "mode": "truth_reconstruction",
+    "player_selectable": "jiang_li,jiang_qiao,tang_tang,meng_lan,pei_yan",
+    "source_kind": "RolePlayingGame JSON",
+    "source_provenance": {
+      "creator": "Codex AI 辅助原创",
+      "kind": "original",
+      "source": "根据UI概念图的标题与主题创作；未引用现成剧本正文。"
+    },
+    "stages": 3
+  }
 }

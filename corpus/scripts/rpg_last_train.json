@@ -1,19 +1,2070 @@
 {
-  "schema_version": "0.4",
-  "script_id": "rpg_last_train",
-  "title": "末班列车",
   "brief": "来源：RolePlayingGame/last_train；5人；4幕",
-  "world": {
-    "mode": "truth_reconstruction",
-    "stages": 4,
-    "player_selectable": "lt_duan_yan,lt_ren_rui,lt_bai_jing,lt_tao_wen,lt_tang_shu",
-    "source_kind": "RolePlayingGame JSON",
-    "source_provenance": {
-      "kind": "original",
-      "creator": "Codex AI 辅助原创",
-      "source": "根据 UI 概念图的标题与主题创作；未引用现成剧本正文。"
+  "characters": [
+    {
+      "backstory": "查清督查员魏舟的死因，保住真实检修记录；你曾在任瑞施压下补签一份并未完成的旧试验单，害怕因此背负杀人嫌疑。",
+      "canon_evidence": [],
+      "goals": [
+        "查清督查员魏舟的死因，保住真实检修记录；你曾在任瑞施压下补签一份并未完成的旧试验单，害怕因此背负杀人嫌疑。"
+      ],
+      "id": "lt_duan_yan",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "lt_duan_yan_s1_1",
+        "lt_duan_yan_s1_2",
+        "lt_duan_yan_s1_3",
+        "lt_duan_yan_s2_1",
+        "lt_duan_yan_s2_2",
+        "lt_duan_yan_s2_3",
+        "lt_duan_yan_s3_1",
+        "lt_duan_yan_s3_2",
+        "lt_duan_yan_s3_3",
+        "lt_duan_yan_s4_1",
+        "lt_duan_yan_s4_2"
+      ],
+      "lexicon": "",
+      "name": "段砚",
+      "personality": "直截了当，遇到技术推断会要求复核原始数据；讨厌靠身份压人，却对过去的妥协心怀愧疚。",
+      "public_identity": "信号检修工程师，随末班列车接受例行复核，负责当晚出库的联锁试验。",
+      "public_profile": "信号检修工程师，随末班列车接受例行复核，负责当晚出库的联锁试验。",
+      "role": "信号检修工程师，随末班列车接受例行复核，负责当晚出库的联锁试验。",
+      "speaking_style": "直截了当，遇到技术推断会要求复核原始数据；讨厌靠身份压人，却对过去的妥协心怀愧疚。",
+      "timeline": []
+    },
+    {
+      "backstory": "掩盖你在发车前杀害魏舟的事实，用22:14票据把调查导向行车时段；阻止旧件冒充新件的账目被公开。",
+      "canon_evidence": [],
+      "goals": [
+        "掩盖你在发车前杀害魏舟的事实，用22:14票据把调查导向行车时段；阻止旧件冒充新件的账目被公开。"
+      ],
+      "id": "lt_ren_rui",
+      "is_killer": true,
+      "is_victim": false,
+      "known_fact_ids": [
+        "lt_ren_rui_s1_1",
+        "lt_ren_rui_s1_2",
+        "lt_ren_rui_s1_3",
+        "lt_ren_rui_s2_1",
+        "lt_ren_rui_s2_2",
+        "lt_ren_rui_s2_3",
+        "lt_ren_rui_s3_1",
+        "lt_ren_rui_s3_2",
+        "lt_ren_rui_s3_3",
+        "lt_ren_rui_s4_1",
+        "lt_ren_rui_s4_2"
+      ],
+      "lexicon": "",
+      "name": "任瑞",
+      "personality": "稳重、善于调度，习惯把自己的叙述包装成既定流程；压力下会反复引用所谓手续齐全。",
+      "public_identity": "末班列车的列车长，持有公务室总钥匙、当晚公务票据设备及封条。",
+      "public_profile": "末班列车的列车长，持有公务室总钥匙、当晚公务票据设备及封条。",
+      "role": "末班列车的列车长，持有公务室总钥匙、当晚公务票据设备及封条。",
+      "speaking_style": "稳重、善于调度，习惯把自己的叙述包装成既定流程；压力下会反复引用所谓手续齐全。",
+      "timeline": []
+    },
+    {
+      "backstory": "找到哥哥所涉事故的原始记录，避免唐枢向你私售旧资料的事情被当成杀人交易；你没有杀害魏舟。",
+      "canon_evidence": [],
+      "goals": [
+        "找到哥哥所涉事故的原始记录，避免唐枢向你私售旧资料的事情被当成杀人交易；你没有杀害魏舟。"
+      ],
+      "id": "lt_bai_jing",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "lt_bai_jing_s1_1",
+        "lt_bai_jing_s1_2",
+        "lt_bai_jing_s1_3",
+        "lt_bai_jing_s2_1",
+        "lt_bai_jing_s2_2",
+        "lt_bai_jing_s2_3",
+        "lt_bai_jing_s3_1",
+        "lt_bai_jing_s3_2",
+        "lt_bai_jing_s3_3",
+        "lt_bai_jing_s4_1",
+        "lt_bai_jing_s4_2"
+      ],
+      "lexicon": "",
+      "name": "白镜",
+      "personality": "敏锐、咄咄逼人，容易把揭露欲望当成事实；愿意公开材料来源时才真正获得可信度。",
+      "public_identity": "地方报社记者，持票乘坐末班列车，正在调查三年前的信号故障事故。",
+      "public_profile": "地方报社记者，持票乘坐末班列车，正在调查三年前的信号故障事故。",
+      "role": "地方报社记者，持票乘坐末班列车，正在调查三年前的信号故障事故。",
+      "speaking_style": "敏锐、咄咄逼人，容易把揭露欲望当成事实；愿意公开材料来源时才真正获得可信度。",
+      "timeline": []
+    },
+    {
+      "backstory": "取回魏舟拖欠你的店铺垫款，并守住私人关系的边界；你担心讨债便条被认作杀人威胁。",
+      "canon_evidence": [],
+      "goals": [
+        "取回魏舟拖欠你的店铺垫款，并守住私人关系的边界；你担心讨债便条被认作杀人威胁。"
+      ],
+      "id": "lt_tao_wen",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "lt_tao_wen_s1_1",
+        "lt_tao_wen_s1_2",
+        "lt_tao_wen_s1_3",
+        "lt_tao_wen_s2_1",
+        "lt_tao_wen_s2_2",
+        "lt_tao_wen_s2_3",
+        "lt_tao_wen_s3_1",
+        "lt_tao_wen_s3_2",
+        "lt_tao_wen_s3_3",
+        "lt_tao_wen_s4_1",
+        "lt_tao_wen_s4_2"
+      ],
+      "lexicon": "",
+      "name": "陶闻",
+      "personality": "克制，习惯把怒气藏在事务里；涉及情感时会回避，但愿意交代可核对的工作过程。",
+      "public_identity": "餐车领班，魏舟的前伴侣；当晚负责末班车冷餐备货。",
+      "public_profile": "餐车领班，魏舟的前伴侣；当晚负责末班车冷餐备货。",
+      "role": "餐车领班，魏舟的前伴侣；当晚负责末班车冷餐备货。",
+      "speaking_style": "克制，习惯把怒气藏在事务里；涉及情感时会回避，但愿意交代可核对的工作过程。",
+      "timeline": []
+    },
+    {
+      "backstory": "隐瞒私卖旧检验目录和盗取失效访客牌的行为，同时弄清为什么你见证封条后魏舟仍死在室内。",
+      "canon_evidence": [],
+      "goals": [
+        "隐瞒私卖旧检验目录和盗取失效访客牌的行为，同时弄清为什么你见证封条后魏舟仍死在室内。"
+      ],
+      "id": "lt_tang_shu",
+      "is_killer": false,
+      "is_victim": false,
+      "known_fact_ids": [
+        "lt_tang_shu_s1_1",
+        "lt_tang_shu_s1_2",
+        "lt_tang_shu_s1_3",
+        "lt_tang_shu_s2_1",
+        "lt_tang_shu_s2_2",
+        "lt_tang_shu_s2_3",
+        "lt_tang_shu_s3_1",
+        "lt_tang_shu_s3_2",
+        "lt_tang_shu_s3_3",
+        "lt_tang_shu_s4_1",
+        "lt_tang_shu_s4_2"
+      ],
+      "lexicon": "",
+      "name": "唐枢",
+      "personality": "重情而圆滑，怕丢掉退休资格；面对记录时会从含糊的“我确认过”逐渐说清自己真正看到了什么。",
+      "public_identity": "即将退休的行李员，熟悉站台和公务室封条交接；为末班列车见证贴封。",
+      "public_profile": "即将退休的行李员，熟悉站台和公务室封条交接；为末班列车见证贴封。",
+      "role": "即将退休的行李员，熟悉站台和公务室封条交接；为末班列车见证贴封。",
+      "speaking_style": "重情而圆滑，怕丢掉退休资格；面对记录时会从含糊的“我确认过”逐渐说清自己真正看到了什么。",
+      "timeline": []
     }
+  ],
+  "clue_fact_map": {
+    "lt_clue_access": [
+      "f_rpg_last_train_chain04",
+      "f_rpg_last_train_chain05"
+    ],
+    "lt_clue_access 有效通行原始记录：R-01在21:49:05近室读卡、21:51:08离室读卡，当天领取人任瑞；对应走廊连续画面能看到任|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain04",
+      "f_rpg_last_train_chain05"
+    ],
+    "lt_clue_alive": [
+      "f_rpg_last_train_chain02"
+    ],
+    "lt_clue_alive 站台原始连续视频：21:48:45魏舟独自走入公务室，脸部清楚、行动正常，手中是采购文件；21:49:05任瑞从公务室门|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain02"
+    ],
+    "lt_clue_audio": [
+      "f_rpg_last_train_chain02",
+      "f_rpg_last_train_chain04",
+      "f_rpg_last_train_chain06"
+    ],
+    "lt_clue_audio 公务室应急台的原始缓存采用司机基准时间：21:49:30录到魏舟说“这不是新件的金属编号，把旧号贴起来也没用”；21:5|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain02",
+      "f_rpg_last_train_chain04",
+      "f_rpg_last_train_chain06"
+    ],
+    "lt_clue_body": [
+      "f_rpg_last_train_chain02",
+      "f_rpg_last_train_chain05"
+    ],
+    "lt_clue_body 魏舟倒在桌边，后头部有一次致命钝器损伤，伤痕呈双浅槽；无切割、注射或毒物迹象，桌柜均无会自行倒落的重物。左掌指缝夹着新鲜|logLR:lt_ren_rui=1.5": [
+      "f_rpg_last_train_chain02",
+      "f_rpg_last_train_chain05"
+    ],
+    "lt_clue_clocks": [
+      "f_rpg_last_train_chain03"
+    ],
+    "lt_clue_clocks 出库校时单：公务室壁钟慢12分钟，21:00司机基准时壁钟显示20:48，壁钟当晚未被校准；应急台、通行记录及各固定摄像|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain03"
+    ],
+    "lt_clue_contact": [
+      "f_rpg_last_train_chain05"
+    ],
+    "lt_clue_contact 归还柜完整导出视频清楚拍到任瑞21:51:25用左手橙线补丁手套包着H-7锤头放入柜内；柜随后锁闭，21:51:25至2|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain05"
+    ],
+    "lt_clue_duan_alibi": [
+      "f_rpg_last_train_chain04"
+    ],
+    "lt_clue_duan_alibi 玻璃试验间原始视频与操作记录连续相符：21:48:30至21:53:20段砚的身体与双手始终在镜头中；唯一出口未被开启，|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain04"
+    ],
+    "lt_clue_lock": [
+      "f_rpg_last_train_chain01"
+    ],
+    "lt_clue_lock 公务室门使用外旋总钥匙锁，无内侧锁钮；门口通行牌读取台只记录获准人员的接近，不代替机械钥匙。观察窗帘已放下。封条F-62|logLR:lt_ren_rui=1.5": [
+      "f_rpg_last_train_chain01"
+    ],
+    "lt_clue_motive": [
+      "f_rpg_last_train_chain06"
+    ],
+    "lt_clue_motive 桌下原始采购文件与供应回单互证：旧件金属号仍为K批，纸标签改为N批新件，列车长签字任瑞；价差汇入任瑞控制的供应账户。段砚|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain06"
+    ],
+    "lt_clue_other_alibis": [
+      "f_rpg_last_train_chain04"
+    ],
+    "lt_clue_other_alibis 三份原始连续视频与司机基准校时：白镜21:48:40至21:53:00在新闻隔间全身可见，陶闻21:48:20至21:5|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain04"
+    ],
+    "lt_clue_printer_owner": [
+      "f_rpg_last_train_chain03"
+    ],
+    "lt_clue_printer_owner 领用单与前台视频相互印证：21:30任瑞领取橙色公务机及S-19站内纸卷，未转交他人；21:56前台连续视频清楚拍到任瑞|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain03"
+    ],
+    "lt_clue_route": [
+      "f_rpg_last_train_chain03"
+    ],
+    "lt_clue_route 司机不可编辑的运行记录：22:00列车出站，22:00至22:32持续行驶，22:32因公务室呼叫无回应停在岚岭检查点。|logLR:lt_ren_rui=1.5": [
+      "f_rpg_last_train_chain03"
+    ],
+    "lt_clue_seal": [
+      "f_rpg_last_train_chain01",
+      "f_rpg_last_train_chain02"
+    ],
+    "lt_clue_seal 外锁记录21:52:10总钥匙旋锁，21:54:00任瑞贴F-62；唐枢在行李台旁签见证，只勾选“门锁、编号确认”，未勾|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain01",
+      "f_rpg_last_train_chain02"
+    ],
+    "lt_clue_stub": [
+      "f_rpg_last_train_chain03"
+    ],
+    "lt_clue_stub 公务室文书筐中有一张“22:14，车内核验完成，魏舟”的票据；签名边缘为点阵图而非笔迹，纸背隐约见S-19批号。票据没有|logLR:lt_ren_rui=1.5": [
+      "f_rpg_last_train_chain03"
+    ],
+    "lt_clue_time_forgery": [
+      "f_rpg_last_train_chain03"
+    ],
+    "lt_clue_time_forgery 公务机不可覆盖的设置日志写明：司机基准21:56:10，本地时钟从21:56调至22:14；21:56:24打印核验票据|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain03"
+    ],
+    "lt_clue_tool": [
+      "f_rpg_last_train_chain05"
+    ],
+    "lt_clue_tool H-7领用单：21:42段砚将双槽验车锤交任瑞，21:51:25归还柜录到放回动作，录像待末轮完整导出。柜内封存的H-7|logLR:lt_ren_rui=2.0": [
+      "f_rpg_last_train_chain05"
+    ]
   },
+  "clue_pool": [
+    "lt_clue_lock 公务室门使用外旋总钥匙锁，无内侧锁钮；门口通行牌读取台只记录获准人员的接近，不代替机械钥匙。观察窗帘已放下。封条F-62|logLR:lt_ren_rui=1.5",
+    "lt_clue_body 魏舟倒在桌边，后头部有一次致命钝器损伤，伤痕呈双浅槽；无切割、注射或毒物迹象，桌柜均无会自行倒落的重物。左掌指缝夹着新鲜|logLR:lt_ren_rui=1.5",
+    "lt_clue_route 司机不可编辑的运行记录：22:00列车出站，22:00至22:32持续行驶，22:32因公务室呼叫无回应停在岚岭检查点。|logLR:lt_ren_rui=1.5",
+    "lt_clue_stub 公务室文书筐中有一张“22:14，车内核验完成，魏舟”的票据；签名边缘为点阵图而非笔迹，纸背隐约见S-19批号。票据没有|logLR:lt_ren_rui=1.5",
+    "lt_clue_alive 站台原始连续视频：21:48:45魏舟独自走入公务室，脸部清楚、行动正常，手中是采购文件；21:49:05任瑞从公务室门|logLR:lt_ren_rui=2.0",
+    "lt_clue_seal 外锁记录21:52:10总钥匙旋锁，21:54:00任瑞贴F-62；唐枢在行李台旁签见证，只勾选“门锁、编号确认”，未勾|logLR:lt_ren_rui=2.0",
+    "lt_clue_audio 公务室应急台的原始缓存采用司机基准时间：21:49:30录到魏舟说“这不是新件的金属编号，把旧号贴起来也没用”；21:5|logLR:lt_ren_rui=2.0",
+    "lt_clue_clocks 出库校时单：公务室壁钟慢12分钟，21:00司机基准时壁钟显示20:48，壁钟当晚未被校准；应急台、通行记录及各固定摄像|logLR:lt_ren_rui=2.0",
+    "lt_clue_time_forgery 公务机不可覆盖的设置日志写明：司机基准21:56:10，本地时钟从21:56调至22:14；21:56:24打印核验票据|logLR:lt_ren_rui=2.0",
+    "lt_clue_printer_owner 领用单与前台视频相互印证：21:30任瑞领取橙色公务机及S-19站内纸卷，未转交他人；21:56前台连续视频清楚拍到任瑞|logLR:lt_ren_rui=2.0",
+    "lt_clue_motive 桌下原始采购文件与供应回单互证：旧件金属号仍为K批，纸标签改为N批新件，列车长签字任瑞；价差汇入任瑞控制的供应账户。段砚|logLR:lt_ren_rui=2.0",
+    "lt_clue_tool H-7领用单：21:42段砚将双槽验车锤交任瑞，21:51:25归还柜录到放回动作，录像待末轮完整导出。柜内封存的H-7|logLR:lt_ren_rui=2.0",
+    "lt_clue_duan_alibi 玻璃试验间原始视频与操作记录连续相符：21:48:30至21:53:20段砚的身体与双手始终在镜头中；唯一出口未被开启，|logLR:lt_ren_rui=2.0",
+    "lt_clue_other_alibis 三份原始连续视频与司机基准校时：白镜21:48:40至21:53:00在新闻隔间全身可见，陶闻21:48:20至21:5|logLR:lt_ren_rui=2.0",
+    "lt_clue_access 有效通行原始记录：R-01在21:49:05近室读卡、21:51:08离室读卡，当天领取人任瑞；对应走廊连续画面能看到任|logLR:lt_ren_rui=2.0",
+    "lt_clue_contact 归还柜完整导出视频清楚拍到任瑞21:51:25用左手橙线补丁手套包着H-7锤头放入柜内；柜随后锁闭，21:51:25至2|logLR:lt_ren_rui=2.0"
+  ],
+  "clues": [
+    {
+      "content": "公务室门使用外旋总钥匙锁，无内侧锁钮；门口通行牌读取台只记录获准人员的接近，不代替机械钥匙。观察窗帘已放下。封条F-62覆盖门缝，22:32在五人共同见证下首次拆开，纤维压印无复粘痕迹；窗格和地板完整，没有暗门。门旁3毫米文书口可通过薄纸，不能通过人或验车锤。因此锁封证明贴条后无人从门窗进入，不证明封前室内未发生袭击。",
+      "id": "lt_clue_lock",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain01"
+      ],
+      "source_target": "lt_target_cabin",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "封锁公务室",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "魏舟倒在桌边，后头部有一次致命钝器损伤，伤痕呈双浅槽；无切割、注射或毒物迹象，桌柜均无会自行倒落的重物。左掌指缝夹着新鲜橙色棉线。初检不提供精确死亡分钟，需要用存活记录和封门记录确定窗口。桌下有一组旧件采购文件，尚待整理。",
+      "id": "lt_clue_body",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain02",
+        "f_rpg_last_train_chain05"
+      ],
+      "source_target": "lt_target_cabin",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "封锁公务室",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "司机不可编辑的运行记录：22:00列车出站，22:00至22:32持续行驶，22:32因公务室呼叫无回应停在岚岭检查点。公务室外侧仅站台检修道能接近，行车中无外部可攀附平台；两端出入口视频无中途上下车。司机在21:45至22:32始终处于封闭驾驶室视频内，现场只有五名候选角色具备站内近室权限。",
+      "id": "lt_clue_route",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain03"
+      ],
+      "source_target": "lt_target_route",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "司机运行记录",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "公务室文书筐中有一张“22:14，车内核验完成，魏舟”的票据；签名边缘为点阵图而非笔迹，纸背隐约见S-19批号。票据没有实时人脸或人工在场核验栏。任瑞22:14在前排验票有普通目击者，但这仅说明他那个时刻的位置，不能证明魏舟何时签过这张纸。",
+      "id": "lt_clue_stub",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain03"
+      ],
+      "source_target": "lt_target_stub",
+      "stage": 0,
+      "stage_source": "search_target.unlock_stage=1",
+      "title": "22:14核验票据",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "站台原始连续视频：21:48:45魏舟独自走入公务室，脸部清楚、行动正常，手中是采购文件；21:49:05任瑞从公务室门口消失于门内。21:45至21:54近室区域两侧闸门都关闭，唯一走廊只接通玻璃试验间、行李台及本车入口，入口视频没有陌生人。门内没有摄影，视频没有拍到击打动作。",
+      "id": "lt_clue_alive",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain02"
+      ],
+      "source_target": "lt_target_platform",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "站台交接与封条记录",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "外锁记录21:52:10总钥匙旋锁，21:54:00任瑞贴F-62；唐枢在行李台旁签见证，只勾选“门锁、编号确认”，未勾选“室内人员状态确认”。公务室内部没有自动定时反锁机制。21:57任瑞在走廊将一张薄纸送入文书口，封条仍完整；这个动作不必开门。",
+      "id": "lt_clue_seal",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain01",
+        "f_rpg_last_train_chain02"
+      ],
+      "source_target": "lt_target_platform",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "站台交接与封条记录",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "公务室应急台的原始缓存采用司机基准时间：21:49:30录到魏舟说“这不是新件的金属编号，把旧号贴起来也没用”；21:50:03有重物撞击、倒椅与痛呼，21:50:09声响停止。此前及此后缓存连续无剪接，后至22:32无人再按呼叫键。声音未记录另一人姓名，不能单凭口音识别凶手。",
+      "id": "lt_clue_audio",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain02",
+        "f_rpg_last_train_chain04",
+        "f_rpg_last_train_chain06"
+      ],
+      "source_target": "lt_target_audio",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "应急呼叫缓存",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "出库校时单：公务室壁钟慢12分钟，21:00司机基准时壁钟显示20:48，壁钟当晚未被校准；应急台、通行记录及各固定摄像均使用司机基准。公务票据设备另有可手调本地时间，打印票据只显示该本地时间。三种时间不能混用；不存在所有记录同时偏移12分钟的证据。",
+      "id": "lt_clue_clocks",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain03"
+      ],
+      "source_target": "lt_target_clocks",
+      "stage": 1,
+      "stage_source": "search_target.unlock_stage=2",
+      "title": "站内与车内时钟资料",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "公务机不可覆盖的设置日志写明：司机基准21:56:10，本地时钟从21:56调至22:14；21:56:24打印核验票据。打印前选入的签名图与魏舟上周确认单逐像素一致，连同末笔下扫描灰点也相同。票据因而是在发车前生成，不能证明魏舟22:14仍活着。",
+      "id": "lt_clue_time_forgery",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain03"
+      ],
+      "source_target": "lt_target_printer",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "公务票据设备与签字对照",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "领用单与前台视频相互印证：21:30任瑞领取橙色公务机及S-19站内纸卷，未转交他人；21:56前台连续视频清楚拍到任瑞本人调数字、打印并收起票据。车内固定机使用B批纸卷，签名不得代贴。影片并未进入公务室，不能独自证明他实施击打，但能独立证明假存活票据由他制造。",
+      "id": "lt_clue_printer_owner",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain03"
+      ],
+      "source_target": "lt_target_printer",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "公务票据设备与签字对照",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "桌下原始采购文件与供应回单互证：旧件金属号仍为K批，纸标签改为N批新件，列车长签字任瑞；价差汇入任瑞控制的供应账户。段砚补签试验单但账户没有她的收款，21:46交接柜视频还记录她提交原始储存卡。另有魏舟下午发给陶闻的还款邮件，陶闻回信同意补签还款日。这些材料解释秘密和压力，不能替代杀人机会与接触证据。",
+      "id": "lt_clue_motive",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain06"
+      ],
+      "source_target": "lt_target_bills",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "旧件账册与还款材料",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "H-7领用单：21:42段砚将双槽验车锤交任瑞，21:51:25归还柜录到放回动作，录像待末轮完整导出。柜内封存的H-7锤头双槽与伤痕形态相符，槽内有魏舟的新鲜血迹和橙色棉线。检修工具为公用物，原属段砚并不意味着案发时由她持有；须结合真实领用链判断。",
+      "id": "lt_clue_tool",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain05"
+      ],
+      "source_target": "lt_target_tools",
+      "stage": 2,
+      "stage_source": "search_target.unlock_stage=3",
+      "title": "验车锤领用与归还柜",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "玻璃试验间原始视频与操作记录连续相符：21:48:30至21:53:20段砚的身体与双手始终在镜头中；唯一出口未被开启，室内无通往公务室的其他路线。应急台21:49:30存活讲话、21:50:03撞击、21:52:10外锁都落在这段完整影像中。因此“公用锤原属段砚”不足以支持她在这个窗口实施袭击。",
+      "id": "lt_clue_duan_alibi",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain04"
+      ],
+      "source_target": "lt_target_alibis",
+      "stage": 3,
+      "stage_source": "search_target.unlock_stage=4",
+      "title": "完整工作影像",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "三份原始连续视频与司机基准校时：白镜21:48:40至21:53:00在新闻隔间全身可见，陶闻21:48:20至21:53:40在冷餐备货间门内可见，唐枢21:48:35至21:54:20在行李台操作并于原位见证贴条；各自唯一出口未离开，均覆盖存活讲话至外锁。白镜持有的V-03在三个月前已注销，从未触发当晚公务室有效通行。唐枢偷牌和陶闻讨债属实，但不能把二人移进袭击窗口。",
+      "id": "lt_clue_other_alibis",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain04"
+      ],
+      "source_target": "lt_target_alibis",
+      "stage": 3,
+      "stage_source": "search_target.unlock_stage=4",
+      "title": "完整工作影像",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "有效通行原始记录：R-01在21:49:05近室读卡、21:51:08离室读卡，当天领取人任瑞；对应走廊连续画面能看到任瑞本人进入、离开，没有交牌动作。V-03当晚无有效近室通行权限，读取台只用于接近登记，不控制机械门锁。21:52:10任瑞在同一画面用总钥匙外锁，因而不能用“唐枢借牌”解释这些记录。",
+      "id": "lt_clue_access",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain04",
+        "f_rpg_last_train_chain05"
+      ],
+      "source_target": "lt_target_contact",
+      "stage": 3,
+      "stage_source": "search_target.unlock_stage=4",
+      "title": "通行牌、归还录像与手套",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    },
+    {
+      "content": "归还柜完整导出视频清楚拍到任瑞21:51:25用左手橙线补丁手套包着H-7锤头放入柜内；柜随后锁闭，21:51:25至22:40开启取证前没有再被开启。锤槽中的橙线、魏舟掌内橙线与任瑞左手套新鲜缺线的七针补丁可连续拼接，陶闻21:35完工照片显示原补丁完整；手套内外均有魏舟新鲜血迹。22:34任瑞在五人面前交出仍藏于本人外套内袋的手套并签封，取证链完整。独立影像、断线拼接与血迹共同支持他接触致命凶器和死者，不能只以一根常见橙线定罪。",
+      "id": "lt_clue_contact",
+      "reveals_fact_ids": [
+        "f_rpg_last_train_chain05"
+      ],
+      "source_target": "lt_target_contact",
+      "stage": 3,
+      "stage_source": "search_target.unlock_stage=4",
+      "title": "通行牌、归还录像与手套",
+      "truth_value": true,
+      "type": "physical",
+      "visibility": "finder"
+    }
+  ],
+  "completions": [
+    {
+      "basis": "source_text_annotation",
+      "field": "evaluation.victim_name",
+      "rule": "R1_victim_annotation",
+      "value": "魏舟"
+    }
+  ],
+  "endings": [
+    "正确指认：指认成立。完整真相将说明凶手、作案过程，以及被隐瞒的其他秘密。",
+    "错误指认：最终指认未能成立。{selected_role_name}并非凶手，案件以错误指认告终；未闭合的证据链留下了真正作案者。"
+  ],
+  "evaluation": {
+    "culprit_basis": "truth.culprit_role_id",
+    "has_murder": true,
+    "killer_id": "lt_ren_rui",
+    "required_fact_ids": [
+      "f_rpg_last_train_truth",
+      "f_rpg_last_train_victim",
+      "f_rpg_last_train_chain01",
+      "f_rpg_last_train_chain02",
+      "f_rpg_last_train_chain03",
+      "f_rpg_last_train_chain04",
+      "f_rpg_last_train_chain05",
+      "f_rpg_last_train_chain06"
+    ],
+    "role_kind": "declared_killer",
+    "source_id": "last_train",
+    "victim_basis": "source_text_annotation",
+    "victim_name": "魏舟"
+  },
+  "facts": [
+    {
+      "content": "岚岭支线即将停运，末班列车载着督查员魏舟和五名与旧信号事故有关的人驶入雨夜。公务室被贴封，列车长称督查员要求独处。列车22:00出站，22:32因室内始终无人应答紧急停靠。封条拆开后，魏舟被发现倒在桌边，一张标有22:14的核验票据留在文书筐中。列车长、工程师、记者、餐车领班和行李员必须核对时间与凭证，才能解释封闭车厢里究竟发生了什么。",
+      "core": true,
+      "id": "f_rpg_last_train_pub",
+      "keywords": [
+        "岚岭支线即将停运",
+        "公务室被贴封",
+        "列车长称督查员要求独处",
+        "列车22:00出站",
+        "封条拆开后",
+        "魏舟被发现倒在桌边",
+        "列车长",
+        "工程师",
+        "记者",
+        "才能解释封闭车厢里究竟发生了什么"
+      ],
+      "type": "background",
+      "visibility": "public"
+    },
+    {
+      "content": "死者：魏舟。依据：source_text_annotation。",
+      "core": true,
+      "id": "f_rpg_last_train_victim",
+      "keywords": [
+        "死者",
+        "魏舟",
+        "依据"
+      ],
+      "type": "victim",
+      "visibility": "public"
+    },
+    {
+      "content": "凶手是列车长任瑞。魏舟调查的不是私人债务，而是旧信号继电器被换上新标签冒充新品报销。任瑞控制供应账户并侵吞价差，段砚曾在压力下补签旧试验单，却没有参与分款；她21:46已经提交原始储存卡。任瑞21:42借来公用H-7验车锤，21:49进入公务室，21:50趁魏舟核对采购文件时击打其后头部，造成致命损伤。魏舟抵抗时抓住他的橙线手套，棉线断裂落在掌内；任瑞随后用该手套包住锤头归柜，使断线与新鲜血迹留在锤槽。21:51他离室并将锤子放回柜，21:52正常用总钥匙从外面锁门，21:54让在原位搬行李的唐枢见证贴封。唐枢确认的是门锁和封条，不是活人。所谓密室因此形成于袭击之后，凶手没有从密室中凭空消失，也没有破坏封条。为把作案窗口移到行车后，任瑞21:56将公务票据机调快十八分钟，复制魏舟上周的扫描签名，打印22:14核验完成票据，21:57经薄纸文书口送入已封房间。22:14他确在前排验票，但那是针对错误窗口建立的真实不在场。司机基准、缓存声音、连续影像和有效通行记录共同把袭击压在21:49:30存活讲话至21:52:10外锁之间；四名其他候选人的完整工作影像覆盖该窗口。任瑞的本人进入影像、假票据操作影像与致命工具归还录像相互独立，手套、锤槽和死者掌内断线及血迹又闭合接触链，无需靠他认罪才能指认。白镜与唐枢的资料交易、陶闻的讨债便条以及段砚的旧补签都是真实秘密，但都不改变当晚杀人者。正确结局应保全原始旧件编号、账目和全部记录，让旧事故调查继续。错误指认时，未闭合的证据链会让真正的作案者逃过当晚指认。",
+      "core": true,
+      "id": "f_rpg_last_train_truth",
+      "keywords": [
+        "凶手是列车长任瑞",
+        "魏舟调查的不是私人债务",
+        "任瑞控制供应账户并侵吞价差",
+        "段砚曾在压力下补签旧试验单",
+        "却没有参与分款",
+        "她21:46已经提交原始储存卡",
+        "任瑞21:42借来公用H",
+        "7验车锤",
+        "21:49进入公务室",
+        "造成致命损伤",
+        "魏舟抵抗时抓住他的橙线手套",
+        "棉线断裂落在掌内"
+      ],
+      "type": "truth",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:30 唐枢将橙色公务票据机与S-19纸卷交任瑞，签领用单。",
+      "core": false,
+      "id": "f_rpg_last_train_t01",
+      "keywords": [
+        "21:30",
+        "唐枢将橙色公务票据机与S",
+        "19纸卷交任瑞",
+        "签领用单"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:35 陶闻交还缝好的左手套，任瑞戴走；完工照片记录完整七针橙色补丁。",
+      "core": false,
+      "id": "f_rpg_last_train_t02",
+      "keywords": [
+        "21:35",
+        "陶闻交还缝好的左手套",
+        "任瑞戴走",
+        "完工照片记录完整七针橙色补丁"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:40 陶闻在公务室门口递讨债便条，未进室。",
+      "core": false,
+      "id": "f_rpg_last_train_t03",
+      "keywords": [
+        "21:40",
+        "陶闻在公务室门口递讨债便条",
+        "未进室"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:42 任瑞从段砚处借H-7双槽验车锤，未立即归还。",
+      "core": false,
+      "id": "f_rpg_last_train_t04",
+      "keywords": [
+        "21:42",
+        "任瑞从段砚处借H",
+        "7双槽验车锤",
+        "未立即归还"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:45 唐枢取走已注销的V-03访客牌；近室区域闸门关闭，司机处于连续视频覆盖的驾驶室。",
+      "core": false,
+      "id": "f_rpg_last_train_t05",
+      "keywords": [
+        "21:45",
+        "唐枢取走已注销的V",
+        "03访客牌",
+        "近室区域闸门关闭",
+        "司机处于连续视频覆盖的驾驶室"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:46 唐枢将V-03和旧目录交白镜；段砚把原试验卡交入有摄像的储存柜。",
+      "core": false,
+      "id": "f_rpg_last_train_t06",
+      "keywords": [
+        "21:46",
+        "唐枢将V",
+        "03和旧目录交白镜",
+        "段砚把原试验卡交入有摄像的储存柜"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:48:20 陶闻开始连续可见的冷餐备货。",
+      "core": false,
+      "id": "f_rpg_last_train_t07",
+      "keywords": [
+        "21:48:20",
+        "陶闻开始连续可见的冷餐备货"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:48:30 段砚开始连续可见的双手联锁试验。",
+      "core": false,
+      "id": "f_rpg_last_train_t08",
+      "keywords": [
+        "21:48:30",
+        "段砚开始连续可见的双手联锁试验"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:48:35 唐枢开始连续可见的行李台操作。",
+      "core": false,
+      "id": "f_rpg_last_train_t09",
+      "keywords": [
+        "21:48:35",
+        "唐枢开始连续可见的行李台操作"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:48:40 白镜开始连续全身可见的视频口播。",
+      "core": false,
+      "id": "f_rpg_last_train_t10",
+      "keywords": [
+        "21:48:40",
+        "白镜开始连续全身可见的视频口播"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:48:45 站台视频记录魏舟活着独自进入公务室。",
+      "core": false,
+      "id": "f_rpg_last_train_t11",
+      "keywords": [
+        "21:48:45"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:49:05 任瑞持R-01进入公务室，通行记录与本人影像对应。",
+      "core": false,
+      "id": "f_rpg_last_train_t12",
+      "keywords": [
+        "21:49:05",
+        "任瑞持R",
+        "01进入公务室",
+        "通行记录与本人影像对应"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:49:30 应急台缓存录到魏舟指出旧件金属编号问题。",
+      "core": false,
+      "id": "f_rpg_last_train_t13",
+      "keywords": [
+        "21:49:30"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:50:03 任瑞用H-7袭击魏舟，缓存录到撞击、倒椅、痛呼；魏舟抓断手套橙线。",
+      "core": false,
+      "id": "f_rpg_last_train_t14",
+      "keywords": [
+        "21:50:03",
+        "任瑞用H",
+        "7袭击魏舟",
+        "缓存录到撞击",
+        "倒椅",
+        "痛呼",
+        "魏舟抓断手套橙线"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:51:08 任瑞离开公务室。",
+      "core": false,
+      "id": "f_rpg_last_train_t15",
+      "keywords": [
+        "21:51:08",
+        "任瑞离开公务室"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:51:25 任瑞用左手套包着H-7锤头放回归还柜，柜自锁后至取证未再打开。",
+      "core": false,
+      "id": "f_rpg_last_train_t16",
+      "keywords": [
+        "21:51:25",
+        "任瑞用左手套包着H",
+        "7锤头放回归还柜",
+        "柜自锁后至取证未再打开"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:52:10 任瑞用总钥匙从走廊正常锁闭公务室。",
+      "core": false,
+      "id": "f_rpg_last_train_t17",
+      "keywords": [
+        "21:52:10",
+        "任瑞用总钥匙从走廊正常锁闭公务室"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:53:00至21:53:40 白镜、段砚、陶闻先后结束各自完整视频记录，返回车内职责位置。",
+      "core": false,
+      "id": "f_rpg_last_train_t18",
+      "keywords": [
+        "白镜",
+        "段砚",
+        "陶闻先后结束各自完整视频记录",
+        "返回车内职责位置"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:54:00 任瑞贴F-62封条；唐枢在行李台原位见证门锁和编号，未确认魏舟状态。",
+      "core": false,
+      "id": "f_rpg_last_train_t19",
+      "keywords": [
+        "21:54:00",
+        "任瑞贴F",
+        "62封条",
+        "唐枢在行李台原位见证门锁和编号",
+        "未确认魏舟状态"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:54:20 唐枢完成行李台连续操作。",
+      "core": false,
+      "id": "f_rpg_last_train_t20",
+      "keywords": [
+        "21:54:20",
+        "唐枢完成行李台连续操作"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:56:10 任瑞将公务票据机本地时间调快十八分钟，选入魏舟上周签名扫描图。",
+      "core": false,
+      "id": "f_rpg_last_train_t21",
+      "keywords": [
+        "21:56:10",
+        "选入魏舟上周签名扫描图"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:56:24 票据打印为22:14核验完成，实际仍在发车前。",
+      "core": false,
+      "id": "f_rpg_last_train_t22",
+      "keywords": [
+        "21:56:24",
+        "票据打印为22:14核验完成",
+        "实际仍在发车前"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "21:57 任瑞经薄纸文书口将伪造票据送进已封室内，未动封条。",
+      "core": false,
+      "id": "f_rpg_last_train_t23",
+      "keywords": [
+        "21:57",
+        "未动封条"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "22:00 末班列车出站，至22:32无中途停靠或上下车。",
+      "core": false,
+      "id": "f_rpg_last_train_t24",
+      "keywords": [
+        "22:00",
+        "末班列车出站",
+        "至22:32无中途停靠或上下车"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "22:14 任瑞在前排公开验票，建立真实但不覆盖袭击窗口的不在场。",
+      "core": false,
+      "id": "f_rpg_last_train_t25",
+      "keywords": [
+        "22:14",
+        "任瑞在前排公开验票",
+        "建立真实但不覆盖袭击窗口的不在场"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "22:32 公务室呼叫持续无回应，列车停检查点；五人共同见证拆封，发现魏舟尸体及票据。",
+      "core": false,
+      "id": "f_rpg_last_train_t26",
+      "keywords": [
+        "22:32",
+        "公务室呼叫持续无回应",
+        "列车停检查点",
+        "五人共同见证拆封",
+        "发现魏舟尸体及票据"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "22:34 任瑞在五人面前交出本人外套内袋的手套并签封。",
+      "core": false,
+      "id": "f_rpg_last_train_t27",
+      "keywords": [
+        "22:34"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "22:40 工具柜首次开启共同取证，H-7、手套、声音、视频与纸卷记录进入核对。",
+      "core": false,
+      "id": "f_rpg_last_train_t28",
+      "keywords": [
+        "22:40",
+        "工具柜首次开启共同取证",
+        "手套",
+        "声音",
+        "视频与纸卷记录进入核对"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "三年前至今 任瑞以新标签掩盖报废旧件并报销，控制供应账户侵吞价差；段砚在压力下补签一份不完整检验单。",
+      "core": false,
+      "id": "f_rpg_last_train_t29",
+      "keywords": [
+        "三年前至今",
+        "任瑞以新标签掩盖报废旧件并报销",
+        "控制供应账户侵吞价差",
+        "段砚在压力下补签一份不完整检验单"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "当日下午 魏舟约任瑞解释采购差异，要求段砚提交原始记录，并向陶闻提出还款安排。",
+      "core": false,
+      "id": "f_rpg_last_train_t30",
+      "keywords": [
+        "当日下午",
+        "魏舟约任瑞解释采购差异",
+        "要求段砚提交原始记录",
+        "并向陶闻提出还款安排"
+      ],
+      "type": "timeline",
+      "visibility": "truth"
+    },
+    {
+      "content": "所谓密室形成于外锁与贴条，封条未被破坏不排除封前杀人。 门是正常外旋锁，21:52外锁、21:54贴条且唐枢没有确认活人；薄纸文书口容许票据随后进入，完全无需密室机关或封条复粘。",
+      "core": true,
+      "id": "f_rpg_last_train_chain01",
+      "keywords": [
+        "所谓密室形成于外锁与贴条",
+        "封条未被破坏不排除封前杀人",
+        "门是正常外旋锁",
+        "21:52外锁",
+        "21:54贴条且唐枢没有确认活人",
+        "薄纸文书口容许票据随后进入",
+        "完全无需密室机关或封条复粘"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "有效袭击窗口在21:49:30存活讲话与21:52:10外锁之间。 影像证实21:48:45行动正常，基准缓存21:49:30仍在讲话、21:50:03出现打击及痛呼；外锁后门窗未开启，致命钝器损伤与连续声响吻合。初检没有提供精确死亡分钟，结论来自存活和接近记录。",
+      "core": true,
+      "id": "f_rpg_last_train_chain02",
+      "keywords": [
+        "影像证实21:48:45行动正常",
+        "基准缓存21:49:30仍在讲话",
+        "21:50:03出现打击及痛呼",
+        "外锁后门窗未开启",
+        "致命钝器损伤与连续声响吻合",
+        "初检没有提供精确死亡分钟",
+        "结论来自存活和接近记录"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "22:14票据是任瑞在21:56伪造，不能把作案窗口移至行车后。 可手调本地时间的修改日志、相同扫描签名与S-19站内纸卷各自可核对；前台视频辨认任瑞实际操作。22:00才发车，因此票据不是22:14活人核验，任瑞该时刻验票不构成袭击窗口的不在场。",
+      "core": true,
+      "id": "f_rpg_last_train_chain03",
+      "keywords": [
+        "不能把作案窗口移至行车后",
+        "可手调本地时间的修改日志",
+        "相同扫描签名与S",
+        "19站内纸卷各自可核对",
+        "前台视频辨认任瑞实际操作",
+        "22:00才发车",
+        "因此票据不是22:14活人核验"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "最强替代嫌疑段砚及另外三人均无法在袭击窗口进入公务室。 四人的连续全身或身体工作影像覆盖存活讲话至外锁，唯一出口未离开；旧检验、私卖资料和讨债只说明秘密。注销V-03不能冒充实际使用的R-01，排除以偷牌支持唐枢或白镜进入的解释。",
+      "core": true,
+      "id": "f_rpg_last_train_chain04",
+      "keywords": [
+        "唯一出口未离开",
+        "旧检验",
+        "私卖资料和讨债只说明秘密",
+        "注销V",
+        "03不能冒充实际使用的R",
+        "01"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "任瑞在窗口内进入、接触致命工具和死者，是实际袭击者。 有效牌和本人连续影像共同证明接近；借出与21:51归还链定位H-7当时持有人。致命工具上的新鲜血迹、同一手套断线与死者掌内断线可拼接，再加本人用该手套归还工具的录像，构成独立于假票据的接触证据，排除仅因代办手续而卷入的解释。",
+      "core": true,
+      "id": "f_rpg_last_train_chain05",
+      "keywords": [
+        "任瑞在窗口内进入",
+        "接触致命工具和死者",
+        "是实际袭击者",
+        "有效牌和本人连续影像共同证明接近",
+        "借出与21:51归还链定位H",
+        "7当时持有人",
+        "致命工具上的新鲜血迹",
+        "同一手套断线与死者掌内断线可拼接",
+        "再加本人用该手套归还工具的录像",
+        "构成独立于假票据的接触证据",
+        "排除仅因代办手续而卷入的解释"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "任瑞有阻止旧件骗款曝光的明确动机，其他秘密不自动成为杀人动机。 原件金属号、报销标签、签字和供应回单对应任瑞控制账户，魏舟最后话语正在质问这笔账；段砚交出原卡且无价差收款，陶闻同意还款安排，不能仅用两人的私人秘密替代物证。",
+      "core": true,
+      "id": "f_rpg_last_train_chain06",
+      "keywords": [
+        "任瑞有阻止旧件骗款曝光的明确动机",
+        "其他秘密不自动成为杀人动机",
+        "原件金属号",
+        "报销标签",
+        "签字和供应回单对应任瑞控制账户",
+        "魏舟最后话语正在质问这笔账",
+        "段砚交出原卡且无价差收款",
+        "陶闻同意还款安排",
+        "不能仅用两人的私人秘密替代物证"
+      ],
+      "type": "evidence_chain",
+      "visibility": "truth"
+    },
+    {
+      "content": "三年前，你按列车长任瑞的要求补签过一份信号继电器检验单，没有亲眼检查全部旧件。魏舟今晚问你愿不愿意更正，你答应在到站后提交原始记录。21:42，你把编号H-7的双槽验车锤交给任瑞，供他核对公务室柜架；他口头答应立即归还，但你直到发车仍未见锤子。",
+      "core": false,
+      "id": "lt_duan_yan_s1_1",
+      "keywords": [
+        "三年前",
+        "没有亲眼检查全部旧件",
+        "魏舟今晚问你愿不愿意更正",
+        "你答应在到站后提交原始记录",
+        "21:42",
+        "你把编号H",
+        "7的双槽验车锤交给任瑞",
+        "供他核对公务室柜架",
+        "他口头答应立即归还",
+        "但你直到发车仍未见锤子"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "21:48:30至21:53:20，你在站台联锁试验玻璃间内操作双手按钮，试验室顶摄完整拍到你。试验设备时钟与司机运行记录同源。22:00列车出站，你转至检修席；22:14你看见任瑞在前排验票。你未在发车后进入魏舟所在的公务室。",
+      "core": false,
+      "id": "lt_duan_yan_s1_2",
+      "keywords": [
+        "试验室顶摄完整拍到你",
+        "试验设备时钟与司机运行记录同源",
+        "22:00列车出站",
+        "你转至检修席",
+        "22:14你看见任瑞在前排验票",
+        "你未在发车后进入魏舟所在的公务室"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "先还原公务室如何被封闭以及封闭前谁能进入。你可以保留旧试验单秘密，但不能把壁钟读数当作与司机记录等价的时间。",
+      "core": false,
+      "id": "lt_duan_yan_s1_3",
+      "keywords": [
+        "你可以保留旧试验单秘密"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你回想试验间外的视线：21:51左右，任瑞从公务室方向经过门外，左手抓着自己的橙线修补手套。玻璃反光使你没看清手里是否有锤子，因此你只能提供方向和衣着，不应把它说成目击杀人。",
+      "core": false,
+      "id": "lt_duan_yan_s2_1",
+      "keywords": [
+        "你回想试验间外的视线",
+        "21:51左右",
+        "任瑞从公务室方向经过门外",
+        "左手抓着自己的橙线修补手套",
+        "玻璃反光使你没看清手里是否有锤子",
+        "因此你只能提供方向和衣着",
+        "不应把它说成目击杀人"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你曾维修公务室外锁：它只能从走廊用总钥匙旋锁，内侧没有乘客可用的锁钮，封条只覆盖门缝而不覆盖薄纸文书口。贴上封条只证明门后来未打开，不证明贴条时室内的人活着。你知道机械结构，但没有携带该门总钥匙。",
+      "core": false,
+      "id": "lt_duan_yan_s2_2",
+      "keywords": [
+        "你曾维修公务室外锁",
+        "它只能从走廊用总钥匙旋锁",
+        "内侧没有乘客可用的锁钮",
+        "封条只覆盖门缝而不覆盖薄纸文书口",
+        "贴上封条只证明门后来未打开",
+        "不证明贴条时室内的人活着",
+        "你知道机械结构",
+        "但没有携带该门总钥匙"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "把外锁结构和封条的证明范围讲清楚，推动复核贴条前的站台时段。用自己的试验记录接受质询，而不是要求别人相信你的职业判断。",
+      "core": false,
+      "id": "lt_duan_yan_s2_3",
+      "keywords": [
+        "把外锁结构和封条的证明范围讲清楚",
+        "推动复核贴条前的站台时段",
+        "用自己的试验记录接受质询",
+        "而不是要求别人相信你的职业判断"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你保留了旧件出库相册：真正的新批继电器编号印在壳体金属上，旧件另贴的纸标签不能替代它。任瑞当年让你只填纸标签号码。你愿意把相册目录交出，这会证明你参与过不实补签，也能帮助核对魏舟调查的动机。",
+      "core": false,
+      "id": "lt_duan_yan_s3_1",
+      "keywords": [
+        "你保留了旧件出库相册",
+        "旧件另贴的纸标签不能替代它",
+        "任瑞当年让你只填纸标签号码",
+        "你愿意把相册目录交出",
+        "这会证明你参与过不实补签",
+        "也能帮助核对魏舟调查的动机"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "H-7验车锤是公用工具，借出时有登记，不是只有你能使用的私人凶器。你知道它锤头有两条平行浅槽；如果它后来沾血，必须核对领用、归还和现场损伤，而不能只因它原属检修班就指认你。",
+      "core": false,
+      "id": "lt_duan_yan_s3_2",
+      "keywords": [
+        "7验车锤是公用工具",
+        "借出时有登记",
+        "不是只有你能使用的私人凶器",
+        "你知道它锤头有两条平行浅槽",
+        "如果它后来沾血",
+        "必须核对领用",
+        "归还和现场损伤",
+        "而不能只因它原属检修班就指认你"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "公开你补签旧单的责任，并核对实际工具的归还时刻。将设备时间、票据时间和目击时间分列，寻找能够相互验证的记录。",
+      "core": false,
+      "id": "lt_duan_yan_s3_3",
+      "keywords": [
+        "公开你补签旧单的责任",
+        "并核对实际工具的归还时刻",
+        "将设备时间",
+        "票据时间和目击时间分列",
+        "寻找能够相互验证的记录"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你记起魏舟最后一次向你确认的不是“是否杀了人”，而是“愿不愿意把原件交回来”。你已经在21:46把原试验储存卡投入有摄像的交接柜，后来无法删除。你愿以此解释自己为何没有必要杀他来灭口，但动机轻重仍不能代替不在场证据。",
+      "core": false,
+      "id": "lt_duan_yan_s4_1",
+      "keywords": [
+        "你记起魏舟最后一次向你确认的不是",
+        "是否杀了人",
+        "而是",
+        "愿不愿意把原件交回来",
+        "后来无法删除",
+        "但动机轻重仍不能代替不在场证据"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "最终说明袭击窗口、外锁的形成顺序和票据的时间来源。核对完整试验室影像后，你可以洗清杀人嫌疑，同时承认自己在旧检验中的失职；两件事必须分别处理。",
+      "core": false,
+      "id": "lt_duan_yan_s4_2",
+      "keywords": [
+        "最终说明袭击窗口",
+        "外锁的形成顺序和票据的时间来源",
+        "核对完整试验室影像后",
+        "你可以洗清杀人嫌疑",
+        "同时承认自己在旧检验中的失职",
+        "两件事必须分别处理"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你是凶手。你长期把报废信号继电器换上新标签报销，将价差转入你控制的供应账户。魏舟找到金属编号与发票的差异，今晚要求你21:49在公务室解释。21:42你从段砚处借到H-7验车锤；21:49进入公务室，21:50趁魏舟低头核对材料，用锤子击打其后头部。他倒下后你摸到他不再回应，把文件塞回桌下。",
+      "core": false,
+      "id": "lt_ren_rui_s1_1",
+      "keywords": [
+        "你是凶手",
+        "将价差转入你控制的供应账户",
+        "魏舟找到金属编号与发票的差异",
+        "今晚要求你21:49在公务室解释",
+        "21:42你从段砚处借到H",
+        "7验车锤",
+        "21:49进入公务室",
+        "21:50趁魏舟低头核对材料",
+        "用锤子击打其后头部",
+        "他倒下后你摸到他不再回应",
+        "把文件塞回桌下"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "21:51你走出房间，将H-7放回走廊工具柜；21:52用总钥匙从外面锁门，21:54叫唐枢在门外见证贴条，称魏舟要求独处写报告。唐枢没有看到室内。21:56你把公务票据设备时钟调快十八分钟，复制魏舟旧确认单上的签名图，打印出22:14“车内核验完成”票据；21:57将票据从薄纸文书口送进室内，称他稍后会完成核验。",
+      "core": false,
+      "id": "lt_ren_rui_s1_2",
+      "keywords": [
+        "21:51你走出房间",
+        "将H",
+        "7放回走廊工具柜",
+        "21:52用总钥匙从外面锁门",
+        "21:54叫唐枢在门外见证贴条",
+        "称魏舟要求独处写报告",
+        "唐枢没有看到室内",
+        "复制魏舟旧确认单上的签名图",
+        "打印出22:14",
+        "车内核验完成",
+        "票据",
+        "称他稍后会完成核验"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "强调22:14你在公开验票，诱使众人假定封条贴上后魏舟还活着。你知道工具柜有归还记录，却以为只记录开柜而未拍清你的脸；不要声称其他角色一定没有不在场记录。",
+      "core": false,
+      "id": "lt_ren_rui_s1_3",
+      "keywords": [
+        "强调22:14你在公开验票",
+        "诱使众人假定封条贴上后魏舟还活着",
+        "你知道工具柜有归还记录",
+        "却以为只记录开柜而未拍清你的脸"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你听见段砚试验间的提示音时正在离开公务室。杀人时左手橙色修补线手套被魏舟抓了一下，离开后你把手套收回外套内袋，没有换给别人。你知道这可能留下接触痕迹，不能假设它已被检验。",
+      "core": false,
+      "id": "lt_ren_rui_s2_1",
+      "keywords": [
+        "离开后你把手套收回外套内袋",
+        "没有换给别人",
+        "你知道这可能留下接触痕迹",
+        "不能假设它已被检验"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你掌握的是正常外锁和贴条权，不存在隐藏通道、遥控杀人或远程开启封条机关。你制造的所谓密室只是一间在杀人后才被锁上的办公室。你的22:14验票确实有目击者，但那并不覆盖21:50。",
+      "core": false,
+      "id": "lt_ren_rui_s2_2",
+      "keywords": [
+        "你掌握的是正常外锁和贴条权",
+        "不存在隐藏通道",
+        "遥控杀人或远程开启封条机关",
+        "你的22:14验票确实有目击者",
+        "但那并不覆盖21:50"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "以唐枢盗取旧访客牌、段砚补签检验单作为疑点，争取把问题停留在手续争议；若有人展示了完整站台记录，须回应具体时段，不得虚构新车厢通路。",
+      "core": false,
+      "id": "lt_ren_rui_s2_3",
+      "keywords": [
+        "以唐枢盗取旧访客牌",
+        "段砚补签检验单作为疑点",
+        "争取把问题停留在手续争议",
+        "若有人展示了完整站台记录",
+        "须回应具体时段",
+        "不得虚构新车厢通路"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "公务票据设备的偏移设置会留下不可覆盖的“修改前后时间及司机基准时间”日志，你此前只见过打印面，误以为把数字调快就能骗过全部记录。你也知道本日发给你的纸卷属于站内S批，车内机使用B批；伪造的签名来自魏舟上周确认单同一张扫描图。",
+      "core": false,
+      "id": "lt_ren_rui_s3_1",
+      "keywords": [
+        "修改前后时间及司机基准时间",
+        "日志",
+        "你此前只见过打印面",
+        "误以为把数字调快就能骗过全部记录",
+        "车内机使用B批"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "供应账户由你实际控制，段砚曾参与补签，却没有获取换件价差。魏舟既掌握账目，也让段砚交出原件；你担心被取消职务并追究长期侵吞，才选择以暴力阻止公开。账目动机并不需要别人配合。",
+      "core": false,
+      "id": "lt_ren_rui_s3_2",
+      "keywords": [
+        "供应账户由你实际控制",
+        "段砚曾参与补签",
+        "却没有获取换件价差",
+        "魏舟既掌握账目",
+        "也让段砚交出原件",
+        "你担心被取消职务并追究长期侵吞",
+        "才选择以暴力阻止公开",
+        "账目动机并不需要别人配合"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "面对票据来源和设备日志，可以辩解为提前预打，却必须解释为何署上魏舟签名、放入已封公务室。你可以选择承认造假，不能把造假时间说成真正的存活证据。",
+      "core": false,
+      "id": "lt_ren_rui_s3_3",
+      "keywords": [
+        "面对票据来源和设备日志",
+        "可以辩解为提前预打",
+        "却必须解释为何署上魏舟签名",
+        "放入已封公务室",
+        "你可以选择承认造假",
+        "不能把造假时间说成真正的存活证据"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你最后一次整理衣袋时发现手套橙线少了半截。你记得21:51归还工具时曾用这只手套包住锤头，橙线有可能留在沟槽中。你在21:54封门、22:14验票都是公开动作，最危险的是别人把这些动作与21:50袭击分开核对。",
+      "core": false,
+      "id": "lt_ren_rui_s4_1",
+      "keywords": [
+        "橙线有可能留在沟槽中",
+        "你在21:54封门",
+        "22:14验票都是公开动作"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "最终回应工具归还影像、接触痕迹与未借出的通行牌。你可以继续主张别人冒用，但没有证据时不得把冒用说成既定事实；如果承认，需交代杀人早于锁门及假票据的完整顺序。",
+      "core": false,
+      "id": "lt_ren_rui_s4_2",
+      "keywords": [
+        "最终回应工具归还影像",
+        "接触痕迹与未借出的通行牌",
+        "你可以继续主张别人冒用",
+        "如果承认"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "哥哥三年前在信号故障事故中死亡。你花钱从唐枢处购买旧检验目录，他21:46还交给你一枚早已失效的访客牌V-03，想让你拍下来证明自己曾接触档案。你没有用它进公务室，也知道这笔交易违规。魏舟曾约你到终点后做采访，你对他是否真愿意公开一直有怀疑。",
+      "core": false,
+      "id": "lt_bai_jing_s1_1",
+      "keywords": [
+        "哥哥三年前在信号故障事故中死亡",
+        "你花钱从唐枢处购买旧检验目录",
+        "03",
+        "想让你拍下来证明自己曾接触档案",
+        "你没有用它进公务室",
+        "也知道这笔交易违规",
+        "魏舟曾约你到终点后做采访",
+        "你对他是否真愿意公开一直有怀疑"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "21:48:40至21:53:00，你在站台新闻隔间录一段出发前的视频口播，固定镜头拍到全身与唯一出口。21:55你返回车内。22:14你在前排看到任瑞验票，他告诉你魏舟正在独立核验，不许采访。你只能证明这一时刻任瑞的位置。",
+      "core": false,
+      "id": "lt_bai_jing_s1_2",
+      "keywords": [
+        "固定镜头拍到全身与唯一出口",
+        "21:55你返回车内",
+        "22:14你在前排看到任瑞验票",
+        "他告诉你魏舟正在独立核验",
+        "不许采访",
+        "你只能证明这一时刻任瑞的位置"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "不要先把买来的目录当作完整事故报告。先核对列车行驶路径及封门流程，再追查谁利用“公务保密”阻止别人确认魏舟状态。",
+      "core": false,
+      "id": "lt_bai_jing_s1_3",
+      "keywords": [
+        "先核对列车行驶路径及封门流程",
+        "再追查谁利用",
+        "公务保密",
+        "阻止别人确认魏舟状态"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你站在新闻隔间时，麦克风录到远处一次金属碰响，但当时你正在说话，无法准确判断声源。自己的口播文件带有连续画面，比零散听觉记忆更适合核对行踪。你愿意提供完整原文件，不只提供有利片段。",
+      "core": false,
+      "id": "lt_bai_jing_s2_1",
+      "keywords": [
+        "你站在新闻隔间时",
+        "麦克风录到远处一次金属碰响",
+        "但当时你正在说话",
+        "无法准确判断声源",
+        "自己的口播文件带有连续画面",
+        "比零散听觉记忆更适合核对行踪",
+        "你愿意提供完整原文件",
+        "不只提供有利片段"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你拍摄的V-03卡片背面写“临时访客，注销后不可办理公务室通行”。你没有改写权限；唐枢交给你卡片也不代表他借走了列车长的有效职工牌。若有人混用这两个编号，应要求出示实际通行记录。",
+      "core": false,
+      "id": "lt_bai_jing_s2_2",
+      "keywords": [
+        "你拍摄的V",
+        "03卡片背面写",
+        "临时访客",
+        "注销后不可办理公务室通行",
+        "你没有改写权限",
+        "若有人混用这两个编号",
+        "应要求出示实际通行记录"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "查明贴封条是否包含确认活人的步骤；区分真实录像、失效访客牌和有意夸大的声称。可以承认买资料，不必替唐枢编造不在场。",
+      "core": false,
+      "id": "lt_bai_jing_s2_3",
+      "keywords": [
+        "查明贴封条是否包含确认活人的步骤",
+        "区分真实录像",
+        "失效访客牌和有意夸大的声称",
+        "可以承认买资料",
+        "不必替唐枢编造不在场"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "21:56回车厢取相机时，你看见任瑞拿着橙色公务票据机在前台按数字轮，旁边放着魏舟上周的确认单。你当时以为是校准工作，没有看到打印纸上最终的时间；这是一次有限目击，需要设备日志核对。",
+      "core": false,
+      "id": "lt_bai_jing_s3_1",
+      "keywords": [
+        "21:56回车厢取相机时",
+        "旁边放着魏舟上周的确认单",
+        "你当时以为是校准工作",
+        "没有看到打印纸上最终的时间",
+        "这是一次有限目击",
+        "需要设备日志核对"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你保存的一份上周采访材料含魏舟手写签字原图，第二个字末笔下有一颗扫描灰点。如果新票据连同灰点都一模一样，说明签名图被复制，不能直接证明他本人刚刚签署。你只能提供对照材料，不可预先宣称检验已经完成。",
+      "core": false,
+      "id": "lt_bai_jing_s3_2",
+      "keywords": [
+        "第二个字末笔下有一颗扫描灰点",
+        "如果新票据连同灰点都一模一样",
+        "说明签名图被复制",
+        "不能直接证明他本人刚刚签署",
+        "你只能提供对照材料",
+        "不可预先宣称检验已经完成"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "用签字对照、纸卷来源与时钟日志复核那张22:14票据。报道草稿必须把谁提供了材料写清楚，避免把任瑞讲的程序直接当作事实。",
+      "core": false,
+      "id": "lt_bai_jing_s3_3",
+      "keywords": [
+        "用签字对照",
+        "报道草稿必须把谁提供了材料写清楚",
+        "避免把任瑞讲的程序直接当作事实"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你为了推动事故调查，曾在报道草稿写“段砚卖了所有人的命”，却没有证实她收钱。魏舟下午要求你修改这一段。你现在可以撤回这个未经证实的判断，保留对旧检验失职的调查。",
+      "core": false,
+      "id": "lt_bai_jing_s4_1",
+      "keywords": [
+        "你为了推动事故调查",
+        "曾在报道草稿写",
+        "段砚卖了所有人的命",
+        "却没有证实她收钱",
+        "魏舟下午要求你修改这一段",
+        "你现在可以撤回这个未经证实的判断",
+        "保留对旧检验失职的调查"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "最终公开能验证自己的连续视频，并把不利于既有报道的证据一起保留。判断谁在袭击窗口有机会、谁留下独立接触痕迹；你的哥哥之死解释追查动机，不能决定今晚的凶手。",
+      "core": false,
+      "id": "lt_bai_jing_s4_2",
+      "keywords": [
+        "最终公开能验证自己的连续视频",
+        "并把不利于既有报道的证据一起保留",
+        "判断谁在袭击窗口有机会",
+        "谁留下独立接触痕迹",
+        "你的哥哥之死解释追查动机",
+        "不能决定今晚的凶手"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你与魏舟半年前分手，他尚未归还借去的店铺垫款。21:40你在门口交给他一张“最后一晚，必须结清”的便条，话语激烈，但没有进去。他承诺到终点后转账。你没有携带毒物或凶器，这句话中的“最后一晚”指末班运营和还款期限。",
+      "core": false,
+      "id": "lt_tao_wen_s1_1",
+      "keywords": [
+        "你与魏舟半年前分手",
+        "他尚未归还借去的店铺垫款",
+        "21:40你在门口交给他一张",
+        "最后一晚",
+        "必须结清",
+        "的便条",
+        "话语激烈",
+        "但没有进去",
+        "他承诺到终点后转账",
+        "你没有携带毒物或凶器",
+        "这句话中的",
+        "指末班运营和还款期限"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "21:48:20至21:53:40，你在后部冷餐备货间称量封装餐盒，顶摄一直看到你；账单打印机与司机运行记录同源。任瑞曾在开工前托你用橙线缝他的左手套，并把补好的手套直接取走。22:14你正在餐车出餐，没看见公务室内部。",
+      "core": false,
+      "id": "lt_tao_wen_s1_2",
+      "keywords": [
+        "你在后部冷餐备货间称量封装餐盒",
+        "顶摄一直看到你",
+        "账单打印机与司机运行记录同源",
+        "并把补好的手套直接取走",
+        "22:14你正在餐车出餐",
+        "没看见公务室内部"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "查清死亡方式，不要让别人只凭讨债字句推定你杀人。提供备货线索，也留意任何把工作票据当成当事人亲自到场的推理。",
+      "core": false,
+      "id": "lt_tao_wen_s1_3",
+      "keywords": [
+        "查清死亡方式",
+        "不要让别人只凭讨债字句推定你杀人",
+        "提供备货线索"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你在21:47回备货间之前，看到魏舟拿着文件独自往公务室走，手中没有餐饮。他说“等我谈完这笔账”。你没有看见后来谁进室，因此这条记忆只支持他当时还活着。",
+      "core": false,
+      "id": "lt_tao_wen_s2_1",
+      "keywords": [
+        "你在21:47回备货间之前",
+        "看到魏舟拿着文件独自往公务室走",
+        "手中没有餐饮",
+        "他说",
+        "等我谈完这笔账",
+        "你没有看见后来谁进室",
+        "因此这条记忆只支持他当时还活着"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "餐车与公务室相隔两个可见走廊出口，备货间镜头覆盖唯一门。你没有借任瑞的职工牌或总钥匙。你的冷餐封条与公务室封条属于不同编号，不能互相替代；你愿意交出剩余封装材料供核对。",
+      "core": false,
+      "id": "lt_tao_wen_s2_2",
+      "keywords": [
+        "餐车与公务室相隔两个可见走廊出口",
+        "备货间镜头覆盖唯一门",
+        "你没有借任瑞的职工牌或总钥匙",
+        "不能互相替代",
+        "你愿意交出剩余封装材料供核对"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "公开便条的实际含义，要求他人用现场损伤与实物核对指控。请把你的工作记录与贴门封条的记录分开讨论。",
+      "core": false,
+      "id": "lt_tao_wen_s2_3",
+      "keywords": [
+        "公开便条的实际含义",
+        "要求他人用现场损伤与实物核对指控"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你缝任瑞手套时用了橙色棉线，左拇指根部是七针交叉缝；其余工作人员的公发手套原来都没有这个补丁。任瑞21:35当着你取走并戴上。你不能知道手套后来沾了什么，只能指出可对照的位置和针法。",
+      "core": false,
+      "id": "lt_tao_wen_s3_1",
+      "keywords": [
+        "你缝任瑞手套时用了橙色棉线",
+        "左拇指根部是七针交叉缝",
+        "任瑞21:35当着你取走并戴上",
+        "你不能知道手套后来沾了什么",
+        "只能指出可对照的位置和针法"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你另存魏舟下午交来的还款计划邮件，写明款项下周到账；你虽不满意，但同意当晚补签结清日期。便条措辞尖锐不等于你拒绝安排。这个邮件解释动机背景，真正的不在场仍需完整备货影像。",
+      "core": false,
+      "id": "lt_tao_wen_s3_2",
+      "keywords": [
+        "你另存魏舟下午交来的还款计划邮件",
+        "写明款项下周到账",
+        "你虽不满意",
+        "但同意当晚补签结清日期",
+        "便条措辞尖锐不等于你拒绝安排",
+        "这个邮件解释动机背景",
+        "真正的不在场仍需完整备货影像"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "若取得手套或工具，帮助核对橙线补丁，但先区分亲手所见与检验结论。你可以要求公布还款邮件，避免把感情秘密继续当作案件核心。",
+      "core": false,
+      "id": "lt_tao_wen_s3_3",
+      "keywords": [
+        "若取得手套或工具",
+        "帮助核对橙线补丁",
+        "但先区分亲手所见与检验结论",
+        "你可以要求公布还款邮件",
+        "避免把感情秘密继续当作案件核心"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你记得手套交还后曾拍一张完工照片给任瑞，照片连同21:35消息保留了完整七针补丁。今晚他没有把手套再拿回来维修；若现在缺线，可以用完工照片作案前对照，但不能仅凭少线就认定凶手。",
+      "core": false,
+      "id": "lt_tao_wen_s4_1",
+      "keywords": [
+        "今晚他没有把手套再拿回来维修",
+        "若现在缺线",
+        "可以用完工照片作案前对照",
+        "但不能仅凭少线就认定凶手"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "用连续备货影像排除自己，再将针线对照交给共同讨论。接受魏舟已无法还款的事实，与其他人一起保全记录；最终指认应由机会与接触物证共同支持。",
+      "core": false,
+      "id": "lt_tao_wen_s4_2",
+      "keywords": [
+        "用连续备货影像排除自己",
+        "再将针线对照交给共同讨论",
+        "接受魏舟已无法还款的事实",
+        "与其他人一起保全记录"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你为了偿还家中债务，私下将旧检验目录卖给白镜。21:45你拿走已注销的访客牌V-03，21:46交给她拍照，未借过任瑞的有效职工牌。你知道此事可能影响退休，最初只想说自己在搬行李。",
+      "core": false,
+      "id": "lt_tang_shu_s1_1",
+      "keywords": [
+        "你为了偿还家中债务",
+        "私下将旧检验目录卖给白镜",
+        "21:45你拿走已注销的访客牌V",
+        "03",
+        "21:46交给她拍照",
+        "未借过任瑞的有效职工牌",
+        "你知道此事可能影响退休",
+        "最初只想说自己在搬行李"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "21:48:35至21:54:20，你在站台唯一行李升降台连续操作，摄像拍到全程；21:54升降台旁就是公务室外门，你在不离开镜头的位置见证任瑞贴封。任瑞说魏舟要独处写报告，你只看见门外锁好，没有透过窗确认人是否活着。",
+      "core": false,
+      "id": "lt_tang_shu_s1_2",
+      "keywords": [
+        "你在站台唯一行李升降台连续操作",
+        "摄像拍到全程",
+        "21:54升降台旁就是公务室外门",
+        "你在不离开镜头的位置见证任瑞贴封",
+        "任瑞说魏舟要独处写报告",
+        "你只看见门外锁好",
+        "没有透过窗确认人是否活着"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "不要把“看见贴条”说成“看见魏舟还活着”。先解释封条交接，再决定是否承认目录和访客牌交易，避免伪装成你从未接触过任何卡片。",
+      "core": false,
+      "id": "lt_tang_shu_s1_3",
+      "keywords": [
+        "不要把",
+        "看见贴条",
+        "说成",
+        "看见魏舟还活着",
+        "先解释封条交接",
+        "再决定是否承认目录和访客牌交易",
+        "避免伪装成你从未接触过任何卡片"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "当你见证贴条时，魏舟没有出声回应，任瑞说督查纪律禁止打扰。门上观察窗的帘子从里面被放下，你并未掀开。你以前见证的流程通常只登记门锁和封条编号，不包含生命状态确认。",
+      "core": false,
+      "id": "lt_tang_shu_s2_1",
+      "keywords": [
+        "当你见证贴条时",
+        "魏舟没有出声回应",
+        "任瑞说督查纪律禁止打扰",
+        "门上观察窗的帘子从里面被放下",
+        "你并未掀开",
+        "不包含生命状态确认"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "你能辨认当晚封条F-62的纸纤维和压印；你保管的是备用封条，不是公务室总钥匙。若F-62后来完整，也只能证明封完之后未从门口进入，不排除封前发生袭击。",
+      "core": false,
+      "id": "lt_tang_shu_s2_2",
+      "keywords": [
+        "你能辨认当晚封条F",
+        "62的纸纤维和压印",
+        "你保管的是备用封条",
+        "不是公务室总钥匙",
+        "若F",
+        "62后来完整",
+        "也只能证明封完之后未从门口进入",
+        "不排除封前发生袭击"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "更正任何把你签名理解为“21:54人还活着”的说法。向白镜问清访客牌去向，但不得要求她删掉照片替你掩盖违规。",
+      "core": false,
+      "id": "lt_tang_shu_s2_3",
+      "keywords": [
+        "更正任何把你签名理解为",
+        "21:54人还活着",
+        "的说法",
+        "向白镜问清访客牌去向",
+        "但不得要求她删掉照片替你掩盖违规"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你多次搬运票据纸卷，知道站内领用卷的背纹为S、车内卷为B，领用单各自编号。21:30你把S-19卷和橙色公务机交给任瑞，他签了保管单；你没有操作机器或替魏舟签字。",
+      "core": false,
+      "id": "lt_tang_shu_s3_1",
+      "keywords": [
+        "你多次搬运票据纸卷",
+        "知道站内领用卷的背纹为S",
+        "车内卷为B",
+        "领用单各自编号",
+        "21:30你把S",
+        "19卷和橙色公务机交给任瑞",
+        "他签了保管单",
+        "你没有操作机器或替魏舟签字"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "卖给白镜的目录只有旧检验项目名称，不含供应收款账户或原始工具记录。你不能用它证明谁杀了人，也不能说白镜已经掌握全部事故真相。你盗走的V-03在交接时已失效，编号与任瑞当天R-01职工牌不同。",
+      "core": false,
+      "id": "lt_tang_shu_s3_2",
+      "keywords": [
+        "卖给白镜的目录只有旧检验项目名称",
+        "不含供应收款账户或原始工具记录",
+        "你不能用它证明谁杀了人",
+        "也不能说白镜已经掌握全部事故真相",
+        "你盗走的V",
+        "03在交接时已失效",
+        "编号与任瑞当天R",
+        "01职工牌不同"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "fact",
+      "visibility": "private"
+    },
+    {
+      "content": "核对纸卷、机器归属和有效牌记录。承认你实际做过的偷拿与出售，把它们与总钥匙、工具领用和杀人时段分开。",
+      "core": false,
+      "id": "lt_tang_shu_s3_3",
+      "keywords": [
+        "核对纸卷",
+        "机器归属和有效牌记录",
+        "承认你实际做过的偷拿与出售",
+        "把它们与总钥匙",
+        "工具领用和杀人时段分开"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "你一度以为只要封条无破损就能证明自己没有疏漏，现在知道你真正缺少的是封前状态确认。行李台录像完整保留你见证贴条的动作和位置，也能核对你没有进入公务室。",
+      "core": false,
+      "id": "lt_tang_shu_s4_1",
+      "keywords": [
+        "也能核对你没有进入公务室"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "memory",
+      "visibility": "private"
+    },
+    {
+      "content": "最终交代封条见证的边界，不替任瑞背书。你仍需为私卖资料负责，但不应接受没有证据的杀人指控；向共同讨论提供完整行李台视频编号。",
+      "core": false,
+      "id": "lt_tang_shu_s4_2",
+      "keywords": [
+        "最终交代封条见证的边界",
+        "不替任瑞背书",
+        "你仍需为私卖资料负责",
+        "但不应接受没有证据的杀人指控",
+        "向共同讨论提供完整行李台视频编号"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "objective",
+      "visibility": "private"
+    },
+    {
+      "content": "信号检修工程师，随末班列车接受例行复核，负责当晚出库的联锁试验。",
+      "core": false,
+      "id": "f_lt_duan_yan_identity",
+      "keywords": [
+        "信号检修工程师",
+        "随末班列车接受例行复核",
+        "负责当晚出库的联锁试验"
+      ],
+      "owner": "lt_duan_yan",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "末班列车的列车长，持有公务室总钥匙、当晚公务票据设备及封条。",
+      "core": false,
+      "id": "f_lt_ren_rui_identity",
+      "keywords": [
+        "末班列车的列车长",
+        "持有公务室总钥匙",
+        "当晚公务票据设备及封条"
+      ],
+      "owner": "lt_ren_rui",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "地方报社记者，持票乘坐末班列车，正在调查三年前的信号故障事故。",
+      "core": false,
+      "id": "f_lt_bai_jing_identity",
+      "keywords": [
+        "地方报社记者",
+        "持票乘坐末班列车",
+        "正在调查三年前的信号故障事故"
+      ],
+      "owner": "lt_bai_jing",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "餐车领班，魏舟的前伴侣；当晚负责末班车冷餐备货。",
+      "core": false,
+      "id": "f_lt_tao_wen_identity",
+      "keywords": [
+        "餐车领班",
+        "魏舟的前伴侣",
+        "当晚负责末班车冷餐备货"
+      ],
+      "owner": "lt_tao_wen",
+      "type": "identity",
+      "visibility": "public"
+    },
+    {
+      "content": "即将退休的行李员，熟悉站台和公务室封条交接；为末班列车见证贴封。",
+      "core": false,
+      "id": "f_lt_tang_shu_identity",
+      "keywords": [
+        "即将退休的行李员",
+        "熟悉站台和公务室封条交接",
+        "为末班列车见证贴封"
+      ],
+      "owner": "lt_tang_shu",
+      "type": "identity",
+      "visibility": "public"
+    }
+  ],
+  "ingest": {
+    "adapter": "rpg_json",
+    "checks": {
+      "canonical_fields": true,
+      "clue_refs_valid": true,
+      "clue_weights_parseable": true
+    },
+    "detected_evidence": [
+      "script_meta",
+      "roles",
+      "truth"
+    ],
+    "ingested_at": "2026-11-25T04:54:21+00:00",
+    "source_path": "corpus\\raw\\rpg\\last_train.json",
+    "source_sha256": "8569f331ea13d20222b5030761bd8cbe858f896b28b2d13057c353ceeb3172bb"
+  },
+  "plot_locks": [],
+  "schema_version": "1.0",
+  "script_id": "rpg_last_train",
+  "source_files": [
+    "raw/rpg/last_train.json"
+  ],
+  "timeline_true": [
+    "21:30 唐枢将橙色公务票据机与S-19纸卷交任瑞，签领用单。",
+    "21:35 陶闻交还缝好的左手套，任瑞戴走；完工照片记录完整七针橙色补丁。",
+    "21:40 陶闻在公务室门口递讨债便条，未进室。",
+    "21:42 任瑞从段砚处借H-7双槽验车锤，未立即归还。",
+    "21:45 唐枢取走已注销的V-03访客牌；近室区域闸门关闭，司机处于连续视频覆盖的驾驶室。",
+    "21:46 唐枢将V-03和旧目录交白镜；段砚把原试验卡交入有摄像的储存柜。",
+    "21:48:20 陶闻开始连续可见的冷餐备货。",
+    "21:48:30 段砚开始连续可见的双手联锁试验。",
+    "21:48:35 唐枢开始连续可见的行李台操作。",
+    "21:48:40 白镜开始连续全身可见的视频口播。",
+    "21:48:45 站台视频记录魏舟活着独自进入公务室。",
+    "21:49:05 任瑞持R-01进入公务室，通行记录与本人影像对应。",
+    "21:49:30 应急台缓存录到魏舟指出旧件金属编号问题。",
+    "21:50:03 任瑞用H-7袭击魏舟，缓存录到撞击、倒椅、痛呼；魏舟抓断手套橙线。",
+    "21:51:08 任瑞离开公务室。",
+    "21:51:25 任瑞用左手套包着H-7锤头放回归还柜，柜自锁后至取证未再打开。",
+    "21:52:10 任瑞用总钥匙从走廊正常锁闭公务室。",
+    "21:53:00至21:53:40 白镜、段砚、陶闻先后结束各自完整视频记录，返回车内职责位置。",
+    "21:54:00 任瑞贴F-62封条；唐枢在行李台原位见证门锁和编号，未确认魏舟状态。",
+    "21:54:20 唐枢完成行李台连续操作。",
+    "21:56:10 任瑞将公务票据机本地时间调快十八分钟，选入魏舟上周签名扫描图。",
+    "21:56:24 票据打印为22:14核验完成，实际仍在发车前。",
+    "21:57 任瑞经薄纸文书口将伪造票据送进已封室内，未动封条。",
+    "22:00 末班列车出站，至22:32无中途停靠或上下车。",
+    "22:14 任瑞在前排公开验票，建立真实但不覆盖袭击窗口的不在场。",
+    "22:32 公务室呼叫持续无回应，列车停检查点；五人共同见证拆封，发现魏舟尸体及票据。",
+    "22:34 任瑞在五人面前交出本人外套内袋的手套并签封。",
+    "22:40 工具柜首次开启共同取证，H-7、手套、声音、视频与纸卷记录进入核对。",
+    "三年前至今 任瑞以新标签掩盖报废旧件并报销，控制供应账户侵吞价差；段砚在压力下补签一份不完整检验单。",
+    "当日下午 魏舟约任瑞解释采购差异，要求段砚提交原始记录，并向陶闻提出还款安排。"
+  ],
+  "title": "末班列车",
   "truth_graph": [
     "岚岭支线即将停运，末班列车载着督查员魏舟和五名与旧信号事故有关的人驶入雨夜。公务室被贴封，列车长称督查员要求独处。列车22:00出站，22:32因室内始终无人应答紧急停靠。封条拆开后，魏舟被发现倒在桌边，一张标有22:14的核验票据留在文书筐中。列车长、工程师、记者、餐车领班和行李员必须核对时间与凭证，才能解释封闭车厢里究竟发生了什么。",
     "死者：魏舟。依据：source_text_annotation。",
@@ -115,2050 +2166,15 @@
     "餐车领班，魏舟的前伴侣；当晚负责末班车冷餐备货。",
     "即将退休的行李员，熟悉站台和公务室封条交接；为末班列车见证贴封。"
   ],
-  "facts": [
-    {
-      "id": "f_rpg_last_train_pub",
-      "type": "background",
-      "content": "岚岭支线即将停运，末班列车载着督查员魏舟和五名与旧信号事故有关的人驶入雨夜。公务室被贴封，列车长称督查员要求独处。列车22:00出站，22:32因室内始终无人应答紧急停靠。封条拆开后，魏舟被发现倒在桌边，一张标有22:14的核验票据留在文书筐中。列车长、工程师、记者、餐车领班和行李员必须核对时间与凭证，才能解释封闭车厢里究竟发生了什么。",
-      "visibility": "public",
-      "core": true,
-      "keywords": [
-        "岚岭支线即将停运",
-        "公务室被贴封",
-        "列车长称督查员要求独处",
-        "列车22:00出站",
-        "封条拆开后",
-        "魏舟被发现倒在桌边",
-        "列车长",
-        "工程师",
-        "记者",
-        "才能解释封闭车厢里究竟发生了什么"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_victim",
-      "type": "victim",
-      "content": "死者：魏舟。依据：source_text_annotation。",
-      "visibility": "public",
-      "core": true,
-      "keywords": [
-        "死者",
-        "魏舟",
-        "依据"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_truth",
-      "type": "truth",
-      "content": "凶手是列车长任瑞。魏舟调查的不是私人债务，而是旧信号继电器被换上新标签冒充新品报销。任瑞控制供应账户并侵吞价差，段砚曾在压力下补签旧试验单，却没有参与分款；她21:46已经提交原始储存卡。任瑞21:42借来公用H-7验车锤，21:49进入公务室，21:50趁魏舟核对采购文件时击打其后头部，造成致命损伤。魏舟抵抗时抓住他的橙线手套，棉线断裂落在掌内；任瑞随后用该手套包住锤头归柜，使断线与新鲜血迹留在锤槽。21:51他离室并将锤子放回柜，21:52正常用总钥匙从外面锁门，21:54让在原位搬行李的唐枢见证贴封。唐枢确认的是门锁和封条，不是活人。所谓密室因此形成于袭击之后，凶手没有从密室中凭空消失，也没有破坏封条。为把作案窗口移到行车后，任瑞21:56将公务票据机调快十八分钟，复制魏舟上周的扫描签名，打印22:14核验完成票据，21:57经薄纸文书口送入已封房间。22:14他确在前排验票，但那是针对错误窗口建立的真实不在场。司机基准、缓存声音、连续影像和有效通行记录共同把袭击压在21:49:30存活讲话至21:52:10外锁之间；四名其他候选人的完整工作影像覆盖该窗口。任瑞的本人进入影像、假票据操作影像与致命工具归还录像相互独立，手套、锤槽和死者掌内断线及血迹又闭合接触链，无需靠他认罪才能指认。白镜与唐枢的资料交易、陶闻的讨债便条以及段砚的旧补签都是真实秘密，但都不改变当晚杀人者。正确结局应保全原始旧件编号、账目和全部记录，让旧事故调查继续。错误指认时，未闭合的证据链会让真正的作案者逃过当晚指认。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "凶手是列车长任瑞",
-        "魏舟调查的不是私人债务",
-        "任瑞控制供应账户并侵吞价差",
-        "段砚曾在压力下补签旧试验单",
-        "却没有参与分款",
-        "她21:46已经提交原始储存卡",
-        "任瑞21:42借来公用H",
-        "7验车锤",
-        "21:49进入公务室",
-        "造成致命损伤",
-        "魏舟抵抗时抓住他的橙线手套",
-        "棉线断裂落在掌内"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t01",
-      "type": "timeline",
-      "content": "21:30 唐枢将橙色公务票据机与S-19纸卷交任瑞，签领用单。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:30",
-        "唐枢将橙色公务票据机与S",
-        "19纸卷交任瑞",
-        "签领用单"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t02",
-      "type": "timeline",
-      "content": "21:35 陶闻交还缝好的左手套，任瑞戴走；完工照片记录完整七针橙色补丁。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:35",
-        "陶闻交还缝好的左手套",
-        "任瑞戴走",
-        "完工照片记录完整七针橙色补丁"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t03",
-      "type": "timeline",
-      "content": "21:40 陶闻在公务室门口递讨债便条，未进室。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:40",
-        "陶闻在公务室门口递讨债便条",
-        "未进室"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t04",
-      "type": "timeline",
-      "content": "21:42 任瑞从段砚处借H-7双槽验车锤，未立即归还。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:42",
-        "任瑞从段砚处借H",
-        "7双槽验车锤",
-        "未立即归还"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t05",
-      "type": "timeline",
-      "content": "21:45 唐枢取走已注销的V-03访客牌；近室区域闸门关闭，司机处于连续视频覆盖的驾驶室。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:45",
-        "唐枢取走已注销的V",
-        "03访客牌",
-        "近室区域闸门关闭",
-        "司机处于连续视频覆盖的驾驶室"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t06",
-      "type": "timeline",
-      "content": "21:46 唐枢将V-03和旧目录交白镜；段砚把原试验卡交入有摄像的储存柜。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:46",
-        "唐枢将V",
-        "03和旧目录交白镜",
-        "段砚把原试验卡交入有摄像的储存柜"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t07",
-      "type": "timeline",
-      "content": "21:48:20 陶闻开始连续可见的冷餐备货。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:48:20",
-        "陶闻开始连续可见的冷餐备货"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t08",
-      "type": "timeline",
-      "content": "21:48:30 段砚开始连续可见的双手联锁试验。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:48:30",
-        "段砚开始连续可见的双手联锁试验"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t09",
-      "type": "timeline",
-      "content": "21:48:35 唐枢开始连续可见的行李台操作。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:48:35",
-        "唐枢开始连续可见的行李台操作"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t10",
-      "type": "timeline",
-      "content": "21:48:40 白镜开始连续全身可见的视频口播。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:48:40",
-        "白镜开始连续全身可见的视频口播"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t11",
-      "type": "timeline",
-      "content": "21:48:45 站台视频记录魏舟活着独自进入公务室。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:48:45"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t12",
-      "type": "timeline",
-      "content": "21:49:05 任瑞持R-01进入公务室，通行记录与本人影像对应。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:49:05",
-        "任瑞持R",
-        "01进入公务室",
-        "通行记录与本人影像对应"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t13",
-      "type": "timeline",
-      "content": "21:49:30 应急台缓存录到魏舟指出旧件金属编号问题。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:49:30"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t14",
-      "type": "timeline",
-      "content": "21:50:03 任瑞用H-7袭击魏舟，缓存录到撞击、倒椅、痛呼；魏舟抓断手套橙线。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:50:03",
-        "任瑞用H",
-        "7袭击魏舟",
-        "缓存录到撞击",
-        "倒椅",
-        "痛呼",
-        "魏舟抓断手套橙线"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t15",
-      "type": "timeline",
-      "content": "21:51:08 任瑞离开公务室。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:51:08",
-        "任瑞离开公务室"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t16",
-      "type": "timeline",
-      "content": "21:51:25 任瑞用左手套包着H-7锤头放回归还柜，柜自锁后至取证未再打开。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:51:25",
-        "任瑞用左手套包着H",
-        "7锤头放回归还柜",
-        "柜自锁后至取证未再打开"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t17",
-      "type": "timeline",
-      "content": "21:52:10 任瑞用总钥匙从走廊正常锁闭公务室。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:52:10",
-        "任瑞用总钥匙从走廊正常锁闭公务室"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t18",
-      "type": "timeline",
-      "content": "21:53:00至21:53:40 白镜、段砚、陶闻先后结束各自完整视频记录，返回车内职责位置。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "白镜",
-        "段砚",
-        "陶闻先后结束各自完整视频记录",
-        "返回车内职责位置"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t19",
-      "type": "timeline",
-      "content": "21:54:00 任瑞贴F-62封条；唐枢在行李台原位见证门锁和编号，未确认魏舟状态。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:54:00",
-        "任瑞贴F",
-        "62封条",
-        "唐枢在行李台原位见证门锁和编号",
-        "未确认魏舟状态"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t20",
-      "type": "timeline",
-      "content": "21:54:20 唐枢完成行李台连续操作。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:54:20",
-        "唐枢完成行李台连续操作"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t21",
-      "type": "timeline",
-      "content": "21:56:10 任瑞将公务票据机本地时间调快十八分钟，选入魏舟上周签名扫描图。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:56:10",
-        "选入魏舟上周签名扫描图"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t22",
-      "type": "timeline",
-      "content": "21:56:24 票据打印为22:14核验完成，实际仍在发车前。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:56:24",
-        "票据打印为22:14核验完成",
-        "实际仍在发车前"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t23",
-      "type": "timeline",
-      "content": "21:57 任瑞经薄纸文书口将伪造票据送进已封室内，未动封条。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "21:57",
-        "未动封条"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t24",
-      "type": "timeline",
-      "content": "22:00 末班列车出站，至22:32无中途停靠或上下车。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "22:00",
-        "末班列车出站",
-        "至22:32无中途停靠或上下车"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t25",
-      "type": "timeline",
-      "content": "22:14 任瑞在前排公开验票，建立真实但不覆盖袭击窗口的不在场。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "22:14",
-        "任瑞在前排公开验票",
-        "建立真实但不覆盖袭击窗口的不在场"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t26",
-      "type": "timeline",
-      "content": "22:32 公务室呼叫持续无回应，列车停检查点；五人共同见证拆封，发现魏舟尸体及票据。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "22:32",
-        "公务室呼叫持续无回应",
-        "列车停检查点",
-        "五人共同见证拆封",
-        "发现魏舟尸体及票据"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t27",
-      "type": "timeline",
-      "content": "22:34 任瑞在五人面前交出本人外套内袋的手套并签封。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "22:34"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t28",
-      "type": "timeline",
-      "content": "22:40 工具柜首次开启共同取证，H-7、手套、声音、视频与纸卷记录进入核对。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "22:40",
-        "工具柜首次开启共同取证",
-        "手套",
-        "声音",
-        "视频与纸卷记录进入核对"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t29",
-      "type": "timeline",
-      "content": "三年前至今 任瑞以新标签掩盖报废旧件并报销，控制供应账户侵吞价差；段砚在压力下补签一份不完整检验单。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "三年前至今",
-        "任瑞以新标签掩盖报废旧件并报销",
-        "控制供应账户侵吞价差",
-        "段砚在压力下补签一份不完整检验单"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_t30",
-      "type": "timeline",
-      "content": "当日下午 魏舟约任瑞解释采购差异，要求段砚提交原始记录，并向陶闻提出还款安排。",
-      "visibility": "truth",
-      "core": false,
-      "keywords": [
-        "当日下午",
-        "魏舟约任瑞解释采购差异",
-        "要求段砚提交原始记录",
-        "并向陶闻提出还款安排"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_chain01",
-      "type": "evidence_chain",
-      "content": "所谓密室形成于外锁与贴条，封条未被破坏不排除封前杀人。 门是正常外旋锁，21:52外锁、21:54贴条且唐枢没有确认活人；薄纸文书口容许票据随后进入，完全无需密室机关或封条复粘。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "所谓密室形成于外锁与贴条",
-        "封条未被破坏不排除封前杀人",
-        "门是正常外旋锁",
-        "21:52外锁",
-        "21:54贴条且唐枢没有确认活人",
-        "薄纸文书口容许票据随后进入",
-        "完全无需密室机关或封条复粘"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_chain02",
-      "type": "evidence_chain",
-      "content": "有效袭击窗口在21:49:30存活讲话与21:52:10外锁之间。 影像证实21:48:45行动正常，基准缓存21:49:30仍在讲话、21:50:03出现打击及痛呼；外锁后门窗未开启，致命钝器损伤与连续声响吻合。初检没有提供精确死亡分钟，结论来自存活和接近记录。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "影像证实21:48:45行动正常",
-        "基准缓存21:49:30仍在讲话",
-        "21:50:03出现打击及痛呼",
-        "外锁后门窗未开启",
-        "致命钝器损伤与连续声响吻合",
-        "初检没有提供精确死亡分钟",
-        "结论来自存活和接近记录"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_chain03",
-      "type": "evidence_chain",
-      "content": "22:14票据是任瑞在21:56伪造，不能把作案窗口移至行车后。 可手调本地时间的修改日志、相同扫描签名与S-19站内纸卷各自可核对；前台视频辨认任瑞实际操作。22:00才发车，因此票据不是22:14活人核验，任瑞该时刻验票不构成袭击窗口的不在场。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "不能把作案窗口移至行车后",
-        "可手调本地时间的修改日志",
-        "相同扫描签名与S",
-        "19站内纸卷各自可核对",
-        "前台视频辨认任瑞实际操作",
-        "22:00才发车",
-        "因此票据不是22:14活人核验"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_chain04",
-      "type": "evidence_chain",
-      "content": "最强替代嫌疑段砚及另外三人均无法在袭击窗口进入公务室。 四人的连续全身或身体工作影像覆盖存活讲话至外锁，唯一出口未离开；旧检验、私卖资料和讨债只说明秘密。注销V-03不能冒充实际使用的R-01，排除以偷牌支持唐枢或白镜进入的解释。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "唯一出口未离开",
-        "旧检验",
-        "私卖资料和讨债只说明秘密",
-        "注销V",
-        "03不能冒充实际使用的R",
-        "01"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_chain05",
-      "type": "evidence_chain",
-      "content": "任瑞在窗口内进入、接触致命工具和死者，是实际袭击者。 有效牌和本人连续影像共同证明接近；借出与21:51归还链定位H-7当时持有人。致命工具上的新鲜血迹、同一手套断线与死者掌内断线可拼接，再加本人用该手套归还工具的录像，构成独立于假票据的接触证据，排除仅因代办手续而卷入的解释。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "任瑞在窗口内进入",
-        "接触致命工具和死者",
-        "是实际袭击者",
-        "有效牌和本人连续影像共同证明接近",
-        "借出与21:51归还链定位H",
-        "7当时持有人",
-        "致命工具上的新鲜血迹",
-        "同一手套断线与死者掌内断线可拼接",
-        "再加本人用该手套归还工具的录像",
-        "构成独立于假票据的接触证据",
-        "排除仅因代办手续而卷入的解释"
-      ]
-    },
-    {
-      "id": "f_rpg_last_train_chain06",
-      "type": "evidence_chain",
-      "content": "任瑞有阻止旧件骗款曝光的明确动机，其他秘密不自动成为杀人动机。 原件金属号、报销标签、签字和供应回单对应任瑞控制账户，魏舟最后话语正在质问这笔账；段砚交出原卡且无价差收款，陶闻同意还款安排，不能仅用两人的私人秘密替代物证。",
-      "visibility": "truth",
-      "core": true,
-      "keywords": [
-        "任瑞有阻止旧件骗款曝光的明确动机",
-        "其他秘密不自动成为杀人动机",
-        "原件金属号",
-        "报销标签",
-        "签字和供应回单对应任瑞控制账户",
-        "魏舟最后话语正在质问这笔账",
-        "段砚交出原卡且无价差收款",
-        "陶闻同意还款安排",
-        "不能仅用两人的私人秘密替代物证"
-      ]
-    },
-    {
-      "id": "lt_duan_yan_s1_1",
-      "type": "memory",
-      "content": "三年前，你按列车长任瑞的要求补签过一份信号继电器检验单，没有亲眼检查全部旧件。魏舟今晚问你愿不愿意更正，你答应在到站后提交原始记录。21:42，你把编号H-7的双槽验车锤交给任瑞，供他核对公务室柜架；他口头答应立即归还，但你直到发车仍未见锤子。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "三年前",
-        "没有亲眼检查全部旧件",
-        "魏舟今晚问你愿不愿意更正",
-        "你答应在到站后提交原始记录",
-        "21:42",
-        "你把编号H",
-        "7的双槽验车锤交给任瑞",
-        "供他核对公务室柜架",
-        "他口头答应立即归还",
-        "但你直到发车仍未见锤子"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "lt_duan_yan_s1_2",
-      "type": "fact",
-      "content": "21:48:30至21:53:20，你在站台联锁试验玻璃间内操作双手按钮，试验室顶摄完整拍到你。试验设备时钟与司机运行记录同源。22:00列车出站，你转至检修席；22:14你看见任瑞在前排验票。你未在发车后进入魏舟所在的公务室。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "试验室顶摄完整拍到你",
-        "试验设备时钟与司机运行记录同源",
-        "22:00列车出站",
-        "你转至检修席",
-        "22:14你看见任瑞在前排验票",
-        "你未在发车后进入魏舟所在的公务室"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "lt_duan_yan_s1_3",
-      "type": "objective",
-      "content": "先还原公务室如何被封闭以及封闭前谁能进入。你可以保留旧试验单秘密，但不能把壁钟读数当作与司机记录等价的时间。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你可以保留旧试验单秘密"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "lt_duan_yan_s2_1",
-      "type": "memory",
-      "content": "你回想试验间外的视线：21:51左右，任瑞从公务室方向经过门外，左手抓着自己的橙线修补手套。玻璃反光使你没看清手里是否有锤子，因此你只能提供方向和衣着，不应把它说成目击杀人。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你回想试验间外的视线",
-        "21:51左右",
-        "任瑞从公务室方向经过门外",
-        "左手抓着自己的橙线修补手套",
-        "玻璃反光使你没看清手里是否有锤子",
-        "因此你只能提供方向和衣着",
-        "不应把它说成目击杀人"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "lt_duan_yan_s2_2",
-      "type": "fact",
-      "content": "你曾维修公务室外锁：它只能从走廊用总钥匙旋锁，内侧没有乘客可用的锁钮，封条只覆盖门缝而不覆盖薄纸文书口。贴上封条只证明门后来未打开，不证明贴条时室内的人活着。你知道机械结构，但没有携带该门总钥匙。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你曾维修公务室外锁",
-        "它只能从走廊用总钥匙旋锁",
-        "内侧没有乘客可用的锁钮",
-        "封条只覆盖门缝而不覆盖薄纸文书口",
-        "贴上封条只证明门后来未打开",
-        "不证明贴条时室内的人活着",
-        "你知道机械结构",
-        "但没有携带该门总钥匙"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "lt_duan_yan_s2_3",
-      "type": "objective",
-      "content": "把外锁结构和封条的证明范围讲清楚，推动复核贴条前的站台时段。用自己的试验记录接受质询，而不是要求别人相信你的职业判断。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "把外锁结构和封条的证明范围讲清楚",
-        "推动复核贴条前的站台时段",
-        "用自己的试验记录接受质询",
-        "而不是要求别人相信你的职业判断"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "lt_duan_yan_s3_1",
-      "type": "memory",
-      "content": "你保留了旧件出库相册：真正的新批继电器编号印在壳体金属上，旧件另贴的纸标签不能替代它。任瑞当年让你只填纸标签号码。你愿意把相册目录交出，这会证明你参与过不实补签，也能帮助核对魏舟调查的动机。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你保留了旧件出库相册",
-        "旧件另贴的纸标签不能替代它",
-        "任瑞当年让你只填纸标签号码",
-        "你愿意把相册目录交出",
-        "这会证明你参与过不实补签",
-        "也能帮助核对魏舟调查的动机"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "lt_duan_yan_s3_2",
-      "type": "fact",
-      "content": "H-7验车锤是公用工具，借出时有登记，不是只有你能使用的私人凶器。你知道它锤头有两条平行浅槽；如果它后来沾血，必须核对领用、归还和现场损伤，而不能只因它原属检修班就指认你。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "7验车锤是公用工具",
-        "借出时有登记",
-        "不是只有你能使用的私人凶器",
-        "你知道它锤头有两条平行浅槽",
-        "如果它后来沾血",
-        "必须核对领用",
-        "归还和现场损伤",
-        "而不能只因它原属检修班就指认你"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "lt_duan_yan_s3_3",
-      "type": "objective",
-      "content": "公开你补签旧单的责任，并核对实际工具的归还时刻。将设备时间、票据时间和目击时间分列，寻找能够相互验证的记录。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "公开你补签旧单的责任",
-        "并核对实际工具的归还时刻",
-        "将设备时间",
-        "票据时间和目击时间分列",
-        "寻找能够相互验证的记录"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "lt_duan_yan_s4_1",
-      "type": "memory",
-      "content": "你记起魏舟最后一次向你确认的不是“是否杀了人”，而是“愿不愿意把原件交回来”。你已经在21:46把原试验储存卡投入有摄像的交接柜，后来无法删除。你愿以此解释自己为何没有必要杀他来灭口，但动机轻重仍不能代替不在场证据。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你记起魏舟最后一次向你确认的不是",
-        "是否杀了人",
-        "而是",
-        "愿不愿意把原件交回来",
-        "后来无法删除",
-        "但动机轻重仍不能代替不在场证据"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "lt_duan_yan_s4_2",
-      "type": "objective",
-      "content": "最终说明袭击窗口、外锁的形成顺序和票据的时间来源。核对完整试验室影像后，你可以洗清杀人嫌疑，同时承认自己在旧检验中的失职；两件事必须分别处理。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "最终说明袭击窗口",
-        "外锁的形成顺序和票据的时间来源",
-        "核对完整试验室影像后",
-        "你可以洗清杀人嫌疑",
-        "同时承认自己在旧检验中的失职",
-        "两件事必须分别处理"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "lt_ren_rui_s1_1",
-      "type": "fact",
-      "content": "你是凶手。你长期把报废信号继电器换上新标签报销，将价差转入你控制的供应账户。魏舟找到金属编号与发票的差异，今晚要求你21:49在公务室解释。21:42你从段砚处借到H-7验车锤；21:49进入公务室，21:50趁魏舟低头核对材料，用锤子击打其后头部。他倒下后你摸到他不再回应，把文件塞回桌下。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你是凶手",
-        "将价差转入你控制的供应账户",
-        "魏舟找到金属编号与发票的差异",
-        "今晚要求你21:49在公务室解释",
-        "21:42你从段砚处借到H",
-        "7验车锤",
-        "21:49进入公务室",
-        "21:50趁魏舟低头核对材料",
-        "用锤子击打其后头部",
-        "他倒下后你摸到他不再回应",
-        "把文件塞回桌下"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "lt_ren_rui_s1_2",
-      "type": "memory",
-      "content": "21:51你走出房间，将H-7放回走廊工具柜；21:52用总钥匙从外面锁门，21:54叫唐枢在门外见证贴条，称魏舟要求独处写报告。唐枢没有看到室内。21:56你把公务票据设备时钟调快十八分钟，复制魏舟旧确认单上的签名图，打印出22:14“车内核验完成”票据；21:57将票据从薄纸文书口送进室内，称他稍后会完成核验。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "21:51你走出房间",
-        "将H",
-        "7放回走廊工具柜",
-        "21:52用总钥匙从外面锁门",
-        "21:54叫唐枢在门外见证贴条",
-        "称魏舟要求独处写报告",
-        "唐枢没有看到室内",
-        "复制魏舟旧确认单上的签名图",
-        "打印出22:14",
-        "车内核验完成",
-        "票据",
-        "称他稍后会完成核验"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "lt_ren_rui_s1_3",
-      "type": "objective",
-      "content": "强调22:14你在公开验票，诱使众人假定封条贴上后魏舟还活着。你知道工具柜有归还记录，却以为只记录开柜而未拍清你的脸；不要声称其他角色一定没有不在场记录。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "强调22:14你在公开验票",
-        "诱使众人假定封条贴上后魏舟还活着",
-        "你知道工具柜有归还记录",
-        "却以为只记录开柜而未拍清你的脸"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "lt_ren_rui_s2_1",
-      "type": "memory",
-      "content": "你听见段砚试验间的提示音时正在离开公务室。杀人时左手橙色修补线手套被魏舟抓了一下，离开后你把手套收回外套内袋，没有换给别人。你知道这可能留下接触痕迹，不能假设它已被检验。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "离开后你把手套收回外套内袋",
-        "没有换给别人",
-        "你知道这可能留下接触痕迹",
-        "不能假设它已被检验"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "lt_ren_rui_s2_2",
-      "type": "fact",
-      "content": "你掌握的是正常外锁和贴条权，不存在隐藏通道、遥控杀人或远程开启封条机关。你制造的所谓密室只是一间在杀人后才被锁上的办公室。你的22:14验票确实有目击者，但那并不覆盖21:50。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你掌握的是正常外锁和贴条权",
-        "不存在隐藏通道",
-        "遥控杀人或远程开启封条机关",
-        "你的22:14验票确实有目击者",
-        "但那并不覆盖21:50"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "lt_ren_rui_s2_3",
-      "type": "objective",
-      "content": "以唐枢盗取旧访客牌、段砚补签检验单作为疑点，争取把问题停留在手续争议；若有人展示了完整站台记录，须回应具体时段，不得虚构新车厢通路。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "以唐枢盗取旧访客牌",
-        "段砚补签检验单作为疑点",
-        "争取把问题停留在手续争议",
-        "若有人展示了完整站台记录",
-        "须回应具体时段",
-        "不得虚构新车厢通路"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "lt_ren_rui_s3_1",
-      "type": "memory",
-      "content": "公务票据设备的偏移设置会留下不可覆盖的“修改前后时间及司机基准时间”日志，你此前只见过打印面，误以为把数字调快就能骗过全部记录。你也知道本日发给你的纸卷属于站内S批，车内机使用B批；伪造的签名来自魏舟上周确认单同一张扫描图。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "修改前后时间及司机基准时间",
-        "日志",
-        "你此前只见过打印面",
-        "误以为把数字调快就能骗过全部记录",
-        "车内机使用B批"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "lt_ren_rui_s3_2",
-      "type": "fact",
-      "content": "供应账户由你实际控制，段砚曾参与补签，却没有获取换件价差。魏舟既掌握账目，也让段砚交出原件；你担心被取消职务并追究长期侵吞，才选择以暴力阻止公开。账目动机并不需要别人配合。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "供应账户由你实际控制",
-        "段砚曾参与补签",
-        "却没有获取换件价差",
-        "魏舟既掌握账目",
-        "也让段砚交出原件",
-        "你担心被取消职务并追究长期侵吞",
-        "才选择以暴力阻止公开",
-        "账目动机并不需要别人配合"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "lt_ren_rui_s3_3",
-      "type": "objective",
-      "content": "面对票据来源和设备日志，可以辩解为提前预打，却必须解释为何署上魏舟签名、放入已封公务室。你可以选择承认造假，不能把造假时间说成真正的存活证据。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "面对票据来源和设备日志",
-        "可以辩解为提前预打",
-        "却必须解释为何署上魏舟签名",
-        "放入已封公务室",
-        "你可以选择承认造假",
-        "不能把造假时间说成真正的存活证据"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "lt_ren_rui_s4_1",
-      "type": "memory",
-      "content": "你最后一次整理衣袋时发现手套橙线少了半截。你记得21:51归还工具时曾用这只手套包住锤头，橙线有可能留在沟槽中。你在21:54封门、22:14验票都是公开动作，最危险的是别人把这些动作与21:50袭击分开核对。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "橙线有可能留在沟槽中",
-        "你在21:54封门",
-        "22:14验票都是公开动作"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "lt_ren_rui_s4_2",
-      "type": "objective",
-      "content": "最终回应工具归还影像、接触痕迹与未借出的通行牌。你可以继续主张别人冒用，但没有证据时不得把冒用说成既定事实；如果承认，需交代杀人早于锁门及假票据的完整顺序。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "最终回应工具归还影像",
-        "接触痕迹与未借出的通行牌",
-        "你可以继续主张别人冒用",
-        "如果承认"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "lt_bai_jing_s1_1",
-      "type": "memory",
-      "content": "哥哥三年前在信号故障事故中死亡。你花钱从唐枢处购买旧检验目录，他21:46还交给你一枚早已失效的访客牌V-03，想让你拍下来证明自己曾接触档案。你没有用它进公务室，也知道这笔交易违规。魏舟曾约你到终点后做采访，你对他是否真愿意公开一直有怀疑。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "哥哥三年前在信号故障事故中死亡",
-        "你花钱从唐枢处购买旧检验目录",
-        "03",
-        "想让你拍下来证明自己曾接触档案",
-        "你没有用它进公务室",
-        "也知道这笔交易违规",
-        "魏舟曾约你到终点后做采访",
-        "你对他是否真愿意公开一直有怀疑"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "lt_bai_jing_s1_2",
-      "type": "fact",
-      "content": "21:48:40至21:53:00，你在站台新闻隔间录一段出发前的视频口播，固定镜头拍到全身与唯一出口。21:55你返回车内。22:14你在前排看到任瑞验票，他告诉你魏舟正在独立核验，不许采访。你只能证明这一时刻任瑞的位置。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "固定镜头拍到全身与唯一出口",
-        "21:55你返回车内",
-        "22:14你在前排看到任瑞验票",
-        "他告诉你魏舟正在独立核验",
-        "不许采访",
-        "你只能证明这一时刻任瑞的位置"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "lt_bai_jing_s1_3",
-      "type": "objective",
-      "content": "不要先把买来的目录当作完整事故报告。先核对列车行驶路径及封门流程，再追查谁利用“公务保密”阻止别人确认魏舟状态。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "先核对列车行驶路径及封门流程",
-        "再追查谁利用",
-        "公务保密",
-        "阻止别人确认魏舟状态"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "lt_bai_jing_s2_1",
-      "type": "memory",
-      "content": "你站在新闻隔间时，麦克风录到远处一次金属碰响，但当时你正在说话，无法准确判断声源。自己的口播文件带有连续画面，比零散听觉记忆更适合核对行踪。你愿意提供完整原文件，不只提供有利片段。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你站在新闻隔间时",
-        "麦克风录到远处一次金属碰响",
-        "但当时你正在说话",
-        "无法准确判断声源",
-        "自己的口播文件带有连续画面",
-        "比零散听觉记忆更适合核对行踪",
-        "你愿意提供完整原文件",
-        "不只提供有利片段"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "lt_bai_jing_s2_2",
-      "type": "fact",
-      "content": "你拍摄的V-03卡片背面写“临时访客，注销后不可办理公务室通行”。你没有改写权限；唐枢交给你卡片也不代表他借走了列车长的有效职工牌。若有人混用这两个编号，应要求出示实际通行记录。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你拍摄的V",
-        "03卡片背面写",
-        "临时访客",
-        "注销后不可办理公务室通行",
-        "你没有改写权限",
-        "若有人混用这两个编号",
-        "应要求出示实际通行记录"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "lt_bai_jing_s2_3",
-      "type": "objective",
-      "content": "查明贴封条是否包含确认活人的步骤；区分真实录像、失效访客牌和有意夸大的声称。可以承认买资料，不必替唐枢编造不在场。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "查明贴封条是否包含确认活人的步骤",
-        "区分真实录像",
-        "失效访客牌和有意夸大的声称",
-        "可以承认买资料",
-        "不必替唐枢编造不在场"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "lt_bai_jing_s3_1",
-      "type": "memory",
-      "content": "21:56回车厢取相机时，你看见任瑞拿着橙色公务票据机在前台按数字轮，旁边放着魏舟上周的确认单。你当时以为是校准工作，没有看到打印纸上最终的时间；这是一次有限目击，需要设备日志核对。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "21:56回车厢取相机时",
-        "旁边放着魏舟上周的确认单",
-        "你当时以为是校准工作",
-        "没有看到打印纸上最终的时间",
-        "这是一次有限目击",
-        "需要设备日志核对"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "lt_bai_jing_s3_2",
-      "type": "fact",
-      "content": "你保存的一份上周采访材料含魏舟手写签字原图，第二个字末笔下有一颗扫描灰点。如果新票据连同灰点都一模一样，说明签名图被复制，不能直接证明他本人刚刚签署。你只能提供对照材料，不可预先宣称检验已经完成。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "第二个字末笔下有一颗扫描灰点",
-        "如果新票据连同灰点都一模一样",
-        "说明签名图被复制",
-        "不能直接证明他本人刚刚签署",
-        "你只能提供对照材料",
-        "不可预先宣称检验已经完成"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "lt_bai_jing_s3_3",
-      "type": "objective",
-      "content": "用签字对照、纸卷来源与时钟日志复核那张22:14票据。报道草稿必须把谁提供了材料写清楚，避免把任瑞讲的程序直接当作事实。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "用签字对照",
-        "报道草稿必须把谁提供了材料写清楚",
-        "避免把任瑞讲的程序直接当作事实"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "lt_bai_jing_s4_1",
-      "type": "memory",
-      "content": "你为了推动事故调查，曾在报道草稿写“段砚卖了所有人的命”，却没有证实她收钱。魏舟下午要求你修改这一段。你现在可以撤回这个未经证实的判断，保留对旧检验失职的调查。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你为了推动事故调查",
-        "曾在报道草稿写",
-        "段砚卖了所有人的命",
-        "却没有证实她收钱",
-        "魏舟下午要求你修改这一段",
-        "你现在可以撤回这个未经证实的判断",
-        "保留对旧检验失职的调查"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "lt_bai_jing_s4_2",
-      "type": "objective",
-      "content": "最终公开能验证自己的连续视频，并把不利于既有报道的证据一起保留。判断谁在袭击窗口有机会、谁留下独立接触痕迹；你的哥哥之死解释追查动机，不能决定今晚的凶手。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "最终公开能验证自己的连续视频",
-        "并把不利于既有报道的证据一起保留",
-        "判断谁在袭击窗口有机会",
-        "谁留下独立接触痕迹",
-        "你的哥哥之死解释追查动机",
-        "不能决定今晚的凶手"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "lt_tao_wen_s1_1",
-      "type": "memory",
-      "content": "你与魏舟半年前分手，他尚未归还借去的店铺垫款。21:40你在门口交给他一张“最后一晚，必须结清”的便条，话语激烈，但没有进去。他承诺到终点后转账。你没有携带毒物或凶器，这句话中的“最后一晚”指末班运营和还款期限。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你与魏舟半年前分手",
-        "他尚未归还借去的店铺垫款",
-        "21:40你在门口交给他一张",
-        "最后一晚",
-        "必须结清",
-        "的便条",
-        "话语激烈",
-        "但没有进去",
-        "他承诺到终点后转账",
-        "你没有携带毒物或凶器",
-        "这句话中的",
-        "指末班运营和还款期限"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "lt_tao_wen_s1_2",
-      "type": "fact",
-      "content": "21:48:20至21:53:40，你在后部冷餐备货间称量封装餐盒，顶摄一直看到你；账单打印机与司机运行记录同源。任瑞曾在开工前托你用橙线缝他的左手套，并把补好的手套直接取走。22:14你正在餐车出餐，没看见公务室内部。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你在后部冷餐备货间称量封装餐盒",
-        "顶摄一直看到你",
-        "账单打印机与司机运行记录同源",
-        "并把补好的手套直接取走",
-        "22:14你正在餐车出餐",
-        "没看见公务室内部"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "lt_tao_wen_s1_3",
-      "type": "objective",
-      "content": "查清死亡方式，不要让别人只凭讨债字句推定你杀人。提供备货线索，也留意任何把工作票据当成当事人亲自到场的推理。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "查清死亡方式",
-        "不要让别人只凭讨债字句推定你杀人",
-        "提供备货线索"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "lt_tao_wen_s2_1",
-      "type": "memory",
-      "content": "你在21:47回备货间之前，看到魏舟拿着文件独自往公务室走，手中没有餐饮。他说“等我谈完这笔账”。你没有看见后来谁进室，因此这条记忆只支持他当时还活着。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你在21:47回备货间之前",
-        "看到魏舟拿着文件独自往公务室走",
-        "手中没有餐饮",
-        "他说",
-        "等我谈完这笔账",
-        "你没有看见后来谁进室",
-        "因此这条记忆只支持他当时还活着"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "lt_tao_wen_s2_2",
-      "type": "fact",
-      "content": "餐车与公务室相隔两个可见走廊出口，备货间镜头覆盖唯一门。你没有借任瑞的职工牌或总钥匙。你的冷餐封条与公务室封条属于不同编号，不能互相替代；你愿意交出剩余封装材料供核对。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "餐车与公务室相隔两个可见走廊出口",
-        "备货间镜头覆盖唯一门",
-        "你没有借任瑞的职工牌或总钥匙",
-        "不能互相替代",
-        "你愿意交出剩余封装材料供核对"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "lt_tao_wen_s2_3",
-      "type": "objective",
-      "content": "公开便条的实际含义，要求他人用现场损伤与实物核对指控。请把你的工作记录与贴门封条的记录分开讨论。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "公开便条的实际含义",
-        "要求他人用现场损伤与实物核对指控"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "lt_tao_wen_s3_1",
-      "type": "memory",
-      "content": "你缝任瑞手套时用了橙色棉线，左拇指根部是七针交叉缝；其余工作人员的公发手套原来都没有这个补丁。任瑞21:35当着你取走并戴上。你不能知道手套后来沾了什么，只能指出可对照的位置和针法。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你缝任瑞手套时用了橙色棉线",
-        "左拇指根部是七针交叉缝",
-        "任瑞21:35当着你取走并戴上",
-        "你不能知道手套后来沾了什么",
-        "只能指出可对照的位置和针法"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "lt_tao_wen_s3_2",
-      "type": "fact",
-      "content": "你另存魏舟下午交来的还款计划邮件，写明款项下周到账；你虽不满意，但同意当晚补签结清日期。便条措辞尖锐不等于你拒绝安排。这个邮件解释动机背景，真正的不在场仍需完整备货影像。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你另存魏舟下午交来的还款计划邮件",
-        "写明款项下周到账",
-        "你虽不满意",
-        "但同意当晚补签结清日期",
-        "便条措辞尖锐不等于你拒绝安排",
-        "这个邮件解释动机背景",
-        "真正的不在场仍需完整备货影像"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "lt_tao_wen_s3_3",
-      "type": "objective",
-      "content": "若取得手套或工具，帮助核对橙线补丁，但先区分亲手所见与检验结论。你可以要求公布还款邮件，避免把感情秘密继续当作案件核心。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "若取得手套或工具",
-        "帮助核对橙线补丁",
-        "但先区分亲手所见与检验结论",
-        "你可以要求公布还款邮件",
-        "避免把感情秘密继续当作案件核心"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "lt_tao_wen_s4_1",
-      "type": "memory",
-      "content": "你记得手套交还后曾拍一张完工照片给任瑞，照片连同21:35消息保留了完整七针补丁。今晚他没有把手套再拿回来维修；若现在缺线，可以用完工照片作案前对照，但不能仅凭少线就认定凶手。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "今晚他没有把手套再拿回来维修",
-        "若现在缺线",
-        "可以用完工照片作案前对照",
-        "但不能仅凭少线就认定凶手"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "lt_tao_wen_s4_2",
-      "type": "objective",
-      "content": "用连续备货影像排除自己，再将针线对照交给共同讨论。接受魏舟已无法还款的事实，与其他人一起保全记录；最终指认应由机会与接触物证共同支持。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "用连续备货影像排除自己",
-        "再将针线对照交给共同讨论",
-        "接受魏舟已无法还款的事实",
-        "与其他人一起保全记录"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "lt_tang_shu_s1_1",
-      "type": "memory",
-      "content": "你为了偿还家中债务，私下将旧检验目录卖给白镜。21:45你拿走已注销的访客牌V-03，21:46交给她拍照，未借过任瑞的有效职工牌。你知道此事可能影响退休，最初只想说自己在搬行李。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你为了偿还家中债务",
-        "私下将旧检验目录卖给白镜",
-        "21:45你拿走已注销的访客牌V",
-        "03",
-        "21:46交给她拍照",
-        "未借过任瑞的有效职工牌",
-        "你知道此事可能影响退休",
-        "最初只想说自己在搬行李"
-      ],
-      "owner": "lt_tang_shu"
-    },
-    {
-      "id": "lt_tang_shu_s1_2",
-      "type": "fact",
-      "content": "21:48:35至21:54:20，你在站台唯一行李升降台连续操作，摄像拍到全程；21:54升降台旁就是公务室外门，你在不离开镜头的位置见证任瑞贴封。任瑞说魏舟要独处写报告，你只看见门外锁好，没有透过窗确认人是否活着。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你在站台唯一行李升降台连续操作",
-        "摄像拍到全程",
-        "21:54升降台旁就是公务室外门",
-        "你在不离开镜头的位置见证任瑞贴封",
-        "任瑞说魏舟要独处写报告",
-        "你只看见门外锁好",
-        "没有透过窗确认人是否活着"
-      ],
-      "owner": "lt_tang_shu"
-    },
-    {
-      "id": "lt_tang_shu_s1_3",
-      "type": "objective",
-      "content": "不要把“看见贴条”说成“看见魏舟还活着”。先解释封条交接，再决定是否承认目录和访客牌交易，避免伪装成你从未接触过任何卡片。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "不要把",
-        "看见贴条",
-        "说成",
-        "看见魏舟还活着",
-        "先解释封条交接",
-        "再决定是否承认目录和访客牌交易",
-        "避免伪装成你从未接触过任何卡片"
-      ],
-      "owner": "lt_tang_shu"
-    },
-    {
-      "id": "lt_tang_shu_s2_1",
-      "type": "memory",
-      "content": "当你见证贴条时，魏舟没有出声回应，任瑞说督查纪律禁止打扰。门上观察窗的帘子从里面被放下，你并未掀开。你以前见证的流程通常只登记门锁和封条编号，不包含生命状态确认。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "当你见证贴条时",
-        "魏舟没有出声回应",
-        "任瑞说督查纪律禁止打扰",
-        "门上观察窗的帘子从里面被放下",
-        "你并未掀开",
-        "不包含生命状态确认"
-      ],
-      "owner": "lt_tang_shu"
-    },
-    {
-      "id": "lt_tang_shu_s2_2",
-      "type": "fact",
-      "content": "你能辨认当晚封条F-62的纸纤维和压印；你保管的是备用封条，不是公务室总钥匙。若F-62后来完整，也只能证明封完之后未从门口进入，不排除封前发生袭击。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你能辨认当晚封条F",
-        "62的纸纤维和压印",
-        "你保管的是备用封条",
-        "不是公务室总钥匙",
-        "若F",
-        "62后来完整",
-        "也只能证明封完之后未从门口进入",
-        "不排除封前发生袭击"
-      ],
-      "owner": "lt_tang_shu"
-    },
-    {
-      "id": "lt_tang_shu_s2_3",
-      "type": "objective",
-      "content": "更正任何把你签名理解为“21:54人还活着”的说法。向白镜问清访客牌去向，但不得要求她删掉照片替你掩盖违规。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "更正任何把你签名理解为",
-        "21:54人还活着",
-        "的说法",
-        "向白镜问清访客牌去向",
-        "但不得要求她删掉照片替你掩盖违规"
-      ],
-      "owner": "lt_tang_shu"
-    },
-    {
-      "id": "lt_tang_shu_s3_1",
-      "type": "memory",
-      "content": "你多次搬运票据纸卷，知道站内领用卷的背纹为S、车内卷为B，领用单各自编号。21:30你把S-19卷和橙色公务机交给任瑞，他签了保管单；你没有操作机器或替魏舟签字。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "你多次搬运票据纸卷",
-        "知道站内领用卷的背纹为S",
-        "车内卷为B",
-        "领用单各自编号",
-        "21:30你把S",
-        "19卷和橙色公务机交给任瑞",
-        "他签了保管单",
-        "你没有操作机器或替魏舟签字"
-      ],
-      "owner": "lt_tang_shu"
-    },
-    {
-      "id": "lt_tang_shu_s3_2",
-      "type": "fact",
-      "content": "卖给白镜的目录只有旧检验项目名称，不含供应收款账户或原始工具记录。你不能用它证明谁杀了人，也不能说白镜已经掌握全部事故真相。你盗走的V-03在交接时已失效，编号与任瑞当天R-01职工牌不同。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "卖给白镜的目录只有旧检验项目名称",
-        "不含供应收款账户或原始工具记录",
-        "你不能用它证明谁杀了人",
-        "也不能说白镜已经掌握全部事故真相",
-        "你盗走的V",
-        "03在交接时已失效",
-        "编号与任瑞当天R",
-        "01职工牌不同"
-      ],
-      "owner": "lt_tang_shu"
-    },
-    {
-      "id": "lt_tang_shu_s3_3",
-      "type": "objective",
-      "content": "核对纸卷、机器归属和有效牌记录。承认你实际做过的偷拿与出售，把它们与总钥匙、工具领用和杀人时段分开。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "核对纸卷",
-        "机器归属和有效牌记录",
-        "承认你实际做过的偷拿与出售",
-        "把它们与总钥匙",
-        "工具领用和杀人时段分开"
-      ],
-      "owner": "lt_tang_shu"
-    },
-    {
-      "id": "lt_tang_shu_s4_1",
-      "type": "memory",
-      "content": "你一度以为只要封条无破损就能证明自己没有疏漏，现在知道你真正缺少的是封前状态确认。行李台录像完整保留你见证贴条的动作和位置，也能核对你没有进入公务室。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "也能核对你没有进入公务室"
-      ],
-      "owner": "lt_tang_shu"
-    },
-    {
-      "id": "lt_tang_shu_s4_2",
-      "type": "objective",
-      "content": "最终交代封条见证的边界，不替任瑞背书。你仍需为私卖资料负责，但不应接受没有证据的杀人指控；向共同讨论提供完整行李台视频编号。",
-      "visibility": "private",
-      "core": false,
-      "keywords": [
-        "最终交代封条见证的边界",
-        "不替任瑞背书",
-        "你仍需为私卖资料负责",
-        "但不应接受没有证据的杀人指控",
-        "向共同讨论提供完整行李台视频编号"
-      ],
-      "owner": "lt_tang_shu"
-    },
-    {
-      "id": "f_lt_duan_yan_identity",
-      "type": "identity",
-      "content": "信号检修工程师，随末班列车接受例行复核，负责当晚出库的联锁试验。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "信号检修工程师",
-        "随末班列车接受例行复核",
-        "负责当晚出库的联锁试验"
-      ],
-      "owner": "lt_duan_yan"
-    },
-    {
-      "id": "f_lt_ren_rui_identity",
-      "type": "identity",
-      "content": "末班列车的列车长，持有公务室总钥匙、当晚公务票据设备及封条。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "末班列车的列车长",
-        "持有公务室总钥匙",
-        "当晚公务票据设备及封条"
-      ],
-      "owner": "lt_ren_rui"
-    },
-    {
-      "id": "f_lt_bai_jing_identity",
-      "type": "identity",
-      "content": "地方报社记者，持票乘坐末班列车，正在调查三年前的信号故障事故。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "地方报社记者",
-        "持票乘坐末班列车",
-        "正在调查三年前的信号故障事故"
-      ],
-      "owner": "lt_bai_jing"
-    },
-    {
-      "id": "f_lt_tao_wen_identity",
-      "type": "identity",
-      "content": "餐车领班，魏舟的前伴侣；当晚负责末班车冷餐备货。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "餐车领班",
-        "魏舟的前伴侣",
-        "当晚负责末班车冷餐备货"
-      ],
-      "owner": "lt_tao_wen"
-    },
-    {
-      "id": "f_lt_tang_shu_identity",
-      "type": "identity",
-      "content": "即将退休的行李员，熟悉站台和公务室封条交接；为末班列车见证贴封。",
-      "visibility": "public",
-      "core": false,
-      "keywords": [
-        "即将退休的行李员",
-        "熟悉站台和公务室封条交接",
-        "为末班列车见证贴封"
-      ],
-      "owner": "lt_tang_shu"
-    }
-  ],
-  "timeline_true": [
-    "21:30 唐枢将橙色公务票据机与S-19纸卷交任瑞，签领用单。",
-    "21:35 陶闻交还缝好的左手套，任瑞戴走；完工照片记录完整七针橙色补丁。",
-    "21:40 陶闻在公务室门口递讨债便条，未进室。",
-    "21:42 任瑞从段砚处借H-7双槽验车锤，未立即归还。",
-    "21:45 唐枢取走已注销的V-03访客牌；近室区域闸门关闭，司机处于连续视频覆盖的驾驶室。",
-    "21:46 唐枢将V-03和旧目录交白镜；段砚把原试验卡交入有摄像的储存柜。",
-    "21:48:20 陶闻开始连续可见的冷餐备货。",
-    "21:48:30 段砚开始连续可见的双手联锁试验。",
-    "21:48:35 唐枢开始连续可见的行李台操作。",
-    "21:48:40 白镜开始连续全身可见的视频口播。",
-    "21:48:45 站台视频记录魏舟活着独自进入公务室。",
-    "21:49:05 任瑞持R-01进入公务室，通行记录与本人影像对应。",
-    "21:49:30 应急台缓存录到魏舟指出旧件金属编号问题。",
-    "21:50:03 任瑞用H-7袭击魏舟，缓存录到撞击、倒椅、痛呼；魏舟抓断手套橙线。",
-    "21:51:08 任瑞离开公务室。",
-    "21:51:25 任瑞用左手套包着H-7锤头放回归还柜，柜自锁后至取证未再打开。",
-    "21:52:10 任瑞用总钥匙从走廊正常锁闭公务室。",
-    "21:53:00至21:53:40 白镜、段砚、陶闻先后结束各自完整视频记录，返回车内职责位置。",
-    "21:54:00 任瑞贴F-62封条；唐枢在行李台原位见证门锁和编号，未确认魏舟状态。",
-    "21:54:20 唐枢完成行李台连续操作。",
-    "21:56:10 任瑞将公务票据机本地时间调快十八分钟，选入魏舟上周签名扫描图。",
-    "21:56:24 票据打印为22:14核验完成，实际仍在发车前。",
-    "21:57 任瑞经薄纸文书口将伪造票据送进已封室内，未动封条。",
-    "22:00 末班列车出站，至22:32无中途停靠或上下车。",
-    "22:14 任瑞在前排公开验票，建立真实但不覆盖袭击窗口的不在场。",
-    "22:32 公务室呼叫持续无回应，列车停检查点；五人共同见证拆封，发现魏舟尸体及票据。",
-    "22:34 任瑞在五人面前交出本人外套内袋的手套并签封。",
-    "22:40 工具柜首次开启共同取证，H-7、手套、声音、视频与纸卷记录进入核对。",
-    "三年前至今 任瑞以新标签掩盖报废旧件并报销，控制供应账户侵吞价差；段砚在压力下补签一份不完整检验单。",
-    "当日下午 魏舟约任瑞解释采购差异，要求段砚提交原始记录，并向陶闻提出还款安排。"
-  ],
-  "characters": [
-    {
-      "id": "lt_duan_yan",
-      "name": "段砚",
-      "role": "信号检修工程师，随末班列车接受例行复核，负责当晚出库的联锁试验。",
-      "public_identity": "信号检修工程师，随末班列车接受例行复核，负责当晚出库的联锁试验。",
-      "public_profile": "信号检修工程师，随末班列车接受例行复核，负责当晚出库的联锁试验。",
-      "personality": "直截了当，遇到技术推断会要求复核原始数据；讨厌靠身份压人，却对过去的妥协心怀愧疚。",
-      "speaking_style": "直截了当，遇到技术推断会要求复核原始数据；讨厌靠身份压人，却对过去的妥协心怀愧疚。",
-      "lexicon": "",
-      "backstory": "查清督查员魏舟的死因，保住真实检修记录；你曾在任瑞施压下补签一份并未完成的旧试验单，害怕因此背负杀人嫌疑。",
-      "goals": [
-        "查清督查员魏舟的死因，保住真实检修记录；你曾在任瑞施压下补签一份并未完成的旧试验单，害怕因此背负杀人嫌疑。"
-      ],
-      "known_fact_ids": [
-        "lt_duan_yan_s1_1",
-        "lt_duan_yan_s1_2",
-        "lt_duan_yan_s1_3",
-        "lt_duan_yan_s2_1",
-        "lt_duan_yan_s2_2",
-        "lt_duan_yan_s2_3",
-        "lt_duan_yan_s3_1",
-        "lt_duan_yan_s3_2",
-        "lt_duan_yan_s3_3",
-        "lt_duan_yan_s4_1",
-        "lt_duan_yan_s4_2"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "lt_ren_rui",
-      "name": "任瑞",
-      "role": "末班列车的列车长，持有公务室总钥匙、当晚公务票据设备及封条。",
-      "public_identity": "末班列车的列车长，持有公务室总钥匙、当晚公务票据设备及封条。",
-      "public_profile": "末班列车的列车长，持有公务室总钥匙、当晚公务票据设备及封条。",
-      "personality": "稳重、善于调度，习惯把自己的叙述包装成既定流程；压力下会反复引用所谓手续齐全。",
-      "speaking_style": "稳重、善于调度，习惯把自己的叙述包装成既定流程；压力下会反复引用所谓手续齐全。",
-      "lexicon": "",
-      "backstory": "掩盖你在发车前杀害魏舟的事实，用22:14票据把调查导向行车时段；阻止旧件冒充新件的账目被公开。",
-      "goals": [
-        "掩盖你在发车前杀害魏舟的事实，用22:14票据把调查导向行车时段；阻止旧件冒充新件的账目被公开。"
-      ],
-      "known_fact_ids": [
-        "lt_ren_rui_s1_1",
-        "lt_ren_rui_s1_2",
-        "lt_ren_rui_s1_3",
-        "lt_ren_rui_s2_1",
-        "lt_ren_rui_s2_2",
-        "lt_ren_rui_s2_3",
-        "lt_ren_rui_s3_1",
-        "lt_ren_rui_s3_2",
-        "lt_ren_rui_s3_3",
-        "lt_ren_rui_s4_1",
-        "lt_ren_rui_s4_2"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": true
-    },
-    {
-      "id": "lt_bai_jing",
-      "name": "白镜",
-      "role": "地方报社记者，持票乘坐末班列车，正在调查三年前的信号故障事故。",
-      "public_identity": "地方报社记者，持票乘坐末班列车，正在调查三年前的信号故障事故。",
-      "public_profile": "地方报社记者，持票乘坐末班列车，正在调查三年前的信号故障事故。",
-      "personality": "敏锐、咄咄逼人，容易把揭露欲望当成事实；愿意公开材料来源时才真正获得可信度。",
-      "speaking_style": "敏锐、咄咄逼人，容易把揭露欲望当成事实；愿意公开材料来源时才真正获得可信度。",
-      "lexicon": "",
-      "backstory": "找到哥哥所涉事故的原始记录，避免唐枢向你私售旧资料的事情被当成杀人交易；你没有杀害魏舟。",
-      "goals": [
-        "找到哥哥所涉事故的原始记录，避免唐枢向你私售旧资料的事情被当成杀人交易；你没有杀害魏舟。"
-      ],
-      "known_fact_ids": [
-        "lt_bai_jing_s1_1",
-        "lt_bai_jing_s1_2",
-        "lt_bai_jing_s1_3",
-        "lt_bai_jing_s2_1",
-        "lt_bai_jing_s2_2",
-        "lt_bai_jing_s2_3",
-        "lt_bai_jing_s3_1",
-        "lt_bai_jing_s3_2",
-        "lt_bai_jing_s3_3",
-        "lt_bai_jing_s4_1",
-        "lt_bai_jing_s4_2"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "lt_tao_wen",
-      "name": "陶闻",
-      "role": "餐车领班，魏舟的前伴侣；当晚负责末班车冷餐备货。",
-      "public_identity": "餐车领班，魏舟的前伴侣；当晚负责末班车冷餐备货。",
-      "public_profile": "餐车领班，魏舟的前伴侣；当晚负责末班车冷餐备货。",
-      "personality": "克制，习惯把怒气藏在事务里；涉及情感时会回避，但愿意交代可核对的工作过程。",
-      "speaking_style": "克制，习惯把怒气藏在事务里；涉及情感时会回避，但愿意交代可核对的工作过程。",
-      "lexicon": "",
-      "backstory": "取回魏舟拖欠你的店铺垫款，并守住私人关系的边界；你担心讨债便条被认作杀人威胁。",
-      "goals": [
-        "取回魏舟拖欠你的店铺垫款，并守住私人关系的边界；你担心讨债便条被认作杀人威胁。"
-      ],
-      "known_fact_ids": [
-        "lt_tao_wen_s1_1",
-        "lt_tao_wen_s1_2",
-        "lt_tao_wen_s1_3",
-        "lt_tao_wen_s2_1",
-        "lt_tao_wen_s2_2",
-        "lt_tao_wen_s2_3",
-        "lt_tao_wen_s3_1",
-        "lt_tao_wen_s3_2",
-        "lt_tao_wen_s3_3",
-        "lt_tao_wen_s4_1",
-        "lt_tao_wen_s4_2"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    },
-    {
-      "id": "lt_tang_shu",
-      "name": "唐枢",
-      "role": "即将退休的行李员，熟悉站台和公务室封条交接；为末班列车见证贴封。",
-      "public_identity": "即将退休的行李员，熟悉站台和公务室封条交接；为末班列车见证贴封。",
-      "public_profile": "即将退休的行李员，熟悉站台和公务室封条交接；为末班列车见证贴封。",
-      "personality": "重情而圆滑，怕丢掉退休资格；面对记录时会从含糊的“我确认过”逐渐说清自己真正看到了什么。",
-      "speaking_style": "重情而圆滑，怕丢掉退休资格；面对记录时会从含糊的“我确认过”逐渐说清自己真正看到了什么。",
-      "lexicon": "",
-      "backstory": "隐瞒私卖旧检验目录和盗取失效访客牌的行为，同时弄清为什么你见证封条后魏舟仍死在室内。",
-      "goals": [
-        "隐瞒私卖旧检验目录和盗取失效访客牌的行为，同时弄清为什么你见证封条后魏舟仍死在室内。"
-      ],
-      "known_fact_ids": [
-        "lt_tang_shu_s1_1",
-        "lt_tang_shu_s1_2",
-        "lt_tang_shu_s1_3",
-        "lt_tang_shu_s2_1",
-        "lt_tang_shu_s2_2",
-        "lt_tang_shu_s2_3",
-        "lt_tang_shu_s3_1",
-        "lt_tang_shu_s3_2",
-        "lt_tang_shu_s3_3",
-        "lt_tang_shu_s4_1",
-        "lt_tang_shu_s4_2"
-      ],
-      "canon_evidence": [],
-      "timeline": [],
-      "is_victim": false,
-      "is_killer": false
-    }
-  ],
-  "clue_pool": [
-    "lt_clue_lock 公务室门使用外旋总钥匙锁，无内侧锁钮；门口通行牌读取台只记录获准人员的接近，不代替机械钥匙。观察窗帘已放下。封条F-62|logLR:lt_ren_rui=1.5",
-    "lt_clue_body 魏舟倒在桌边，后头部有一次致命钝器损伤，伤痕呈双浅槽；无切割、注射或毒物迹象，桌柜均无会自行倒落的重物。左掌指缝夹着新鲜|logLR:lt_ren_rui=1.5",
-    "lt_clue_route 司机不可编辑的运行记录：22:00列车出站，22:00至22:32持续行驶，22:32因公务室呼叫无回应停在岚岭检查点。|logLR:lt_ren_rui=1.5",
-    "lt_clue_stub 公务室文书筐中有一张“22:14，车内核验完成，魏舟”的票据；签名边缘为点阵图而非笔迹，纸背隐约见S-19批号。票据没有|logLR:lt_ren_rui=1.5",
-    "lt_clue_alive 站台原始连续视频：21:48:45魏舟独自走入公务室，脸部清楚、行动正常，手中是采购文件；21:49:05任瑞从公务室门|logLR:lt_ren_rui=2.0",
-    "lt_clue_seal 外锁记录21:52:10总钥匙旋锁，21:54:00任瑞贴F-62；唐枢在行李台旁签见证，只勾选“门锁、编号确认”，未勾|logLR:lt_ren_rui=2.0",
-    "lt_clue_audio 公务室应急台的原始缓存采用司机基准时间：21:49:30录到魏舟说“这不是新件的金属编号，把旧号贴起来也没用”；21:5|logLR:lt_ren_rui=2.0",
-    "lt_clue_clocks 出库校时单：公务室壁钟慢12分钟，21:00司机基准时壁钟显示20:48，壁钟当晚未被校准；应急台、通行记录及各固定摄像|logLR:lt_ren_rui=2.0",
-    "lt_clue_time_forgery 公务机不可覆盖的设置日志写明：司机基准21:56:10，本地时钟从21:56调至22:14；21:56:24打印核验票据|logLR:lt_ren_rui=2.0",
-    "lt_clue_printer_owner 领用单与前台视频相互印证：21:30任瑞领取橙色公务机及S-19站内纸卷，未转交他人；21:56前台连续视频清楚拍到任瑞|logLR:lt_ren_rui=2.0",
-    "lt_clue_motive 桌下原始采购文件与供应回单互证：旧件金属号仍为K批，纸标签改为N批新件，列车长签字任瑞；价差汇入任瑞控制的供应账户。段砚|logLR:lt_ren_rui=2.0",
-    "lt_clue_tool H-7领用单：21:42段砚将双槽验车锤交任瑞，21:51:25归还柜录到放回动作，录像待末轮完整导出。柜内封存的H-7|logLR:lt_ren_rui=2.0",
-    "lt_clue_duan_alibi 玻璃试验间原始视频与操作记录连续相符：21:48:30至21:53:20段砚的身体与双手始终在镜头中；唯一出口未被开启，|logLR:lt_ren_rui=2.0",
-    "lt_clue_other_alibis 三份原始连续视频与司机基准校时：白镜21:48:40至21:53:00在新闻隔间全身可见，陶闻21:48:20至21:5|logLR:lt_ren_rui=2.0",
-    "lt_clue_access 有效通行原始记录：R-01在21:49:05近室读卡、21:51:08离室读卡，当天领取人任瑞；对应走廊连续画面能看到任|logLR:lt_ren_rui=2.0",
-    "lt_clue_contact 归还柜完整导出视频清楚拍到任瑞21:51:25用左手橙线补丁手套包着H-7锤头放入柜内；柜随后锁闭，21:51:25至2|logLR:lt_ren_rui=2.0"
-  ],
-  "clues": [
-    {
-      "id": "lt_clue_lock",
-      "title": "封锁公务室",
-      "content": "公务室门使用外旋总钥匙锁，无内侧锁钮；门口通行牌读取台只记录获准人员的接近，不代替机械钥匙。观察窗帘已放下。封条F-62覆盖门缝，22:32在五人共同见证下首次拆开，纤维压印无复粘痕迹；窗格和地板完整，没有暗门。门旁3毫米文书口可通过薄纸，不能通过人或验车锤。因此锁封证明贴条后无人从门窗进入，不证明封前室内未发生袭击。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain01"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "lt_target_cabin"
-    },
-    {
-      "id": "lt_clue_body",
-      "title": "封锁公务室",
-      "content": "魏舟倒在桌边，后头部有一次致命钝器损伤，伤痕呈双浅槽；无切割、注射或毒物迹象，桌柜均无会自行倒落的重物。左掌指缝夹着新鲜橙色棉线。初检不提供精确死亡分钟，需要用存活记录和封门记录确定窗口。桌下有一组旧件采购文件，尚待整理。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain02",
-        "f_rpg_last_train_chain05"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "lt_target_cabin"
-    },
-    {
-      "id": "lt_clue_route",
-      "title": "司机运行记录",
-      "content": "司机不可编辑的运行记录：22:00列车出站，22:00至22:32持续行驶，22:32因公务室呼叫无回应停在岚岭检查点。公务室外侧仅站台检修道能接近，行车中无外部可攀附平台；两端出入口视频无中途上下车。司机在21:45至22:32始终处于封闭驾驶室视频内，现场只有五名候选角色具备站内近室权限。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "lt_target_route"
-    },
-    {
-      "id": "lt_clue_stub",
-      "title": "22:14核验票据",
-      "content": "公务室文书筐中有一张“22:14，车内核验完成，魏舟”的票据；签名边缘为点阵图而非笔迹，纸背隐约见S-19批号。票据没有实时人脸或人工在场核验栏。任瑞22:14在前排验票有普通目击者，但这仅说明他那个时刻的位置，不能证明魏舟何时签过这张纸。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 0,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=1",
-      "source_target": "lt_target_stub"
-    },
-    {
-      "id": "lt_clue_alive",
-      "title": "站台交接与封条记录",
-      "content": "站台原始连续视频：21:48:45魏舟独自走入公务室，脸部清楚、行动正常，手中是采购文件；21:49:05任瑞从公务室门口消失于门内。21:45至21:54近室区域两侧闸门都关闭，唯一走廊只接通玻璃试验间、行李台及本车入口，入口视频没有陌生人。门内没有摄影，视频没有拍到击打动作。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain02"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "lt_target_platform"
-    },
-    {
-      "id": "lt_clue_seal",
-      "title": "站台交接与封条记录",
-      "content": "外锁记录21:52:10总钥匙旋锁，21:54:00任瑞贴F-62；唐枢在行李台旁签见证，只勾选“门锁、编号确认”，未勾选“室内人员状态确认”。公务室内部没有自动定时反锁机制。21:57任瑞在走廊将一张薄纸送入文书口，封条仍完整；这个动作不必开门。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain01",
-        "f_rpg_last_train_chain02"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "lt_target_platform"
-    },
-    {
-      "id": "lt_clue_audio",
-      "title": "应急呼叫缓存",
-      "content": "公务室应急台的原始缓存采用司机基准时间：21:49:30录到魏舟说“这不是新件的金属编号，把旧号贴起来也没用”；21:50:03有重物撞击、倒椅与痛呼，21:50:09声响停止。此前及此后缓存连续无剪接，后至22:32无人再按呼叫键。声音未记录另一人姓名，不能单凭口音识别凶手。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain02",
-        "f_rpg_last_train_chain04",
-        "f_rpg_last_train_chain06"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "lt_target_audio"
-    },
-    {
-      "id": "lt_clue_clocks",
-      "title": "站内与车内时钟资料",
-      "content": "出库校时单：公务室壁钟慢12分钟，21:00司机基准时壁钟显示20:48，壁钟当晚未被校准；应急台、通行记录及各固定摄像均使用司机基准。公务票据设备另有可手调本地时间，打印票据只显示该本地时间。三种时间不能混用；不存在所有记录同时偏移12分钟的证据。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 1,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=2",
-      "source_target": "lt_target_clocks"
-    },
-    {
-      "id": "lt_clue_time_forgery",
-      "title": "公务票据设备与签字对照",
-      "content": "公务机不可覆盖的设置日志写明：司机基准21:56:10，本地时钟从21:56调至22:14；21:56:24打印核验票据。打印前选入的签名图与魏舟上周确认单逐像素一致，连同末笔下扫描灰点也相同。票据因而是在发车前生成，不能证明魏舟22:14仍活着。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "lt_target_printer"
-    },
-    {
-      "id": "lt_clue_printer_owner",
-      "title": "公务票据设备与签字对照",
-      "content": "领用单与前台视频相互印证：21:30任瑞领取橙色公务机及S-19站内纸卷，未转交他人；21:56前台连续视频清楚拍到任瑞本人调数字、打印并收起票据。车内固定机使用B批纸卷，签名不得代贴。影片并未进入公务室，不能独自证明他实施击打，但能独立证明假存活票据由他制造。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain03"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "lt_target_printer"
-    },
-    {
-      "id": "lt_clue_motive",
-      "title": "旧件账册与还款材料",
-      "content": "桌下原始采购文件与供应回单互证：旧件金属号仍为K批，纸标签改为N批新件，列车长签字任瑞；价差汇入任瑞控制的供应账户。段砚补签试验单但账户没有她的收款，21:46交接柜视频还记录她提交原始储存卡。另有魏舟下午发给陶闻的还款邮件，陶闻回信同意补签还款日。这些材料解释秘密和压力，不能替代杀人机会与接触证据。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain06"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "lt_target_bills"
-    },
-    {
-      "id": "lt_clue_tool",
-      "title": "验车锤领用与归还柜",
-      "content": "H-7领用单：21:42段砚将双槽验车锤交任瑞，21:51:25归还柜录到放回动作，录像待末轮完整导出。柜内封存的H-7锤头双槽与伤痕形态相符，槽内有魏舟的新鲜血迹和橙色棉线。检修工具为公用物，原属段砚并不意味着案发时由她持有；须结合真实领用链判断。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 2,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain05"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=3",
-      "source_target": "lt_target_tools"
-    },
-    {
-      "id": "lt_clue_duan_alibi",
-      "title": "完整工作影像",
-      "content": "玻璃试验间原始视频与操作记录连续相符：21:48:30至21:53:20段砚的身体与双手始终在镜头中；唯一出口未被开启，室内无通往公务室的其他路线。应急台21:49:30存活讲话、21:50:03撞击、21:52:10外锁都落在这段完整影像中。因此“公用锤原属段砚”不足以支持她在这个窗口实施袭击。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 3,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain04"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=4",
-      "source_target": "lt_target_alibis"
-    },
-    {
-      "id": "lt_clue_other_alibis",
-      "title": "完整工作影像",
-      "content": "三份原始连续视频与司机基准校时：白镜21:48:40至21:53:00在新闻隔间全身可见，陶闻21:48:20至21:53:40在冷餐备货间门内可见，唐枢21:48:35至21:54:20在行李台操作并于原位见证贴条；各自唯一出口未离开，均覆盖存活讲话至外锁。白镜持有的V-03在三个月前已注销，从未触发当晚公务室有效通行。唐枢偷牌和陶闻讨债属实，但不能把二人移进袭击窗口。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 3,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain04"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=4",
-      "source_target": "lt_target_alibis"
-    },
-    {
-      "id": "lt_clue_access",
-      "title": "通行牌、归还录像与手套",
-      "content": "有效通行原始记录：R-01在21:49:05近室读卡、21:51:08离室读卡，当天领取人任瑞；对应走廊连续画面能看到任瑞本人进入、离开，没有交牌动作。V-03当晚无有效近室通行权限，读取台只用于接近登记，不控制机械门锁。21:52:10任瑞在同一画面用总钥匙外锁，因而不能用“唐枢借牌”解释这些记录。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 3,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain04",
-        "f_rpg_last_train_chain05"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=4",
-      "source_target": "lt_target_contact"
-    },
-    {
-      "id": "lt_clue_contact",
-      "title": "通行牌、归还录像与手套",
-      "content": "归还柜完整导出视频清楚拍到任瑞21:51:25用左手橙线补丁手套包着H-7锤头放入柜内；柜随后锁闭，21:51:25至22:40开启取证前没有再被开启。锤槽中的橙线、魏舟掌内橙线与任瑞左手套新鲜缺线的七针补丁可连续拼接，陶闻21:35完工照片显示原补丁完整；手套内外均有魏舟新鲜血迹。22:34任瑞在五人面前交出仍藏于本人外套内袋的手套并签封，取证链完整。独立影像、断线拼接与血迹共同支持他接触致命凶器和死者，不能只以一根常见橙线定罪。",
-      "type": "physical",
-      "truth_value": true,
-      "stage": 3,
-      "reveals_fact_ids": [
-        "f_rpg_last_train_chain05"
-      ],
-      "visibility": "finder",
-      "stage_source": "search_target.unlock_stage=4",
-      "source_target": "lt_target_contact"
-    }
-  ],
-  "clue_fact_map": {
-    "lt_clue_lock 公务室门使用外旋总钥匙锁，无内侧锁钮；门口通行牌读取台只记录获准人员的接近，不代替机械钥匙。观察窗帘已放下。封条F-62|logLR:lt_ren_rui=1.5": [
-      "f_rpg_last_train_chain01"
-    ],
-    "lt_clue_lock": [
-      "f_rpg_last_train_chain01"
-    ],
-    "lt_clue_body 魏舟倒在桌边，后头部有一次致命钝器损伤，伤痕呈双浅槽；无切割、注射或毒物迹象，桌柜均无会自行倒落的重物。左掌指缝夹着新鲜|logLR:lt_ren_rui=1.5": [
-      "f_rpg_last_train_chain02",
-      "f_rpg_last_train_chain05"
-    ],
-    "lt_clue_body": [
-      "f_rpg_last_train_chain02",
-      "f_rpg_last_train_chain05"
-    ],
-    "lt_clue_route 司机不可编辑的运行记录：22:00列车出站，22:00至22:32持续行驶，22:32因公务室呼叫无回应停在岚岭检查点。|logLR:lt_ren_rui=1.5": [
-      "f_rpg_last_train_chain03"
-    ],
-    "lt_clue_route": [
-      "f_rpg_last_train_chain03"
-    ],
-    "lt_clue_stub 公务室文书筐中有一张“22:14，车内核验完成，魏舟”的票据；签名边缘为点阵图而非笔迹，纸背隐约见S-19批号。票据没有|logLR:lt_ren_rui=1.5": [
-      "f_rpg_last_train_chain03"
-    ],
-    "lt_clue_stub": [
-      "f_rpg_last_train_chain03"
-    ],
-    "lt_clue_alive 站台原始连续视频：21:48:45魏舟独自走入公务室，脸部清楚、行动正常，手中是采购文件；21:49:05任瑞从公务室门|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain02"
-    ],
-    "lt_clue_alive": [
-      "f_rpg_last_train_chain02"
-    ],
-    "lt_clue_seal 外锁记录21:52:10总钥匙旋锁，21:54:00任瑞贴F-62；唐枢在行李台旁签见证，只勾选“门锁、编号确认”，未勾|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain01",
-      "f_rpg_last_train_chain02"
-    ],
-    "lt_clue_seal": [
-      "f_rpg_last_train_chain01",
-      "f_rpg_last_train_chain02"
-    ],
-    "lt_clue_audio 公务室应急台的原始缓存采用司机基准时间：21:49:30录到魏舟说“这不是新件的金属编号，把旧号贴起来也没用”；21:5|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain02",
-      "f_rpg_last_train_chain04",
-      "f_rpg_last_train_chain06"
-    ],
-    "lt_clue_audio": [
-      "f_rpg_last_train_chain02",
-      "f_rpg_last_train_chain04",
-      "f_rpg_last_train_chain06"
-    ],
-    "lt_clue_clocks 出库校时单：公务室壁钟慢12分钟，21:00司机基准时壁钟显示20:48，壁钟当晚未被校准；应急台、通行记录及各固定摄像|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain03"
-    ],
-    "lt_clue_clocks": [
-      "f_rpg_last_train_chain03"
-    ],
-    "lt_clue_time_forgery 公务机不可覆盖的设置日志写明：司机基准21:56:10，本地时钟从21:56调至22:14；21:56:24打印核验票据|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain03"
-    ],
-    "lt_clue_time_forgery": [
-      "f_rpg_last_train_chain03"
-    ],
-    "lt_clue_printer_owner 领用单与前台视频相互印证：21:30任瑞领取橙色公务机及S-19站内纸卷，未转交他人；21:56前台连续视频清楚拍到任瑞|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain03"
-    ],
-    "lt_clue_printer_owner": [
-      "f_rpg_last_train_chain03"
-    ],
-    "lt_clue_motive 桌下原始采购文件与供应回单互证：旧件金属号仍为K批，纸标签改为N批新件，列车长签字任瑞；价差汇入任瑞控制的供应账户。段砚|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain06"
-    ],
-    "lt_clue_motive": [
-      "f_rpg_last_train_chain06"
-    ],
-    "lt_clue_tool H-7领用单：21:42段砚将双槽验车锤交任瑞，21:51:25归还柜录到放回动作，录像待末轮完整导出。柜内封存的H-7|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain05"
-    ],
-    "lt_clue_tool": [
-      "f_rpg_last_train_chain05"
-    ],
-    "lt_clue_duan_alibi 玻璃试验间原始视频与操作记录连续相符：21:48:30至21:53:20段砚的身体与双手始终在镜头中；唯一出口未被开启，|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain04"
-    ],
-    "lt_clue_duan_alibi": [
-      "f_rpg_last_train_chain04"
-    ],
-    "lt_clue_other_alibis 三份原始连续视频与司机基准校时：白镜21:48:40至21:53:00在新闻隔间全身可见，陶闻21:48:20至21:5|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain04"
-    ],
-    "lt_clue_other_alibis": [
-      "f_rpg_last_train_chain04"
-    ],
-    "lt_clue_access 有效通行原始记录：R-01在21:49:05近室读卡、21:51:08离室读卡，当天领取人任瑞；对应走廊连续画面能看到任|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain04",
-      "f_rpg_last_train_chain05"
-    ],
-    "lt_clue_access": [
-      "f_rpg_last_train_chain04",
-      "f_rpg_last_train_chain05"
-    ],
-    "lt_clue_contact 归还柜完整导出视频清楚拍到任瑞21:51:25用左手橙线补丁手套包着H-7锤头放入柜内；柜随后锁闭，21:51:25至2|logLR:lt_ren_rui=2.0": [
-      "f_rpg_last_train_chain05"
-    ],
-    "lt_clue_contact": [
-      "f_rpg_last_train_chain05"
-    ]
-  },
-  "plot_locks": [],
-  "endings": [
-    "正确指认：指认成立。完整真相将说明凶手、作案过程，以及被隐瞒的其他秘密。",
-    "错误指认：最终指认未能成立。{selected_role_name}并非凶手，案件以错误指认告终；未闭合的证据链留下了真正作案者。"
-  ],
-  "evaluation": {
-    "killer_id": "lt_ren_rui",
-    "required_fact_ids": [
-      "f_rpg_last_train_truth",
-      "f_rpg_last_train_victim",
-      "f_rpg_last_train_chain01",
-      "f_rpg_last_train_chain02",
-      "f_rpg_last_train_chain03",
-      "f_rpg_last_train_chain04",
-      "f_rpg_last_train_chain05",
-      "f_rpg_last_train_chain06"
-    ],
-    "culprit_basis": "truth.culprit_role_id",
-    "role_kind": "declared_killer",
-    "has_murder": true,
-    "victim_name": "魏舟",
-    "victim_basis": "source_text_annotation",
-    "source_id": "last_train"
-  },
-  "completions": [
-    {
-      "rule": "R1_victim_annotation",
-      "field": "evaluation.victim_name",
-      "value": "魏舟",
-      "basis": "source_text_annotation"
-    }
-  ],
-  "source_files": [
-    "raw/rpg/last_train.json"
-  ]
+  "world": {
+    "mode": "truth_reconstruction",
+    "player_selectable": "lt_duan_yan,lt_ren_rui,lt_bai_jing,lt_tao_wen,lt_tang_shu",
+    "source_kind": "RolePlayingGame JSON",
+    "source_provenance": {
+      "creator": "Codex AI 辅助原创",
+      "kind": "original",
+      "source": "根据 UI 概念图的标题与主题创作；未引用现成剧本正文。"
+    },
+    "stages": 4
+  }
 }
