@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "description": "Derived values are computed on read and never persisted as independent L1 attributes.",
+  "rules": [
+    {
+      "key": "observation",
+      "formula": "0.6*O + 0.4*skill_norm('observation')",
+      "inputs": ["OCEAN.O", "skill_set.observation"],
+      "persist": false
+    },
+    {
+      "key": "reasoning",
+      "formula": "0.5*O + 0.3*C + 0.2*skill_norm('reasoning')",
+      "inputs": ["OCEAN.O", "OCEAN.C", "skill_set.reasoning"],
+      "persist": false
+    },
+    {
+      "key": "deception",
+      "formula": "0.5*(1-A) + 0.3*C + 0.2*acting_skill",
+      "inputs": ["OCEAN.A", "OCEAN.C", "L0.acting_skill"],
+      "persist": false
+    },
+    {
+      "key": "impulse_control",
+      "formula": "0.6*C + 0.4*(1-N)",
+      "inputs": ["OCEAN.C", "OCEAN.N"],
+      "persist": false
+    },
+    {
+      "key": "nu",
+      "formula": "0.5 + N",
+      "inputs": ["OCEAN.N"],
+      "persist": false
+    },
+    {
+      "key": "leak_sigma",
+      "formula": "sigma0*(1+gamma1*arousal)*(1+gamma2*stress)*(1-acting_skill)",
+      "inputs": ["L0.sigma0", "L0.gamma1", "L0.gamma2", "L3.arousal", "L3.stress", "L0.acting_skill"],
+      "persist": false
+    },
+    {
+      "key": "T_v",
+      "formula": "T0*(1+kappa_stress*stress)/(1+kappa_C*C)",
+      "inputs": ["L0.T0", "L3.stress", "OCEAN.C"],
+      "persist": false
+    },
+    {
+      "key": "tech_craft",
+      "formula": "0.7*skill_norm('craft') + 0.3*O",
+      "inputs": ["OCEAN.O", "skill_set.craft"],
+      "persist": false
+    },
+    {
+      "key": "combat_effective",
+      "formula": "0.6*skill_norm('combat') + 0.2*physique + 0.2*(1-N)",
+      "inputs": ["skill_set.combat", "physique", "OCEAN.N"],
+      "persist": false
+    },
+    {
+      "key": "social_leverage",
+      "formula": "0.4*E + 0.3*skill_norm('eloquence') + 0.3*(1-A)",
+      "inputs": ["OCEAN.E", "OCEAN.A", "skill_set.eloquence"],
+      "persist": false
+    }
+  ]
+}

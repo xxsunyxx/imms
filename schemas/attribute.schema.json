@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://imms.local/schemas/attribute.schema.json",
+  "title": "IMMS Attribute Envelope",
+  "description": "Unified envelope for L1 canon, L2 assigned and L3 emergent attributes.",
+  "type": "object",
+  "required": [
+    "key",
+    "value",
+    "layer",
+    "domain",
+    "visibility",
+    "confidence",
+    "source",
+    "evidence",
+    "updated_at_round",
+    "updated_by",
+    "locked"
+  ],
+  "properties": {
+    "key": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.]*$"
+    },
+    "value": {
+      "description": "Any JSON value; must satisfy domain constraints."
+    },
+    "layer": {
+      "enum": ["L1", "L2", "L3"]
+    },
+    "scope": {
+      "enum": ["self", "dyadic", "global"],
+      "default": "self"
+    },
+    "target": {
+      "type": "string",
+      "description": "Required when scope is dyadic."
+    },
+    "domain": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        { "enum": ["enum", "list", "object", "text"] }
+      ]
+    },
+    "visibility": {
+      "enum": ["public", "faction", "self", "gm", "truth"]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "source": {
+      "enum": [
+        "canon_extract",
+        "script",
+        "player_input",
+        "history_infer",
+        "gm_cli",
+        "runtime_formula"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence" }
+    },
+    "derivation": { "$ref": "#/$defs/derivation" },
+    "volatility": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "decay": { "$ref": "#/$defs/decay" },
+    "updated_at_round": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "updated_by": {
+      "type": "string",
+      "examples": ["pipeline:v3", "gm_cli:host", "engine"]
+    },
+    "locked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Must be true for L1."
+    },
+    "ttl_rounds": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "extraction_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "needs_review": {
+      "type": "boolean",
+      "default": false
+    },
+    "reason": {
+      "type": "string",
+      "description": "Required when source is gm_cli."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "layer": { "const": "L1" } } },
+      "then": { "properties": { "locked": { "const": true } } }
+    },
+    {
+      "if": { "properties": { "scope": { "const": "dyadic" } } },
+      "then": { "required": ["target"] }
+    },
+    {
+      "if": { "properties": { "source": { "const": "gm_cli" } } },
+      "then": { "required": ["reason"] }
+    }
+  ],
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": ["source_id", "weight"],
+      "properties": {
+        "source_id": { "type": "string" },
+        "quote": { "type": "string" },
+        "locator": { "type": "string" },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "anchor_bin": {
+          "enum": [0.1, 0.3, 0.5, 0.7, 0.9]
+        },
+        "conflict": {
+          "type": "object",
+          "properties": {
+            "source_id": { "type": "string" },
+            "delta": { "type": "number" }
+          }
+        }
+      }
+    },
+    "derivation": {
+      "type": "object",
+      "required": ["rule"],
+      "properties": {
+        "rule": { "type": "string" },
+        "inputs": { "type": "object" },
+        "expires_on_input_change": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "decay": {
+      "type": "object",
+      "properties": {
+        "lambda": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "baseline": { "type": "number" },
+        "tau_rounds": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

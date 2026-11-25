@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "description": "Theme-agnostic alias to standard-key mapping. polarity: +1 raises the key, -1 lowers it.",
+  "aliases": [
+    {
+      "alias": ["心机深", "城府重", "calculating"],
+      "keys": [
+        { "key": "OCEAN.C", "polarity": 1 },
+        { "key": "OCEAN.A", "polarity": -1 }
+      ]
+    },
+    {
+      "alias": ["冲动", "急躁", "impulsive"],
+      "keys": [
+        { "key": "OCEAN.C", "polarity": -1 },
+        { "key": "OCEAN.N", "polarity": 1 }
+      ]
+    },
+    {
+      "alias": ["重情义", "护短", "loyal"],
+      "keys": [{ "key": "values.loyalty", "polarity": 1 }]
+    },
+    {
+      "alias": ["胆小", "怯懦", "timid"],
+      "keys": [
+        { "key": "OCEAN.N", "polarity": 1 },
+        { "key": "pad_dominance", "polarity": -1 }
+      ]
+    },
+    {
+      "alias": ["口齿伶俐", "善辩", "eloquent"],
+      "keys": [{ "key": "skill_set.eloquence", "polarity": 1 }]
+    },
+    {
+      "alias": ["体弱", "多病", "frail"],
+      "keys": [{ "key": "health", "polarity": -1 }]
+    }
+  ]
+}

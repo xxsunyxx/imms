@@ -1,0 +1,311 @@
+"""SQLite persistence for scripts, L1/L2/L3 attributes, sessions and audit events."""
+
+import json
+import sqlite3
+from datetime import datetime, timezone
+
+from .util import write_json
+
+SCHEMA = """
+CREATE TABLE IF NOT EXISTS scripts (
+    script_id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    ontology_json TEXT NOT NULL,
+    source_files_json TEXT NOT NULL DEFAULT '[]',
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS persona_l1 (
+    script_id TEXT NOT NULL,
+    character_id TEXT NOT NULL,
+    key TEXT NOT NULL,
+    extraction_version INTEGER NOT NULL,
+    data_json TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (script_id, character_id, key, extraction_version)
+);
+
+CREATE TRIGGER IF NOT EXISTS persona_l1_no_update
+BEFORE UPDATE ON persona_l1
+BEGIN
+    SELECT RAISE(ABORT, 'ERR_L1_IMMUTABLE');
+END;
+
+CREATE TRIGGER IF NOT EXISTS persona_l1_no_delete
+BEFORE DELETE ON persona_l1
+BEGIN
+    SELECT RAISE(ABORT, 'ERR_L1_IMMUTABLE');
+END;
+
+CREATE TABLE IF NOT EXISTS persona_l2 (
+    session_id TEXT NOT NULL,
+    character_id TEXT NOT NULL,
+    key TEXT NOT NULL,
+    data_json TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY (session_id, character_id, key)
+);
+
+CREATE TABLE IF NOT EXISTS persona_l3 (
+    session_id TEXT NOT NULL,
+    character_id TEXT NOT NULL,
+    scope TEXT NOT NULL,
+    target TEXT NOT NULL DEFAULT '',
+    key TEXT NOT NULL,
+    data_json TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY (session_id, character_id, scope, target, key)
+);
+
+CREATE TABLE IF NOT EXISTS sessions (
+    session_id TEXT PRIMARY KEY,
+    script_id TEXT NOT NULL,
+    human_character_id TEXT NOT NULL,
+    roster_json TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS attribute_events (
+    seq INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL,
+    round INT NOT NULL,
+    actor TEXT NOT NULL,
+    layer TEXT NOT NULL,
+    character_id TEXT NOT NULL,
+    key TEXT NOT NULL,
+    target TEXT NOT NULL DEFAULT '',
+    before_json TEXT,
+    after_json TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS state_snapshots (
+    session_id TEXT NOT NULL,
+    round INT NOT NULL,
+    agent_id TEXT NOT NULL,
+    data_json TEXT NOT NULL,
+    PRIMARY KEY (session_id, round, agent_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_l1_lookup ON persona_l1(script_id, character_id, extraction_version);
+CREATE INDEX IF NOT EXISTS idx_events_session ON attribute_events(session_id, seq);
+"""
+
+
+def now():
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def connect(db_path):
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys=ON")
+    conn.executescript(SCHEMA)
+    conn.commit()
+    return conn
+
+
+def save_script(conn, onto):
+    conn.execute(
+        "INSERT OR REPLACE INTO scripts(script_id, title, ontology_json, source_files_json, created_at) VALUES(?,?,?,?,?)",
+        (
+            onto["script_id"],
+            onto.get("title", onto["script_id"]),
+            json.dumps(onto, ensure_ascii=False),
+            json.dumps(onto.get("source_files", []), ensure_ascii=False),
+            now(),
+        ),
+    )
+    conn.commit()
+
+
+def get_script(conn, script_id):
+    row = conn.execute("SELECT ontology_json FROM scripts WHERE script_id=?", (script_id,)).fetchone()
+    if row is None:
+        raise ValueError("ERR_SCRIPT_NOT_FOUND")
+    return json.loads(row["ontology_json"])
+
+
+def list_scripts(conn):
+    return [dict(r) for r in conn.execute("SELECT script_id, title, created_at FROM scripts ORDER BY created_at")]
+
+
+def latest_version(conn, script_id):
+    row = conn.execute(
+        "SELECT MAX(extraction_version) AS v FROM persona_l1 WHERE script_id=?", (script_id,)
+    ).fetchone()
+    return (row["v"] or 0) + 1
+
+
+def save_persona_l1(conn, script_id, persona_doc):
+    version = latest_version(conn, script_id)
+    created = now()
+    for persona in persona_doc["personas"]:
+        for attr in persona["attributes"]:
+            conn.execute(
+                "INSERT INTO persona_l1(script_id, character_id, key, extraction_version, data_json, created_at) VALUES(?,?,?,?,?,?)",
+                (
+                    script_id,
+                    persona["character_id"],
+                    attr["key"],
+                    version,
+                    json.dumps(attr, ensure_ascii=False),
+                    created,
+                ),
+            )
+    conn.commit()
+    return version
+
+
+def get_persona_l1(conn, script_id):
+    rows = conn.execute(
+        """
+        SELECT p.character_id, p.data_json
+        FROM persona_l1 p
+        JOIN (SELECT script_id, character_id, MAX(extraction_version) AS v
+              FROM persona_l1 WHERE script_id=? GROUP BY script_id, character_id) m
+          ON p.script_id=m.script_id AND p.character_id=m.character_id AND p.extraction_version=m.v
+        WHERE p.script_id=?
+        """,
+        (script_id, script_id),
+    ).fetchall()
+    grouped = {}
+    for row in rows:
+        grouped.setdefault(row["character_id"], []).append(json.loads(row["data_json"]))
+    if not grouped:
+        raise ValueError("ERR_PERSONA_NOT_FOUND")
+    return {"script_id": script_id, "personas": [
+        {"character_id": cid, "name": cid, "layer": "L1", "attributes": attrs}
+        for cid, attrs in grouped.items()
+    ]}
+
+
+def save_session(conn, session_doc):
+    conn.execute(
+        "INSERT OR REPLACE INTO sessions(session_id, script_id, human_character_id, roster_json, created_at) VALUES(?,?,?,?,?)",
+        (
+            session_doc["session_id"],
+            session_doc["script_id"],
+            session_doc["human_character_id"],
+            json.dumps(session_doc, ensure_ascii=False),
+            now(),
+        ),
+    )
+    conn.commit()
+
+
+def get_session(conn, session_id):
+    row = conn.execute("SELECT roster_json FROM sessions WHERE session_id=?", (session_id,)).fetchone()
+    if row is None:
+        raise ValueError("ERR_SESSION_NOT_FOUND")
+    return json.loads(row["roster_json"])
+
+
+def is_l1_key(conn, script_id, key):
+    row = conn.execute(
+        "SELECT 1 FROM persona_l1 WHERE script_id=? AND key=? LIMIT 1", (script_id, key)
+    ).fetchone()
+    return row is not None
+
+
+def set_attribute(conn, session_doc, layer, character_id, key, value, reason, round_no, actor="gm_cli:host", target="", lock=False):
+    if layer not in {"L2", "L3"}:
+        raise ValueError("ERR_LAYER_NOT_MUTABLE")
+    if not reason:
+        raise ValueError("ERR_REASON_REQUIRED")
+    script_id = session_doc["script_id"]
+    if is_l1_key(conn, script_id, key):
+        raise ValueError("ERR_L1_IMMUTABLE")
+
+    session_id = session_doc["session_id"]
+    table = "persona_l2" if layer == "L2" else "persona_l3"
+    if layer == "L2":
+        where = "session_id=? AND character_id=? AND key=?"
+        params = (session_id, character_id, key)
+    else:
+        scope = "dyadic" if target else "self"
+        where = "session_id=? AND character_id=? AND scope=? AND target=? AND key=?"
+        params = (session_id, character_id, scope, target or "", key)
+
+    old = conn.execute(f"SELECT data_json FROM {table} WHERE {where}", params).fetchone()
+    before = json.loads(old["data_json"]) if old else None
+    after = {
+        "key": key,
+        "value": value,
+        "layer": layer,
+        "scope": "dyadic" if target else "self",
+        "target": target or None,
+        "visibility": "self",
+        "source": "gm_cli",
+        "locked": bool(lock),
+        "reason": reason,
+        "updated_at_round": round_no,
+        "updated_by": actor,
+    }
+    data_json = json.dumps(after, ensure_ascii=False)
+    if old:
+        conn.execute(f"UPDATE {table} SET data_json=?, updated_at=? WHERE {where}", (data_json, now(), *params))
+    else:
+        if layer == "L2":
+            conn.execute(
+                "INSERT INTO persona_l2(session_id, character_id, key, data_json, updated_at) VALUES(?,?,?,?,?)",
+                (session_id, character_id, key, data_json, now()),
+            )
+        else:
+            conn.execute(
+                "INSERT INTO persona_l3(session_id, character_id, scope, target, key, data_json, updated_at) VALUES(?,?,?,?,?,?,?)",
+                (session_id, character_id, "dyadic" if target else "self", target or "", key, data_json, now()),
+            )
+    conn.execute(
+        """INSERT INTO attribute_events(session_id, round, actor, layer, character_id, key, target,
+                                        before_json, after_json, reason, created_at)
+           VALUES(?,?,?,?,?,?,?,?,?,?,?)""",
+        (
+            session_id,
+            round_no,
+            actor,
+            layer,
+            character_id,
+            key,
+            target or "",
+            json.dumps(before, ensure_ascii=False) if before else None,
+            data_json,
+            reason,
+            now(),
+        ),
+    )
+    conn.commit()
+    return after
+
+
+def get_attributes(conn, session_id, layer, character_id=None):
+    table = "persona_l2" if layer == "L2" else "persona_l3"
+    sql = f"SELECT data_json FROM {table} WHERE session_id=?"
+    params = [session_id]
+    if character_id:
+        sql += " AND character_id=?"
+        params.append(character_id)
+    return [json.loads(r["data_json"]) for r in conn.execute(sql, params)]
+
+
+def audit(conn, session_id, character_id=None, since=0):
+    sql = "SELECT * FROM attribute_events WHERE session_id=? AND seq>=?"
+    params = [session_id, since]
+    if character_id:
+        sql += " AND character_id=?"
+        params.append(character_id)
+    sql += " ORDER BY seq"
+    return [dict(r) for r in conn.execute(sql, params)]
+
+
+def export_db(conn, out_path):
+    payload = {
+        "scripts": list_scripts(conn),
+        "persona_l2": [dict(r) for r in conn.execute("SELECT * FROM persona_l2")],
+        "persona_l3": [dict(r) for r in conn.execute("SELECT * FROM persona_l3")],
+        "sessions": [dict(r) for r in conn.execute("SELECT * FROM sessions")],
+        "attribute_events": [dict(r) for r in conn.execute("SELECT * FROM attribute_events")],
+    }
+    write_json(out_path, payload)
+    return payload

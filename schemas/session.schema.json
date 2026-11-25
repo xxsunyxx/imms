@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://imms.local/schemas/session.schema.json",
+  "title": "IMMS Session Roster",
+  "description": "Assembled roster: one GM, N-1 AI character agents, one human character seat.",
+  "type": "object",
+  "required": ["session_id", "script_id", "ontology", "participants", "visibility_matrix"],
+  "properties": {
+    "session_id": { "type": "string" },
+    "script_id": { "type": "string" },
+    "ontology": {
+      "type": "string",
+      "description": "Path or id of the parsed Script Ontology."
+    },
+    "participants": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "$ref": "#/$defs/participant" }
+    },
+    "visibility_matrix": {
+      "type": "object",
+      "description": "Map of reader seat id to readable layers or fact ids."
+    }
+  },
+  "$defs": {
+    "participant": {
+      "type": "object",
+      "required": ["id", "kind", "seat_label"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(gm|ai|human):"
+        },
+        "kind": {
+          "enum": ["gm", "ai_character", "human_character"]
+        },
+        "script_character_id": {
+          "type": "string",
+          "description": "Absent for the GM seat."
+        },
+        "seat_label": { "type": "string" },
+        "persona_ref": {
+          "type": ["string", "null"],
+          "description": "L1 card reference; null for GM."
+        },
+        "l0": {
+          "type": "object",
+          "properties": {
+            "difficulty": { "type": "integer", "minimum": 1, "maximum": 5 },
+            "acting_skill": { "type": "number", "minimum": 0, "maximum": 1 },
+            "lying_skill": { "type": "number", "minimum": 0, "maximum": 1 },
+            "play_style": { "type": "string" }
+          }
+        },
+        "initial_l3": { "type": "object" },
+        "script_locks": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "visibility": {
+          "enum": ["all", "self", "faction", "public", "gm_only"]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "gm" } } },
+          "then": { "properties": { "visibility": { "const": "all" } } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "ai_character" } } },
+          "then": { "required": ["script_character_id", "persona_ref"] }
+        }
+      ]
+    }
+  }
+}
