@@ -99,3 +99,11 @@
 - `retro` 追加 `retrospective.vote_audit` 与 Markdown「投票审计」小节；lockedroom 5 指标评分公式不变。
 - 修复：`majority_stop=false` 曾被写成立即 break，导致第二轮永不发生；`normalize_rules()` 传单个 dict 时曾按字符串迭代而丢失配置，现已兼容 dict/list；平票不再依赖字典插入顺序。
 - 验证：76 个 unittest 全通过（新增 test_vote.py）；雪夜山庄默认投票 5 张合法票、证据支持率 80%、solved=True；两轮 persona 配置跑出自我投票拦截 1、非法目标 0、平票按证据裁决、账本 10 张票。详见 docs/VOTE.md。
+
+## 2026-11-25 · 记忆账本与承诺状态机（任务 #30）
+
+- 新增 `src/imms/memory.py`：听众账本（seq/round/speaker/audience/claimed_facts/status/importance/emotion_snapshot）、承诺状态机 `stated → revised/weakened → retracted`（retracted 终态）、F26 `formulas.memory_score` 确定性召回与跨分支 `memory.diff`。
+- runtime 接线：感知阶段按事件 `seq` 去重后记录听到的话（公开=全体，私聊=房间成员）；发言载荷新增 `recalled` Top3；LLM Prompt 新增「记忆召回」段并强调不得据此新增事实；承诺变化进 log。
+- `gm.narrative_diff` 新增 `memory_changes`（added/removed/changed/commitment/recall_top）与 `summary.memory_changes`；CLI 新增 `memory show / commitments`（支持按席位、轮次、cue 查询）。
+- 修正编号口径：记忆检索是 F26，F30 是派生能力；任务编号 #30 与公式编号不要混用。
+- 验证：83 个 unittest 全通过（新增 test_memory.py）；雪夜山庄端到端产出听众账本、承诺 `stated→retracted`、召回分与 13 项记忆分叉差异，retro/replay 未回归。详见 docs/MEMORY.md。

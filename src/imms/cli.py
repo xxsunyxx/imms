@@ -13,6 +13,7 @@ from . import derive as derive_mod
 from . import gm as gm_mod
 from . import infoguard as infoguard_mod
 from . import ingest as ingest_mod
+from . import memory as memory_mod
 from . import normalize as normalize_mod
 from . import ontology as ontology_mod
 from . import registry as registry_mod
@@ -151,6 +152,18 @@ def build_parser():
 
     seats_p = sub.add_parser("seats", help="List assembled seats")
     seats_p.add_argument("--session", required=True)
+
+    mem_p = sub.add_parser("memory", help="Inspect the listener-aware memory ledger")
+    mem_sp = mem_p.add_subparsers(dest="memory_action", required=True)
+    ms = mem_sp.add_parser("show", help="Show remembered statements or F30 recall")
+    ms.add_argument("--session", required=True)
+    ms.add_argument("--seat")
+    ms.add_argument("--round", type=int)
+    ms.add_argument("--cue")
+    ms.add_argument("--limit", type=int, default=10)
+    mc = mem_sp.add_parser("commitments", help="Show the commitment state machine")
+    mc.add_argument("--session", required=True)
+    mc.add_argument("--seat")
 
     priv_p = sub.add_parser("private", help="Private chat rooms ordered by global seq")
     priv_sp = priv_p.add_subparsers(dest="private_action", required=True)
@@ -430,6 +443,28 @@ def main(argv=None):
 
         elif args.cmd == "seats":
             print_json(db_mod.get_session(conn, args.session)["participants"])
+
+        elif args.cmd == "memory":
+            db_mod.get_session(conn, args.session)
+            runtime_state = db_mod.get_game_state(conn, args.session, "runtime", {})
+            seats = [args.seat] if args.seat else sorted(runtime_state)
+            if args.memory_action == "show":
+                out = {}
+                for seat in seats:
+                    state = runtime_state.get(seat, {})
+                    if args.cue:
+                        out[seat] = memory_mod.recall(
+                            state, args.round or db_mod.get_game_state(conn, args.session, "round", 0),
+                            cue=args.cue, limit=args.limit,
+                        )
+                    else:
+                        items = [m for m in state.get("memory", []) if isinstance(m, dict)]
+                        if args.round is not None:
+                            items = [m for m in items if m.get("round") == args.round]
+                        out[seat] = items[-args.limit:]
+                print_json(out)
+            elif args.memory_action == "commitments":
+                print_json({seat: runtime_state.get(seat, {}).get("commitments", {}) for seat in seats})
 
         elif args.cmd == "private":
             db_mod.get_session(conn, args.session)

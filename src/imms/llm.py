@@ -23,7 +23,8 @@ def _env(name, default=None):
     return os.environ.get(name, default)
 
 
-def build_prompt(state, intent, target_name, clue, round_no, allowed_facts, seat_names=None, known_fact_lines=None):
+def build_prompt(state, intent, target_name, clue, round_no, allowed_facts, seat_names=None,
+                 known_fact_lines=None, recalled_lines=None):
     """Build a drift-resistant, block-structured persona prompt."""
     attrs = state.get("l1", {})
     emo = state["emotion"]
@@ -43,6 +44,7 @@ def build_prompt(state, intent, target_name, clue, round_no, allowed_facts, seat
         f"- 第{lie.get('round_created', '?')}轮对{','.join(lie.get('audience', []))}声称：{'；'.join(lie.get('claimed_facts', []))}"
         for lie in lies
     ]
+    recalled = list(recalled_lines or [])
     lexicon = attrs.get("lexicon") or attrs.get("L1.lexicon") or "（未配置语言指纹）"
     persona = "；".join(
         f"{k.replace('OCEAN.', '').replace('values.', '')}={attrs[k]:.2f}"
@@ -64,6 +66,8 @@ def build_prompt(state, intent, target_name, clue, round_no, allowed_facts, seat
         "\n".join(fact_lines) if fact_lines else "- （暂无可用事实，不得编造线索或时间）",
         "# 你说过什么（谎言账本·必须自洽）",
         "\n".join(lie_lines) if lie_lines else "- （暂无）",
+        "# 记忆召回（F30，仅 recalled 的旧话，不得据此新增事实）",
+        "\n".join(recalled) if recalled else "- （暂无可召回发言）",
         "# 本轮意图（已由公式层决定，不可更改）",
         f"act_type={intent}；对象={target_name}；可用线索={clue}",
         "# 输出格式",

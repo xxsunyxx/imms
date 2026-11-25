@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import db, formulas, infoguard, llm, vote
+from . import db, formulas, infoguard, llm, memory, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -66,6 +66,7 @@ def init_runtime(conn, session_doc):
             "beliefs": {},
             "lie_ledger": [],
             "memory": [],
+            "commitments": {},
         }
     for clue in onto.get("clue_pool", []):
         for state in runtime.values():
@@ -233,6 +234,39 @@ def _user_act(scripted, scripted_index, target_name):
     return {"act_type": "assert", "utterance": item, "claimed_facts": [], "target": None, "inner_intent": "用户自行决定"}
 
 
+def _audience_for(row, all_seats):
+    """Who actually received an event, derived from its visibility tokens."""
+    try:
+        vis = json.loads(row.get("visibility_json") or "[]")
+    except (TypeError, ValueError):
+        vis = ["public"]
+    actor = row.get("actor")
+    if "public" in vis:
+        return [s for s in all_seats if s != actor]
+    audience = set()
+    for token in vis:
+        if not isinstance(token, str):
+            continue
+        if token.startswith("room:"):
+            try:
+                room = db.get_private_room(token[len("room:"):])
+                audience.update(room.get("participants") or [])
+            except ValueError:
+                continue
+        elif token in all_seats:
+            audience.add(token)
+    audience.discard(actor)
+    return sorted(audience)
+
+
+def _recall_payload(items):
+    return [{
+        "round": item.get("round"), "speaker": item.get("speaker"),
+        "utterance": item.get("utterance"), "status": item.get("status"),
+        "recall_score": item.get("recall_score"),
+    } for item in (items or [])]
+
+
 def _gm_step(conn, session_id, round_no, onto, runtime, guard=None, seat_map=None, decision=None):
     revealed = db.get_game_state(conn, session_id, "revealed_clues", [])
     events = db.visible_game_events(conn, session_id, "gm")
@@ -313,6 +347,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
         guard_engine.exempt_clue(clue)
     rng = random.Random(seed)
     human_id = session_doc["human_character_id"]
+    all_seats = list(runtime.keys())
     for seat_id, state in runtime.items():
         state["seat_id"] = seat_id
         state["is_human"] = human_id in seat_id
@@ -341,19 +376,36 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                     if wrapped.findings:
                         payload["utterance"] = wrapped.text
                         guard_stats["input_wrapped"] += 1
-                parsed.append({"actor": e["actor"], "act_type": e["act_type"], "payload": payload})
+                parsed.append({
+                    "actor": e["actor"], "act_type": e["act_type"], "payload": payload,
+                    "seq": e["seq"], "visibility_json": e["visibility_json"],
+                })
             round_changes = []
             for ev in parsed:
                 _, changes = _appraise(state, ev, round_no)
                 round_changes.extend(changes)
             round_changes.extend(_update_suspicion(state, parsed))
+            for ev in parsed:
+                observation = memory.observe(
+                    state, ev, round_no, audience=_audience_for(ev, all_seats)
+                )
+                if not observation:
+                    continue
+                for change in observation["commitment_changes"]:
+                    log.append({
+                        "round": round_no, "actor": seat_id, "act": "commitment",
+                        "witness": seat_id, "fact": change["fact"],
+                        "from": change["from"], "to": change["to"],
+                    })
             _log_changes(conn, session_id, round_no, seat_id, state["character_id"], round_changes)
+            recalled = []
             if state["is_human"]:
                 raw = _user_act(scripted, user_index, names.get(state["character_id"], state["character_id"]))
                 user_index += 1
                 if raw["claimed_facts"]:
                     state["beliefs"].update({f: {"belief": 0.8, "source": "user", "is_true": True} for f in raw["claimed_facts"]})
                 act = raw
+                recalled = memory.recall(state, round_no, cue=act.get("utterance"), limit=3)
             else:
                 intent = _choose_intent(state, rng)
                 target_id = max(state["suspicion"], key=state["suspicion"].get) if state["suspicion"] else None
@@ -367,6 +419,9 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                     "inner_intent": f"意图={intent}；怀疑最高={target_name}",
                     "emotion_shown": "平静",
                 }
+                recalled = memory.recall(
+                    state, round_no, cue=f"{intent} {target_name} {clue}", limit=3
+                )
                 if speaker.name != "template":
                     allowed = sorted(set(public_facts) | set(state["beliefs"]))
                     scope = guard_engine.scope_for(state["character_id"])
@@ -377,6 +432,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                     prompt = llm.build_prompt(
                         state, intent, target_name, clue, round_no, allowed, seat_names,
                         known_fact_lines=known_lines,
+                        recalled_lines=memory.recall_lines(recalled, seat_names),
                     )
                     try:
                         generated = llm.parse_speech(speaker.generate(prompt), allowed, intent)
@@ -437,9 +493,27 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 "target": act["target"],
                 "emotion_shown": act.get("emotion_shown", "平静"),
                 "guard": guard_info,
+                "recalled": _recall_payload(recalled),
             }
-            db.append_game_event(conn, session_id, round_no, seat_id, act["act_type"], payload, ["public"])
-            state["memory"].append({"round": round_no, "act": act["act_type"], "importance": 0.5})
+            seq = db.append_game_event(
+                conn, session_id, round_no, seat_id, act["act_type"], payload, ["public"]
+            )
+            own_observation = memory.observe(
+                state,
+                {
+                    "seq": seq, "actor": seat_id, "act_type": act["act_type"],
+                    "payload": payload, "is_self": True,
+                },
+                round_no,
+                audience=[s for s in all_seats if s != seat_id],
+            )
+            if own_observation:
+                for change in own_observation["commitment_changes"]:
+                    log.append({
+                        "round": round_no, "actor": seat_id, "act": "commitment",
+                        "witness": seat_id, "fact": change["fact"],
+                        "from": change["from"], "to": change["to"],
+                    })
             log.append({"round": round_no, "actor": seat_id, "act": act["act_type"], "utterance": act["utterance"]})
             if guard_info:
                 log.append({"round": round_no, "actor": seat_id, "act": "infoguard", "result": guard_info})

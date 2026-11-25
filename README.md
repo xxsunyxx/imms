@@ -47,6 +47,17 @@ uv run imms --db imms.db replay --session snow-night-villa-s001 --with-eval --ou
 
 LLM 台词（可选）：设 `IMMS_LLM_URL` / `IMMS_LLM_MODEL` 后 `play --llm auto`；未配置时用离线模板。LLM 只写台词，不碰数值与事实。
 
+## 记忆与承诺
+
+运行时为每个席位维护听众账本（谁在何时对谁说了什么）、承诺状态机（`stated → revised/weakened → retracted`）与 F26 召回评分。召回结果只进 Prompt 与事件载荷，不生成新事实、不改数值。GM 分叉 diff 会列出记忆与承诺差异。
+
+```bash
+uv run imms --db imms.db memory show --session snow-night-villa-s001 --seat ai:gu_chengye --cue "书房 争吵"
+uv run imms --db imms.db memory commitments --session snow-night-villa-s001 --seat human:lin_wanqiu
+```
+
+详见 `docs/MEMORY.md`。
+
 ## 投票体系
 
 ```bash
@@ -135,6 +146,7 @@ uv run python -m unittest discover -s tests
 - `docs/GM.md` — GM 决策策略、分支树、合并回滚与叙事 diff
 - `docs/RETRO.md` — 复盘回溯评估指标与决策时点复核
 - `docs/VOTE.md` — 投票规则、多轮复投、AI 策略与票据审计
+- `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
 
 ## 已踩过的坑
 
@@ -164,3 +176,5 @@ uv run python -m unittest discover -s tests
 - manifest 汇总必须在每次 upsert 后重算；两个不同 SKIP 文件可能哈希相同，不能只按哈希去重。
 - 平票不能用 `max(tally, key=tally.get)`：它依赖字典插入顺序；投票平局必须由证据分数或显式规则裁决。
 - 多轮投票的 `majority_stop=false` 表示继续投满指定轮次，不能写成 `if not majority_stop: break`，否则第二轮永远不会发生。
+- 运行时每轮都会重读此前事件，记忆账本必须按事件 `seq` 去重，否则同一句话会被反复评价与召回。
+- 记忆检索是 F26（`formulas.memory_score`），F30 是派生能力；任务编号与公式编号不要混用。

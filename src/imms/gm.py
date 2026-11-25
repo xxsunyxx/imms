@@ -16,7 +16,7 @@ decision specification plus a replay, not a second copy of the world.
 import json
 from datetime import datetime, timezone
 
-from . import branch, db, formulas, runtime, solver
+from . import branch, db, formulas, memory, runtime, solver
 
 WEIGHT_RE = solver.WEIGHT_RE
 
@@ -185,6 +185,7 @@ def narrative_diff(base_conn, fork_conn, base_id, fork_id):
     ]
 
     suspicion_changes = []
+    memory_changes = {}
     rounds = {
         r[0] for r in base_conn.execute(
             "SELECT DISTINCT round FROM state_snapshots WHERE session_id=?", (base_id,)
@@ -210,6 +211,13 @@ def narrative_diff(base_conn, fork_conn, base_id, fork_id):
                 suspicion_changes.append({
                     "round": round_no, "seat": seat, "base_top": b_top, "fork_top": f_top,
                 })
+            for change in memory.diff(b_state, f_state, round_no):
+                if change.get("kind") == "recall_top":
+                    key = (seat, "recall_top", tuple(change.get("base") or []))
+                else:
+                    key = (seat, change.get("kind"), change.get("seq") or change.get("fact"))
+                if key not in memory_changes:
+                    memory_changes[key] = {"seat": seat, "round": round_no, **change}
 
     b_result = db.get_game_state(base_conn, base_id, "result", {})
     f_result = db.get_game_state(fork_conn, fork_id, "result", {})
@@ -218,15 +226,18 @@ def narrative_diff(base_conn, fork_conn, base_id, fork_id):
         "fork": {"winner": f_result.get("winner"), "solved": f_result.get("solved")},
         "changed": b_result.get("solved") != f_result.get("solved") or b_result.get("winner") != f_result.get("winner"),
     }
+    ordered_memory = [memory_changes[k] for k in sorted(memory_changes, key=str)]
     return {
         "clue_changes": clue_changes,
         "utterance_changes": utterance_changes,
         "suspicion_changes": suspicion_changes,
+        "memory_changes": ordered_memory,
         "outcome": outcome,
         "summary": {
             "clue_changes": len(clue_changes),
             "utterance_changes": len(utterance_changes),
             "suspicion_changes": len(suspicion_changes),
+            "memory_changes": len(ordered_memory),
             "outcome_changed": outcome["changed"],
         },
     }

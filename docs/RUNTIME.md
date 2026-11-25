@@ -28,10 +28,10 @@
 | 表 | 内容 |
 |---|---|
 | `game_events` | 每轮 SpeechAct（含 `inner_intent`，仅复盘可见）；私聊事件共用全局 `seq` |
-| `game_state` | `runtime` / `round` / `revealed_clues` / `user_input_index` / `result` / `vote_state` / `llm_stats` |
+| `game_state` | `runtime`（含 `memory` / `commitments`）/ `round` / `revealed_clues` / `user_input_index` / `result` / `vote_state` / `llm_stats` |
 | `private_rooms` | 私聊房间的席位、轮次、开关顺序 |
 
-`inner_intent` 与 `utterance` 分离存储，支撑复盘时展示"内心独白"。公式层产生的显著 L3 变化（`|Δ|≥0.05`）也写入 `attribute_events`，供复盘排序转折点。
+`inner_intent` 与 `utterance` 分离存储，支撑复盘时展示"内心独白"。公式层产生的显著 L3 变化（`|Δ|≥0.05`）也写入 `attribute_events`，供复盘排序转折点。每轮感知先按事件 `seq` 去重再写入听众账本；公开的每句发言会携带 `payload.recalled`（F26 召回 Top3），私聊只按 `room:` 可见性进入房间成员的内存。详见 `docs/MEMORY.md`。
 
 ## 4. 命令
 
