@@ -36,8 +36,8 @@
 ## 4. 命令
 
 ```bash
-uv run imms --db imms.db play --session 雨夜山庄-s001 --rounds 2 \
-  --scripted examples/sample_script/user_script.json --seed 42
+uv run imms --db imms.db play --session snow-night-villa-s001 --rounds 2 \
+  --scripted examples/scripts/user_script.json --seed 42
 ```
 
 ## 5. LLM 台词层（可插拔、不碰数值）
@@ -48,8 +48,8 @@ uv run imms --db imms.db play --session 雨夜山庄-s001 --rounds 2 \
 # 默认 auto：未设 IMMS_LLM_URL 时用模板，设了则走 HTTP
 export IMMS_LLM_URL=http://localhost:11434/v1/chat/completions
 export IMMS_LLM_MODEL=qwen2.5:7b
-uv run imms --db imms.db play --session 雨夜山庄-s001 --rounds 2 \
-  --scripted examples/sample_script/user_script.json --llm auto
+uv run imms --db imms.db play --session snow-night-villa-s001 --rounds 2 \
+  --scripted examples/scripts/user_script.json --llm auto
 ```
 
 - Prompt 分块注入 L1/L2/L3、信念图、谎言账本、本轮意图；`is_true` 等 GM 真值字段不进 Prompt。
@@ -59,13 +59,13 @@ uv run imms --db imms.db play --session 雨夜山庄-s001 --rounds 2 \
 ## 6. 私聊房间
 
 ```bash
-uv run imms --db imms.db private open --session 雨夜山庄-s001 --round 3 \
-  --seats human:char_01,ai:char_02
-uv run imms --db imms.db private say --session 雨夜山庄-s001 \
-  --room 雨夜山庄-s001-p001 --actor human:char_01 --to ai:char_02 \
+uv run imms --db imms.db private open --session snow-night-villa-s001 --round 3 \
+  --seats human:lin_wanqiu,ai:gu_chengye
+uv run imms --db imms.db private say --session snow-night-villa-s001 \
+  --room snow-night-villa-s001-p001 --actor human:lin_wanqiu --to ai:gu_chengye \
   --utterance "账房的灯熄得早。"
-uv run imms --db imms.db private list --session 雨夜山庄-s001
-uv run imms --db imms.db private close --session 雨夜山庄-s001 --room 雨夜山庄-s001-p001
+uv run imms --db imms.db private list --session snow-night-villa-s001
+uv run imms --db imms.db private close --session snow-night-villa-s001 --room snow-night-villa-s001-p001
 ```
 
 - 所有发言（公开/私聊/开房/关房）共用 `game_events.seq`（AUTOINCREMENT），按全局序消费，避免竞态错序。
@@ -75,7 +75,7 @@ uv run imms --db imms.db private close --session 雨夜山庄-s001 --room 雨夜
 ## 7. 复盘
 
 ```bash
-uv run imms --db imms.db replay --session 雨夜山庄-s001 --out replay.md
+uv run imms --db imms.db replay --session snow-night-villa-s001 --out replay.md
 ```
 
 五段：真相时间线、角色内心独白、关键转折点 Top 5、谎言全景图、反事实推演。反事实用已记录的 `logLR` 重算怀疑度与投票分布，不重放搜证/私聊，故为近似推演。
@@ -85,8 +85,8 @@ uv run imms --db imms.db replay --session 雨夜山庄-s001 --out replay.md
 **GM 的难点不是把话说漂亮，而是内容分叉后能否回归。** 用户改一轮决策、GM 注入一个事件，系统必须精确恢复当时状态、重跑后续、并校验全局仍然成立。
 
 ```bash
-uv run imms --db imms.db branch fork --session 雨夜山庄-s001 --at-round 2 \
-  --override-round 2 --override-utterance "我相信赵管事，账房的灯熄得早与我无关。" \
+uv run imms --db imms.db branch fork --session snow-night-villa-s001 --at-round 2 \
+  --override-round 2 --override-utterance "我承认，我偷看过遗嘱草稿。" \
   --seed 42 --out branch_report.json
 ```
 

@@ -11,7 +11,7 @@ class TestReplay(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.conn, self.session = make_session_db(Path(self.tmp.name) / "t.db")
-        scripted = json.loads((ROOT / "examples" / "sample_script" / "user_script.json").read_text(encoding="utf-8"))
+        scripted = json.loads((ROOT / "examples" / "scripts" / "user_script.json").read_text(encoding="utf-8"))
         runtime.run_session(
             self.conn, self.session["session_id"], 2, scripted, 42, "template"
         )
@@ -24,7 +24,7 @@ class TestReplay(unittest.TestCase):
     def test_all_five_sections(self):
         for title in replay.SECTIONS:
             self.assertIn(title, self.text)
-        self.assertIn("赵管事", self.text)
+        self.assertIn("周慕辰", self.text)
 
     def test_turning_points_from_formula_audit(self):
         section = self.text.split("## 3.")[1].split("## 4.")[0]

@@ -138,22 +138,10 @@ social_leverage   = 0.4·E + 0.3·skill_norm('eloquence') + 0.3·(1−A)
 2. **同一派生式**：上面的公式对所有角色一致；差值只来自输入值，不来自公式切换。
 3. **同一比较命令**：`imms compare --script-id <id> --a <char> --b <char>` 输出逐维并列向量。
 
-示例（同一向量下两人可比；取 `acting_skill=0.5`）：
+真实剧本示例（`examples/scripts/snow-night-villa.yaml`）：
 
-示例输入见 `examples/cross_source/script.md`，实际输出：
+```bash
+uv run imms --db imms.db compare --script-id snow-night-villa --a lin_wanqiu --b zhou_muchen
+```
 
-| 维度 | 柯南 | 钢铁侠 |
-|---|---|---|
-| O 开放性 | 0.80 | 0.90 |
-| C 尽责性 | 0.80 | 0.60 |
-| A 宜人性 | 0.60 | 0.40 |
-| N 神经质 | 0.40 | 0.60 |
-| observation | 0.84 | 0.82 |
-| reasoning | 0.82 | 0.81 |
-| deception | 0.54 | 0.58 |
-| impulse_control | 0.72 | 0.52 |
-| tech_craft | 0.52 | 0.90 |
-| combat_effective | 0.52 | 0.72 |
-| social_leverage | 0.54 | 0.77 |
-
-结论：柯南在观察/推理/自控上更高；钢铁侠在技术/战斗/社交杠杆上更高。**差异来自数值，不来自题材标签。**
+该剧本不含行为证据句，归一化报告列出 `missing_evidence`，标准键产出 `value=null`，派生值走中性默认。**没有证据就不给分**——跨来源等效的前提是差异来自可比数值，而不是题材标签或臆测。补入 `canon_evidence` 后重跑 `normalize` 生成新 `extraction_version`，再比较才会出现角色差异。

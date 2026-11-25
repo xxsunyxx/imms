@@ -283,15 +283,17 @@ def _gm_step(conn, session_id, round_no, onto, runtime):
 def _vote(conn, session_id, runtime, session_doc, scripted):
     onto = db.get_script(conn, session_doc["script_id"])
     name_map = _name_map(onto)
-    culprit_name = None
-    for fact in onto.get("truth_graph", []):
-        for name in name_map:
-            if name in fact:
-                culprit_name = name
+    culprit_id = onto.get("evaluation", {}).get("killer_id")
+    if not culprit_id:
+        culprit_name = None
+        for fact in onto.get("truth_graph", []):
+            for name in name_map:
+                if name in fact:
+                    culprit_name = name
+                    break
+            if culprit_name:
                 break
-        if culprit_name:
-            break
-    culprit_id = name_map.get(culprit_name, culprit_name)
+        culprit_id = name_map.get(culprit_name, culprit_name)
     seat_ids = set(runtime.keys())
 
     def to_seat(value):

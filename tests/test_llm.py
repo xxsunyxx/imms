@@ -27,8 +27,8 @@ class TestLLM(unittest.TestCase):
         state = {
             "l1": {"OCEAN.C": 0.8, "lexicon": "反问句"},
             "emotion": {"arousal": 0.4, "stress": 0.2, "valence": -0.1},
-            "relations": {"ai:char_02": {"like": 0.1, "trust": -0.2, "suspicion": 0.7}},
-            "suspicion": {"ai:char_02": 0.7},
+            "relations": {"ai:zhou_muchen": {"like": 0.1, "trust": -0.2, "suspicion": 0.7}},
+            "suspicion": {"ai:zhou_muchen": 0.7},
             "lie_ledger": [], "beliefs": {"clue_01": {}},
         }
         prompt = llm.build_prompt(state, "accuse", "赵管事", "clue_01", 3, ["clue_01"])

@@ -1,0 +1,224 @@
+id: snow-night-villa
+title: 雪夜·山庄
+brief: |
+  冬至夜，暴风雪封住了山。山庄主人沈万楼被发现死于自己的书房——
+  房门从内反锁，窗户插着插销，是一间完美的密室。
+  在场的五个人都有嫌疑，而雪停之前，没有人能离开。
+mode: roleplay
+player_selectable: [lin_wanqiu, gu_chengye, su_manqing, fang_heming, zhou_muchen]
+
+facts:
+  - id: p_setup
+    visibility: public
+    core: false
+    content: 死者沈万楼，62岁，山庄主人，死于书房，房门从内反锁，门窗完好。
+    keywords: [沈万楼, 书房, 密室]
+  - id: p_snow
+    visibility: public
+    core: false
+    content: 暴风雪自下午起封山，山庄与外界隔绝，凶手必在当晚留宿的五人之中。
+    keywords: [暴风雪, 封山]
+  - id: t_method
+    visibility: private
+    core: true
+    content: 死者死于过量胰岛素注射，腹部针孔被领带遮住，伪装成心脏病发。
+    keywords: [胰岛素, 注射, 针孔, 心脏病]
+  - id: t_time
+    visibility: private
+    core: true
+    content: 实际死亡时间为23:00至23:30之间，早于众人认知的午夜。
+    keywords: [十一点, 23点, 死亡时间]
+  - id: t_noise
+    visibility: private
+    core: false
+    content: 林晚秋23:15经过书房门外，听到里面有激烈的争吵声，其中一方的声音不是死者。
+    keywords: [争吵, 十一点十五, "23:15"]
+  - id: t_will
+    visibility: private
+    core: false
+    content: 死者当天让律师送来新遗嘱草稿，准备剥夺方鹤鸣的继承权。
+    keywords: [遗嘱, 草稿, 律师]
+  - id: t_inheritance
+    visibility: private
+    core: true
+    content: 方鹤鸣欠下八十万赌债，并伪造死者签名向地下钱庄借款，死者已掌握字据。
+    keywords: [赌债, 伪造签名, 八十万]
+  - id: t_debt
+    visibility: private
+    core: false
+    content: 顾承业挪用公司公款三百万元，死者握有证据，限其三日内归还。
+    keywords: [挪用, 公款, 三百万]
+  - id: t_affair
+    visibility: private
+    core: false
+    content: 苏曼卿是死者的私生女，上周上门相认被死者拒绝，并遭言语羞辱。
+    keywords: [私生女, 相认]
+  - id: t_drug
+    visibility: private
+    core: true
+    content: 周慕辰长期倒卖处方药牟利，死者发现后勒令其交出全部所得并辞职，否则报警。
+    keywords: [倒卖, 处方药, 辞职]
+  - id: t_medicine
+    visibility: private
+    core: false
+    content: 周慕辰医药箱中的胰岛素笔少了一支，且笔身有新刮痕。
+    keywords: [胰岛素笔, 少了一支, 刮痕]
+  - id: t_window
+    visibility: private
+    core: true
+    content: 书房窗户插销上有细微划痕，窗台内侧有融雪水渍——窗户曾被从外打开后重新锁上，凶手经阳台离开。
+    keywords: [插销, 划痕, 融雪, 阳台]
+
+characters:
+  - id: shen_wanlou
+    name: 沈万楼
+    role: 死者（山庄主人）
+    is_victim: true
+    is_killer: false
+    public_profile: 死者。经营药材生意发家，性情刚愎，掌控欲极强。
+    personality: ""
+    speaking_style: ""
+    known_fact_ids: []
+  - id: lin_wanqiu
+    name: 林晚秋
+    role: 管家
+    is_victim: false
+    is_killer: false
+    public_profile: 沈家管家，服务二十年，掌管山庄大小事务。
+    personality: 谨慎克制，忠于沈家，说话留三分。
+    speaking_style: 简短恭敬，多用"是""老爷"，被逼问时会沉默片刻再答。
+    known_fact_ids: [t_noise, t_will]
+    backstory: |
+      你二十岁就进沈家做丫鬟，老爷教你认字管账，你也从端茶递水做到了管家。老爷脾气硬，近年疑心更重，连你也要回避书房里的事。你念着旧恩，可老爷书房
+      里的东西，你越来越看不懂了。
+    timeline:
+      - "21:00 安排晚宴收尾，核对次日菜单"
+      - "22:30 在厨房监督佣人收拾"
+      - "23:15 送安神茶路过书房，听到里面有激烈的争吵声，其中一方的声音不是老爷"
+      - "23:40 回下房休息，没敢声张"
+    goals:
+      - "守住你偷看遗嘱草稿的事——老爷生前改遗嘱的风声若从你嘴里出去，你在沈家三十年就毁了"
+      - "如果瞒不住，就说送茶是老爷的吩咐，你什么都没看见"
+      - "配合调查找出真凶——老爷对你有旧恩，你是真心想抓出那个人"
+  - id: gu_chengye
+    name: 顾承业
+    role: 生意合伙人
+    is_victim: false
+    is_killer: false
+    public_profile: 死者生意合伙人，当晚与死者谈过公司账目。
+    personality: 精明圆滑，习惯把话题引向生意场。
+    speaking_style: 客套话多，回避直接回答，喜欢用反问。
+    known_fact_ids: [t_debt]
+    backstory: |
+      你跟着沈万楼合伙做药材生意十五年，外人眼里你们是过命的交情。只有你知道账上那三百万的窟窿——你挪去填期货的坑，原想翻本再补回去。上周老爷把你
+      叫进书房，把流水拍在桌上，限你三天归还。
+    timeline:
+      - "20:00 与老爷在书房对账，谈得很不愉快"
+      - "21:30 回客房与律师通电话商量对策"
+      - "22:50 想去书房再求一次情，门从里面反锁，里面没有动静，你没敢敲门"
+      - "23:30 回房，一夜没睡好"
+    goals:
+      - "挪用公款的事绝不能暴露——坐牢是小事，行里的名声毁了才是死路"
+      - "被问起书房就说你只是路过，什么都没听见"
+      - "稳住阵脚：老爷一死审计还是会来，你现在最不能自乱阵脚"
+  - id: su_manqing
+    name: 苏曼卿
+    role: 钢琴教师
+    is_victim: false
+    is_killer: false
+    public_profile: 受雇于山庄教小少爷钢琴的女教师，案发前一周才到。
+    personality: 敏感内敛，自尊心强，情绪激动时语速变快。
+    speaking_style: 文艺含蓄，偶有试探，对身份话题极为回避。
+    known_fact_ids: [t_affair]
+    backstory: |
+      你是城里音乐学院的钢琴老师，一周前以家教名义住进山庄——其实进门那天你就亮明了身份：你是沈万楼的私生女。他要面子，给钱，让你永远别提。上周你
+      最后一次摊牌，只想要一声承认，他把支票摔在了你脸上。
+    timeline:
+      - "21:00 在琴房练琴"
+      - "22:00 回房与母亲通电话，她劝你别再去了"
+      - "23:00 听见走廊尽头有脚步声"
+      - "23:30 熄灯"
+    goals:
+      - "身世绝不主动提——那天的羞辱你不想经历第二次"
+      - "但如果有人拿出生证明或体检记录当面质问，你可以承认，并要求参与遗产分配"
+      - "找出真凶——你恨老爷，但你更想知道是谁动的手"
+  - id: fang_heming
+    name: 方鹤鸣
+    role: 远房侄子
+    is_victim: false
+    is_killer: false
+    public_profile: 死者的远房侄子，最近常住山庄，出手阔绰。
+    personality: 轻浮好赌，虚张声势，越心虚越大声。
+    speaking_style: 口头禅"开什么玩笑"，回答常自相矛盾。
+    known_fact_ids: [t_inheritance]
+    backstory: |
+      你是沈家远房侄子，从小被亲戚们说命好，有个有钱的叔叔。这几年你在澳门欠了八十万赌债，伪造叔叔的签名向地下钱庄借了钱，本想年关翻本。叔叔上周放
+      话：新遗嘱里，你一分钱都拿不到。
+    timeline:
+      - "20:30 在偏厅独自喝酒"
+      - "21:30 去找叔叔借钱，被轰出书房"
+      - "22:30 回房数筹码，越数越烦"
+      - "23:40 好像听见雪地里有人走动——不，你喝多了，听错了"
+    goals:
+      - "伪造签名的事一个字都不能漏——那是要吃官司的"
+      - "遗产没了就没了，先想法子把债主的电话按住"
+      - "摆出查案最上心的样子——谁杀了叔叔，你要第一个查出来给人看"
+  - id: zhou_muchen
+    name: 周慕辰
+    role: 家庭医生
+    is_victim: false
+    is_killer: true
+    public_profile: 山庄家庭医生，负责死者的日常健康，案发当晚为死者做过例行检查。
+    personality: 温和专业，善于安抚他人，压力下依旧冷静。
+    speaking_style: 用词精确，习惯用医学解释一切，滴水不漏。
+    known_fact_ids: [t_method, t_time, t_drug, t_medicine, t_window]
+    backstory: |
+      你是沈家特聘的家庭医生，留德回来的全科医生，镇上人称周神医。你习惯了用医学解释一切，也确实救过老爷几次。只有你知道书房抽屉里那封信的分量：老
+      爷发现了你倒卖处方药的账，限你三天交出全部所得并辞职，否则报警。
+    timeline:
+      - "21:00 为老爷做例行检查，一切指标正常"
+      - "22:30 回医疗室整理药箱，顺手取走一支胰岛素笔"
+      - "23:00 由阳台翻进书房，注射过量胰岛素，布置成心脏病发的样子"
+      - "23:20 从窗户回到自己房间，处理掉手套"
+      - "23:45 和衣躺下，装睡"
+    goals:
+      - "首要：把死因钉死在心脏病发上——谁提胰岛素，你就用医学常识和统计学概率搪塞"
+      - "如果空笔或窗台水渍被发现，就说你当晚一直在医疗室配药，哪都没去"
+      - "万不得已时，把话题引向方鹤鸣的赌债或顾承业的三百万——他们的动机人尽皆知"
+
+clues:
+  - id: c_report
+    title: 初步检验结果
+    stage: 0
+    location: 书房（死者身上）
+    description: 死者体表无明显外伤，领带遮掩处有细微针孔，死状近似急性心衰。
+    reveals_fact_ids: [t_method, t_time]
+  - id: c_insulin
+    title: 空掉的胰岛素笔
+    stage: 0
+    location: 医疗室
+    description: 周慕辰的医药箱底层，一支胰岛素笔已经空了，笔身有一道新刮痕。
+    reveals_fact_ids: [t_medicine]
+  - id: c_window
+    title: 窗台的融雪水渍
+    stage: 0
+    location: 书房窗台
+    description: 插销有细微划痕，窗台内侧有一小滩融雪的水渍。
+    reveals_fact_ids: [t_window]
+  - id: c_will
+    title: 遗嘱草稿与字据
+    stage: 0
+    location: 书房抽屉
+    description: 一份尚未签署的新遗嘱草稿，旁边放着方鹤鸣伪造签名的借款字据。
+    reveals_fact_ids: [t_will, t_inheritance]
+  - id: c_ledger
+    title: 异常的采购单
+    stage: 1
+    location: 医疗室（夹层）
+    description: 夹在医学期刊里的药品采购单复印件，进货量远超处方记录。
+    reveals_fact_ids: [t_drug]
+
+evaluation:
+  killer_id: zhou_muchen
+  motive_fact_id: t_drug
+  required_fact_ids: [t_method, t_time, t_drug, t_window]

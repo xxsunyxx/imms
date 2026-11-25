@@ -27,3 +27,13 @@
 - 新增 `src/imms/branch.py`：在内存 SQLite 副本中从轮 k−1 快照分叉，替换用户该轮发言，重放后续完整链路；原会话不被污染。
 - 回归校验四项：bounded / info_isolation / claims_known / solvable；差异报告含原局与分叉局赢家、破案与否、结局翻转；verdict ∈ pass/changed/fail。
 - 测试：新增 test_branch.py，共 21 个 unittest 全通过；干净库验证 override 发言生效、原局事件与结果未变、结局翻转可被检出。
+
+## 2026-11-25 · 真实剧本替换自编示例
+
+- 参考 `refer/lockedroom-ai` 的剧本格式，清空自编的 `examples/sample_script`（雨夜山庄）与 `examples/cross_source`（柯南/钢铁侠）。
+- 三份真实 YAML 剧本复制到 `examples/scripts/`：`snow-night-villa.yaml` / `silent-dinner.yaml` / `midnight-meeting.yaml`。
+- `ontology.py` 新增 `parse_yaml_script`：把 facts（visibility/core/content/keywords）、characters（known_fact_ids/goals/timeline/speaking_style）、clues（reveals_fact_ids/stage）、evaluation（killer_id/motive_fact_id/required_fact_ids）带进 Ontology；同时生成兼容旧 runtime 的 truth_graph/clue_pool，logLR 方向由 reveals_fact_ids → knowers 推导。
+- `assemble` 排除受害者席位并校验 `player_selectable`；`runtime._vote` 与 `replay._culprit_id` 优先读 `evaluation.killer_id`，不再从文本猜凶手。
+- `normalize` 对无 `canon_evidence` 的真实剧本产出 `value=null` + `missing_evidence` 报告，不编造分值；对局用中性默认值。
+- 依赖：新增 `pyyaml`（uv add，uv.lock 已更新）。
+- 全仓命令与测试引用切到 `snow-night-villa` / `lin_wanqiu`；21 个 unittest 与 parse→normalize→assemble→play→private→replay→branch 端到端全通过。

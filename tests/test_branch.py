@@ -12,7 +12,7 @@ class TestBranchRegression(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.conn, self.session = make_session_db(Path(self.tmp.name) / "t.db")
         self.sid = self.session["session_id"]
-        scripted = json.loads((ROOT / "examples" / "sample_script" / "user_script.json").read_text(encoding="utf-8"))
+        scripted = json.loads((ROOT / "examples" / "scripts" / "user_script.json").read_text(encoding="utf-8"))
         self.base = runtime.run_session(self.conn, self.sid, 2, scripted, 42, "template")
         self.human_seat = next(
             p["id"] for p in self.session["participants"] if p["kind"] == "human_character"

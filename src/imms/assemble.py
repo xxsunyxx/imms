@@ -10,7 +10,11 @@ def assemble(conn, script_id, human_character_id, difficulty=3):
 
     if human_character_id not in chars:
         raise ValueError("ERR_NO_HUMAN_SEAT")
-    if len(chars) < 3:
+    selectable = onto.get("world", {}).get("player_selectable", "")
+    if selectable and human_character_id not in selectable.split(","):
+        raise ValueError("ERR_CHAR_NOT_SELECTABLE")
+    playable = {cid: ch for cid, ch in chars.items() if not ch.get("is_victim")}
+    if len(playable) < 3:
         raise ValueError("ERR_CHAR_COUNT")
     if not onto.get("truth_graph"):
         raise ValueError("ERR_TRUTH_INCONSISTENT")
@@ -24,7 +28,7 @@ def assemble(conn, script_id, human_character_id, difficulty=3):
         "visibility": "all",
     }]
 
-    for cid, ch in chars.items():
+    for cid, ch in playable.items():
         is_human = cid == human_character_id
         participants.append({
             "id": f"{'human' if is_human else 'ai'}:{cid}",

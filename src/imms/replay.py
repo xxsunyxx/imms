@@ -26,6 +26,8 @@ def _seat_names(session_doc):
 
 
 def _culprit_id(onto):
+    if onto.get("evaluation", {}).get("killer_id"):
+        return onto["evaluation"]["killer_id"]
     names = {c["name"]: c["id"] for c in onto.get("characters", [])}
     for fact in onto.get("truth_graph", []):
         for name, cid in names.items():

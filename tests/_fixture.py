@@ -9,9 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def make_session_db(path):
     conn = db.connect(path)
-    onto = ontology.parse_script_dir(ROOT / "examples" / "sample_script")
+    onto = ontology.parse_script_dir(ROOT / "examples" / "scripts" / "snow-night-villa.yaml")
     db.save_script(conn, onto)
     doc, _ = normalize.normalize_persona(onto, ROOT / "config")
     db.save_persona_l1(conn, onto["script_id"], doc)
-    session = assemble.assemble(conn, onto["script_id"], "char_01")
+    session = assemble.assemble(conn, onto["script_id"], "lin_wanqiu")
     return conn, session

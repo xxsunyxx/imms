@@ -11,23 +11,21 @@ uv sync
 ## 端到端示例
 
 ```bash
-uv run imms --db imms.db parse --script examples/sample_script
-uv run imms --db imms.db normalize --script-id 雨夜山庄
-uv run imms --db imms.db assemble --script-id 雨夜山庄 --human char_01
-uv run imms --db imms.db persona show --script-id 雨夜山庄 --char char_01
-uv run imms --db imms.db derive --script-id 雨夜山庄 --char char_01 --key observation
-uv run imms --db cross.db parse --script examples/cross_source
-uv run imms --db cross.db normalize --script-id 跨源等效测试
-uv run imms --db cross.db compare --script-id 跨源等效测试 --a char_conan --b char_iron
-uv run imms --db imms.db assigned set --session 雨夜山庄-s001 --char char_01 --key public_identity --value '"山庄主人"' --reason '第二幕身份揭示' --round 2
-uv run imms --db imms.db emergent set --session 雨夜山庄-s001 --char char_01 --key trust --target char_02 --value -0.2 --reason '谎言被戳穿' --round 3
-uv run imms --db imms.db audit --session 雨夜山庄-s001 --char char_01
-uv run imms --db imms.db play --session 雨夜山庄-s001 --rounds 2 --scripted examples/sample_script/user_script.json --seed 42
-uv run imms --db imms.db private open --session 雨夜山庄-s001 --round 3 --seats human:char_01,ai:char_02
-uv run imms --db imms.db private say --session 雨夜山庄-s001 --room 雨夜山庄-s001-p001 --actor human:char_01 --to ai:char_02 --utterance "账房的灯熄得早。"
-uv run imms --db imms.db private close --session 雨夜山庄-s001 --room 雨夜山庄-s001-p001
-uv run imms --db imms.db replay --session 雨夜山庄-s001 --out replay.md
-uv run imms --db imms.db branch fork --session 雨夜山庄-s001 --at-round 2 --override-round 2 --override-utterance "我相信赵管事" --out branch_report.json
+uv run imms --db imms.db parse --script examples/scripts/snow-night-villa.yaml
+uv run imms --db imms.db normalize --script-id snow-night-villa
+uv run imms --db imms.db assemble --script-id snow-night-villa --human lin_wanqiu
+uv run imms --db imms.db persona show --script-id snow-night-villa --char lin_wanqiu
+uv run imms --db imms.db derive --script-id snow-night-villa --char lin_wanqiu --key observation
+uv run imms --db imms.db compare --script-id snow-night-villa --a lin_wanqiu --b zhou_muchen
+uv run imms --db imms.db assigned set --session snow-night-villa-s001 --char lin_wanqiu --key public_identity --value '"山庄管家"' --reason '第二幕身份揭示' --round 2
+uv run imms --db imms.db emergent set --session snow-night-villa-s001 --char lin_wanqiu --key trust --target gu_chengye --value -0.2 --reason '谎言被戳穿' --round 3
+uv run imms --db imms.db audit --session snow-night-villa-s001 --char lin_wanqiu
+uv run imms --db imms.db play --session snow-night-villa-s001 --rounds 2 --scripted examples/scripts/user_script.json --seed 42
+uv run imms --db imms.db private open --session snow-night-villa-s001 --round 3 --seats human:lin_wanqiu,ai:gu_chengye
+uv run imms --db imms.db private say --session snow-night-villa-s001 --room snow-night-villa-s001-p001 --actor human:lin_wanqiu --to ai:gu_chengye --utterance "我听到书房里有争执。"
+uv run imms --db imms.db private close --session snow-night-villa-s001 --room snow-night-villa-s001-p001
+uv run imms --db imms.db replay --session snow-night-villa-s001 --out replay.md
+uv run imms --db imms.db branch fork --session snow-night-villa-s001 --at-round 2 --override-round 2 --override-utterance "我承认偷看过遗嘱" --out branch_report.json
 ```
 
 LLM 台词（可选）：设 `IMMS_LLM_URL` / `IMMS_LLM_MODEL` 后 `play --llm auto`；未配置时用离线模板。LLM 只写台词，不碰数值与事实。详见 `docs/RUNTIME.md`。
@@ -40,7 +38,9 @@ uv run python -m unittest discover -s tests
 
 ## 剧本格式
 
-见 `examples/sample_script/script.md`。分节：`## World` / `## Characters` / `## TruthGraph` / `## Timeline_True` / `## CluePool` / `## PlotLocks` / `## Endings`。角色用 `### <id> <name>`，证据行为 `- key|锚点值|证据句|定位`。
+真实剧本见 `examples/scripts/*.yaml`（取自 lockedroom-ai）。结构：`facts`（`id/visibility/core/content/keywords`）、`characters`（含 `known_fact_ids/goals/timeline/speaking_style`）、`clues`（`reveals_fact_ids/stage`）、`evaluation`（`killer_id/motive_fact_id/required_fact_ids`）。旧 markdown 分节格式仍兼容，新剧本优先 yaml。
+
+真实剧本通常不含行为证据句。归一化对无 `canon_evidence` 的角色产出 `value=null` 并在报告的 `missing_evidence` 中列名，不编造分值；对局用中性默认值，属性补齐后重跑 `normalize` 生成新版本。
 
 ## 文档
 

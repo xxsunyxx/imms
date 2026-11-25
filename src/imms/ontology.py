@@ -3,6 +3,8 @@
 import re
 from pathlib import Path
 
+import yaml
+
 SECTIONS = {
     "world": "world",
     "世界": "world",
@@ -43,10 +45,92 @@ def _parse_evidence(line):
     }
 
 
+def parse_yaml_script(path):
+    """Parse a structured script (lockedroom-ai format) into our Ontology.
+
+    Keeps the legacy flat fields (truth_graph / clue_pool) for the runtime, and
+    carries structured facts / clues / evaluation for InfoGuard and evaluation.
+    """
+    data = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(data, dict) or "facts" not in data:
+        raise ValueError("ERR_YAML_NOT_SCRIPT")
+
+    facts = data.get("facts", [])
+    characters = data.get("characters", [])
+    clues = data.get("clues", [])
+    evaluation = data.get("evaluation", {})
+    char_by_id = {c["id"]: c for c in characters}
+
+    # Who knows each fact (private) — used to direct each clue's evidentiary weight.
+    knowers = {}
+    for c in characters:
+        for fid in c.get("known_fact_ids", []):
+            knowers.setdefault(fid, []).append(c["id"])
+
+    clue_lines = []
+    for clue in clues:
+        targets = []
+        for fid in clue.get("reveals_fact_ids", []):
+            for cid in knowers.get(fid, [evaluation.get("killer_id")]):
+                if cid and cid not in targets:
+                    targets.append(cid)
+        if not targets:
+            targets = [evaluation.get("killer_id")]
+        weight = 1.5 if clue.get("stage", 0) == 0 else 2.0
+        suffix = "|".join(f"logLR:{cid}={weight}" for cid in targets if cid)
+        clue_lines.append(f"{clue['id']} {clue.get('title', '')}|{suffix}")
+
+    killer_name = char_by_id.get(evaluation.get("killer_id"), {}).get("name", evaluation.get("killer_id"))
+    onto = {
+        "schema_version": "0.2",
+        "script_id": data["id"],
+        "title": data.get("title", data["id"]),
+        "brief": data.get("brief", ""),
+        "world": {
+            "mode": data.get("mode", "investigation"),
+            "player_selectable": ",".join(data.get("player_selectable", [])),
+        },
+        "truth_graph": [f["content"] for f in facts],
+        "facts": facts,
+        "timeline_true": list(char_by_id.get(evaluation.get("killer_id"), {}).get("timeline", [])),
+        "characters": [
+            {
+                "id": c["id"], "name": c["name"], "role": c.get("role", ""),
+                "is_victim": c.get("is_victim", False), "is_killer": c.get("is_killer", False),
+                "public_identity": c.get("public_profile", ""),
+                "personality": c.get("personality", ""),
+                "speaking_style": c.get("speaking_style", ""),
+                "lexicon": c.get("speaking_style", ""),
+                "known_fact_ids": c.get("known_fact_ids", []),
+                "backstory": c.get("backstory", ""),
+                "timeline": c.get("timeline", []),
+                "goals": c.get("goals", []),
+                "canon_evidence": [],
+            }
+            for c in characters
+        ],
+        "clue_pool": clue_lines,
+        "clues": clues,
+        "plot_locks": [],
+        "endings": [
+            f"指认{killer_name}则真凶伏法",
+            "指认其他人则冤案",
+        ],
+        "evaluation": evaluation,
+        "source_files": [str(path)],
+    }
+    return onto
+
+
 def parse_script_dir(script_dir):
     root = Path(script_dir)
+    if root.is_file() and root.suffix.lower() in {".yaml", ".yml"}:
+        return parse_yaml_script(root)
     if not root.is_dir():
         raise ValueError("ERR_SCRIPT_DIR_NOT_FOUND")
+    yaml_files = sorted([*root.rglob("*.yaml"), *root.rglob("*.yml")])
+    if yaml_files:
+        return parse_yaml_script(yaml_files[0])
     texts = []
     for p in sorted(root.rglob("*")):
         if p.suffix.lower() in {".md", ".txt"}:

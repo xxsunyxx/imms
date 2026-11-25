@@ -42,10 +42,17 @@ def envelope(key, value, confidence, evidence, domain, reason=None):
     }
 
 
+STANDARD_KEYS = (
+    "OCEAN.O", "OCEAN.C", "OCEAN.E", "OCEAN.A", "OCEAN.N",
+    "values.honesty", "health", "physique",
+    "skill_set.observation", "skill_set.reasoning",
+)
+
+
 def normalize_persona(onto, config_dir):
     anchors = read_json(config_dir / "anchors.json")
     allowed = set(anchors["levels"])
-    report = {"unmapped": [], "invalid_bins": [], "insufficient": []}
+    report = {"unmapped": [], "invalid_bins": [], "insufficient": [], "missing_evidence": []}
     personas = []
 
     for ch in onto.get("characters", []):
@@ -65,6 +72,14 @@ def normalize_persona(onto, config_dir):
             })
 
         attrs = []
+        if not grouped:
+            # A script without behavioural evidence is common. Emit explicit
+            # null slots instead of fabricating scores; runtime falls back to
+            # neutral values and the report names the gap.
+            for key in STANDARD_KEYS:
+                domain, _ = domain_for_key(key)
+                attrs.append(envelope(key, None, 0.0, [], domain, "missing_evidence"))
+            report["missing_evidence"].append(ch["id"])
         for key, items in grouped.items():
             domain, factor = domain_for_key(key)
             if len(items) < 2:
