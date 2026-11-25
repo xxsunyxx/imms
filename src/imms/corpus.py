@@ -324,7 +324,7 @@ def parse_rpg_script(data, source_rel):
                 "stage_source": stage_source,
                 "source_target": target.get("id", ""),
             })
-            weights = "|".join(f"logLR:{culprit}={1.5 if stage == 0 else 2.0}")
+            weights = f"logLR:{culprit}={1.5 if stage == 0 else 2.0}"
             line = f"{cid} {_clean(raw.get('content'))[:60]}|{weights}"
             clue_lines.append(line)
             clue_fact_map[line] = revealed

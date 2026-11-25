@@ -564,12 +564,12 @@
     }
   ],
   "clue_pool": [
-    "clue_medicine_seal 死者随身药瓶的封签被重新粘贴过，瓶盖内侧残留极淡的苦杏仁气味。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|1|.|5",
-    "clue_locked_door 门锁只能从室内转动，锁舌与窗框都没有工具痕迹。密室本身并非机关。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|1|.|5",
-    "clue_passport_case 抽屉里有一个空护照袋和当天购买的离港船票，持有人是沈知微。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|1|.|5",
-    "clue_aconite 药柜夹层发现少量乌头碱粉末，登记册上最后一次领用签名模仿得很像陆绍庭。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|2|.|0",
-    "clue_burned_ledger 未烧尽的账页记录了三笔义诊基金支出，收款公司的联系人缩写为 G.L.C。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|2|.|0",
-    "clue_clock_offset 维护记录确认钟楼当晚慢了十四分钟。怀表显示的是二十三点二十六分，对应真实时间二十三点四十分。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|2|.|0",
+    "clue_medicine_seal 死者随身药瓶的封签被重新粘贴过，瓶盖内侧残留极淡的苦杏仁气味。|logLR:gu_linchuan=1.5",
+    "clue_locked_door 门锁只能从室内转动，锁舌与窗框都没有工具痕迹。密室本身并非机关。|logLR:gu_linchuan=1.5",
+    "clue_passport_case 抽屉里有一个空护照袋和当天购买的离港船票，持有人是沈知微。|logLR:gu_linchuan=1.5",
+    "clue_aconite 药柜夹层发现少量乌头碱粉末，登记册上最后一次领用签名模仿得很像陆绍庭。|logLR:gu_linchuan=2.0",
+    "clue_burned_ledger 未烧尽的账页记录了三笔义诊基金支出，收款公司的联系人缩写为 G.L.C。|logLR:gu_linchuan=2.0",
+    "clue_clock_offset 维护记录确认钟楼当晚慢了十四分钟。怀表显示的是二十三点二十六分，对应真实时间二十三点四十分。|logLR:gu_linchuan=2.0",
     "rpg_fog_harbor_clocktower_gap_inquiry 证据链要求核对“账本照片”与“药柜行踪”。相关细节只存在于个别角色的私有记忆中，不会自动公开；请通过问询/私聊取得，不要|logLR:gu_linchuan=2.0"
   ],
   "clues": [
@@ -672,37 +672,37 @@
     }
   ],
   "clue_fact_map": {
-    "clue_medicine_seal 死者随身药瓶的封签被重新粘贴过，瓶盖内侧残留极淡的苦杏仁气味。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|1|.|5": [
+    "clue_medicine_seal 死者随身药瓶的封签被重新粘贴过，瓶盖内侧残留极淡的苦杏仁气味。|logLR:gu_linchuan=1.5": [
       "f_rpg_fog_harbor_clocktower_chain01"
     ],
     "clue_medicine_seal": [
       "f_rpg_fog_harbor_clocktower_chain01"
     ],
-    "clue_locked_door 门锁只能从室内转动，锁舌与窗框都没有工具痕迹。密室本身并非机关。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|1|.|5": [
+    "clue_locked_door 门锁只能从室内转动，锁舌与窗框都没有工具痕迹。密室本身并非机关。|logLR:gu_linchuan=1.5": [
       "f_rpg_fog_harbor_clocktower_chain01"
     ],
     "clue_locked_door": [
       "f_rpg_fog_harbor_clocktower_chain01"
     ],
-    "clue_passport_case 抽屉里有一个空护照袋和当天购买的离港船票，持有人是沈知微。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|1|.|5": [
+    "clue_passport_case 抽屉里有一个空护照袋和当天购买的离港船票，持有人是沈知微。|logLR:gu_linchuan=1.5": [
       "f_rpg_fog_harbor_clocktower_truth"
     ],
     "clue_passport_case": [
       "f_rpg_fog_harbor_clocktower_truth"
     ],
-    "clue_aconite 药柜夹层发现少量乌头碱粉末，登记册上最后一次领用签名模仿得很像陆绍庭。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|2|.|0": [
+    "clue_aconite 药柜夹层发现少量乌头碱粉末，登记册上最后一次领用签名模仿得很像陆绍庭。|logLR:gu_linchuan=2.0": [
       "f_rpg_fog_harbor_clocktower_chain01"
     ],
     "clue_aconite": [
       "f_rpg_fog_harbor_clocktower_chain01"
     ],
-    "clue_burned_ledger 未烧尽的账页记录了三笔义诊基金支出，收款公司的联系人缩写为 G.L.C。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|2|.|0": [
+    "clue_burned_ledger 未烧尽的账页记录了三笔义诊基金支出，收款公司的联系人缩写为 G.L.C。|logLR:gu_linchuan=2.0": [
       "f_rpg_fog_harbor_clocktower_chain02"
     ],
     "clue_burned_ledger": [
       "f_rpg_fog_harbor_clocktower_chain02"
     ],
-    "clue_clock_offset 维护记录确认钟楼当晚慢了十四分钟。怀表显示的是二十三点二十六分，对应真实时间二十三点四十分。|l|o|g|L|R|:|g|u|_|l|i|n|c|h|u|a|n|=|2|.|0": [
+    "clue_clock_offset 维护记录确认钟楼当晚慢了十四分钟。怀表显示的是二十三点二十六分，对应真实时间二十三点四十分。|logLR:gu_linchuan=2.0": [
       "f_rpg_fog_harbor_clocktower_chain03"
     ],
     "clue_clock_offset": [

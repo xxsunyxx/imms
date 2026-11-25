@@ -233,7 +233,7 @@ def _user_act(scripted, scripted_index, target_name):
     return {"act_type": "assert", "utterance": item, "claimed_facts": [], "target": None, "inner_intent": "用户自行决定"}
 
 
-def _gm_step(conn, session_id, round_no, onto, runtime, guard=None, seat_map=None):
+def _gm_step(conn, session_id, round_no, onto, runtime, guard=None, seat_map=None, decision=None):
     revealed = db.get_game_state(conn, session_id, "revealed_clues", [])
     events = db.visible_game_events(conn, session_id, "gm")
     n_accuse = sum(1 for e in events if e["round"] == round_no and e["act_type"] == "accuse")
@@ -243,39 +243,45 @@ def _gm_step(conn, session_id, round_no, onto, runtime, guard=None, seat_map=Non
     target = formulas.heat_target(round_no, max(1, round_no), 3.0)
     injected = None
     gm_changes = []
-    if heat < target - 0.3:
+    chosen = None
+    if decision and decision.get("release_clue") and decision["release_clue"] not in revealed:
+        if decision["release_clue"] in onto.get("clue_pool", []):
+            chosen = decision["release_clue"]
+    if chosen is None and heat < target - 0.3:
         pool = [c for c in onto.get("clue_pool", []) if c not in revealed]
         if pool:
-            clue = pool[0]
-            revealed.append(clue)
-            db.set_game_state(conn, session_id, "revealed_clues", revealed)
-            exempted = guard.exempt_clue(clue) if guard else []
-            injected = {"type": "clue_release", "clue": clue, "facts_now_public": exempted}
-            match = re.search(r"logLR:(\w+)=([-\d.]+)", clue)
-            if match:
-                target_raw = match.group(1)
-                target_seat = (seat_map or {}).get(target_raw, f"ai:{target_raw}")
-                log_lr = float(match.group(2))
-                for state in runtime.values():
-                    if state.get("seat_id") == target_seat:
-                        # The accused does not suspect themselves; they feel exposure.
-                        emo = state["emotion"]
-                        before_risk = emo.get("exposure_risk", 0.0)
-                        emo["exposure_risk"] = min(1.0, before_risk + 0.2)
-                        gm_changes.append((state.get("seat_id"), state["character_id"], {
-                            "dim": "exposure_risk", "before": before_risk, "after": emo["exposure_risk"],
-                        }))
-                        continue
-                    before = state["suspicion"].get(target_seat, formulas.sigmoid(state["ell"].get(target_seat, 0.0)))
-                    ell = state["ell"].get(target_seat, 0.0) + 0.8 * log_lr
-                    state["ell"][target_seat] = ell
-                    state["suspicion"][target_seat] = formulas.sigmoid(ell)
+            chosen = pool[0]
+    if chosen is not None:
+        clue = chosen
+        revealed.append(clue)
+        db.set_game_state(conn, session_id, "revealed_clues", revealed)
+        exempted = guard.exempt_clue(clue) if guard else []
+        injected = {"type": "clue_release", "clue": clue, "facts_now_public": exempted}
+        match = re.search(r"logLR:(\w+)=([-\d.]+)", clue)
+        if match:
+            target_raw = match.group(1)
+            target_seat = (seat_map or {}).get(target_raw, f"ai:{target_raw}")
+            log_lr = float(match.group(2))
+            for state in runtime.values():
+                if state.get("seat_id") == target_seat:
+                    # The accused does not suspect themselves; they feel exposure.
+                    emo = state["emotion"]
+                    before_risk = emo.get("exposure_risk", 0.0)
+                    emo["exposure_risk"] = min(1.0, before_risk + 0.2)
                     gm_changes.append((state.get("seat_id"), state["character_id"], {
-                        "dim": "suspicion", "target": target_seat,
-                        "before": before, "after": state["suspicion"][target_seat],
+                        "dim": "exposure_risk", "before": before_risk, "after": emo["exposure_risk"],
                     }))
-            db.set_game_state(conn, session_id, "runtime", runtime)
-            db.append_game_event(conn, session_id, round_no, "gm:host", "clue_release", injected, ["public"])
+                    continue
+                before = state["suspicion"].get(target_seat, formulas.sigmoid(state["ell"].get(target_seat, 0.0)))
+                ell = state["ell"].get(target_seat, 0.0) + 0.8 * log_lr
+                state["ell"][target_seat] = ell
+                state["suspicion"][target_seat] = formulas.sigmoid(ell)
+                gm_changes.append((state.get("seat_id"), state["character_id"], {
+                    "dim": "suspicion", "target": target_seat,
+                    "before": before, "after": state["suspicion"][target_seat],
+                }))
+        db.set_game_state(conn, session_id, "runtime", runtime)
+        db.append_game_event(conn, session_id, round_no, "gm:host", "clue_release", injected, ["public"])
     elif heat > target + 0.3:
         injected = {"type": "rest"}
         db.append_game_event(conn, session_id, round_no, "gm:host", "rest", injected, ["public"])
@@ -326,10 +332,15 @@ def _vote(conn, session_id, runtime, session_doc, scripted):
         choice = to_seat(choice)
         tally[choice] = tally.get(choice, 0) + 1
     winner = max(tally, key=tally.get) if tally else None
-    return {"culprit": culprit_id, "tally": tally, "winner": winner, "solved": winner == culprit_id}
+    motive = scripted.get("motive_fact_id") if scripted else None
+    return {
+        "culprit": culprit_id, "tally": tally, "winner": winner,
+        "solved": winner == culprit_id, "motive_fact_id": motive,
+    }
 
 
-def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=None, start_round=None):
+def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=None,
+                start_round=None, gm_policy=None):
     session_doc = db.get_session(conn, session_id)
     init_runtime(conn, session_doc)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -439,6 +450,13 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                     (v.finding.fact_id if hasattr(v, "finding") else v.fact_id)
                     for v in (verdicts or findings)
                 })
+                leaks = [
+                    {
+                        "fact_id": v.finding.fact_id if hasattr(v, "finding") else v.fact_id,
+                        "severity": v.effective_severity if hasattr(v, "effective_severity") else v.severity,
+                    }
+                    for v in (verdicts or findings)
+                ]
                 if hard or confirmed:
                     act["utterance"] = infoguard.REWRITE_UTTERANCE
                     act["act_type"] = "deflect"
@@ -448,7 +466,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 else:
                     guard_stats["output_flagged"] += 1
                     action = "flag"
-                guard_info = {"action": action, "facts": ids}
+                guard_info = {"action": action, "facts": ids, "leaks": leaks}
             payload = {
                 "utterance": act["utterance"],
                 "inner_intent": act["inner_intent"],
@@ -467,7 +485,19 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             p["script_character_id"]: p["id"]
             for p in session_doc["participants"] if p.get("script_character_id")
         }
-        gm_result = _gm_step(conn, session_id, round_no, onto, runtime, guard_engine, seat_map)
+        gm_decision = None
+        if gm_policy is not None:
+            gm_decision = gm_policy(conn, session_id, round_no, onto, runtime)
+            db.append_game_event(
+                conn, session_id, round_no, "gm:host", "gm_decision",
+                gm_decision, ["gm:host"],
+            )
+            log.append({"round": round_no, "actor": "gm:host", "act": "gm_decision",
+                        "policy": gm_decision.get("policy"), "release_clue": gm_decision.get("release_clue")})
+        gm_result = _gm_step(
+            conn, session_id, round_no, onto, runtime, guard_engine, seat_map,
+            decision=gm_decision,
+        )
         for change_seat, change_char, change in gm_result.pop("changes", []):
             if change_seat:
                 _log_changes(conn, session_id, round_no, change_seat, change_char, [change])

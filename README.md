@@ -28,6 +28,21 @@ uv run imms --db imms.db infoguard scopes --session snow-night-villa-s001
 uv run imms --db imms.db infoguard check --session snow-night-villa-s001 --char gu_chengye --text "死者死于过量胰岛素注射"
 uv run imms --db imms.db replay --session snow-night-villa-s001 --out replay.md
 uv run imms --db imms.db branch fork --session snow-night-villa-s001 --at-round 2 --override-round 2 --override-utterance "我承认偷看过遗嘱" --out branch_report.json
+
+# 剧本准入 / 可解性审计
+uv run imms --db imms.db audit-script --script-id snow-night-villa --out audit.json
+uv run imms --db imms.db audit-all --out audit_all.json
+
+# GM 决策核：策略 → 分支树 → 叙事 diff → 合并/回滚
+uv run imms --db imms.db gm decide --session snow-night-villa-s001 --round 2 --policy adaptive
+uv run imms --db imms.db gm branch --session snow-night-villa-s001 --at-round 2 --label "改口" --override-round 2 --override-utterance "我只相信自己" --policy information
+uv run imms --db imms.db gm tree --session snow-night-villa-s001
+uv run imms --db imms.db gm diff --branch snow-night-villa-s001-gm001
+uv run imms --db imms.db gm merge --branch snow-night-villa-s001-gm001 --rationale "反事实基准"
+
+# 复盘回溯评估（5 指标 + 决策时点复核 + 分支对照）
+uv run imms --db imms.db retro --session snow-night-villa-s001 --out retro.json --markdown retro.md
+uv run imms --db imms.db replay --session snow-night-villa-s001 --with-eval --out full_replay.md
 ```
 
 LLM 台词（可选）：设 `IMMS_LLM_URL` / `IMMS_LLM_MODEL` 后 `play --llm auto`；未配置时用离线模板。LLM 只写台词，不碰数值与事实。
@@ -77,6 +92,9 @@ uv run python -m unittest discover -s tests
 - `docs/INFOGUARD.md` — 信息边界四层引擎与参考取舍
 - `docs/BOXED.md` — 100 套盒装本批量导入与映射
 - `docs/CORPUS.md` — 自持语料库、准入门禁与缺陷补全
+- `docs/SOLVER.md` — 可解性求解器、真值模型规则与时间线系统
+- `docs/GM.md` — GM 决策策略、分支树、合并回滚与叙事 diff
+- `docs/RETRO.md` — 复盘回溯评估指标与决策时点复核
 
 ## 已踩过的坑
 
@@ -97,3 +115,7 @@ uv run python -m unittest discover -s tests
 - 外部参考目录会被删除：可用剧本必须在 `refer/` 还在时转成项目自持的 `corpus/`，运行链路不得引用 `refer/` 路径。
 - 需要鼠标地图、实景搜查或靠图片认物的本子不是纯文本剧本杀，直接 SKIP；不要为了“装进去”而改写玩法。
 - 剧情逻辑缺口只能从来源已有证据补全（死者标注、线索回指、问询提示）；补不出来的就放弃，绝不编造时间与事实。
+- `"|".join(单个字符串)` 会把字符串逐字符拆开：corpus 的线索权重曾变成 `|l|o|g|L|R|`，运行时正则解析不到，GM 放线索后怀疑度不更新。权重必须直接 f-string 拼接；求解器的 `clue_weights_parseable` 会抓这种退化。
+- 完整真相是证据链合成的结果，不该要求单条线索逐字揭示；但"只回指完整真相"的 R3/R5 补全是提示而不是证据链接，必须单独标记。
+- 时间线没有时间戳只是 warning，不是矛盾；只有真实的时间倒挂才阻断可解性判定。
+- 复盘评分里的动机指认必须显式提供（`scripted.motive_fact_id`）；不能替玩家把"投中凶手"自动算成"动机也正确"。

@@ -831,19 +831,19 @@
     }
   ],
   "clue_pool": [
-    "rnl_clue_body 现场初检：秦重有一次新鲜头部钝器损伤，倒地时左手抓着衣袖布线；无其他新鲜搏斗伤。门锁完好且处于未上锁状态，窗户内栓和纱网|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5",
-    "rnl_clue_recorder 录音笔原件从桌下取出，文件连续、没有剪接。20:35录到与大厅服务器同一声校时提示；20:41录到开门，秦重说“底单已经|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5",
-    "rnl_clue_receipt 外封是秦重20:31登记封存的一封旧信，封蜡未重新熔开；旁边另附红章纸条“21:00，秦重签收”。签收处是姓名橡皮章，不|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5",
-    "rnl_clue_letter 完整外封的登记卡写着：旧信来自林澄亲属，投递对象为“北岸安置所林家二童”，补偿批次Q-08；秦重另写“请按原件通知当事人|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5",
-    "rnl_clue_stamp 寄递台旧红章的数字轮停在21:00，数字1右侧有固定裂纹，与签收纸条一致。自动服务日志却记录20:55拉开红章柜、20:|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5",
-    "rnl_clue_conflicts 桌上三份预约原件：秦禾20:20约谈收养信息；林默20:25申请亲属档案、20:37开始授权扫描；沈雨20:40补交Q-|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5",
-    "rnl_clue_alibis 修复室与阅览室的连续原始影像经同一服务器校时：秦禾20:35至20:57一直在修复台前，林默20:37至20:57一直在|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0",
-    "rnl_clue_route 后墙进信口有独立光闸记录：20:55一份邮件从馆外小路投入，20:57由大厅自动落件。泥地上往返的一组鞋印，左前掌有三角|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0",
-    "rnl_clue_bag_custody 入口固定影像与封存表可互证：沈雨20:40携本人锁扣邮袋进入服务走廊，20:57回大厅后一直手持，20:59当着二人的面|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0",
-    "rnl_clue_weapon 邮袋夹层内找到带新鲜血迹的黄铜压信器和断裂叶饰。血迹检验与秦重一致；叶饰断面与办公室桌角残片物理拼合，秦禾案前修复描摹也|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0",
-    "rnl_clue_fraud 旧信正文请求安置所告知两个孩子：“我们汇出的安置款应由本人监护手续核验后领取，若尚未收到请复信。”随信原始银行回单及补偿|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0",
-    "rnl_clue_family 完整安置移交表及两张同底片家庭合照相符：林禾被秦重收养后登记为秦禾，林默生转至北岸安置所后登记为林默。移交表具同期机构章|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0",
-    "rnl_clue_final_times 大厅服务器原始声像备份记录20:35校时提示、20:43暴雷、20:58三人共同进入办公室；与录音笔中对应声音逐点一致。|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0"
+    "rnl_clue_body 现场初检：秦重有一次新鲜头部钝器损伤，倒地时左手抓着衣袖布线；无其他新鲜搏斗伤。门锁完好且处于未上锁状态，窗户内栓和纱网|logLR:rnl_shen_yu=1.5",
+    "rnl_clue_recorder 录音笔原件从桌下取出，文件连续、没有剪接。20:35录到与大厅服务器同一声校时提示；20:41录到开门，秦重说“底单已经|logLR:rnl_shen_yu=1.5",
+    "rnl_clue_receipt 外封是秦重20:31登记封存的一封旧信，封蜡未重新熔开；旁边另附红章纸条“21:00，秦重签收”。签收处是姓名橡皮章，不|logLR:rnl_shen_yu=1.5",
+    "rnl_clue_letter 完整外封的登记卡写着：旧信来自林澄亲属，投递对象为“北岸安置所林家二童”，补偿批次Q-08；秦重另写“请按原件通知当事人|logLR:rnl_shen_yu=1.5",
+    "rnl_clue_stamp 寄递台旧红章的数字轮停在21:00，数字1右侧有固定裂纹，与签收纸条一致。自动服务日志却记录20:55拉开红章柜、20:|logLR:rnl_shen_yu=1.5",
+    "rnl_clue_conflicts 桌上三份预约原件：秦禾20:20约谈收养信息；林默20:25申请亲属档案、20:37开始授权扫描；沈雨20:40补交Q-|logLR:rnl_shen_yu=1.5",
+    "rnl_clue_alibis 修复室与阅览室的连续原始影像经同一服务器校时：秦禾20:35至20:57一直在修复台前，林默20:37至20:57一直在|logLR:rnl_shen_yu=2.0",
+    "rnl_clue_route 后墙进信口有独立光闸记录：20:55一份邮件从馆外小路投入，20:57由大厅自动落件。泥地上往返的一组鞋印，左前掌有三角|logLR:rnl_shen_yu=2.0",
+    "rnl_clue_bag_custody 入口固定影像与封存表可互证：沈雨20:40携本人锁扣邮袋进入服务走廊，20:57回大厅后一直手持，20:59当着二人的面|logLR:rnl_shen_yu=2.0",
+    "rnl_clue_weapon 邮袋夹层内找到带新鲜血迹的黄铜压信器和断裂叶饰。血迹检验与秦重一致；叶饰断面与办公室桌角残片物理拼合，秦禾案前修复描摹也|logLR:rnl_shen_yu=2.0",
+    "rnl_clue_fraud 旧信正文请求安置所告知两个孩子：“我们汇出的安置款应由本人监护手续核验后领取，若尚未收到请复信。”随信原始银行回单及补偿|logLR:rnl_shen_yu=2.0",
+    "rnl_clue_family 完整安置移交表及两张同底片家庭合照相符：林禾被秦重收养后登记为秦禾，林默生转至北岸安置所后登记为林默。移交表具同期机构章|logLR:rnl_shen_yu=2.0",
+    "rnl_clue_final_times 大厅服务器原始声像备份记录20:35校时提示、20:43暴雷、20:58三人共同进入办公室；与录音笔中对应声音逐点一致。|logLR:rnl_shen_yu=2.0"
   ],
   "clues": [
     {
@@ -1031,13 +1031,13 @@
     }
   ],
   "clue_fact_map": {
-    "rnl_clue_body 现场初检：秦重有一次新鲜头部钝器损伤，倒地时左手抓着衣袖布线；无其他新鲜搏斗伤。门锁完好且处于未上锁状态，窗户内栓和纱网|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5": [
+    "rnl_clue_body 现场初检：秦重有一次新鲜头部钝器损伤，倒地时左手抓着衣袖布线；无其他新鲜搏斗伤。门锁完好且处于未上锁状态，窗户内栓和纱网|logLR:rnl_shen_yu=1.5": [
       "f_rpg_rainy_night_letter_truth"
     ],
     "rnl_clue_body": [
       "f_rpg_rainy_night_letter_truth"
     ],
-    "rnl_clue_recorder 录音笔原件从桌下取出，文件连续、没有剪接。20:35录到与大厅服务器同一声校时提示；20:41录到开门，秦重说“底单已经|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5": [
+    "rnl_clue_recorder 录音笔原件从桌下取出，文件连续、没有剪接。20:35录到与大厅服务器同一声校时提示；20:41录到开门，秦重说“底单已经|logLR:rnl_shen_yu=1.5": [
       "f_rpg_rainy_night_letter_chain02",
       "f_rpg_rainy_night_letter_chain03"
     ],
@@ -1045,67 +1045,67 @@
       "f_rpg_rainy_night_letter_chain02",
       "f_rpg_rainy_night_letter_chain03"
     ],
-    "rnl_clue_receipt 外封是秦重20:31登记封存的一封旧信，封蜡未重新熔开；旁边另附红章纸条“21:00，秦重签收”。签收处是姓名橡皮章，不|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5": [
+    "rnl_clue_receipt 外封是秦重20:31登记封存的一封旧信，封蜡未重新熔开；旁边另附红章纸条“21:00，秦重签收”。签收处是姓名橡皮章，不|logLR:rnl_shen_yu=1.5": [
       "f_rpg_rainy_night_letter_chain01"
     ],
     "rnl_clue_receipt": [
       "f_rpg_rainy_night_letter_chain01"
     ],
-    "rnl_clue_letter 完整外封的登记卡写着：旧信来自林澄亲属，投递对象为“北岸安置所林家二童”，补偿批次Q-08；秦重另写“请按原件通知当事人|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5": [
+    "rnl_clue_letter 完整外封的登记卡写着：旧信来自林澄亲属，投递对象为“北岸安置所林家二童”，补偿批次Q-08；秦重另写“请按原件通知当事人|logLR:rnl_shen_yu=1.5": [
       "f_rpg_rainy_night_letter_chain05"
     ],
     "rnl_clue_letter": [
       "f_rpg_rainy_night_letter_chain05"
     ],
-    "rnl_clue_stamp 寄递台旧红章的数字轮停在21:00，数字1右侧有固定裂纹，与签收纸条一致。自动服务日志却记录20:55拉开红章柜、20:|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5": [
+    "rnl_clue_stamp 寄递台旧红章的数字轮停在21:00，数字1右侧有固定裂纹，与签收纸条一致。自动服务日志却记录20:55拉开红章柜、20:|logLR:rnl_shen_yu=1.5": [
       "f_rpg_rainy_night_letter_chain01"
     ],
     "rnl_clue_stamp": [
       "f_rpg_rainy_night_letter_chain01"
     ],
-    "rnl_clue_conflicts 桌上三份预约原件：秦禾20:20约谈收养信息；林默20:25申请亲属档案、20:37开始授权扫描；沈雨20:40补交Q-|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|1|.|5": [
+    "rnl_clue_conflicts 桌上三份预约原件：秦禾20:20约谈收养信息；林默20:25申请亲属档案、20:37开始授权扫描；沈雨20:40补交Q-|logLR:rnl_shen_yu=1.5": [
       "f_rpg_rainy_night_letter_chain03"
     ],
     "rnl_clue_conflicts": [
       "f_rpg_rainy_night_letter_chain03"
     ],
-    "rnl_clue_alibis 修复室与阅览室的连续原始影像经同一服务器校时：秦禾20:35至20:57一直在修复台前，林默20:37至20:57一直在|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0": [
+    "rnl_clue_alibis 修复室与阅览室的连续原始影像经同一服务器校时：秦禾20:35至20:57一直在修复台前，林默20:37至20:57一直在|logLR:rnl_shen_yu=2.0": [
       "f_rpg_rainy_night_letter_chain03"
     ],
     "rnl_clue_alibis": [
       "f_rpg_rainy_night_letter_chain03"
     ],
-    "rnl_clue_route 后墙进信口有独立光闸记录：20:55一份邮件从馆外小路投入，20:57由大厅自动落件。泥地上往返的一组鞋印，左前掌有三角|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0": [
+    "rnl_clue_route 后墙进信口有独立光闸记录：20:55一份邮件从馆外小路投入，20:57由大厅自动落件。泥地上往返的一组鞋印，左前掌有三角|logLR:rnl_shen_yu=2.0": [
       "f_rpg_rainy_night_letter_chain04"
     ],
     "rnl_clue_route": [
       "f_rpg_rainy_night_letter_chain04"
     ],
-    "rnl_clue_bag_custody 入口固定影像与封存表可互证：沈雨20:40携本人锁扣邮袋进入服务走廊，20:57回大厅后一直手持，20:59当着二人的面|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0": [
+    "rnl_clue_bag_custody 入口固定影像与封存表可互证：沈雨20:40携本人锁扣邮袋进入服务走廊，20:57回大厅后一直手持，20:59当着二人的面|logLR:rnl_shen_yu=2.0": [
       "f_rpg_rainy_night_letter_chain04"
     ],
     "rnl_clue_bag_custody": [
       "f_rpg_rainy_night_letter_chain04"
     ],
-    "rnl_clue_weapon 邮袋夹层内找到带新鲜血迹的黄铜压信器和断裂叶饰。血迹检验与秦重一致；叶饰断面与办公室桌角残片物理拼合，秦禾案前修复描摹也|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0": [
+    "rnl_clue_weapon 邮袋夹层内找到带新鲜血迹的黄铜压信器和断裂叶饰。血迹检验与秦重一致；叶饰断面与办公室桌角残片物理拼合，秦禾案前修复描摹也|logLR:rnl_shen_yu=2.0": [
       "f_rpg_rainy_night_letter_chain04"
     ],
     "rnl_clue_weapon": [
       "f_rpg_rainy_night_letter_chain04"
     ],
-    "rnl_clue_fraud 旧信正文请求安置所告知两个孩子：“我们汇出的安置款应由本人监护手续核验后领取，若尚未收到请复信。”随信原始银行回单及补偿|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0": [
+    "rnl_clue_fraud 旧信正文请求安置所告知两个孩子：“我们汇出的安置款应由本人监护手续核验后领取，若尚未收到请复信。”随信原始银行回单及补偿|logLR:rnl_shen_yu=2.0": [
       "f_rpg_rainy_night_letter_chain05"
     ],
     "rnl_clue_fraud": [
       "f_rpg_rainy_night_letter_chain05"
     ],
-    "rnl_clue_family 完整安置移交表及两张同底片家庭合照相符：林禾被秦重收养后登记为秦禾，林默生转至北岸安置所后登记为林默。移交表具同期机构章|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0": [
+    "rnl_clue_family 完整安置移交表及两张同底片家庭合照相符：林禾被秦重收养后登记为秦禾，林默生转至北岸安置所后登记为林默。移交表具同期机构章|logLR:rnl_shen_yu=2.0": [
       "f_rpg_rainy_night_letter_chain05"
     ],
     "rnl_clue_family": [
       "f_rpg_rainy_night_letter_chain05"
     ],
-    "rnl_clue_final_times 大厅服务器原始声像备份记录20:35校时提示、20:43暴雷、20:58三人共同进入办公室；与录音笔中对应声音逐点一致。|l|o|g|L|R|:|r|n|l|_|s|h|e|n|_|y|u|=|2|.|0": [
+    "rnl_clue_final_times 大厅服务器原始声像备份记录20:35校时提示、20:43暴雷、20:58三人共同进入办公室；与录音笔中对应声音逐点一致。|logLR:rnl_shen_yu=2.0": [
       "f_rpg_rainy_night_letter_chain02"
     ],
     "rnl_clue_final_times": [

@@ -1770,22 +1770,22 @@
     }
   ],
   "clue_pool": [
-    "lt_clue_lock 公务室门使用外旋总钥匙锁，无内侧锁钮；门口通行牌读取台只记录获准人员的接近，不代替机械钥匙。观察窗帘已放下。封条F-62|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|1|.|5",
-    "lt_clue_body 魏舟倒在桌边，后头部有一次致命钝器损伤，伤痕呈双浅槽；无切割、注射或毒物迹象，桌柜均无会自行倒落的重物。左掌指缝夹着新鲜|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|1|.|5",
-    "lt_clue_route 司机不可编辑的运行记录：22:00列车出站，22:00至22:32持续行驶，22:32因公务室呼叫无回应停在岚岭检查点。|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|1|.|5",
-    "lt_clue_stub 公务室文书筐中有一张“22:14，车内核验完成，魏舟”的票据；签名边缘为点阵图而非笔迹，纸背隐约见S-19批号。票据没有|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|1|.|5",
-    "lt_clue_alive 站台原始连续视频：21:48:45魏舟独自走入公务室，脸部清楚、行动正常，手中是采购文件；21:49:05任瑞从公务室门|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0",
-    "lt_clue_seal 外锁记录21:52:10总钥匙旋锁，21:54:00任瑞贴F-62；唐枢在行李台旁签见证，只勾选“门锁、编号确认”，未勾|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0",
-    "lt_clue_audio 公务室应急台的原始缓存采用司机基准时间：21:49:30录到魏舟说“这不是新件的金属编号，把旧号贴起来也没用”；21:5|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0",
-    "lt_clue_clocks 出库校时单：公务室壁钟慢12分钟，21:00司机基准时壁钟显示20:48，壁钟当晚未被校准；应急台、通行记录及各固定摄像|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0",
-    "lt_clue_time_forgery 公务机不可覆盖的设置日志写明：司机基准21:56:10，本地时钟从21:56调至22:14；21:56:24打印核验票据|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0",
-    "lt_clue_printer_owner 领用单与前台视频相互印证：21:30任瑞领取橙色公务机及S-19站内纸卷，未转交他人；21:56前台连续视频清楚拍到任瑞|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0",
-    "lt_clue_motive 桌下原始采购文件与供应回单互证：旧件金属号仍为K批，纸标签改为N批新件，列车长签字任瑞；价差汇入任瑞控制的供应账户。段砚|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0",
-    "lt_clue_tool H-7领用单：21:42段砚将双槽验车锤交任瑞，21:51:25归还柜录到放回动作，录像待末轮完整导出。柜内封存的H-7|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0",
-    "lt_clue_duan_alibi 玻璃试验间原始视频与操作记录连续相符：21:48:30至21:53:20段砚的身体与双手始终在镜头中；唯一出口未被开启，|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0",
-    "lt_clue_other_alibis 三份原始连续视频与司机基准校时：白镜21:48:40至21:53:00在新闻隔间全身可见，陶闻21:48:20至21:5|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0",
-    "lt_clue_access 有效通行原始记录：R-01在21:49:05近室读卡、21:51:08离室读卡，当天领取人任瑞；对应走廊连续画面能看到任|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0",
-    "lt_clue_contact 归还柜完整导出视频清楚拍到任瑞21:51:25用左手橙线补丁手套包着H-7锤头放入柜内；柜随后锁闭，21:51:25至2|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0"
+    "lt_clue_lock 公务室门使用外旋总钥匙锁，无内侧锁钮；门口通行牌读取台只记录获准人员的接近，不代替机械钥匙。观察窗帘已放下。封条F-62|logLR:lt_ren_rui=1.5",
+    "lt_clue_body 魏舟倒在桌边，后头部有一次致命钝器损伤，伤痕呈双浅槽；无切割、注射或毒物迹象，桌柜均无会自行倒落的重物。左掌指缝夹着新鲜|logLR:lt_ren_rui=1.5",
+    "lt_clue_route 司机不可编辑的运行记录：22:00列车出站，22:00至22:32持续行驶，22:32因公务室呼叫无回应停在岚岭检查点。|logLR:lt_ren_rui=1.5",
+    "lt_clue_stub 公务室文书筐中有一张“22:14，车内核验完成，魏舟”的票据；签名边缘为点阵图而非笔迹，纸背隐约见S-19批号。票据没有|logLR:lt_ren_rui=1.5",
+    "lt_clue_alive 站台原始连续视频：21:48:45魏舟独自走入公务室，脸部清楚、行动正常，手中是采购文件；21:49:05任瑞从公务室门|logLR:lt_ren_rui=2.0",
+    "lt_clue_seal 外锁记录21:52:10总钥匙旋锁，21:54:00任瑞贴F-62；唐枢在行李台旁签见证，只勾选“门锁、编号确认”，未勾|logLR:lt_ren_rui=2.0",
+    "lt_clue_audio 公务室应急台的原始缓存采用司机基准时间：21:49:30录到魏舟说“这不是新件的金属编号，把旧号贴起来也没用”；21:5|logLR:lt_ren_rui=2.0",
+    "lt_clue_clocks 出库校时单：公务室壁钟慢12分钟，21:00司机基准时壁钟显示20:48，壁钟当晚未被校准；应急台、通行记录及各固定摄像|logLR:lt_ren_rui=2.0",
+    "lt_clue_time_forgery 公务机不可覆盖的设置日志写明：司机基准21:56:10，本地时钟从21:56调至22:14；21:56:24打印核验票据|logLR:lt_ren_rui=2.0",
+    "lt_clue_printer_owner 领用单与前台视频相互印证：21:30任瑞领取橙色公务机及S-19站内纸卷，未转交他人；21:56前台连续视频清楚拍到任瑞|logLR:lt_ren_rui=2.0",
+    "lt_clue_motive 桌下原始采购文件与供应回单互证：旧件金属号仍为K批，纸标签改为N批新件，列车长签字任瑞；价差汇入任瑞控制的供应账户。段砚|logLR:lt_ren_rui=2.0",
+    "lt_clue_tool H-7领用单：21:42段砚将双槽验车锤交任瑞，21:51:25归还柜录到放回动作，录像待末轮完整导出。柜内封存的H-7|logLR:lt_ren_rui=2.0",
+    "lt_clue_duan_alibi 玻璃试验间原始视频与操作记录连续相符：21:48:30至21:53:20段砚的身体与双手始终在镜头中；唯一出口未被开启，|logLR:lt_ren_rui=2.0",
+    "lt_clue_other_alibis 三份原始连续视频与司机基准校时：白镜21:48:40至21:53:00在新闻隔间全身可见，陶闻21:48:20至21:5|logLR:lt_ren_rui=2.0",
+    "lt_clue_access 有效通行原始记录：R-01在21:49:05近室读卡、21:51:08离室读卡，当天领取人任瑞；对应走廊连续画面能看到任|logLR:lt_ren_rui=2.0",
+    "lt_clue_contact 归还柜完整导出视频清楚拍到任瑞21:51:25用左手橙线补丁手套包着H-7锤头放入柜内；柜随后锁闭，21:51:25至2|logLR:lt_ren_rui=2.0"
   ],
   "clues": [
     {
@@ -2019,13 +2019,13 @@
     }
   ],
   "clue_fact_map": {
-    "lt_clue_lock 公务室门使用外旋总钥匙锁，无内侧锁钮；门口通行牌读取台只记录获准人员的接近，不代替机械钥匙。观察窗帘已放下。封条F-62|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|1|.|5": [
+    "lt_clue_lock 公务室门使用外旋总钥匙锁，无内侧锁钮；门口通行牌读取台只记录获准人员的接近，不代替机械钥匙。观察窗帘已放下。封条F-62|logLR:lt_ren_rui=1.5": [
       "f_rpg_last_train_chain01"
     ],
     "lt_clue_lock": [
       "f_rpg_last_train_chain01"
     ],
-    "lt_clue_body 魏舟倒在桌边，后头部有一次致命钝器损伤，伤痕呈双浅槽；无切割、注射或毒物迹象，桌柜均无会自行倒落的重物。左掌指缝夹着新鲜|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|1|.|5": [
+    "lt_clue_body 魏舟倒在桌边，后头部有一次致命钝器损伤，伤痕呈双浅槽；无切割、注射或毒物迹象，桌柜均无会自行倒落的重物。左掌指缝夹着新鲜|logLR:lt_ren_rui=1.5": [
       "f_rpg_last_train_chain02",
       "f_rpg_last_train_chain05"
     ],
@@ -2033,25 +2033,25 @@
       "f_rpg_last_train_chain02",
       "f_rpg_last_train_chain05"
     ],
-    "lt_clue_route 司机不可编辑的运行记录：22:00列车出站，22:00至22:32持续行驶，22:32因公务室呼叫无回应停在岚岭检查点。|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|1|.|5": [
+    "lt_clue_route 司机不可编辑的运行记录：22:00列车出站，22:00至22:32持续行驶，22:32因公务室呼叫无回应停在岚岭检查点。|logLR:lt_ren_rui=1.5": [
       "f_rpg_last_train_chain03"
     ],
     "lt_clue_route": [
       "f_rpg_last_train_chain03"
     ],
-    "lt_clue_stub 公务室文书筐中有一张“22:14，车内核验完成，魏舟”的票据；签名边缘为点阵图而非笔迹，纸背隐约见S-19批号。票据没有|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|1|.|5": [
+    "lt_clue_stub 公务室文书筐中有一张“22:14，车内核验完成，魏舟”的票据；签名边缘为点阵图而非笔迹，纸背隐约见S-19批号。票据没有|logLR:lt_ren_rui=1.5": [
       "f_rpg_last_train_chain03"
     ],
     "lt_clue_stub": [
       "f_rpg_last_train_chain03"
     ],
-    "lt_clue_alive 站台原始连续视频：21:48:45魏舟独自走入公务室，脸部清楚、行动正常，手中是采购文件；21:49:05任瑞从公务室门|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_alive 站台原始连续视频：21:48:45魏舟独自走入公务室，脸部清楚、行动正常，手中是采购文件；21:49:05任瑞从公务室门|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain02"
     ],
     "lt_clue_alive": [
       "f_rpg_last_train_chain02"
     ],
-    "lt_clue_seal 外锁记录21:52:10总钥匙旋锁，21:54:00任瑞贴F-62；唐枢在行李台旁签见证，只勾选“门锁、编号确认”，未勾|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_seal 外锁记录21:52:10总钥匙旋锁，21:54:00任瑞贴F-62；唐枢在行李台旁签见证，只勾选“门锁、编号确认”，未勾|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain01",
       "f_rpg_last_train_chain02"
     ],
@@ -2059,7 +2059,7 @@
       "f_rpg_last_train_chain01",
       "f_rpg_last_train_chain02"
     ],
-    "lt_clue_audio 公务室应急台的原始缓存采用司机基准时间：21:49:30录到魏舟说“这不是新件的金属编号，把旧号贴起来也没用”；21:5|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_audio 公务室应急台的原始缓存采用司机基准时间：21:49:30录到魏舟说“这不是新件的金属编号，把旧号贴起来也没用”；21:5|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain02",
       "f_rpg_last_train_chain04",
       "f_rpg_last_train_chain06"
@@ -2069,49 +2069,49 @@
       "f_rpg_last_train_chain04",
       "f_rpg_last_train_chain06"
     ],
-    "lt_clue_clocks 出库校时单：公务室壁钟慢12分钟，21:00司机基准时壁钟显示20:48，壁钟当晚未被校准；应急台、通行记录及各固定摄像|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_clocks 出库校时单：公务室壁钟慢12分钟，21:00司机基准时壁钟显示20:48，壁钟当晚未被校准；应急台、通行记录及各固定摄像|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain03"
     ],
     "lt_clue_clocks": [
       "f_rpg_last_train_chain03"
     ],
-    "lt_clue_time_forgery 公务机不可覆盖的设置日志写明：司机基准21:56:10，本地时钟从21:56调至22:14；21:56:24打印核验票据|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_time_forgery 公务机不可覆盖的设置日志写明：司机基准21:56:10，本地时钟从21:56调至22:14；21:56:24打印核验票据|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain03"
     ],
     "lt_clue_time_forgery": [
       "f_rpg_last_train_chain03"
     ],
-    "lt_clue_printer_owner 领用单与前台视频相互印证：21:30任瑞领取橙色公务机及S-19站内纸卷，未转交他人；21:56前台连续视频清楚拍到任瑞|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_printer_owner 领用单与前台视频相互印证：21:30任瑞领取橙色公务机及S-19站内纸卷，未转交他人；21:56前台连续视频清楚拍到任瑞|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain03"
     ],
     "lt_clue_printer_owner": [
       "f_rpg_last_train_chain03"
     ],
-    "lt_clue_motive 桌下原始采购文件与供应回单互证：旧件金属号仍为K批，纸标签改为N批新件，列车长签字任瑞；价差汇入任瑞控制的供应账户。段砚|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_motive 桌下原始采购文件与供应回单互证：旧件金属号仍为K批，纸标签改为N批新件，列车长签字任瑞；价差汇入任瑞控制的供应账户。段砚|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain06"
     ],
     "lt_clue_motive": [
       "f_rpg_last_train_chain06"
     ],
-    "lt_clue_tool H-7领用单：21:42段砚将双槽验车锤交任瑞，21:51:25归还柜录到放回动作，录像待末轮完整导出。柜内封存的H-7|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_tool H-7领用单：21:42段砚将双槽验车锤交任瑞，21:51:25归还柜录到放回动作，录像待末轮完整导出。柜内封存的H-7|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain05"
     ],
     "lt_clue_tool": [
       "f_rpg_last_train_chain05"
     ],
-    "lt_clue_duan_alibi 玻璃试验间原始视频与操作记录连续相符：21:48:30至21:53:20段砚的身体与双手始终在镜头中；唯一出口未被开启，|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_duan_alibi 玻璃试验间原始视频与操作记录连续相符：21:48:30至21:53:20段砚的身体与双手始终在镜头中；唯一出口未被开启，|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain04"
     ],
     "lt_clue_duan_alibi": [
       "f_rpg_last_train_chain04"
     ],
-    "lt_clue_other_alibis 三份原始连续视频与司机基准校时：白镜21:48:40至21:53:00在新闻隔间全身可见，陶闻21:48:20至21:5|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_other_alibis 三份原始连续视频与司机基准校时：白镜21:48:40至21:53:00在新闻隔间全身可见，陶闻21:48:20至21:5|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain04"
     ],
     "lt_clue_other_alibis": [
       "f_rpg_last_train_chain04"
     ],
-    "lt_clue_access 有效通行原始记录：R-01在21:49:05近室读卡、21:51:08离室读卡，当天领取人任瑞；对应走廊连续画面能看到任|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_access 有效通行原始记录：R-01在21:49:05近室读卡、21:51:08离室读卡，当天领取人任瑞；对应走廊连续画面能看到任|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain04",
       "f_rpg_last_train_chain05"
     ],
@@ -2119,7 +2119,7 @@
       "f_rpg_last_train_chain04",
       "f_rpg_last_train_chain05"
     ],
-    "lt_clue_contact 归还柜完整导出视频清楚拍到任瑞21:51:25用左手橙线补丁手套包着H-7锤头放入柜内；柜随后锁闭，21:51:25至2|l|o|g|L|R|:|l|t|_|r|e|n|_|r|u|i|=|2|.|0": [
+    "lt_clue_contact 归还柜完整导出视频清楚拍到任瑞21:51:25用左手橙线补丁手套包着H-7锤头放入柜内；柜随后锁闭，21:51:25至2|logLR:lt_ren_rui=2.0": [
       "f_rpg_last_train_chain05"
     ],
     "lt_clue_contact": [

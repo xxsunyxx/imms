@@ -117,6 +117,21 @@ CREATE TABLE IF NOT EXISTS game_state (
     PRIMARY KEY (session_id, key)
 );
 
+CREATE TABLE IF NOT EXISTS gm_branches (
+    branch_id TEXT PRIMARY KEY,
+    session_id TEXT NOT NULL,
+    parent_id TEXT NOT NULL DEFAULT 'root',
+    fork_round INT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'branch',
+    status TEXT NOT NULL DEFAULT 'active',
+    label TEXT NOT NULL DEFAULT '',
+    decision_json TEXT NOT NULL DEFAULT '{}',
+    report_json TEXT NOT NULL DEFAULT '{}',
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_gm_branches_session ON gm_branches(session_id);
+
 CREATE INDEX IF NOT EXISTS idx_l1_lookup ON persona_l1(script_id, character_id, extraction_version);
 CREATE INDEX IF NOT EXISTS idx_events_session ON attribute_events(session_id, seq);
 CREATE INDEX IF NOT EXISTS idx_game_events_session ON game_events(session_id, seq);

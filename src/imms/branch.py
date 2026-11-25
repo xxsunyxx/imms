@@ -62,7 +62,7 @@ def _rebuild_user_script(conn, session_id, human_seat, total_rounds, override_ro
 
 
 def fork(conn, session_id, at_round, override_round=None, override_utterance=None,
-         seed=42, llm_name="template"):
+         seed=42, llm_name="template", gm_policy=None):
     """Fork at the START of `at_round`; returns (run_result, in_memory_connection)."""
     session_doc = db.get_session(conn, session_id)
     base_result = db.get_game_state(conn, session_id, "result", {})
@@ -106,7 +106,7 @@ def fork(conn, session_id, at_round, override_round=None, override_utterance=Non
     )
     result = runtime.run_session(
         mem, fork_id, rounds=total_rounds, scripted=scripted, seed=seed,
-        llm_name=llm_name, start_round=at_round,
+        llm_name=llm_name, start_round=at_round, gm_policy=gm_policy,
     )
     return result, mem, fork_id
 
@@ -182,10 +182,10 @@ def regress(base_result, fork_result, fork_conn, fork_id, at_round):
 
 
 def fork_and_regress(conn, session_id, at_round, override_round=None, override_utterance=None,
-                     seed=42, llm_name="template"):
+                     seed=42, llm_name="template", gm_policy=None):
     base_result = db.get_game_state(conn, session_id, "result", {})
     result, mem, fork_id = fork(
-        conn, session_id, at_round, override_round, override_utterance, seed, llm_name
+        conn, session_id, at_round, override_round, override_utterance, seed, llm_name, gm_policy
     )
     try:
         report = regress(base_result, result, mem, fork_id, at_round)

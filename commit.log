@@ -68,3 +68,14 @@
 - 补全机制：R1 死者从来源文本标注；R2 stage 1-based→0-based；R3 未点名线索只回指完整真相；R4 无时间线记缺口不编造；R5 雾港私有材料缺口只生成“待核对”问询线索、不泄露私有内容；R6 重复线索 id 加序号。所有补全写入 Ontology `completions[]` 与 manifest。
 - CLI 新增 `build-corpus` / `import-corpus` / `corpus-report`；文档 `docs/CORPUS.md`，README 同步。
 - 测试：新增 `tests/test_corpus.py`（准入、补全结构、落库与投票），全量 37 个 unittest 通过；6 个本落库，`rpg_last_train` 完成 assemble→play→vote 冒烟。
+
+## 2026-11-25 · 可解性求解器、GM 决策核与时间线/回溯评估
+
+- 用户决策：按推荐顺序先做可解性求解器、再做 GM 决策核；随后补充「时间线系统与 replay 回溯评估都没做」，并指出 lockedroom-ai 有现成复盘评估。
+- 只读研究 lockedroom-ai：`replayeval/metrics.py` 的 5 指标与评分公式、`script.py::validate_references()` 的可解性规则直接复用；该仓库没有时间线冲突、分支反事实、决策时点可得性、谎言一致性，均自行设计。
+- **修复真实缺陷**：`corpus.py` 用 `"|".join(f"logLR:...")` 把 78/79 条线索权重拆成 `|l|o|g|L|R|`，GM 释放线索的正则永远匹配不到，怀疑度不更新。改为 f-string 直拼并重建 corpus/重新导入，79/79 可解析。
+- 新增 `src/imms/solver.py` + CLI `audit-script` / `audit-all`：真值模型规则（唯一凶手、凶手知动机、死者无秘密、私有事实可达）、必需事实覆盖、logLR 唯一解证明、阶段门控、补全回归（R3/R5 只回指真相比判为 hint_only）、难度曲线；时间线解析支持 HH:MM/N点/第N幕，倒挂为矛盾、无时间戳仅告警。
+- 新增 `src/imms/gm.py` + CLI `gm decide/branch/tree/diff/activate/merge/rollback`：`gm_branches` 表存 parent/child/canonical 与决策规格、回归报告、叙事 diff；策略 heat/information/adaptive 按热度与信息增益选线索；分支状态保持事件溯源（决策规格+确定性重放，不写回主库）；合并回滚写事件不改写历史。
+- `runtime.py` 加 `gm_policy` hook 与 `gm_decision` 事件；`_vote` 记录 `motive_fact_id`；输出护栏事件补 `leaks[].severity`。
+- 新增 `src/imms/retro.py` + CLI `retro` / `replay --with-eval`：lockedroom 5 指标与评分公式，加决策时点离线信息复核、转折点归因、可解性、证据指向强度、真实 GM 分支 diff 与时间线检查。不移植 LLM 推理链（不可复现且不参与评分）。
+- 验证：53 个 unittest 全通过（新增 test_solver.py / test_gm.py / test_retro.py）；雪夜山庄端到端评分 57.5/C、覆盖 50%、可解性 unique；GM 分支把 heat 策略改为 information 并让玩家改口后，赢家由 `ai:zhou_muchen` 翻转为 `human:lin_wanqiu`，diff 记录 2 线索/5 台词/3 怀疑变化；merge/rollback 与复盘分支对照均跑通。详见 docs/SOLVER.md / docs/GM.md / docs/RETRO.md。

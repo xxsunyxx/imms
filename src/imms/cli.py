@@ -10,11 +10,14 @@ from . import branch as branch_mod
 from . import corpus as corpus_mod
 from . import db as db_mod
 from . import derive as derive_mod
+from . import gm as gm_mod
 from . import infoguard as infoguard_mod
 from . import normalize as normalize_mod
 from . import ontology as ontology_mod
 from . import replay as replay_mod
+from . import retro as retro_mod
 from . import runtime as runtime_mod
+from . import solver as solver_mod
 from .util import print_json, read_json, write_json
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -132,6 +135,33 @@ def build_parser():
     bf.add_argument("--llm", choices=["auto", "template", "http"], default="template")
     bf.add_argument("--out", help="JSON report path")
 
+    gm_p = sub.add_parser("gm", help="GM decision core: policy, branch tree, merge and rollback")
+    gm_sp = gm_p.add_subparsers(dest="gm_action", required=True)
+    gd = gm_sp.add_parser("decide", help="Suggest the GM decision for a round")
+    gd.add_argument("--session", required=True)
+    gd.add_argument("--round", type=int, required=True)
+    gd.add_argument("--policy", choices=["heat", "information", "adaptive"], default="adaptive")
+    gb = gm_sp.add_parser("branch", help="Create a replayed branch and register it in the tree")
+    gb.add_argument("--session", required=True)
+    gb.add_argument("--at-round", type=int, required=True)
+    gb.add_argument("--label", default="")
+    gb.add_argument("--override-round", type=int)
+    gb.add_argument("--override-utterance")
+    gb.add_argument("--policy", choices=["heat", "information", "adaptive"], default="adaptive")
+    gb.add_argument("--release-clue", help="Force the GM to release this clue (must be in clue_pool)")
+    gb.add_argument("--seed", type=int, default=42)
+    gt = gm_sp.add_parser("tree", help="List the branch tree")
+    gt.add_argument("--session", required=True)
+    gdf = gm_sp.add_parser("diff", help="Show narrative diff of one branch")
+    gdf.add_argument("--branch", required=True)
+    ga = gm_sp.add_parser("activate", help="Set a branch as canonical")
+    ga.add_argument("--branch", required=True)
+    gmrg = gm_sp.add_parser("merge", help="Merge a branch into the canonical line")
+    gmrg.add_argument("--branch", required=True)
+    gmrg.add_argument("--rationale", default="")
+    grb = gm_sp.add_parser("rollback", help="Roll a branch back to its parent")
+    grb.add_argument("--branch", required=True)
+
     ig_p = sub.add_parser("infoguard", help="Inspect the information boundary")
     ig_sp = ig_p.add_subparsers(dest="infoguard_action", required=True)
     igs = ig_sp.add_parser("scopes", help="List known/forbidden facts per character")
@@ -142,9 +172,23 @@ def build_parser():
     igc.add_argument("--text", required=True)
     igc.add_argument("--direction", choices=["in", "out"], default="out")
 
+    audit_script_p = sub.add_parser("audit-script", help="Audit script solvability and consistency")
+    audit_script_p.add_argument("--script-id", required=True)
+    audit_script_p.add_argument("--out", help="Optional JSON report path")
+
+    audit_all_p = sub.add_parser("audit-all", help="Audit every stored script (summary only)")
+    audit_all_p.add_argument("--limit", type=int)
+    audit_all_p.add_argument("--out", help="Optional JSON report path")
+
+    retro_p = sub.add_parser("retro", help="Evaluate a completed session and render the assessment")
+    retro_p.add_argument("--session", required=True)
+    retro_p.add_argument("--out", help="Optional JSON evaluation path")
+    retro_p.add_argument("--markdown", help="Optional Markdown evaluation path")
+
     rep_p = sub.add_parser("replay", help="Generate five-section post-game replay")
     rep_p.add_argument("--session", required=True)
     rep_p.add_argument("--out", help="Markdown output path")
+    rep_p.add_argument("--with-eval", action="store_true", help="Append the retrospective evaluation section")
 
     exp_p = sub.add_parser("export", help="Export DB tables to JSON")
     exp_p.add_argument("--out", required=True)
@@ -270,6 +314,33 @@ def main(argv=None):
                 write_json(args.out, report)
             print_json(report)
 
+        elif args.cmd == "gm":
+            if args.gm_action == "decide":
+                session_doc = db_mod.get_session(conn, args.session)
+                onto = db_mod.get_script(conn, session_doc["script_id"])
+                state = db_mod.get_game_state(conn, args.session, "runtime", {})
+                print_json(gm_mod.suggest_decision(
+                    conn, args.session, args.round, onto, state, args.policy
+                ))
+            elif args.gm_action == "branch":
+                decision = {"policy": args.policy}
+                if args.release_clue:
+                    decision["overrides"] = {"release_clue": args.release_clue}
+                print_json(gm_mod.create_branch(
+                    conn, args.session, args.at_round, args.label,
+                    args.override_round, args.override_utterance, decision, args.seed,
+                ))
+            elif args.gm_action == "tree":
+                print_json(gm_mod.branch_tree(conn, args.session))
+            elif args.gm_action == "diff":
+                print_json(gm_mod.branch_diff(conn, args.branch))
+            elif args.gm_action == "activate":
+                print_json(gm_mod.activate(conn, args.branch))
+            elif args.gm_action == "merge":
+                print_json(gm_mod.merge(conn, args.branch, args.rationale))
+            elif args.gm_action == "rollback":
+                print_json(gm_mod.rollback(conn, args.branch))
+
         elif args.cmd == "infoguard":
             session = db_mod.get_session(conn, args.session)
             onto = db_mod.get_script(conn, session["script_id"])
@@ -293,11 +364,44 @@ def main(argv=None):
                 findings = engine.check_output(args.char, args.text)
                 print_json({"character_id": args.char, "findings": [f.as_dict() for f in findings]})
 
+        elif args.cmd == "audit-script":
+            report = solver_mod.audit_script_by_id(conn, args.script_id)
+            if args.out:
+                write_json(args.out, report)
+            print_json({
+                "script_id": report["script_id"], "verdict": report["verdict"],
+                "checks": report["checks"], "solution": report["solution"],
+                "summary": report["summary"],
+            })
+
+        elif args.cmd == "audit-all":
+            report = solver_mod.audit_all(conn, args.limit)
+            if args.out:
+                write_json(args.out, report)
+            print_json(report)
+
+        elif args.cmd == "retro":
+            report, markdown = retro_mod.evaluate_and_render(conn, args.session)
+            if args.out:
+                write_json(args.out, report)
+            if args.markdown:
+                Path(args.markdown).write_text(markdown, encoding="utf-8")
+            print_json({
+                "session_id": args.session,
+                "metrics": report["metrics"],
+                "solvability": report["retrospective"]["solvability"]["verdict"],
+            })
+
         elif args.cmd == "replay":
             text = replay_mod.build_replay(conn, args.session)
+            sections = list(replay_mod.SECTIONS)
+            if args.with_eval:
+                _, evaluation_md = retro_mod.evaluate_and_render(conn, args.session)
+                text = text.rstrip() + "\n\n" + evaluation_md
+                sections.append("回溯评估")
             out = args.out or f"replay_{args.session}.md"
             Path(out).write_text(text, encoding="utf-8")
-            print_json({"out": out, "sections": replay_mod.SECTIONS, "bytes": len(text.encode("utf-8"))})
+            print_json({"out": out, "sections": sections, "bytes": len(text.encode("utf-8"))})
 
         elif args.cmd == "export":
             print_json(db_mod.export_db(conn, args.out))
