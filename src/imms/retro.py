@@ -12,7 +12,7 @@ the story and no session state is mutated.
 
 import json
 
-from . import db, infoguard, replay, solver
+from . import db, infoguard, replay, solver, vote
 
 WEIGHT_HARD = 1.0
 WEIGHT_SOFT = 0.3
@@ -267,6 +267,7 @@ def evaluate(conn, session_id, scripted_motive=None):
                 "summary": audit["summary"],
             },
             "counterfactual": _branch_counterfactual(conn, session_id, audit["solution"]),
+            "vote_audit": vote.audit(conn, session_id),
             "timeline": {
                 "order_conflicts": audit["timeline"]["order_conflicts"],
                 "warnings": audit["timeline"]["warnings"],
@@ -312,6 +313,21 @@ def render_evaluation(report):
             f"结局变化 {'是' if summary.get('outcome_changed') else '否'}"
             f"（{outcome.get('base', {}).get('winner')} → {outcome.get('fork', {}).get('winner')}）"
         )
+    va = retro["vote_audit"]
+    lines.extend(["", "**投票审计**", ""])
+    if va["status"] == "ok":
+        reason = "—" if va["vote_reasonableness"] is None else f"{va['vote_reasonableness']:.0%}"
+        lines.append(
+            f"- 有效票率 {va['legal_rate']:.0%}｜弃票率 {va['abstention_rate']:.0%}"
+            f"｜证据支持率 {reason}（{va['evidence_supported']}/{va['evidence_judged']}）"
+        )
+        lines.append(
+            f"- 自我投票拦截 {va['self_votes_blocked']}｜非法目标 {va['unknown_targets']}"
+            f"｜胜者合法 {'是' if va['winner_legal'] else '否'}"
+            f"｜平票 {va['tie_resolved_by'] or '无'}"
+        )
+    else:
+        lines.append("- （无投票账本，无法审计；旧会话只保留胜负结果）")
     lines.extend(["", "**转折点 Top 5**", ""])
     if retro["turning_points"]:
         for idx, item in enumerate(retro["turning_points"], 1):

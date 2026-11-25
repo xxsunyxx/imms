@@ -20,6 +20,7 @@ from . import replay as replay_mod
 from . import retro as retro_mod
 from . import runtime as runtime_mod
 from . import solver as solver_mod
+from . import vote as vote_mod
 from .util import print_json, read_json, write_json
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -226,6 +227,27 @@ def build_parser():
     audit_all_p = sub.add_parser("audit-all", help="Audit every stored script (summary only)")
     audit_all_p.add_argument("--limit", type=int)
     audit_all_p.add_argument("--out", help="Optional JSON report path")
+
+    vote_p = sub.add_parser("vote", help="Run and audit the voting phase")
+    vote_sp = vote_p.add_subparsers(dest="vote_action", required=True)
+    vr = vote_sp.add_parser("run", help="Run a voting phase against the current runtime")
+    vr.add_argument("--session", required=True)
+    vr.add_argument("--scripted", help="JSON with vote / votes / vote_config")
+    vr.add_argument("--seed", type=int, default=42)
+    vc = vote_sp.add_parser("cast", help="Record one manual ballot")
+    vc.add_argument("--session", required=True)
+    vc.add_argument("--voter", required=True)
+    vc.add_argument("--target", required=True)
+    vc.add_argument("--reason", default="")
+    vc.add_argument("--round", type=int)
+    vre = vote_sp.add_parser("replay", help="Recompute the tally from the stored ledger")
+    vre.add_argument("--session", required=True)
+    vre.add_argument("--out", help="Optional JSON output path")
+    va = vote_sp.add_parser("audit", help="Audit ballot legality and evidence support")
+    va.add_argument("--session", required=True)
+    va.add_argument("--out", help="Optional JSON output path")
+    vcfg = vote_sp.add_parser("config", help="Show effective voting rules")
+    vcfg.add_argument("--session", required=True)
 
     retro_p = sub.add_parser("retro", help="Evaluate a completed session and render the assessment")
     retro_p.add_argument("--session", required=True)
@@ -498,6 +520,32 @@ def main(argv=None):
             if args.out:
                 write_json(args.out, report)
             print_json(report)
+
+        elif args.cmd == "vote":
+            if args.vote_action == "run":
+                scripted = read_json(args.scripted) if args.scripted else None
+                result = vote_mod.run_vote(conn, args.session, scripted=scripted, seed=args.seed)
+                result.pop("_changes", None)
+                db_mod.set_game_state(conn, args.session, "result", result)
+                print_json(result)
+            elif args.vote_action == "cast":
+                print_json(vote_mod.cast_ballot(
+                    conn, args.session, args.voter, args.target,
+                    reason=args.reason, round_no=args.round,
+                ))
+            elif args.vote_action == "replay":
+                report = vote_mod.replay_tally(conn, args.session)
+                if args.out:
+                    write_json(args.out, report)
+                print_json(report)
+            elif args.vote_action == "audit":
+                report = vote_mod.audit(conn, args.session)
+                if args.out:
+                    write_json(args.out, report)
+                print_json(report)
+            elif args.vote_action == "config":
+                state = db_mod.get_game_state(conn, args.session, "vote_state", {}) or {}
+                print_json(state.get("rules") or vote_mod.normalize_rules())
 
         elif args.cmd == "retro":
             report, markdown = retro_mod.evaluate_and_render(conn, args.session)

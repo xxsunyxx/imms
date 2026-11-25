@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import db, formulas, infoguard, llm
+from . import db, formulas, infoguard, llm, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -288,55 +288,18 @@ def _gm_step(conn, session_id, round_no, onto, runtime, guard=None, seat_map=Non
     return {"heat": round(heat, 4), "target": round(target, 4), "injected": injected, "changes": gm_changes}
 
 
-def _vote(conn, session_id, runtime, session_doc, scripted):
-    onto = db.get_script(conn, session_doc["script_id"])
-    name_map = _name_map(onto)
-    culprit_id = onto.get("evaluation", {}).get("killer_id")
-    if not culprit_id:
-        culprit_name = None
-        for fact in onto.get("truth_graph", []):
-            for name in name_map:
-                if name in fact:
-                    culprit_name = name
-                    break
-            if culprit_name:
-                break
-        culprit_id = name_map.get(culprit_name, culprit_name)
-    seat_ids = set(runtime.keys())
-    char_to_seat = {
-        p["script_character_id"]: p["id"]
-        for p in session_doc["participants"] if p.get("script_character_id")
-    }
-
-    def to_seat(value):
-        if value in seat_ids:
-            return value
-        if value in char_to_seat:
-            return char_to_seat[value]
-        for prefix in ("ai:", "human:"):
-            if prefix + str(value) in seat_ids:
-                return prefix + str(value)
-        return value
-
-    culprit_id = to_seat(culprit_id)
-    tally = {}
-    for seat_id, state in runtime.items():
-        if state.get("is_human"):
-            if scripted and scripted.get("vote"):
-                choice = scripted["vote"]
-            else:
-                choice = input("[用户席位] 投给谁（角色 id）：")
-        else:
-            dist = formulas.vote_distribution(state["ell"], 1.0)
-            choice = max(dist, key=dist.get) if dist else None
-        choice = to_seat(choice)
-        tally[choice] = tally.get(choice, 0) + 1
-    winner = max(tally, key=tally.get) if tally else None
-    motive = scripted.get("motive_fact_id") if scripted else None
-    return {
-        "culprit": culprit_id, "tally": tally, "winner": winner,
-        "solved": winner == culprit_id, "motive_fact_id": motive,
-    }
+def _vote(conn, session_id, runtime, session_doc, scripted, seed=42):
+    result = vote.run_vote(
+        conn, session_id, scripted=scripted, runtime=runtime,
+        session_doc=session_doc, seed=seed,
+    )
+    for change in result.pop("_changes", []):
+        if change.get("seat_id"):
+            _log_changes(
+                conn, session_id, db.get_game_state(conn, session_id, "round", 0),
+                change["seat_id"], change.get("character_id"), [change],
+            )
+    return result
 
 
 def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=None,
@@ -515,7 +478,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     db.set_game_state(conn, session_id, "runtime", runtime)
     db.set_game_state(conn, session_id, "llm_stats", llm_stats)
     db.set_game_state(conn, session_id, "infoguard_stats", guard_stats)
-    result = _vote(conn, session_id, runtime, session_doc, scripted)
+    result = _vote(conn, session_id, runtime, session_doc, scripted, seed)
     db.set_game_state(conn, session_id, "result", result)
     return {
         "session_id": session_id, "rounds": rounds, "log": log, "result": result,

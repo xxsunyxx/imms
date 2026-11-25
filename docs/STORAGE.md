@@ -14,7 +14,7 @@
 | `attribute_events` | L2/L3 每次变更的 before/after/reason | 所有写入方 |
 | `state_snapshots` | 每轮末每席位 runtime + `@global`（线索/输入索引/轮次），支撑分叉回归 | 公式引擎 |
 | `game_events` | 每轮 SpeechAct，含 utterance / inner_intent；公开与私聊共用全局 `seq` | 对局引擎 / `imms private say` |
-| `game_state` | runtime / round / revealed_clues / result / llm_stats | 对局引擎 |
+| `game_state` | runtime / round / revealed_clues / result / vote_state / llm_stats | 对局引擎、投票账本 |
 | `private_rooms` | 私聊房间席位、轮次、opened_seq / closed_seq | `imms private open/close` |
 | `script_registry` | 剧本生命周期（staged/normalized/ready/archived/rejected）与来源指纹 | `imms ingest` / `import-corpus` / `script promote` |
 | `script_skeletons` | 骨架版本（追加，不覆盖） | `imms ingest` / `import-corpus` |

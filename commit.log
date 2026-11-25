@@ -90,3 +90,12 @@
 - CLI：`ingest detect/skeleton/convert/add/batch/report/validate`、`script list/show/skeleton/history/promote`；`parse` 收敛到同一链路。
 - 修复：RPG 叙事片段的解析异常曾盖掉 `no_culprit` 等真正门禁原因，改为先 admit 再 parse；manifest 汇总每次 upsert 后重算；两个不同 SKIP 文件哈希相同时按来源路径分别保留；盒装本单文件需暂存为目录再解析。
 - 验证：69 个 unittest 全通过（新增 test_ingest.py / test_skeleton.py）；6 个真实 RPG 本从 raw 重新摄入→导入→装配→对局（solved=True），脚本管理 list/skeleton/promote/history 跑通。详见 docs/INGEST.md / docs/REGISTRY.md。
+
+## 2026-11-25 · 完整投票体系
+
+- 新增 `src/imms/vote.py`：规则配置（Ontology → scripted → explicit）、席位/角色名解析、弃票/自我投票/非法目标校验、证据平票裁决、1–5 轮复投与改票、AI `argmax`/`persona` 策略、票据账本与离线审计。
+- `runtime._vote` 改为调用投票模块并保留旧 `tally/winner/solved/motive_fact_id`；`run_session` 传入 seed；复投产生的 L3 变化写入 `attribute_events`。
+- 新增 CLI `vote run/cast/replay/audit/config`；`game_state.vote_state` 与 `vote_cast` / `vote_tally` / `vote_deliberation` / `vote_result` 事件构成完整票据链。
+- `retro` 追加 `retrospective.vote_audit` 与 Markdown「投票审计」小节；lockedroom 5 指标评分公式不变。
+- 修复：`majority_stop=false` 曾被写成立即 break，导致第二轮永不发生；`normalize_rules()` 传单个 dict 时曾按字符串迭代而丢失配置，现已兼容 dict/list；平票不再依赖字典插入顺序。
+- 验证：76 个 unittest 全通过（新增 test_vote.py）；雪夜山庄默认投票 5 张合法票、证据支持率 80%、solved=True；两轮 persona 配置跑出自我投票拦截 1、非法目标 0、平票按证据裁决、账本 10 张票。详见 docs/VOTE.md。

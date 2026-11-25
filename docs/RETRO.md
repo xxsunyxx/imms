@@ -33,6 +33,7 @@ uv run imms --db s.db replay --session S --with-eval --out full_replay.md
 - **证据指向强度**：最高 logLR 指向与次高之差；`≥0.5` 且唯一才判 `decisive`。这是静态估计，不是重放。
 - **真实分支对照**：读 `gm_branches` 里 `active`/`merged` 分支的 diff，列出线索变化数、台词变化数、结局是否翻转及赢家迁移。静态强度与真实分支并列，不混为一谈。
 - **时间线检查**：来自 solver 的 `order_conflicts` 与 `warnings`。
+- **投票审计**：`vote.audit()` 汇总合法票率、弃票率、自我投票拦截、非法目标、证据支持率、平票裁决与动机记录；挂在 `retrospective.vote_audit`，不改变 lockedroom 5 指标评分公式。
 
 ## 边界
 

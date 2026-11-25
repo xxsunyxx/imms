@@ -14,7 +14,7 @@
     意图生成 → 效用 F24 → softmax F25 → 选定动作
     三重护栏（知识 / 谎言账本 / 禁造事实）
     落 game_events → GM 节奏 F22/F23（必要时释放线索）
-→ 终幕投票 F16 → 与真相比对 → 写 result
+→ 终幕投票阶段（F16 + 规则/账本/审计）→ 与真相比对 → 写 result
 ```
 
 ## 2. GM 与用户席位
@@ -28,7 +28,7 @@
 | 表 | 内容 |
 |---|---|
 | `game_events` | 每轮 SpeechAct（含 `inner_intent`，仅复盘可见）；私聊事件共用全局 `seq` |
-| `game_state` | `runtime` / `round` / `revealed_clues` / `user_input_index` / `result` / `llm_stats` |
+| `game_state` | `runtime` / `round` / `revealed_clues` / `user_input_index` / `result` / `vote_state` / `llm_stats` |
 | `private_rooms` | 私聊房间的席位、轮次、开关顺序 |
 
 `inner_intent` 与 `utterance` 分离存储，支撑复盘时展示"内心独白"。公式层产生的显著 L3 变化（`|Δ|≥0.05`）也写入 `attribute_events`，供复盘排序转折点。
@@ -38,7 +38,13 @@
 ```bash
 uv run imms --db imms.db play --session snow-night-villa-s001 --rounds 2 \
   --scripted examples/scripts/user_script.json --seed 42
+
+# 投票阶段可独立运行/审计
+uv run imms --db imms.db vote replay --session snow-night-villa-s001
+uv run imms --db imms.db vote audit --session snow-night-villa-s001
 ```
+
+投票规则、多轮改票、AI 选票策略与票据格式见 `docs/VOTE.md`。`scripted.vote` 继续兼容；`scripted.votes` + `vote_config` 可配置复投。
 
 ## 5. LLM 台词层（可插拔、不碰数值）
 
@@ -119,5 +125,5 @@ uv run imms --db imms.db infoguard check --session snow-night-villa-s001 \
 
 - 不做语音、不做 Web UI；LLM 端点需用户自行提供。
 - RUNTIME 公式见 `docs/FORMULAS.md` F01–F27；纯函数实现见 `src/imms/formulas.py`。
-- 投票真相比对从 Ontology 的 `TruthGraph` 文本推断角色名；正式剧本应显式写 `culprit` 字段。
+- 投票目标经席位表解析（角色 id / 中文名 / `ai:` / `human:` 均可）；真相比对优先用 `evaluation.killer_id`，正式剧本应显式给出，不要依赖 `TruthGraph` 文本回退。
 - 分叉重放使用与基础局相同的角色台词 provider；`--llm http` 时端点需可用，否则回退模板。

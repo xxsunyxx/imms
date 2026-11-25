@@ -47,6 +47,18 @@ uv run imms --db imms.db replay --session snow-night-villa-s001 --with-eval --ou
 
 LLM 台词（可选）：设 `IMMS_LLM_URL` / `IMMS_LLM_MODEL` 后 `play --llm auto`；未配置时用离线模板。LLM 只写台词，不碰数值与事实。
 
+## 投票体系
+
+```bash
+uv run imms --db imms.db vote run --session snow-night-villa-s001 --scripted vote_script.json
+uv run imms --db imms.db vote cast --session snow-night-villa-s001 --voter human:lin_wanqiu --target zhou_muchen
+uv run imms --db imms.db vote replay --session snow-night-villa-s001
+uv run imms --db imms.db vote audit --session snow-night-villa-s001
+uv run imms --db imms.db vote config --session snow-night-villa-s001
+```
+
+投票支持弃票/自我投票拦截、非法目标处理、证据平票裁决、1–5 轮复投改票、AI `argmax`/`persona` 策略与完整票据账本。`play` 自动投票并保持旧的 `scripted.vote` 兼容；`scripted.votes` + `vote_config` 可指定多轮票型。复盘会附加投票审计。详见 `docs/VOTE.md`。
+
 ## 批量导入 100 套盒装本
 
 ```bash
@@ -122,6 +134,7 @@ uv run python -m unittest discover -s tests
 - `docs/SOLVER.md` — 可解性求解器、真值模型规则与时间线系统
 - `docs/GM.md` — GM 决策策略、分支树、合并回滚与叙事 diff
 - `docs/RETRO.md` — 复盘回溯评估指标与决策时点复核
+- `docs/VOTE.md` — 投票规则、多轮复投、AI 策略与票据审计
 
 ## 已踩过的坑
 
@@ -149,3 +162,5 @@ uv run python -m unittest discover -s tests
 - 骨架必须先于归一化：LLM 只做槽内摘要，任何未在原文逐字出现的句子都丢弃；否则"补全"会变成编剧情。
 - 结构化本子在 `admit` 之后才调用下游 parser；否则 `no_case` 这类叙事片段会用解析异常盖掉真正的门禁原因。
 - manifest 汇总必须在每次 upsert 后重算；两个不同 SKIP 文件可能哈希相同，不能只按哈希去重。
+- 平票不能用 `max(tally, key=tally.get)`：它依赖字典插入顺序；投票平局必须由证据分数或显式规则裁决。
+- 多轮投票的 `majority_stop=false` 表示继续投满指定轮次，不能写成 `if not majority_stop: break`，否则第二轮永远不会发生。
