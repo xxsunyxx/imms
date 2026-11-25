@@ -8,6 +8,7 @@ from . import assemble as assemble_mod
 from . import branch as branch_mod
 from . import db as db_mod
 from . import derive as derive_mod
+from . import infoguard as infoguard_mod
 from . import normalize as normalize_mod
 from . import ontology as ontology_mod
 from . import replay as replay_mod
@@ -112,6 +113,16 @@ def build_parser():
     bf.add_argument("--llm", choices=["auto", "template", "http"], default="template")
     bf.add_argument("--out", help="JSON report path")
 
+    ig_p = sub.add_parser("infoguard", help="Inspect the information boundary")
+    ig_sp = ig_p.add_subparsers(dest="infoguard_action", required=True)
+    igs = ig_sp.add_parser("scopes", help="List known/forbidden facts per character")
+    igs.add_argument("--session", required=True)
+    igc = ig_sp.add_parser("check", help="Check one text against a character's scope")
+    igc.add_argument("--session", required=True)
+    igc.add_argument("--char", required=True)
+    igc.add_argument("--text", required=True)
+    igc.add_argument("--direction", choices=["in", "out"], default="out")
+
     rep_p = sub.add_parser("replay", help="Generate five-section post-game replay")
     rep_p.add_argument("--session", required=True)
     rep_p.add_argument("--out", help="Markdown output path")
@@ -208,6 +219,29 @@ def main(argv=None):
             if args.out:
                 write_json(args.out, report)
             print_json(report)
+
+        elif args.cmd == "infoguard":
+            session = db_mod.get_session(conn, args.session)
+            onto = db_mod.get_script(conn, session["script_id"])
+            engine = infoguard_mod.build_engine(onto)
+            if args.infoguard_action == "scopes":
+                print_json({
+                    cid: {"known": sorted(s.known_fact_ids), "forbidden": sorted(s.forbidden_fact_ids)}
+                    for cid, s in engine.scopes.items()
+                })
+            elif args.direction == "in":
+                result = engine.guard_input(args.char, args.text)
+                print_json({
+                    "character_id": args.char, "wrapped": bool(result.findings),
+                    "text": result.text,
+                    "findings": [
+                        {"fact_id": h.fact_id, "matched_text": h.matched_text, "method": h.method}
+                        for h in result.findings
+                    ],
+                })
+            else:
+                findings = engine.check_output(args.char, args.text)
+                print_json({"character_id": args.char, "findings": [f.as_dict() for f in findings]})
 
         elif args.cmd == "replay":
             text = replay_mod.build_replay(conn, args.session)

@@ -24,6 +24,8 @@ uv run imms --db imms.db play --session snow-night-villa-s001 --rounds 2 --scrip
 uv run imms --db imms.db private open --session snow-night-villa-s001 --round 3 --seats human:lin_wanqiu,ai:gu_chengye
 uv run imms --db imms.db private say --session snow-night-villa-s001 --room snow-night-villa-s001-p001 --actor human:lin_wanqiu --to ai:gu_chengye --utterance "我听到书房里有争执。"
 uv run imms --db imms.db private close --session snow-night-villa-s001 --room snow-night-villa-s001-p001
+uv run imms --db imms.db infoguard scopes --session snow-night-villa-s001
+uv run imms --db imms.db infoguard check --session snow-night-villa-s001 --char gu_chengye --text "死者死于过量胰岛素注射"
 uv run imms --db imms.db replay --session snow-night-villa-s001 --out replay.md
 uv run imms --db imms.db branch fork --session snow-night-villa-s001 --at-round 2 --override-round 2 --override-utterance "我承认偷看过遗嘱" --out branch_report.json
 ```
@@ -50,6 +52,7 @@ uv run python -m unittest discover -s tests
 - `docs/FORMULAS.md` — F01–F30 公式登记
 - `docs/STORAGE.md` — SQLite 表与只读约束
 - `docs/RUNTIME.md` — 对局引擎与回合循环
+- `docs/INFOGUARD.md` — 信息边界四层引擎与参考取舍
 
 ## 已踩过的坑
 
@@ -62,3 +65,6 @@ uv run python -m unittest discover -s tests
 - 被线索指向的角色应更新 `exposure_risk` 而非对自身的 `suspicion`；否则复盘会出现"自己怀疑自己"。
 - 分叉必须落在轮末快照边界（第 k 轮开分叉 = 恢复第 k−1 轮末），不能从事件日志现推状态；重复施加评价会双重更新关系。
 - GM 的核心能力是分叉回归，不是叙事润色：每次分叉都要校验数值域、信息隔离、事实已知与可解性。
+- InfoGuard 只管 AI 生成的台词；人类玩家说什么都合法，只在别人感知时把超知内容包成传闻。
+- 关键词命中默认只标记不改写；judge 解析失败必须按 `confirmed` 处理，不能"失败即放行"。
+- 线索释放后必须在 detector 与 context guard 两侧同步 `exempt_fact`，否则已公开线索会被误判为剧透。

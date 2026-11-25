@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import db, formulas, llm
+from . import db, formulas, infoguard, llm
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -233,7 +233,7 @@ def _user_act(scripted, scripted_index, target_name):
     return {"act_type": "assert", "utterance": item, "claimed_facts": [], "target": None, "inner_intent": "用户自行决定"}
 
 
-def _gm_step(conn, session_id, round_no, onto, runtime):
+def _gm_step(conn, session_id, round_no, onto, runtime, guard=None):
     revealed = db.get_game_state(conn, session_id, "revealed_clues", [])
     events = db.visible_game_events(conn, session_id, "gm")
     n_accuse = sum(1 for e in events if e["round"] == round_no and e["act_type"] == "accuse")
@@ -249,7 +249,8 @@ def _gm_step(conn, session_id, round_no, onto, runtime):
             clue = pool[0]
             revealed.append(clue)
             db.set_game_state(conn, session_id, "revealed_clues", revealed)
-            injected = {"type": "clue_release", "clue": clue}
+            exempted = guard.exempt_clue(clue) if guard else []
+            injected = {"type": "clue_release", "clue": clue, "facts_now_public": exempted}
             match = re.search(r"logLR:(\w+)=([-\d.]+)", clue)
             if match:
                 target_seat = f"ai:{match.group(1)}"
@@ -326,6 +327,9 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     init_runtime(conn, session_doc)
     onto = db.get_script(conn, session_doc["script_id"])
     runtime = db.get_game_state(conn, session_id, "runtime")
+    guard_engine = infoguard.build_engine(onto)
+    for clue in db.get_game_state(conn, session_id, "revealed_clues", []):
+        guard_engine.exempt_clue(clue)
     rng = random.Random(seed)
     human_id = session_doc["human_character_id"]
     for seat_id, state in runtime.items():
@@ -338,7 +342,9 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     names = {v: k for k, v in _name_map(onto).items()}
     seat_names = {p["id"]: p["seat_label"] for p in session_doc["participants"]}
     speaker = llm.build_provider(llm_name)
+    judge = guard_engine.make_judge(speaker) if speaker.name != "template" else None
     llm_stats = {"provider": speaker.name, "generated": 0, "fallback": 0}
+    guard_stats = {"input_wrapped": 0, "output_rewritten": 0, "output_flagged": 0, "judge_calls": 0}
     log = []
 
     current_round = db.get_game_state(conn, session_id, "round", 0)
@@ -346,10 +352,15 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     for round_no in range(first_round, rounds + 1):
         for seat_id, state in runtime.items():
             seen = db.visible_game_events(conn, session_id, seat_id, round_no - 1)
-            parsed = [
-                {"actor": e["actor"], "act_type": e["act_type"], "payload": json.loads(e["payload_json"])}
-                for e in seen
-            ]
+            parsed = []
+            for e in seen:
+                payload = json.loads(e["payload_json"])
+                if e["actor"] != seat_id and payload.get("utterance"):
+                    wrapped = guard_engine.guard_input(state["character_id"], payload["utterance"])
+                    if wrapped.findings:
+                        payload["utterance"] = wrapped.text
+                        guard_stats["input_wrapped"] += 1
+                parsed.append({"actor": e["actor"], "act_type": e["act_type"], "payload": payload})
             round_changes = []
             for ev in parsed:
                 _, changes = _appraise(state, ev, round_no)
@@ -377,7 +388,15 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 }
                 if speaker.name != "template":
                     allowed = sorted(set(public_facts) | set(state["beliefs"]))
-                    prompt = llm.build_prompt(state, intent, target_name, clue, round_no, allowed, seat_names)
+                    scope = guard_engine.scope_for(state["character_id"])
+                    known_lines = (
+                        [f"{fid}: {guard_engine.fact_text(fid)}" for fid in sorted(scope.known_fact_ids)]
+                        if scope else []
+                    )
+                    prompt = llm.build_prompt(
+                        state, intent, target_name, clue, round_no, allowed, seat_names,
+                        known_fact_lines=known_lines,
+                    )
                     try:
                         generated = llm.parse_speech(speaker.generate(prompt), allowed, intent)
                         act["utterance"] = generated["utterance"]
@@ -388,18 +407,56 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                         llm_stats["fallback"] += 1
                         log.append({"round": round_no, "actor": seat_id, "act": "llm_fallback", "reason": str(exc)})
             act = _guard(state, act, public_facts)
+            # The human player may claim anything; guarding their speech would
+            # break legitimate gameplay. Only generated AI speech is checked.
+            findings = [] if state["is_human"] else guard_engine.check_output(state["character_id"], act["utterance"])
+            verdicts = []
+            if findings and judge is not None:
+                guard_stats["judge_calls"] += 1
+                try:
+                    verdicts = judge.adjudicate(state["character_id"], act["utterance"], findings)
+                except Exception:
+                    verdicts = [
+                        infoguard.AdjudicatedLeak(f, "confirmed", "judge error (fail-safe)")
+                        for f in findings
+                    ]
+            if verdicts:
+                hard = [v for v in verdicts if v.effective_severity == "hard"]
+                confirmed = [v for v in verdicts if v.verdict == "confirmed"]
+            else:
+                hard = [f for f in findings if f.severity == "hard"]
+                confirmed = []
+            guard_info = None
+            if findings:
+                ids = sorted({
+                    (v.finding.fact_id if hasattr(v, "finding") else v.fact_id)
+                    for v in (verdicts or findings)
+                })
+                if hard or confirmed:
+                    act["utterance"] = infoguard.REWRITE_UTTERANCE
+                    act["act_type"] = "deflect"
+                    act["claimed_facts"] = []
+                    guard_stats["output_rewritten"] += 1
+                    action = "rewrite"
+                else:
+                    guard_stats["output_flagged"] += 1
+                    action = "flag"
+                guard_info = {"action": action, "facts": ids}
             payload = {
                 "utterance": act["utterance"],
                 "inner_intent": act["inner_intent"],
                 "claimed_facts": act["claimed_facts"],
                 "target": act["target"],
                 "emotion_shown": act.get("emotion_shown", "平静"),
+                "guard": guard_info,
             }
             db.append_game_event(conn, session_id, round_no, seat_id, act["act_type"], payload, ["public"])
             state["memory"].append({"round": round_no, "act": act["act_type"], "importance": 0.5})
             log.append({"round": round_no, "actor": seat_id, "act": act["act_type"], "utterance": act["utterance"]})
+            if guard_info:
+                log.append({"round": round_no, "actor": seat_id, "act": "infoguard", "result": guard_info})
         db.set_game_state(conn, session_id, "user_input_index", user_index)
-        gm_result = _gm_step(conn, session_id, round_no, onto, runtime)
+        gm_result = _gm_step(conn, session_id, round_no, onto, runtime, guard_engine)
         for change_seat, change_char, change in gm_result.pop("changes", []):
             if change_seat:
                 _log_changes(conn, session_id, round_no, change_seat, change_char, [change])
@@ -416,6 +473,10 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
 
     db.set_game_state(conn, session_id, "runtime", runtime)
     db.set_game_state(conn, session_id, "llm_stats", llm_stats)
+    db.set_game_state(conn, session_id, "infoguard_stats", guard_stats)
     result = _vote(conn, session_id, runtime, session_doc, scripted)
     db.set_game_state(conn, session_id, "result", result)
-    return {"session_id": session_id, "rounds": rounds, "log": log, "result": result, "llm": llm_stats}
+    return {
+        "session_id": session_id, "rounds": rounds, "log": log, "result": result,
+        "llm": llm_stats, "infoguard": guard_stats,
+    }

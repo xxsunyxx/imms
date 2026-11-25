@@ -37,3 +37,14 @@
 - `normalize` 对无 `canon_evidence` 的真实剧本产出 `value=null` + `missing_evidence` 报告，不编造分值；对局用中性默认值。
 - 依赖：新增 `pyyaml`（uv add，uv.lock 已更新）。
 - 全仓命令与测试引用切到 `snow-night-villa` / `lin_wanqiu`；21 个 unittest 与 parse→normalize→assemble→play→private→replay→branch 端到端全通过。
+
+## 2026-11-25 · InfoGuard 引擎移植
+
+- 用户指令：移植 lockedroom-ai 的引擎，并评估 silent-recipe/utils 三项机制。
+- 新增 `src/imms/infoguard.py`：InformationScope（known/forbidden 全集补集）、FactMatcher（6 字 shingle 优先于 keyword）、LeakDetector（硬/软泄露）、ContextGuard（输入侧传闻化不拒绝）、LeakJudge（LLM 三选一裁决，失败安全按 confirmed）、InfoGuardEngine（线索豁免与门面）。
+- `ontology.py` 新增 `clue_fact_map`：线索整行与线索 id 双 key 映射到 `reveals_fact_ids`，供线索释放后双向豁免。
+- `runtime.py` 输入侧对他人发言做传闻包裹；输出侧只拦 AI（人类玩家说什么都合法），硬命中/confirmed 改写台词并清空 claimed_facts；GM 释放线索时写 `facts_now_public`；统计进 `game_state.infoguard_stats`。
+- `llm.build_prompt` 增加 `known_fact_lines`：只把该角色 scope 内的事实内容注入 Prompt，forbidden 与 is_true 永不注入。
+- CLI 新增 `imms infoguard scopes/check`（`--direction in|out`）；文档 `docs/INFOGUARD.md`，README/RUNTIME 同步。
+- 测试：新增 test_infoguard.py，N×F 对抗矩阵（全角色×全私有事实）+ 传闻化 + 双向豁免 + judge 失败安全 + runtime 改写；30 个 unittest 全通过，branch fork 回归仍 pass。
+- 修正：初版把人类玩家发言也当输出泄露改写，违背"玩家可拿 A 的秘密质问 B"的合法玩法，已改为只拦 AI。

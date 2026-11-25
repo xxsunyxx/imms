@@ -68,6 +68,7 @@ def parse_yaml_script(path):
             knowers.setdefault(fid, []).append(c["id"])
 
     clue_lines = []
+    clue_fact_map = {}
     for clue in clues:
         targets = []
         for fid in clue.get("reveals_fact_ids", []):
@@ -78,7 +79,11 @@ def parse_yaml_script(path):
             targets = [evaluation.get("killer_id")]
         weight = 1.5 if clue.get("stage", 0) == 0 else 2.0
         suffix = "|".join(f"logLR:{cid}={weight}" for cid in targets if cid)
-        clue_lines.append(f"{clue['id']} {clue.get('title', '')}|{suffix}")
+        line = f"{clue['id']} {clue.get('title', '')}|{suffix}"
+        clue_lines.append(line)
+        # InfoGuard dynamic exemption: unlocking this clue makes its facts discussable.
+        clue_fact_map[line] = list(clue.get("reveals_fact_ids", []) or [])
+        clue_fact_map[clue["id"]] = list(clue.get("reveals_fact_ids", []) or [])
 
     killer_name = char_by_id.get(evaluation.get("killer_id"), {}).get("name", evaluation.get("killer_id"))
     onto = {
@@ -111,6 +116,7 @@ def parse_yaml_script(path):
         ],
         "clue_pool": clue_lines,
         "clues": clues,
+        "clue_fact_map": clue_fact_map,
         "plot_locks": [],
         "endings": [
             f"指认{killer_name}则真凶伏法",
@@ -149,6 +155,7 @@ def parse_script_text(text, source_files=None):
         "timeline_true": [],
         "characters": [],
         "clue_pool": [],
+        "clue_fact_map": {},
         "plot_locks": [],
         "endings": [],
         "source_files": source_files or [],

@@ -98,7 +98,24 @@ uv run imms --db imms.db branch fork --session snow-night-villa-s001 --at-round 
 
 典型用途：用户复盘时问"若第 3 轮我选择相信他"，直接分叉跑出另一条时间线，而不是靠模型口述推测。也可作为剧本平衡性回归：批量分叉后统计 `fail` 比例。
 
-## 9. 边界
+## 9. InfoGuard 信息边界
+
+从 lockedroom-ai 移植的四层信息隔离引擎（`src/imms/infoguard.py`，详见 `docs/INFOGUARD.md`）：
+
+- L1 `compile_scopes`：每个角色的 `known = public ∪ known_fact_ids`，`forbidden` 为全集补集。
+- L2 `LeakDetector`：AI 台词里连续 6 字原文 = 硬泄露，关键词 = 软命中。
+- L2b `LeakJudge`：仅 `--llm http` 时启用；裁决失败按 `confirmed`（从严改写）。
+- L3 `ContextGuard`：输入侧不拒绝，把不可知事实包成「玩家声称…无法证实」的传闻。
+
+```bash
+uv run imms --db imms.db infoguard scopes --session snow-night-villa-s001
+uv run imms --db imms.db infoguard check --session snow-night-villa-s001 \
+  --char gu_chengye --text "死者死于过量胰岛素注射"
+```
+
+`play` 返回 `infoguard` 统计（输入包裹/输出改写/标记/judge 调用）；命中写进 `game_events.payload_json.guard`。GM 释放线索时同步豁免 `reveals_fact_ids`，避免把已公开事实当剧透。人类席位不受输出护栏约束。
+
+## 10. 边界
 
 - 不做语音、不做 Web UI；LLM 端点需用户自行提供。
 - RUNTIME 公式见 `docs/FORMULAS.md` F01–F27；纯函数实现见 `src/imms/formulas.py`。

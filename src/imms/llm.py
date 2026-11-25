@@ -23,7 +23,7 @@ def _env(name, default=None):
     return os.environ.get(name, default)
 
 
-def build_prompt(state, intent, target_name, clue, round_no, allowed_facts, seat_names=None):
+def build_prompt(state, intent, target_name, clue, round_no, allowed_facts, seat_names=None, known_fact_lines=None):
     """Build a drift-resistant, block-structured persona prompt."""
     attrs = state.get("l1", {})
     emo = state["emotion"]
@@ -37,6 +37,8 @@ def build_prompt(state, intent, target_name, clue, round_no, allowed_facts, seat
         for k, v in relations.items()
     ]
     fact_lines = [f"- {f}" for f in sorted(allowed_facts)]
+    if known_fact_lines:
+        fact_lines += [f"- {line}" for line in known_fact_lines]
     lie_lines = [
         f"- 第{lie.get('round_created', '?')}轮对{','.join(lie.get('audience', []))}声称：{'；'.join(lie.get('claimed_facts', []))}"
         for lie in lies
