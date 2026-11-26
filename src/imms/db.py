@@ -196,6 +196,27 @@ CREATE INDEX IF NOT EXISTS idx_l1_lookup ON persona_l1(script_id, character_id, 
 CREATE INDEX IF NOT EXISTS idx_events_session ON attribute_events(session_id, seq);
 CREATE INDEX IF NOT EXISTS idx_game_events_session ON game_events(session_id, seq);
 CREATE INDEX IF NOT EXISTS idx_state_audit_session ON state_change_audit(session_id, seq);
+
+-- G23: cross-session experiential memory (L0 meta layer, never L1).
+CREATE TABLE IF NOT EXISTS long_term_memory (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    owner_character_id TEXT NOT NULL,
+    target_kind TEXT NOT NULL,          -- npc | player
+    target_id TEXT NOT NULL,            -- stable player_id, not a seat id
+    player_id TEXT,                     -- denormalised for player targets
+    sentiment REAL NOT NULL DEFAULT 0.0,
+    outcome TEXT NOT NULL DEFAULT 'draw',  -- win | loss | draw
+    last_interacted_at TEXT NOT NULL,
+    decay_half_life_days REAL NOT NULL DEFAULT 3.0,
+    faded INTEGER NOT NULL DEFAULT 0,
+    evidence_json TEXT NOT NULL DEFAULT '[]',
+    reinforcement_count INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    UNIQUE(owner_character_id, target_kind, target_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_longterm_owner ON long_term_memory(owner_character_id, target_id);
 """
 
 
@@ -417,6 +438,7 @@ def export_db(conn, out_path):
         "private_rooms": [dict(r) for r in conn.execute("SELECT * FROM private_rooms")],
         "game_state": [dict(r) for r in conn.execute("SELECT * FROM game_state")],
         "state_change_audit": [dict(r) for r in conn.execute("SELECT * FROM state_change_audit")],
+        "long_term_memory": [dict(r) for r in conn.execute("SELECT * FROM long_term_memory")],
     }
     write_json(out_path, payload)
     return payload

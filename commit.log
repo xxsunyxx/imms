@@ -236,3 +236,11 @@
 - `retro.improvisation_metrics` 从 `improv_burst` 事件派生 §15.1 的 10 项指标与验收区间，渲染进回溯评估第 6 节；CLI retro 输出新增 `improvisation`。
 - 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G21 完成，README 增加拨盘段。
 - 验证：新增 `tests/test_director.py` 6 项（钳制/预设/乘子方向/老会话中性/运行时不改 L1/指标区间）；全量 171 项 unittest 通过；CLI 冒烟 `director --preset --set` 与 `retro` 指标输出通过。
+
+## 2026-11-26 · G23 跨局长期体验记忆
+
+- `db.py` 新增 `long_term_memory` 表（owner/target/sentiment/outcome/evidence/last_interacted/half_life/faded/reinforcement_count，unique 三元组）并纳入 `export_db`。
+- 新增 `src/imms/longterm.py`：w=exp(-ln2·Δt/half_life)，默认 3 天；低于 0.15 标 faded 不删除；`reinforce` 再交互复活并合并证据；`settle_session` 从 relations(like/trust)+vote.winner 结算；`inject_priors_from` 开局注入 L3 先验并写审计，不触碰 L1。
+- runtime 开局注入 `longterm_prior` 事件、局末写 `longterm_settled` 事件；CLI `memory longterm` 支持查询 / `--settle --session` / `--forget`。
+- 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G23 完成，README 增加长期记忆段。
+- 验证：新增 `tests/test_longterm.py` 5 项（半衰期/再强化复活/显式遗忘/先验只改 L3 且跳 faded/端到端结算）；全量 176 项 unittest 通过；CLI 冒烟 settle 6 条并可读回。

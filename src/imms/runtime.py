@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, db, director, events, formulas, infoguard, ips, journal, l4, lie, llm, memory, vote
+from . import aftermath, breakout, db, director, events, formulas, infoguard, ips, journal, l4, lie, llm, longterm, memory, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -96,6 +96,18 @@ def init_runtime(conn, session_doc):
         }
     # Clue cards are not knowledge until a clue is actually released/revealed.
     # Every agent starts with only public facts plus its own canon knowledge.
+
+    # G23: prior sessions' non-faded sentiment feeds L3 relation baselines.
+    # This is meta state only -- L1 canon is never written back.
+    longterm.refresh_faded(conn)
+    priors = []
+    for cid in sorted({s["character_id"] for s in runtime.values()}):
+        priors.extend(longterm.inject_priors_from(conn, runtime, cid))
+    if priors:
+        db.append_game_event(
+            conn, session_id, 0, "gm:host", "longterm_prior",
+            {"priors": priors}, ["gm:host"],
+        )
 
     db.set_game_state(conn, session_id, "runtime", runtime)
     db.set_game_state(conn, session_id, "round", 0)
@@ -790,6 +802,19 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     db.set_game_state(conn, session_id, "infoguard_stats", guard_stats)
     result = _vote(conn, session_id, runtime, session_doc, scripted, seed)
     db.set_game_state(conn, session_id, "result", result)
+    # G23: settle cross-session sentiment/outcome after the vote is final.
+    settled = longterm.settle_session(
+        conn, session_id, player_id=(session_doc.get("l0") or {}).get("player_id")
+    )
+    db.append_game_event(
+        conn, session_id, max(1, int(rounds)), "gm:host", "longterm_settled",
+        {"entries": [{
+            "owner": e["owner_character_id"], "target": e["target_id"],
+            "kind": e["target_kind"], "sentiment": e["sentiment"],
+            "outcome": e["outcome"],
+        } for e in settled]},
+        ["gm:host"],
+    )
     return {
         "session_id": session_id, "rounds": rounds, "log": log, "result": result,
         "llm": llm_stats, "infoguard": guard_stats,
