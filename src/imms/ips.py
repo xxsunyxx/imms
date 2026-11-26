@@ -513,13 +513,25 @@ def resolve_bursts(states, round_no, events, heat, target, budget, public_facts,
         "seed": seed,
     }
     # G19: direction selects an action descriptor only; IR1/IR2 claims above
-    # remain claim-only and never become TruthGraph facts.
-    from . import direction
+    # remain claim-only and never become TruthGraph facts.  G22: an acute
+    # breakout widens only s_hi/F, never the fact/knowledge guards.
+    from . import breakout, direction
+    state_limits = breakout.thresholds(state)
+    burst["state"] = state_limits["state"]
+    burst["state_thresholds"] = {
+        "s_hi": state_limits["s_hi"], "f_min": state_limits["f_min"]
+    }
+    if state_limits["state"] == "frenzy":
+        burst["guard"]["state"] = "IR1/IR2/R4/R5 unchanged"
     kwargs = {}
     if s_hi is not None:
         kwargs["s_hi"] = s_hi
+    else:
+        kwargs["s_hi"] = state_limits["s_hi"]
     if f_min is not None:
         kwargs["f_min"] = f_min
+    else:
+        kwargs["f_min"] = state_limits["f_min"]
     direction.apply_to_burst(
         burst, state, events, round_no, seed=seed, **kwargs
     )

@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import db, events, formulas, infoguard, ips, l4, lie, llm, memory, vote
+from . import breakout, db, events, formulas, infoguard, ips, journal, l4, lie, llm, memory, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -439,8 +439,23 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     # F22 needs the planned session length, not the current round; otherwise the
     # target heat is always 3.0 and the pacing controller never rests.
     db.set_game_state(conn, session_id, "total_rounds", max(1, int(rounds)))
+    # G22: one breakout token per session by default; G21's macro_quota can
+    # raise the cap when it is present in the stored session metadata.
+    quota = (session_doc.get("l0") or {}).get("macro_quota")
+    breakout_tokens = db.get_game_state(conn, session_id, "breakout_tokens")
+    if not isinstance(breakout_tokens, dict):
+        breakout_tokens = breakout.tokens(quota)
+        journal.set_state(
+            conn, session_id, "breakout_tokens", breakout_tokens,
+            reason="g22:init", actor="gm:host",
+        )
     first_round = start_round if start_round is not None else current_round + 1
     for round_no in range(first_round, rounds + 1):
+        prior_suppressed = [
+            e for e in db.visible_game_events(conn, session_id, "gm", round_no - 1)
+            if e["act_type"] == "suppressed_burst"
+        ]
+        suppressed_before = len(prior_suppressed)
         # G05: build the perceiver's L4 view before anyone speaks this round.
         # Only this projection reaches other seats; L1/L3 truth stays private.
         perceived = l4.project_table(runtime, session_id, round_no, seed=seed)
@@ -468,6 +483,28 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 round_changes.extend(changes)
             round_changes.extend(_update_suspicion(state, parsed))
             ips.accumulate(state, parsed, round_no, session_id=session_id, seed=seed)
+            acc = state.get("accumulator")
+            current_I = ips.intensity(acc, state, parsed, round_no) if acc else 0.0
+            transition = breakout.advance(
+                state, round_no, acc, current_I, suppressed_before,
+                breakout_tokens, observers=[s for s in all_seats if s != seat_id],
+            )
+            if transition:
+                if transition.get("to") == "frenzy":
+                    journal.set_state(
+                        conn, session_id, "breakout_tokens", breakout_tokens,
+                        reason=f"g22:frenzy@{seat_id}", actor=seat_id,
+                    )
+                db.append_game_event(
+                    conn, session_id, round_no, seat_id, "breakout_state",
+                    transition, ["gm"],
+                )
+                log.append({"round": round_no, "actor": seat_id, "act": "breakout_state",
+                            "from": transition.get("from"), "to": transition.get("to")})
+                for change in transition.get("changes", []):
+                    _log_changes(
+                        conn, session_id, round_no, seat_id, state["character_id"], [change]
+                    )
             for change in lie.update_from_events(state, parsed):
                 log.append({
                     "round": round_no, "actor": seat_id, "act": "lie_revision",

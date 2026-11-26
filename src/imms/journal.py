@@ -150,6 +150,10 @@ def visible_events(conn, session_id, seat_id, round_no=None):
             or seat_id in vis
             or row["actor"] == seat_id
             or seat_id.startswith("gm:")
+            # GM visibility tokens include ``gm`` / ``gm:host`` / ``gm:l4``.
+            or (seat_id.startswith("gm") and any(
+                isinstance(t, str) and t.startswith("gm") for t in vis
+            ))
             or any(isinstance(t, str) and t.startswith("room:") and in_room(t) for t in vis)
         ):
             item = dict(row)

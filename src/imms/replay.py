@@ -5,7 +5,8 @@ import re
 
 from . import db, formulas, journal
 
-SECTIONS = ["真相时间线", "角色内心独白", "关键转折点 Top 5", "谎言全景图", "反事实推演"]
+SECTIONS = ["真相时间线", "角色内心独白", "关键转折点 Top 5", "谎言全景图",
+            "反事实推演", "越界时刻 Top N"]
 
 
 def _events(conn, session_id):
@@ -173,6 +174,42 @@ def _counterfactual_section(events, runtime, names):
     return lines
 
 
+def _breakout_section(events, names):
+    """G22: breakout moments are audited in their own replay section."""
+    lines = ["## 6. 越界时刻 Top N", ""]
+    moments = []
+    for event in events:
+        payload = event.get("payload") or {}
+        if event.get("act_type") == "improv_burst" and payload.get("state") == "frenzy":
+            moments.append({
+                "round": event.get("round"), "seat": event.get("actor"),
+                "tier": payload.get("tier"), "epsilon": payload.get("epsilon"),
+                "intensity": (payload.get("trigger") or {}).get("intensity"),
+                "aftermath": (payload.get("aftermath") or {}).get("strategy"),
+                "s_hi": (payload.get("state_thresholds") or {}).get("s_hi"),
+                "kind": "frenzy_burst",
+            })
+        elif event.get("act_type") == "breakout_state" and payload.get("to") == "frenzy":
+            moments.append({
+                "round": event.get("round"), "seat": event.get("actor"),
+                "tier": "-", "epsilon": "-", "intensity": payload.get("intensity"),
+                "aftermath": "-", "s_hi": payload.get("s_hi"), "kind": "entry",
+            })
+    moments.sort(key=lambda m: (m["round"] or 0, m["seat"] or ""))
+    if not moments:
+        lines.append("- （本局未进入越界态）")
+        return lines
+    for rank, item in enumerate(moments[:5], 1):
+        lines.append(
+            f"{rank}. 第{item['round']}轮 · {names.get(item['seat'], item['seat'])} · "
+            f"{item['kind']}：强度={item['intensity']}，档位={item['tier']}，"
+            f"ε={item['epsilon']}，带通上界={item['s_hi']}，余波={item['aftermath']}"
+        )
+    lines.append("")
+    lines.append("> 越界态记忆作用域为 full（同一人、记忆连续）；IR1/IR2/R4/R5 与真相写入未放宽。")
+    return lines
+
+
 def build_replay(conn, session_id):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -200,4 +237,6 @@ def build_replay(conn, session_id):
     lines += _lie_section(events, runtime)
     lines.append("")
     lines += _counterfactual_section(events, runtime, names)
+    lines.append("")
+    lines += _breakout_section(events, names)
     return "\n".join(lines) + "\n"

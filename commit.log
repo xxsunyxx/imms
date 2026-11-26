@@ -203,3 +203,12 @@
 - `ips.resolve_bursts()` 在 IR1/IR2 判定之后调用 `direction.apply_to_burst()`，只改 `action_key/speech_act.direction_delta`，claimed_facts 与真相图不变；`s_hi/f_min` 可由调用方（G22）调档。
 - 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G19 完成，README 增方向引擎段。
 - 验证：新增 `tests/test_direction.py` 6 项（梯度/ζ 缺失/保真与意外度代理/带通拒绝/ζ 启用/爆发接入不写真相）。
+
+## 2026-11-26 · G22 急性越界态与复盘列项
+
+- 新增 `src/imms/breakout.py`：`normal/charged/frenzy` 三态；A≥θ 进 charged，A≥1.1 ∧ I≥0.85 ∧ 既有 `suppressed_burst` ∧ token 可用才进 frenzy（默认每局 1 次，`macro_quota` 可上调）；带通 s_hi 3.2/3.6/4.6、F 下限 0.72/0.65/0.55；1–2 轮后退出。
+- 记忆作用域恒为 `full`，不隔离 memory/beliefs/lie_ledger；IR1/IR2/R4/R5 未被放宽，claimed_facts 仍为 claim-only。退出一次性结算 exposure_risk +0.3、morale −0.2 与关系净损失（不可回收），状态变更入 `state_change_audit`。
+- `ips.resolve_bursts()` 从 winner 的 breakout 态派生带通与 `burst.state/state_thresholds`；`runtime` 每轮更新状态机并写 `breakout_state` 事件；replay 增加第 6 节「越界时刻 Top N」。
+- 顺手修复可见性层 bug：`journal.visible_events` 原先只让 `gm:` 前缀席位读到 `gm:host/gm:l4` 可见性事件，普通 `gm` 席位读不到；现补齐 GM token 匹配，否则 G22 的前置 `suppressed_burst` 判定永远为 0。
+- 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G22 完成，README 增越界态段。
+- 验证：153 个 unittest 全通过（新增 `tests/test_breakout.py` 6 项：阈值/入界前置/退出代价不可逆/带通放宽不写真相/replay 列项/端到端越界事件）；CLI 冒烟 `play` 产出 `breakout_state` 与 `frenzy_burst`，`replay` 第 6 节列出「越界时刻」。

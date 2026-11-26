@@ -77,6 +77,8 @@
 4. `breakout_token` 全局每局默认 ≤1（导演拨盘 `macro_quota` 可上调），且进入前必须有 ≥1 条 `suppressed_burst` 记录，避免"上来就疯"。
 5. 每次越界必须产生 aftermath（IR5），并在 replay 中单列「越界时刻 Top N」。
 
+> 实施注记（G22 已完成）：`state["breakout"]` 只存三态、since/exit_round 与 `memory_scope="full"`，从不分桶 memory/beliefs/lie_ledger；`game_state.breakout_tokens` 是全局账本，进入时消费，退出时一次性结算代价。IR4 的硬检查仍待 G09；在此之前越界态不提供任何绕过剧本锁的接口。
+
 ### 4.3 长期人格面：黑化 / 病娇 / DID 是「面」，要长期持有 ★
 用户明确指出「长期的人格面切换，和短期的状态是两个情况」。**决定**：另建 `facet`（人格面）机制，与急性 `breakout_state` 分离。人格面**不是回写 L1**（呼应 B1）：它只是把 `active_facet_id` 指向某个从 L1 派生的 profile，原文基础人格只读不变。
 
@@ -140,7 +142,7 @@
 | ✅ **G19**（已完成） | P2 有方向 | `direction.py` 落面具梯度、ζ 显式阴影反转与三候选带通（s∈[1.2,3.2]、F≥0.72、对齐>0）；无 mask/ζ 时记录 gap 且不编造，L1 只读 | G05（L4/mask、G2 护栏）+ B2 定案 | `direction.mask_gradient` 可复盘；超限候选被拒并记原因；ζ 缺失时降级不编造 |
 | **G20** | P3 有后果 | 余波三策略接 `lie.reasoning_log` + 记忆烙印 + 级联传染阻尼；漂移只审计不回写 | G18 + lie.py + B1 定案 | `aftermath.strategy∈{regret,rationalize,escalate}`；级联 `d≤2` 且强制降档；`self_concept_delta` 不进 L1 |
 | **G21** | P4 可调可评 | 导演拨盘 5 旋钮入 `session.l0`（improv_gain/chaos/shadow_sensitivity/leak_rate/macro_quota）+ retro 指标看板 + 预设档位 | G17–G20；指标基线依赖 G08/G12 | 拨盘改 θ/quota/T 且可复现；retro 输出有效即兴率 30–60%、余波覆盖 100%、漂移 ≤0.08 |
-| **G22** ★ | 追加：**急性越界态（疯批）** | `breakout_token` + 状态机 `normal/charged/frenzy` + 状态相关带通阈值（s_hi 3.2→4.6）+ after-effect；记忆连续；越界单列复盘 | G17–G19；IR4 需 G09 | `s>3.2` 仅在 frenzy 态放行且记 `state`；记忆不隔离；IR1/IR2/R4/R5 不被突破；每局 token 默认 ≤1 |
+| ✅ **G22** ★（已完成） | 追加：**急性越界态（疯批）** | `breakout.py` 落 `normal/charged/frenzy` 三态、每局 token（默认 1）、入界需既有 `suppressed_burst`、带通 s_hi 3.2/3.6/4.6 与 F 0.72/0.65/0.55；退出记 exposure/morale/关系净损失；replay 第 6 节单列 | G17–G19；IR4 待 G09 | `s>3.2` 仅在 frenzy 态放行且记 `state`；`memory_scope=full`；IR1/IR2/R4/R5 与真相写入不变；token 默认 ≤1 |
 | **G23** ★ | 追加：长期体验记忆 | 新表 `long_term_memory` + 3 天半衰期 + 再强化 + `init_runtime` 关系先验注入 + CLI `memory longterm` | 需稳定 `player_id`（`session.l0` 或参会元数据） | 跨局好恶/输赢可查；超过半衰期权重衰减且可 `faded`；再交互复活；**L1 不变**；证据可溯源 |
 | ✅ **G24**（已完成，并入 G18） | 追加：点火 Provocation | `provoke` 意图 + 玩家 accuse/ally/显式 impact 注入 `s_k` + AI 互燃；点火只写目标 accumulator，玩家席位自身不进 IPS | G17 + §2①/G04 冲击通道 | 玩家点火抬高目标 accumulator 且落库；玩家无 accumulator/delivery；受不应期与 budget 约束 |
 | **G25** ★★ | 追加：**长期人格面（facet）** | `persona_facets` 注册表；连续面（黑化/病娇，记忆共享、权重重排）与分离面（DID，`beliefs/memory/lie_ledger` 按面分桶 + 记忆断层）；`active_facet_id` 切换审计；诊断名不进数据 | G17/G19/G23；分离面需 InfoGuard scope 附加面过滤 | 两族 `memory_scope` 不同且可验证；分离面之间不共享信念；切换有 `facet_switch` + `memory_gap`；L1 不变；复盘无诊断名 |
