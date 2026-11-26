@@ -220,3 +220,5 @@ L4 表演层已落 G05：`l4.py` 把他人的 L1 真值 + L2 面具 + L3 状态�
 急性越界态已落 G22：`breakout.py` 用 `normal/charged/frenzy` 三态机管理 1–2 轮疯批窗口，入界消耗全局 token（默认每局 1 次）且必须已有 `suppressed_burst`；带通上界按态放宽到 3.6/4.6，但 IR1/IR2/R4/R5 与真相图不变，记忆始终连续。退出一次性结算 exposure_risk +0.3、morale −0.2 与不可回收的关系损失，并在 replay 第 6 节单列「越界时刻」。
 
 匿名行为原型库：`config/archetypes.json` 收录九张只含特质与习惯用语的人物卡，已用 `imms import-archetypes` 注入 `imms.db`（`trait-archetypes-001`）。来源角色名与作品名不入库，姓名由固定种子随机生成；`archetypes.validate_cards()` 用摘要黑名单拦截原名回潮。可用 `imms persona --script-id trait-archetypes-001 --char arch_01 show` 查看特质、证据与习惯用语。见 `docs/MEMORY.md`。
+
+余波闭环已落 G20：`aftermath.py` 把后悔/圆场/加码三种策略落到既有的关系、情绪、谎言与记忆账本（不新建第二套）。即兴记忆按 `0.6+0.4I` 烙印、τ×3 并带情绪一致标签；自我概念漂移只审计、L1 范数保险丝 0.08；级联传染限 2 跳、逐跳降档并受全局令牌配额约束。

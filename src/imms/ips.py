@@ -424,6 +424,11 @@ def resolve_bursts(states, round_no, events, heat, target, budget, public_facts,
         if I <= 0:
             continue
         tier = tier_for(I)
+        # G20 cascade damper: a contagion-driven burst is capped one tier below
+        # its source.  The cap is consumed on the next actual burst.
+        cap = acc.get("tier_cap")
+        if cap in TIER_RANK and TIER_RANK[cap] < TIER_RANK[tier]:
+            tier = cap
         K = kairos(state, heat, target, events, stage)
         if K <= PARAMS["k_min"][tier]:
             suppressed.append({"seat": seat, "reason": "kairos_below_min", "tier": tier,
@@ -480,6 +485,7 @@ def resolve_bursts(states, round_no, events, heat, target, budget, public_facts,
     before_A = _num(acc.get("A"), 0.0)
     acc["A"] = round(before_A * (1 - PARAMS["eta"]), 4)
     acc["refractory_until"] = int(round_no) + PARAMS["refractory_rounds"]
+    acc.pop("tier_cap", None)  # consumed by this burst
     budget.consume(tier, seat)
     burst = {
         "improv_id": f"imp_{session_id}_{round_no}_{seat}",

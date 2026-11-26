@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import breakout, db, events, formulas, infoguard, ips, journal, l4, lie, llm, memory, vote
+from . import aftermath, breakout, db, events, formulas, infoguard, ips, journal, l4, lie, llm, memory, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -147,11 +147,12 @@ def _log_changes(conn, session_id, round_no, seat_id, character_id, changes):
         before, after = round(before, 4), round(after, 4)
         if abs(after - before) < 0.05:
             continue
+        reason = ch.get("reason") or "事件评价 F02/F12"
         data = {
             "key": ch["dim"], "value": after, "layer": "L3",
             "scope": "dyadic", "target": ch.get("target"),
             "visibility": "self", "source": "runtime:formula",
-            "locked": False, "reason": "事件评价 F02/F12", "updated_at_round": round_no,
+            "locked": False, "reason": reason, "updated_at_round": round_no,
             "updated_by": seat_id,
         }
         conn.execute(
@@ -161,7 +162,7 @@ def _log_changes(conn, session_id, round_no, seat_id, character_id, changes):
             (
                 session_id, round_no, "runtime:formula", "L3", character_id, ch["dim"],
                 ch.get("target") or "", json.dumps({"value": before}, ensure_ascii=False),
-                json.dumps(data, ensure_ascii=False), "事件评价 F02/F12", db.now(),
+                json.dumps(data, ensure_ascii=False), reason, db.now(),
             ),
         )
     conn.commit()
@@ -700,6 +701,10 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             s["emotion"]["arousal"] for s in runtime.values()
         ) / max(1, len(runtime))
         burst_heat = formulas.actual_heat(n_accuse, n_contra, mean_arousal)
+        # G20: rationalize aftermath raises narrative heat carried across rounds.
+        burst_heat += float(db.get_game_state(
+            conn, session_id, "ips_heat_adjustment", 0.0
+        ) or 0.0)
         burst_target = formulas.heat_target(round_no, max(1, int(rounds)), 3.0)
         bursts = ips.resolve_bursts(
             runtime, round_no, round_events, burst_heat, burst_target, budget,
@@ -714,11 +719,27 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             rel[change["dim"]] = change["after"]
             _log_changes(conn, session_id, round_no, seat, change.get("character_id"), [change])
         for burst in bursts["bursts"]:
+            # G20: settle the aftermath into existing ledgers (lie/memory/relations)
+            # before the event is stored so the audit record carries the effects.
+            settled = aftermath.resolve(
+                runtime, burst, round_no, seed=seed, budget=budget, session_id=session_id
+            )
+            for change in settled["changes"]:
+                seat = change.get("seat_id")
+                if seat not in runtime:
+                    continue
+                _log_changes(conn, session_id, round_no, seat, change.get("character_id"), [change])
+            if settled["heat_delta"]:
+                heat_adj = float(db.get_game_state(
+                    conn, session_id, "ips_heat_adjustment", 0.0
+                ) or 0.0) + settled["heat_delta"]
+                db.set_game_state(conn, session_id, "ips_heat_adjustment", round(heat_adj, 4))
             db.append_game_event(
                 conn, session_id, round_no, burst["seat"], "improv_burst", burst, ["public"]
             )
             log.append({"round": round_no, "actor": burst["seat"], "act": "improv_burst",
-                        "tier": burst["tier"], "strategy": burst["aftermath"]["strategy"]})
+                        "tier": burst["tier"], "strategy": burst["aftermath"]["strategy"],
+                        "cascade": len(settled["cascade"])})
         for suppressed in bursts["suppressed"]:
             db.append_game_event(
                 conn, session_id, round_no, "gm:host", "suppressed_burst", suppressed, ["gm:host"]

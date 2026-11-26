@@ -187,7 +187,10 @@ def recall(state, current_round, cue=None, limit=3, tau_m=3.0):
         age = max(0, int(current_round) - int(item.get("round") or 0))
         cosine = similarity(cue, item.get("utterance", "") + " " + " ".join(item.get("claimed_facts") or []))
         congruence = emotion_congruence(emo, item.get("emotion_snapshot"))
-        score = formulas.memory_score(age, tau_m, float(item.get("importance") or 0.0), cosine, congruence)
+        # G20 memory imprint: an improvised act decays more slowly (tau x3)
+        # and carries an emotion tag for trauma-consistent retrieval.
+        item_tau = tau_m * max(1.0, float(item.get("tau_m_factor") or 1.0))
+        score = formulas.memory_score(age, item_tau, float(item.get("importance") or 0.0), cosine, congruence)
         scored.append({**item, "recall_score": round(score, 4)})
     scored.sort(key=lambda x: (-x["recall_score"], str(x.get("seq"))))
     return scored[:max(0, int(limit))]

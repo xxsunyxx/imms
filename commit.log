@@ -219,3 +219,12 @@
 - 新增 `src/imms/archetypes.py`：`validate_cards()` 用 SHA-256 前缀黑名单拒绝身份词回潮（名单只存摘要）；每条量化特质由两条行为摘要锚定，无证据键为 null；`identity.name/role`、`trait.tags`、`speech.habit_phrases` 作为 L1 属性落库。
 - CLI 新增 `imms import-archetypes [--file ...]`；已导入主库 `imms.db` 的 `trait-archetypes-001`（extraction_version=2，9 个人物卡）。
 - 验证：新增 `tests/test_archetypes.py` 4 项（证据完整/null 不编造/身份泄露拦截/L1 不可变/重导入版本递增）；全量 157 项 unittest 通过；CLI 导入与 persona 查询冒烟通过。
+
+## 2026-11-26 · G20 余波闭环、记忆烙印与级联阻尼
+
+- 新增 `src/imms/aftermath.py`：regret（目标 like +0.10β、自身 stress +0.15、泄露不可逆）、rationalize（复用 `lie.create` + `reasoning_log` 追加圆场谎言、heat +0.25）、escalate（关系损伤继续 ×1.4β、exposure_risk +0.20、不可逆）。
+- 记忆烙印 `imp=0.6+0.4I`、`τ×3`、情绪一致标签；`memory.recall` 按条目 `tau_m_factor` 放慢衰减。自我概念漂移只写审计字段，`|ΣΔ|_1 ≤ 0.08` 保险丝触发即拒，L1 Canon 全程只读。
+- 级联 `p=p0(1-C)·arousal·(1+0.6intimacy)·0.5^d·β`（β 为 §11.4 意外放大）；d≤2、逐跳降档、`tier_cap` 在下次真爆发时消费、令牌不可用时转入蓄能保留（`deferred`）；随机键含 depth/source，避免不同跳抽到同一个数。
+- `ips.resolve_bursts` 尊重级联 `tier_cap`；runtime 在事件落库前结算余波并把 heat 调整跨轮累积到 `ips_heat_adjustment`；`_log_changes` 保留余波 reason。
+- 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G20 完成，README 增加余波段。
+- 验证：新增 `tests/test_aftermath.py` 8 项（三策略后果/τ×3 召回/漂移保险丝/L1 不变/级联降档与配额/人类排除/端到端结算）；全量 165 项 unittest 通过。
