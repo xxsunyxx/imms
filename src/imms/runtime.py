@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, db, director, events, facets, formulas, infoguard, ips, journal, l4, lie, llm, longterm, memory, speech_style, vote
+from . import aftermath, breakout, db, director, events, facets, formulas, infoguard, ips, journal, l4, lie, llm, longterm, memory, performance_guide, speech_style, style_compiler, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -485,7 +485,7 @@ def _vote(conn, session_id, runtime, session_doc, scripted, seed=42):
 
 
 def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=None,
-                start_round=None, gm_policy=None):
+                start_round=None, gm_policy=None, speaker=None):
     session_doc = db.get_session(conn, session_id)
     init_runtime(conn, session_doc)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -505,7 +505,9 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     public_facts = set(db.get_game_state(conn, session_id, "revealed_clues", []))
     names = {v: k for k, v in _name_map(onto).items()}
     seat_names = {p["id"]: p["seat_label"] for p in session_doc["participants"]}
-    speaker = llm.build_provider(llm_name)
+    # Optional provider injection: lets an external driver supply an agent-backed
+    # provider without registering a new llm_name. Default path is unchanged.
+    speaker = speaker if speaker is not None else llm.build_provider(llm_name)
     judge = guard_engine.make_judge(speaker) if speaker.name != "template" else None
     llm_stats = {"provider": speaker.name, "generated": 0, "fallback": 0}
     guard_stats = {"input_wrapped": 0, "output_rewritten": 0, "output_flagged": 0, "judge_calls": 0}
@@ -652,19 +654,53 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                     "triggers": style_parts["triggers"],
                 }
                 if speaker.name != "template":
+                    # Compile keyword payload -> coherent style directive.  The
+                    # compiler is fail-closed: bad output falls back to the
+                    # deterministic prompt; nothing here touches facts/numbers.
+                    compiled = style_compiler.compile_prompt(
+                        style_parts,
+                        style_parts.get("fingerprint")
+                        or speech_style.extract_fingerprint(dict(state), style_ctx),
+                        style_ctx, speaker, db.StyleCompileCache(conn),
+                    )
+                    style_parts = compiled["parts"]
+                    act["style"]["compile"] = compiled["report"]
+                    db.append_style_compile(
+                        conn, session_id, round_no, seat_id, state["character_id"],
+                        compiled["report"],
+                    )
+                    db.append_game_event(
+                        conn, session_id, round_no, seat_id, "style_compile",
+                        compiled["report"], ["gm"],
+                    )
+                    log.append({
+                        "round": round_no, "actor": seat_id, "act": "style_compile",
+                        **compiled["report"],
+                    })
+                if speaker.name != "template":
                     scope = guard_engine.scope_for(state["character_id"])
                     known_lines = (
                         [f"{fid}: {guard_engine.fact_text(fid)}" for fid in sorted(scope.known_fact_ids)]
                         if scope else []
                     )
+                    # Performance guides: the bridge from formula-owned intent,
+                    # suspicion and emotion to wording only.  Never touches
+                    # facts, targets or numbers; sanitised twice (here + block).
+                    guides = performance_guide.build(state, intent, target_id)
+                    act["performance_guides"] = guides
                     prompt = llm.build_prompt(
                         state, intent, target_name, clue, round_no, allowed, seat_names,
                         known_fact_lines=known_lines,
                         recalled_lines=memory.recall_lines(recalled, seat_names),
                         perceived=perceived.get(seat_id, {}),
                         style_parts=style_parts,
+                        guides=guides,
                     )
                     try:
+                        # Let an injected provider know which seat/round this
+                        # speech prompt belongs to (harmless no-op otherwise).
+                        if hasattr(speaker, "bind"):
+                            speaker.bind(round_no, seat_id, intent)
                         generated = llm.parse_speech(speaker.generate(prompt), allowed, intent)
                         # Mid gate: post-generation cosine proxy audit.
                         audit = speech_style.audit(generated["utterance"],

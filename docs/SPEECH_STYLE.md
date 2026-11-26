@@ -27,6 +27,40 @@
 | 三块组装 | `assemble` | `[ANCHOR]`（人格/口癖/句式/节奏/表演底色/证据句）/ `[DRIFT]`（5 类漂移 + 关系/情绪/IPS 措辞）/ `[BOUNDARY]` |
 | 一致性审计 | `audit` | 字符 bigram 余弦代理 + 禁用词 + 预算检查 |
 
+## 2.5 LLM 风格编译阶段（关键词 → 连贯 prompt）
+
+原流水线把关键词直接拼进 `[ANCHOR]/[DRIFT]/[BOUNDARY]`，LLM 读到的是 `O: 用词中立…`、`respect(+0.35)→用敬语`、`句长×0.88` 这类规则清单。`src/imms/style_compiler.py` 增加一道**可选的编译阶段**：仅在 `llm` provider（非 `template`）下调用，把关键词载荷交给 LLM 改写成连贯的第二人称说话风格指令，再经严格校验后才替换原 prompt。
+
+| 校验项 | 失败即回退 |
+|---|---|
+| 三块标签与顺序完整 | `ERR_COMPILE_BLOCK` |
+| identity / public_identity / lexicon / catchphrase / sample_lines 逐字保留 | `ERR_COMPILE_DROPPED_ANCHOR` |
+| `[ANCHOR]/[DRIFT]/[BOUNDARY]` 里全部数字原样保留 | `ERR_COMPILE_CHANGED_NUMBER` |
+| 不得出现载荷之外的新引号台词 | `ERR_COMPILE_INVENTED_QUOTE` |
+| 不得出现白名单外的 `f_` 事实编号 | `ERR_COMPILE_UNKNOWN_FACT` |
+| 输出长度 80–2400 字、严格 JSON | `ERR_COMPILE_LENGTH` / `ERR_COMPILE_*_JSON` |
+
+- 编译器只是**措辞编译器**：不产生 claimed_fact、不改 intent、不改任何数值；校验失败一律回退确定性 prompt。
+- 同一 `fingerprint + parts` 的编译结果按 hash 缓存（`style_compile_cache`），后续轮次走 `cache_hit`，避免每轮重复调用 LLM。
+- 运行记录在 `style_compile_ledger`；CLI `imms style compiled --session S [--seat X]`；replay 第 8 节。
+
+## 2.6 表演指引映射层（本轮状态 → 措辞指令）
+
+`src/imms/performance_guide.py` + `config/performance_guide_lexicon.json`。这一层补上「意图/怀疑/情绪 → 怎么说」的桥：前述风格引擎只描述**长期人格面**（这个人一贯怎么说话），但公式层每轮算出的 `intent`、对当前目标的 `suspicion`、此刻 `emotion` 和已采样 IPS 表演项，原先只是**并列存进 prompt 的数据**，模型拿到 `act_type=defend` 这样的标签，并不知道 defend 该怎么演。
+
+| 输入（IMMS 已有状态） | 输出（只改措辞） |
+|---|---|
+| `intent`（8 类 act_type） | 该类意图的表演方式，如 defend → 先承认再转折 |
+| `suspicion[target_id]` | 高/中/低档：追问施压 / 留疑问 / 顺其话展开 |
+| `emotion`（复用 §1 的 emotion 词库，去掉数值前缀） | 用词偏冷、措辞收窄等纯措辞 |
+| `delivery.item` + `hit` | 表演项仅作节奏提示，明写「不得当作事实陈述」 |
+
+- **零 LLM 调用**：纯查表派生，每轮都变，不缓存。与 §2.5 的 LLM 编译是两条独立通道——前者编译「稳定人格面」（按 hash 缓存），后者派生「本轮表演态」，共用 prompt 的不同段落。
+- **硬边界**：`sanitize()` 拒绝事实 id、`key=value`、数字、引号台词、箭头数值；`prompt_engine._sanitize_guide` 再清洗一次。`guides` 不进入 claimed_facts、不改 intent/target/数值。
+- runtime 传 `target_id`（不是显示名）以正确匹配怀疑值；每轮 guides 写入事件的 `performance_guides` 字段供复盘审计。
+- `speech_style.render()` 把本次使用的 `fingerprint` 随 `parts` 传出，编译器必须用它校验，否则会出现「identity 用 id、锚点用显示名」的假拒绝。
+- 离线 `template` provider 不调用编译器（它根本不读 prompt），`style compiled` 为空。
+
 ## 3. 漂移预算（硬顶 0.20）
 
 | 类型 | 权重 | 上限 | 触发 |
@@ -59,7 +93,9 @@ O09 实测约 **0.50**，未达 0.78–0.82。根因是剧本 `canon_evidence` �
 
 - 表 `drift_ledger`：每 AI 席位每轮一行，含 5 类漂移、总漂移、结构比、触发原因、是否强制回落。
 - CLI：`imms style ledger --session S [--seat X] [--out F]`。
-- replay 第 7 节「说话风格漂移账」逐轮列出可解释触发。
+- 表 `style_compile_cache` / `style_compile_ledger`：LLM 编译结果缓存与逐次状态（compiled / cache_hit / fallback）。
+- CLI：`imms style ledger --session S [--seat X]`、`imms style compiled --session S [--seat X]`。
+- replay 第 7 节「说话风格漂移账」逐轮列出可解释触发，第 8 节「说话风格 LLM 编译」列出编译状态。
 
 ## 8. 边界
 
@@ -70,5 +106,8 @@ O09 实测约 **0.50**，未达 0.78–0.82。根因是剧本 `canon_evidence` �
 ## 9. 验证
 
 - `tests/test_speech_style.py` 25 项：预算封顶、词库覆盖（11 维关系/7 维情绪/5 档 OCEAN）、真实 dominance、delivery 采样噪声、措辞关键词、三块结构、三道闸、账本读写。
-- 全量 **211 项** unittest 通过。
+- `tests/test_style_compiler.py` 14 项：编译成功/缓存/DB 缓存、JSON 与长度校验、逐字锚点丢失、数字被改、自造引号台词（含 DRIFT 块合法引号保留）、未知事实 ID、LLM 异常回退、runtime 接线与 template 路径跳过。
+- `tests/test_performance_guide.py` 9 项：意图/怀疑/情绪档位差异、无事实 id/数值/引号越界、零 LLM 调用、指引段逐字渲染、runtime 接线与 template 路径跳过。
+- 全量 **234 项** unittest 通过。
 - O09 端到端：新词库下三块 prompt 完整渲染，锚点含 8 行派生映射，漂移块含 11 维关系 + 7 维情绪 + IPS 措辞。
+- 桩 LLM 端到端：`output/verify_style_compile.py` 4 席位全部 `compiled`，4 条生成 prompt 均含编译后的风格指令；故意用错锚点的桩则全部 `fallback`，证明校验闸门真实生效。

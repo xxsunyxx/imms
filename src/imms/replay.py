@@ -247,6 +247,28 @@ def _style_section(conn, session_id, names):
     return lines
 
 
+def _style_compile_section(conn, session_id, names):
+    rows = db.get_style_compile_ledger(conn, session_id)
+    lines = ["## 8. 说话风格 LLM 编译"]
+    if not rows:
+        lines.append("- 本局未启用 LLM 风格编译（离线模板 provider 路径）。")
+        return lines
+    counts = {}
+    for row in rows:
+        counts[row["status"]] = counts.get(row["status"], 0) + 1
+    lines.append("- 状态：" + "，".join(f"{k}={v}" for k, v in sorted(counts.items())))
+    for row in rows[:12]:
+        lines.append(
+            f"- 第{row['round']}轮 · {names.get(row['seat_id'], row['seat_id'])}："
+            f"{row['status']}" + (f"（{row['reason']}）" if row["reason"] else "")
+        )
+    if len(rows) > 12:
+        lines.append(f"- （其余 {len(rows) - 12} 条见 `imms style compiled`）")
+    lines.append("")
+    lines.append("> 编译器只改措辞；数值、事实与谎言账本不在其输出范围，校验失败即回退确定性 prompt。")
+    return lines
+
+
 def build_replay(conn, session_id):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -278,4 +300,6 @@ def build_replay(conn, session_id):
     lines += _breakout_section(events, names)
     lines.append("")
     lines += _style_section(conn, session_id, names)
+    lines.append("")
+    lines += _style_compile_section(conn, session_id, names)
     return "\n".join(lines) + "\n"

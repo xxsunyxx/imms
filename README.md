@@ -8,7 +8,7 @@
 
 ## 核心规则模块
 
-分工：**guide 提示词驱动变化，IMMS 控制和记忆人物数据**。核心模块把规则固化进 `src/imms/`：人物抽取（`profile`）、提示词生成引擎（`prompt_engine`）、人格→说话风格引擎（`speech_style`，80% 锚点 / 20% 受控漂移，逐轮漂移入账）、变量计算（`variables`）、确定性随机源（`random_source`）、guide 提示词库（`guides`）。CLI 见 `imms core --help` / `imms guides --help` / `imms style ledger --help`，说明见 `docs/CORE_MODULES.md` 与 `docs/SPEECH_STYLE.md`。
+分工：**guide 提示词驱动变化，IMMS 控制和记忆人物数据**。核心模块把规则固化进 `src/imms/`：人物抽取（`profile`）、提示词生成引擎（`prompt_engine`）、人格→说话风格引擎（`speech_style`，80% 锚点 / 20% 受控漂移，逐轮漂移入账；`style_compiler` 在 LLM 路径把关键词编译成连贯风格指令并逐字/数值校验；`performance_guide` 把本轮意图/怀疑/情绪零 LLM 映射为表演指引，只改措辞）、变量计算（`variables`）、确定性随机源（`random_source`）、guide 提示词库（`guides`）。CLI 见 `imms core --help` / `imms guides --help` / `imms style ledger --help` / `imms style compiled --help`，说明见 `docs/CORE_MODULES.md` 与 `docs/SPEECH_STYLE.md`。
 
 人设有两条来源，互不混淆：带行为证据句的 `canon_evidence` 经 F29 锚点打分进 L1 数值键（`source=canon_extract`）；剧本自述的 `personality` / `speaking_style` / `lexicon` 逐字进 L1 文本槽位（`source=script_text`，不打分、缺则 `None + missing_evidence`）；`public_identity` 属 L2，装配时从剧本写入 `persona_l2` 并回填席位视图。三者共同让 Prompt 身份段不再全为「（未配置）」。
 

@@ -319,3 +319,35 @@
 - runtime 拉取 canon_evidence 时不再每 attribute 截 2 条，取满 5 条作锚点样本。
 - 验证：`tests/test_speech_style.py` 扩到 25 项；全量 211 unittest 通过；O09 三端到端通过，锚点 8 行派生、漂移块 11 维关系 + 7 维情绪 + IPS 措辞完整渲染。结构比仍约 0.50（证据句只有 5–29 字，不自造台词凑数），如实报告。
 - 文档 `docs/SPEECH_STYLE.md` 按新算法重写。
+
+## 2026-11-26 · 新增 LLM 说话风格编译阶段（关键词 → 连贯 prompt）
+
+- 用户指出原流水线把语气基线关键词直接拼进 prompt，缺少「用 LLM 把关键词编译成说话风格 prompt」这一步。确认：这是 LLM 路径的真实缺口；但 10 轮重复台词的直接原因是离线 `template` provider 根本不读 prompt，两者需分开处理。
+- 新增 `src/imms/style_compiler.py`：`build_request` 把三块关键词/逐字锚点/数值锚点交给 LLM，`parse_compiled` 严格 JSON 解析，`validate` 校验三块标签、逐字锚点、全部数字、引号台词与 `f_` 事实白名单，失败即回退确定性 prompt；按 fingerprint+parts hash 缓存，避免每轮重复调用。编译器只改措辞，不产生 claimed_fact / intent / 数值。
+- `speech_style.render()` 把本次用到的 `fingerprint` 随 `parts` 传出；runtime 编译器必须用同一个指纹。踩坑：最初 runtime 重新从 raw state 提取指纹，`identity` 落成 `gu_chengye`，而锚点用显示名「顾承业」，导致每次编译都被 `ERR_COMPILE_DROPPED_ANCHOR` 拒绝。修复后桩 LLM 4/4 编译成功。
+- 新表 `style_compile_cache` / `style_compile_ledger`；runtime 每 AI 席位每轮写账并落 `style_compile` 事件；CLI `imms style compiled --session S [--seat X] [--out F]`；replay 第 8 节。template 路径不调用编译器、账本为空。
+- 验证：新增 `tests/test_style_compiler.py` 13 项（含错锚点/改数字/自造台词/未知事实 ID 全部回退、DB 缓存、runtime 接线）；全量 224 项 unittest 通过。桩 LLM 端到端 4 席位均 `compiled`，4 条生成 prompt 均含编译后风格指令（报告 `output/verify_style_compile.json`）。
+- 文档：`docs/SPEECH_STYLE.md` 新增 §2.5 与账本说明，README 核心模块段同步。
+
+## 2026-11-26 · 随机 4 人 silent-dinner 10 轮 + 编译器引号白名单修复
+
+- 再次真随机抽签（entropy `3bee68153e15aa9a`）：4 个剧本抽中 silent-dinner（5 个可玩席位），从 5 席抽 4 席，从 9 张匿名原型卡抽 arch_09/01/08/02 → 顾野/江朝雨/卫南枝/陆衔舟，人席 lao_zhou，play seed 64979822。剧本多于 4 席时在装配后裁剪 roster 到抽中的 4 席（一次性 harness 在 gitignore 的 output/）。
+- 本次用桩 LLM（name=http）跑 10 轮，触发真正的编译链：编译请求 30 次、生成调用 30 次，编译后风格指令逐字进入生成 prompt。
+- **发现并修复真实 bug**：`style_compiler._tokens` 的 `allowed_quotes` 只取 verbatim 锚点与 ANCHOR 块，词库在 DRIFT 块合法输出的「您」「你」被回显时误判为 `ERR_COMPILE_INVENTED_QUOTE`，14/30 编译回退。修复为三块确定性文本全部纳入白名单；新增测试 `test_quotes_already_in_drift_block_are_allowed`。修复后重跑 30/30 compiled。全量 225 项 unittest 通过。
+- 结果：40 条发言 / 6 种文本（桩 provider 固定 5 句轮换 + 人席 1 句，重复度不代表真实模型文风）；投票 2:2 按证据裁 ai:gu_yunzhou，真凶同为 ai:gu_yunzhou，solved=true；InfoGuard 零包裹零改写（桩发言不触发规则）。
+- 报告 `output/random5_10r_report.md` / `.json` 含三位 AI 席位编译后的完整 [ANCHOR]/[DRIFT]/[BOUNDARY] 提示词逐字稿；`output/random5_prompts.json` 保存全部编译请求与生成 prompt。
+
+## 2026-11-26 · 接通表演指引映射层（意图/怀疑/情绪 → 措辞）
+
+- 用户指出对话里看不到 runtime 算出的意图、怀疑、情绪：查证发现数据确实进了 prompt，但只是 `act_type=defend`、`suspicion=0.10` 这类并列陈列，没有告诉模型 defend 该怎么演；负责这一层的 `prompt_engine.block_guides` 已存在但 runtime 从未传 `guides`，「表演指引」段始终缺失。
+- 新增 `src/imms/performance_guide.py` + `config/performance_guide_lexicon.json`：把 8 类 intent、suspicion 高/中/低档、emotion（复用 §1 词库去数值前缀）、已采样 IPS 表演项映射为措辞指令。零 LLM、纯查表、每轮变化不缓存；与 `style_compiler`（稳定人格面、按 hash 缓存、唯一 LLM 调用）是两条独立通道，不构成「翻译两次」。
+- 硬边界：`sanitize()` 拒绝事实 id / `key=value` / 数字 / 引号台词 / 箭头数值，`prompt_engine._sanitize_guide` 二次清洗；guides 不进 claimed_facts、不改 intent/target/数值。runtime 传 `target_id` 而非显示名，否则怀疑值匹配不上会永远落 low 档。每轮 guides 写入事件 `performance_guides` 供审计。
+- 验证：新增 `tests/test_performance_guide.py` 9 项；桩 LLM 干净库重跑 10 轮，30/30 生成 prompt 含表演指引段、23 种不同组合随状态变化、编译仍 30/30；指引段零事实 id / 零赋值 / 零数字 / 零引号。全量 234 项 unittest 通过。
+- 文档：README 核心模块段、`docs/SPEECH_STYLE.md` §2.6 与验证节同步。原始数据 `output/random5_guide_blocks.json`。
+
+## 2026-11-26 · 4-Agent 驱动对局验证（提示词 → agent 生成台词）
+
+- 用户指出此前用桩 provider 验证是对的方法：正确路径是 runtime 生成每席位提示词 → 4 个 agent 各自生成台词 → 回填推进。为此给 `runtime.run_session` 加可选 `speaker` 注入与 `speaker.bind(round, seat, intent)` 钩子，默认路径零变化，234 项 unittest 全过。
+- harness 落在 gitignore 的 output/：bridge provider（prompt 落盘 + 等 reply + 编译/judge 分流）、随机抽签 casting、后台 driver、4 个 actor agent、逐轮导出。
+- snow-night-villa 5 人本（1 人席 + 4 AI 席）真跑 10 轮：40 prompt / 38 生成 / 2 回退（agent 写空 reply）；50 事件 / 41 去重台词；投票 4:1 命中真凶。台词第一次真正体现意图/怀疑/情绪的逐轮演进与角色语言指纹，而非桩的固定 5 句。
+- 报告 `output/agent4_dialogue.md`、原始数据 `output/agent4_dialogue.json`、全部 prompt/reply 在 `output/agent_protocol/`。

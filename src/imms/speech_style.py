@@ -616,6 +616,9 @@ def render(view, ctx=None):
     parts["variants"] = variants
     parts["forced_baseline"] = forced
     parts["missing"] = list(fp.get("missing") or [])
+    # Carry the exact fingerprint used for this render so downstream compilers
+    # validate against the same identity/anchor (not a re-derived variant).
+    parts["fingerprint"] = fp
     return parts
 
 

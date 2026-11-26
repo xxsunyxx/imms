@@ -1,0 +1,24 @@
+{
+  "version": "performance-guide-v1",
+  "note": "Wording-only performance guides. Every entry maps a stored state value to how something is said, never to what is said. No fact ids, no numbers, no dialogue lines.",
+  "framing": "把本轮意图、对当前对象的怀疑和此刻情绪演进措辞与节奏里，不要只把它们并列陈述。",
+  "intents": {
+    "assert": ["先摆出你确信的部分，再给出判断", "语气肯定，但不夸大证据"],
+    "ask": ["用短问句把注意力引到具体细节", "问完留白，让对方接话"],
+    "accuse": ["点明你指出的矛盾，句末可加压", "用你已知的证据支撑，不凭空加细节"],
+    "defend": ["先承认对方说法里站得住的部分，再转折", "用已知细节回应，不硬顶也不退让"],
+    "ally": ["先给对方一个可接受的台阶", "再把话锋转回尚未说清的细节"],
+    "deflect": ["把问题轻轻拨开，不给确定结论", "可用限定词，但不得编造遗忘的内容"],
+    "confess": ["只承认你已经表态过的部分", "语气放慢，句末留余地"],
+    "provoke": ["用反问加压，但不点破你没掌握的事实", "句短、停顿多，让对方先接"]
+  },
+  "suspicion": {
+    "high": ["对当前对象明显起疑，可追问细节、复述其原话施压"],
+    "mid": ["对当前对象保留疑问，多问一句佐证"],
+    "low": ["对当前对象暂无明显怀疑，顺着其话展开"]
+  },
+  "delivery": {
+    "performance_prefix": "本轮表演项：",
+    "performance_suffix": "只作为节奏与措辞提示，不得当作事实陈述。"
+  }
+}

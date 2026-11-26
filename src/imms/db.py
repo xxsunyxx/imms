@@ -241,6 +241,28 @@ CREATE TABLE IF NOT EXISTS drift_ledger (
 );
 
 CREATE INDEX IF NOT EXISTS idx_drift_ledger_session ON drift_ledger(session_id, round);
+
+-- LLM style compiler: validated compiled prompts (cache) and per-call ledger.
+CREATE TABLE IF NOT EXISTS style_compile_cache (
+    hash TEXT PRIMARY KEY,
+    compiled_json TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS style_compile_ledger (
+    seq INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL,
+    round INT NOT NULL,
+    seat_id TEXT NOT NULL,
+    character_id TEXT NOT NULL,
+    status TEXT NOT NULL,
+    reason TEXT,
+    hash TEXT NOT NULL DEFAULT '',
+    provider TEXT,
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_style_compile_session ON style_compile_ledger(session_id, round);
 """
 
 
@@ -625,5 +647,59 @@ def get_drift_ledger(conn, session_id, seat_id=None):
     else:
         rows = conn.execute(
             "SELECT * FROM drift_ledger WHERE session_id=? ORDER BY seq", (session_id,)
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
+class StyleCompileCache:
+    """Dict-like, DB-backed cache for validated compiled style prompts."""
+
+    def __init__(self, conn):
+        self.conn = conn
+
+    def get(self, key):
+        row = self.conn.execute(
+            "SELECT compiled_json FROM style_compile_cache WHERE hash=?", (key,)
+        ).fetchone()
+        return row["compiled_json"] if row else None
+
+    def pop(self, key):
+        self.conn.execute("DELETE FROM style_compile_cache WHERE hash=?", (key,))
+        self.conn.commit()
+
+    def __setitem__(self, key, value):
+        self.conn.execute(
+            "INSERT OR REPLACE INTO style_compile_cache(hash, compiled_json, created_at) "
+            "VALUES (?,?,?)", (key, value, now()),
+        )
+        self.conn.commit()
+
+
+def append_style_compile(conn, session_id, round_no, seat_id, character_id, report):
+    """Record one style-compiler outcome (compiled / cache_hit / fallback)."""
+    conn.execute(
+        """INSERT INTO style_compile_ledger
+           (session_id, round, seat_id, character_id, status, reason, hash, provider, created_at)
+           VALUES (?,?,?,?,?,?,?,?,?)""",
+        (
+            session_id, int(round_no), seat_id, character_id,
+            report.get("status") or "unknown", report.get("reason"),
+            report.get("hash") or "", report.get("provider"), now(),
+        ),
+    )
+    conn.commit()
+    return True
+
+
+def get_style_compile_ledger(conn, session_id, seat_id=None):
+    """Read style compiler outcomes for a session, ordered by seq."""
+    if seat_id:
+        rows = conn.execute(
+            "SELECT * FROM style_compile_ledger WHERE session_id=? AND seat_id=? ORDER BY seq",
+            (session_id, seat_id),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT * FROM style_compile_ledger WHERE session_id=? ORDER BY seq", (session_id,)
         ).fetchall()
     return [dict(row) for row in rows]
