@@ -107,3 +107,11 @@
 - `gm.narrative_diff` 新增 `memory_changes`（added/removed/changed/commitment/recall_top）与 `summary.memory_changes`；CLI 新增 `memory show / commitments`（支持按席位、轮次、cue 查询）。
 - 修正编号口径：记忆检索是 F26，F30 是派生能力；任务编号 #30 与公式编号不要混用。
 - 验证：83 个 unittest 全通过（新增 test_memory.py）；雪夜山庄端到端产出听众账本、承诺 `stated→retracted`、召回分与 13 项记忆分叉差异，retro/replay 未回归。详见 docs/MEMORY.md。
+
+## 2026-11-26 · 原始设定归档与差距审计
+
+- 新增 `docs/ORIGINAL_SPEC.md`：把用户提供的 IMMS v1.0 长文本逐字归档（1028 行 / 28673 字符），此前该设定只存在于对话中，没有独立落盘。
+- 新增 `docs/GAP_AUDIT.md`：逐章对照原始设定与现有实现；登记 9 项硬冲突、F01–F30 落地矩阵、16 项待补任务（G01–G16），并映射旧计划 #31–#35。
+- 关键冲突：`runtime.init_runtime` 把全部线索发给每个席位（破坏信息不对称）；`heat_target(round_no, max(1, round_no), 3.0)` 使目标热度恒为 3.0（GM 每轮放线索、永不休整）；谎言账本只有读取没有写入（R3/F20/F21 空转）；L4 表演层与 G2 人格护栏缺失；原书自动生成 / Web / TTS 与项目既定范围冲突，需用户确认才启动。
+- README 增「原始设定与差距」段并补两条文档索引；本轮只做归档与审计，未改运行时代码。
+- 验证：83 个 unittest 全通过（审计前基线），审计仅新增/修改文档。

@@ -2,6 +2,10 @@
 
 用户给一份现成剧本 → 系统解析、归一化、装配 GM + N−1 角色 agent + 1 用户席位并开局。系统不创作剧本。
 
+## 原始设定与差距
+
+用户提供的 IMMS v1.0 全文逐字存于 `docs/ORIGINAL_SPEC.md`；与现有实现的冲突、公式落地情况和待补任务见 `docs/GAP_AUDIT.md`。当前范围冻结为「现成剧本装配 + 纯文本对局」，原书自动生成 / Web / TTS 未纳入。
+
 ## 安装
 
 ```bash
@@ -147,6 +151,8 @@ uv run python -m unittest discover -s tests
 - `docs/RETRO.md` — 复盘回溯评估指标与决策时点复核
 - `docs/VOTE.md` — 投票规则、多轮复投、AI 策略与票据审计
 - `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
+- `docs/ORIGINAL_SPEC.md` — 用户提供的 IMMS v1.0 原始设定（逐字归档）
+- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务
 
 ## 已踩过的坑
 
