@@ -172,3 +172,10 @@
 - CLI 新增 `core journal`：可按席位或全量审计视图复查快照、事件与状态审计。
 - 文档：`docs/GAP_AUDIT.md` 标 G27/G28 完成并更新执行顺序；`docs/MEMORY.md` 新增统一入口章节；README 索引同步。
 - 验证：119 个 unittest 全通过（新增 `tests/test_journal.py` 6 项）；CLI 冒烟 `core journal --state-key round --full --audit` 通过。
+
+## 2026-11-26 · G17 IPS 蓄能器与常态表达微扰
+
+- 新增 `src/imms/ips.py`：§4.2 的 12 类 `s_k` 冲击表（含正向暖流）+ 泄漏积分器（ρ/θ/不应期/超阈上限 1.5/冲击明细审计）；§7.5 的 7 项安全即兴库；§9 的 always-on `micro_perturb`（句长、省略号、颤抖、称呼降级等表达参数），全部用 `random_source` 派生种子，不用全局 RNG。
+- 接入 `runtime.init_runtime()` 与逐轮评价：AI 席位每轮累积蓄能并把 `delivery` 写入事件 payload；玩家席位按 B3 不进 IPS（`accumulator=None`、`delivery=None`）。`delivery` 不改意图、claimed_facts、beliefs 或真相图。
+- 文档：`docs/GAP_AUDIT.md` 标 G17 完成，`docs/IPS_FUSION.md` 同步，README 增 IPS 进展段。
+- 验证：126 个 unittest 全通过（新增 `tests/test_ips.py` 7 项：人格差异、冲击表/显式冲击、泄漏与封顶、不应期、确定性复现、TruthGraph 不变、端到端落库）；CLI 冒烟 `play --rounds 2` 后新事件的 `delivery` 字段可见（`source=ips:micro`，命中项来自安全库）。

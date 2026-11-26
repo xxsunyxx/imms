@@ -135,7 +135,7 @@
 
 | 新 ID | 原文阶段 | 内容 | 前置 | 验收口径 |
 |---|---|---|---|---|
-| **G17** | P0 活人感 | `Accumulator`（ρ/θ/不应期/令牌字段）+ always-on `micro_perturb` + 安全即兴库（7 项）；只改 `delivery`，不改行为 | 无（l0 已有 acting_skill；emotion 已有 arousal/stress） | 每轮每席位产出 `delivery` 且进 `game_events`；`delivery` 不写 TruthGraph；96 项测试不回归；`seed` 可复现 |
+| ✅ **G17**（已完成） | P0 活人感 | `ips.py` 落地泄漏积分蓄能器（ρ/θ/不应期/冲击明细）、always-on `micro_perturb` 与 7 项安全库；只写 `delivery`；玩家席位按 B3 不进 IPS | 无（l0 已有 acting_skill；emotion 已有 arousal/stress） | 每轮 AI 席位产出 `delivery` 且进 `game_events`（玩家席位按 B3 例外）；`delivery` 不写 TruthGraph；旧测试不回归；`seed` 可复现 |
 | **G18** | P1 会爆发 | 越阈触发 + 三档幅度 + `ImprovBudget`（macro 1/幕、meso 2/人、d≤2）+ IR1/IR2/IR5；`suppressed_burst` 日志 | G17；IR4 部分需 G09，IR3 需 `is_unique_path()` | 同轮多人越阈只放最高者；未放行者 A 不清空且记 `suppressed_burst`；每次 meso/macro 有 ≥1 条 aftermath |
 | **G19** | P2 有方向 | 面具梯度 + 阴影反转 + 带通选择（意外度/保真度/方向对齐）；保真用规则代理，不引入向量库 | G05（L4/mask、G2 护栏）+ B2 定案 | `direction.mask_gradient` 可复盘；`s>3.2` 或 `F<0.72` 的候选被拒并记原因；ζ 缺失时降级不编造 |
 | **G20** | P3 有后果 | 余波三策略接 `lie.reasoning_log` + 记忆烙印 + 级联传染阻尼；漂移只审计不回写 | G18 + lie.py + B1 定案 | `aftermath.strategy∈{regret,rationalize,escalate}`；级联 `d≤2` 且强制降档；`self_concept_delta` 不进 L1 |

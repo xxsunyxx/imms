@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import db, events, formulas, infoguard, lie, llm, memory, vote
+from . import db, events, formulas, infoguard, ips, lie, llm, memory, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -79,6 +79,13 @@ def init_runtime(conn, session_doc):
             "lie_ledger": [],
             "memory": [],
             "commitments": {},
+            # B3: the human seat relies on its own emotions and stays outside
+            # the IPS pipe; AI seats carry a leaky accumulator from canon OCEAN.
+            "accumulator": (
+                None if session_doc["human_character_id"] in p["id"]
+                else ips.new_accumulator(attrs)
+            ),
+            "delivery": None,
         }
     # Clue cards are not knowledge until a clue is actually released/revealed.
     # Every agent starts with only public facts plus its own canon knowledge.
@@ -421,6 +428,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 _, changes = _appraise(state, ev, round_no)
                 round_changes.extend(changes)
             round_changes.extend(_update_suspicion(state, parsed))
+            ips.accumulate(state, parsed, round_no, session_id=session_id, seed=seed)
             for change in lie.update_from_events(state, parsed):
                 log.append({
                     "round": round_no, "actor": seat_id, "act": "lie_revision",
@@ -538,6 +546,10 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                     guard_stats["output_flagged"] += 1
                     action = "flag"
                 guard_info = {"action": action, "facts": ids, "leaks": leaks}
+            # IPS P0: expression only.  Delivery never feeds intent selection,
+            # claimed facts, beliefs or TruthGraph (IR1).
+            delivery = ips.micro_perturb(state, session_id, round_no, seed=seed)
+            state["delivery"] = delivery
             payload = {
                 "utterance": act["utterance"],
                 "inner_intent": act["inner_intent"],
@@ -547,6 +559,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 "guard": guard_info,
                 "recalled": _recall_payload(recalled),
                 "lie_id": act.get("lie_id"),
+                "delivery": delivery,
             }
             seq = db.append_game_event(
                 conn, session_id, round_no, seat_id, act["act_type"], payload, ["public"]

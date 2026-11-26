@@ -14,6 +14,8 @@
 
 所有会话状态与事件读写统一走 `journal.py`：`game_state` 每次写入落 `state_change_audit`（改前/改后 + reason + actor），事件读取区分席位可见视图与全量审计视图，分叉时审计链一并克隆。可用 `imms core journal --session <id> --round N [--seat X | --full] [--audit]` 复查。见 `docs/MEMORY.md`。
 
+IPS 融合已落 P0（G17）：`ips.py` 用 `s_k` 冲击表与泄漏积分器维护 AI 席位蓄能，按确定性种子产出 `delivery` 表达参数并写入事件；玩家席位按边界 B3 不进 IPS。只改表达，不改事实与行为。见 `docs/IPS_FUSION.md`。
+
 ## 安装
 
 ```bash
