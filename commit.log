@@ -179,3 +179,11 @@
 - 接入 `runtime.init_runtime()` 与逐轮评价：AI 席位每轮累积蓄能并把 `delivery` 写入事件 payload；玩家席位按 B3 不进 IPS（`accumulator=None`、`delivery=None`）。`delivery` 不改意图、claimed_facts、beliefs 或真相图。
 - 文档：`docs/GAP_AUDIT.md` 标 G17 完成，`docs/IPS_FUSION.md` 同步，README 增 IPS 进展段。
 - 验证：126 个 unittest 全通过（新增 `tests/test_ips.py` 7 项：人格差异、冲击表/显式冲击、泄漏与封顶、不应期、确定性复现、TruthGraph 不变、端到端落库）；CLI 冒烟 `play --rounds 2` 后新事件的 `delivery` 字段可见（`source=ips:micro`，命中项来自安全库）。
+
+## 2026-11-26 · G18 + G24 越阈爆发、令牌池与点火
+
+- `ips.py` 扩展 §4.3 强度 `I`、§8.1 三档 `tier`/幅度 `ε`（演技好者泄露少）、§8.3 Kairos（关注 × 语义代理 × 节奏缺口 × 可插入性；投票阶段为 0）、`ImprovBudget`（macro 1/轮、meso 2/人、macro 2/人、不应期 2 轮）与 `resolve_bursts()`。
+- 同轮多人越阈按分数只放一位，其余写 `suppressed_burst` 且蓄能不清空；IR1 即兴只取 `beliefs ∪ public` 的 claim-only 交集并标 `unverified_claim`，IR2 不超知，IR5 强制三策略 aftermath（regret/rationalize/escalate）与 ≥1 他人状态变化；无可观察对象时拒绝 macro/meso。`self_concept_delta` 仅审计，不回写 L1。
+- G24：`runtime` 新增 `provoke` 意图与 `_provocation_from_act`；玩家 accuse/ally 与 AI 互燃都只把 `s_k` 注入目标 accumulator，并落 `provocation` 事件；玩家席位仍无 accumulator/delivery。
+- 文档：`docs/GAP_AUDIT.md` 标 G18/G24 完成，`docs/IPS_FUSION.md` 同步，README 更新 IPS 段。
+- 验证：135 个 unittest 全通过（新增 `tests/test_ips_burst.py` 9 项：强度/分档、Kairos、预算、令牌竞争与后效、策略确定性、IR5 拒绝无观察者、点火边界、端到端 provocation、端到端 improv_burst）；CLI 冒烟 `play --rounds 2` 产出 provocation 与 `improv_budget`，无回归。

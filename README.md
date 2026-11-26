@@ -14,7 +14,7 @@
 
 所有会话状态与事件读写统一走 `journal.py`：`game_state` 每次写入落 `state_change_audit`（改前/改后 + reason + actor），事件读取区分席位可见视图与全量审计视图，分叉时审计链一并克隆。可用 `imms core journal --session <id> --round N [--seat X | --full] [--audit]` 复查。见 `docs/MEMORY.md`。
 
-IPS 融合已落 P0（G17）：`ips.py` 用 `s_k` 冲击表与泄漏积分器维护 AI 席位蓄能，按确定性种子产出 `delivery` 表达参数并写入事件；玩家席位按边界 B3 不进 IPS。只改表达，不改事实与行为。见 `docs/IPS_FUSION.md`。
+IPS 融合已落 P0/P1（G17、G18、G24）：`ips.py` 用 `s_k` 冲击表与泄漏积分器维护 AI 席位蓄能，按确定性种子产出 `delivery` 表达参数；越阈后经 Kairos 与 `ImprovBudget` 令牌竞争，同轮只放一位席位爆发，未放行者的蓄能不清空并记 `suppressed_burst`，meso/macro 强制带余波。玩家可用 `provoke` / `accuse` / `ally` 点火目标，但玩家席位自身不进 IPS。即兴产出只标 `unverified_claim`，不改真相图。见 `docs/IPS_FUSION.md`。
 
 ## 安装
 

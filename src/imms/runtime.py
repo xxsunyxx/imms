@@ -22,7 +22,7 @@ APPRAISAL = {
     "accuse": "accuse_unfounded", "lie_exposed": "lie_exposed", "caught_lying": "caught_lying",
     "deflect": "take_credit", "betray": "betray", "rescue": "rescue",
 }
-INTENTS = ["assert", "ask", "accuse", "defend", "ally", "deflect", "confess"]
+INTENTS = ["assert", "ask", "accuse", "defend", "ally", "deflect", "confess", "provoke"]
 
 
 def _attrs(state):
@@ -181,6 +181,7 @@ def _fit(intent, attrs):
         "ally": 0.6 * A + 0.4 * E,
         "deflect": 0.5 * (1 - C) + 0.5 * (1 - A),
         "confess": 0.7 * honesty + 0.3 * (1 - C),
+        "provoke": 0.6 * (1 - A) + 0.4 * E,
     }
     return mapping.get(intent, 0.5)
 
@@ -218,6 +219,7 @@ def _utter(intent, target_name, clue):
         "ally": f"我愿意相信{target_name}。",
         "deflect": "这件事我记不清了。",
         "confess": "我承认，我隐瞒了一件事。",
+        "provoke": f"{target_name}，你敢说这件事与你无关？",
     }
     return templates.get(intent, "...")
 
@@ -235,6 +237,34 @@ def _guard(state, act, public_facts):
     return act
 
 
+def _provocation_from_act(act):
+    """G24: derive an ignition impact from an utterance, or None.
+
+    Explicit host/script impact wins; otherwise accusation and alliance are
+    the two canonical negative/positive sources.  This applies to the human
+    seat as well as AI seats, but never writes IPS fields onto the speaker.
+    """
+    explicit = act.get("impact") or act.get("provocation")
+    if isinstance(explicit, dict):
+        kind = explicit.get("kind") or ips.PROVOCATION_KINDS.get(act.get("act_type"), "humiliation")
+        if kind not in ips.IMPACT_KINDS:
+            return None
+        s_k = ips.IMPACT_KINDS[kind]
+        try:
+            s_k = float(explicit.get("s_k", s_k))
+        except (TypeError, ValueError):
+            pass
+        return kind, round(ips.formulas.clip(s_k, 0.0, 1.0), 4)
+    mapped = ips.PROVOCATION_KINDS.get(act.get("act_type"))
+    if mapped:
+        return mapped, ips.IMPACT_KINDS[mapped]
+    if act.get("act_type") == "accuse":
+        return "false_accusation", ips.IMPACT_KINDS["false_accusation"]
+    if act.get("act_type") == "ally":
+        return "warmth", ips.IMPACT_KINDS["warmth"]
+    return None
+
+
 def _user_act(scripted, scripted_index, target_name):
     if scripted is None:
         text = input(f"[用户席位] 第 {scripted_index + 1} 轮发言：")
@@ -250,6 +280,8 @@ def _user_act(scripted, scripted_index, target_name):
             "claimed_facts": item.get("claimed_facts", []),
             "target": item.get("target"),
             "inner_intent": "用户自行决定",
+            "impact": item.get("impact"),
+            "provocation": item.get("provocation"),
         }
     return {"act_type": "assert", "utterance": item, "claimed_facts": [], "target": None, "inner_intent": "用户自行决定"}
 
@@ -564,6 +596,22 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             seq = db.append_game_event(
                 conn, session_id, round_no, seat_id, act["act_type"], payload, ["public"]
             )
+            # G24: the speaker ignites somebody else; IPS state is written only
+            # on the target.  Human seats may ignite but never carry IPS.
+            target_seat = act.get("target")
+            ignition = _provocation_from_act(act) if target_seat in runtime else None
+            if ignition:
+                kind, s_k = ignition
+                applied = ips.apply_provocation(
+                    runtime[target_seat], seat_id, kind, s_k, round_no, seq
+                )
+                if applied:
+                    db.append_game_event(
+                        conn, session_id, round_no, seat_id, "provocation",
+                        {**applied, "target": target_seat}, ["public"],
+                    )
+                    log.append({"round": round_no, "actor": seat_id, "act": "provocation",
+                                "target": target_seat, "kind": kind, "s_k": s_k})
             own_observation = memory.observe(
                 state,
                 {
@@ -584,6 +632,53 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             if guard_info:
                 log.append({"round": round_no, "actor": seat_id, "act": "infoguard", "result": guard_info})
         db.set_game_state(conn, session_id, "user_input_index", user_index)
+        # G18: decide overt improvisation once per round.  The highest-scoring
+        # eligible seat wins a token; everyone else keeps their charge and is
+        # logged.  Round is a proxy for "act" until the stage machine (G06).
+        budget = ips.ImprovBudget(db.get_game_state(conn, session_id, "improv_budget", {}))
+        budget.macro_in_act = 0
+        round_events = []
+        for row in db.visible_game_events(conn, session_id, "gm"):
+            if row["round"] != round_no:
+                continue
+            try:
+                payload = json.loads(row["payload_json"])
+            except (TypeError, ValueError):
+                continue
+            round_events.append({
+                "seq": row["seq"], "round": row["round"], "actor": row["actor"],
+                "act_type": row["act_type"], "payload": payload,
+            })
+        n_accuse = sum(1 for e in round_events if e["act_type"] == "accuse")
+        n_contra = sum(1 for e in round_events if e["act_type"] == "contradiction")
+        mean_arousal = sum(
+            s["emotion"]["arousal"] for s in runtime.values()
+        ) / max(1, len(runtime))
+        burst_heat = formulas.actual_heat(n_accuse, n_contra, mean_arousal)
+        burst_target = formulas.heat_target(round_no, max(1, int(rounds)), 3.0)
+        bursts = ips.resolve_bursts(
+            runtime, round_no, round_events, burst_heat, burst_target, budget,
+            public_facts, session_id, seed,
+        )
+        for change in bursts["changes"]:
+            seat = change.get("seat_id")
+            if seat not in runtime:
+                continue
+            relations = runtime[seat].setdefault("relations", {})
+            rel = relations.setdefault(change["target"], dict(REL_DEFAULT))
+            rel[change["dim"]] = change["after"]
+            _log_changes(conn, session_id, round_no, seat, change.get("character_id"), [change])
+        for burst in bursts["bursts"]:
+            db.append_game_event(
+                conn, session_id, round_no, burst["seat"], "improv_burst", burst, ["public"]
+            )
+            log.append({"round": round_no, "actor": burst["seat"], "act": "improv_burst",
+                        "tier": burst["tier"], "strategy": burst["aftermath"]["strategy"]})
+        for suppressed in bursts["suppressed"]:
+            db.append_game_event(
+                conn, session_id, round_no, "gm:host", "suppressed_burst", suppressed, ["gm:host"]
+            )
+        db.set_game_state(conn, session_id, "improv_budget", bursts["budget"])
         seat_map = {
             p["script_character_id"]: p["id"]
             for p in session_doc["participants"] if p.get("script_character_id")
