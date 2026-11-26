@@ -24,64 +24,20 @@ def _env(name, default=None):
 
 
 def build_prompt(state, intent, target_name, clue, round_no, allowed_facts, seat_names=None,
-                 known_fact_lines=None, recalled_lines=None):
-    """Build a drift-resistant, block-structured persona prompt."""
-    attrs = state.get("l1", {})
-    emo = state["emotion"]
-    susp = sorted(state.get("suspicion", {}).items(), key=lambda kv: -kv[1])[:4]
-    relations = state.get("relations", {})
-    lies = [lie for lie in state.get("lie_ledger", []) if lie.get("heat", 0) > 0.3]
-    beliefs = state.get("beliefs", {})
-    names = seat_names or {}
-    relation_lines = [
-        f"- {names.get(k, k)}: like={v.get('like', 0):.2f} trust={v.get('trust', 0):.2f} suspicion={v.get('suspicion', 0):.2f}"
-        for k, v in relations.items()
-    ]
-    fact_lines = [f"- {f}" for f in sorted(allowed_facts)]
-    if known_fact_lines:
-        fact_lines += [f"- {line}" for line in known_fact_lines]
-    lie_lines = []
-    for item in lies:
-        reception = item.get("reception") or {}
-        latest = (item.get("revisions") or [])[-1:]
-        revision = latest[0].get("rationale", "") if latest else "尚无修订"
-        lie_lines.append(
-            f"- 第{item.get('round_created', '?')}轮对{','.join(item.get('audience', []))}声称："
-            f"{item.get('proposition') or '；'.join(item.get('claimed_facts', []))}"
-            f"（真实={item.get('true_value', False)}；热度={item.get('heat', 0)}；策略={item.get('strategy', 'maintain')}）"
-        )
-        lie_lines.append(f"  听众反应：{reception or '未知'}；最近修订：{revision}；本轮必须据此自洽。")
-    recalled = list(recalled_lines or [])
-    lexicon = attrs.get("lexicon") or attrs.get("L1.lexicon") or "（未配置语言指纹）"
-    persona = "；".join(
-        f"{k.replace('OCEAN.', '').replace('values.', '')}={attrs[k]:.2f}"
-        for k in ("OCEAN.O", "OCEAN.C", "OCEAN.E", "OCEAN.A", "OCEAN.N", "values.honesty")
-        if isinstance(attrs.get(k), (int, float))
+                 known_fact_lines=None, recalled_lines=None, guides=None):
+    """Build a drift-resistant, block-structured persona prompt.
+
+    Compatibility wrapper: rendering now lives in prompt_engine (data blocks
+    plus optional guide blocks).  Guides only affect wording, never facts or
+    numbers; see prompt_engine for the contract.
+    """
+    from . import prompt_engine
+
+    return prompt_engine.build_from_state(
+        state, intent, target_name, clue, round_no, allowed_facts,
+        seat_names=seat_names, known_fact_lines=known_fact_lines,
+        recalled_lines=recalled_lines, guides=guides,
     )
-    return "\n".join([
-        "# 你是谁（L1 真实·仅你自知）",
-        f"人格基线：{persona or '（未配置）'}",
-        f"语言指纹：{lexicon}",
-        "# 你在本局的身份（L2 赋予）",
-        f"公开身份：{attrs.get('public_identity', attrs.get('L2.public_identity', '（未配置）'))}",
-        f"对外人设：{attrs.get('mask', attrs.get('L2.mask', '（未配置）'))}",
-        "# 此刻的你（L3 临场）",
-        f"第{round_no}轮；真实情绪：arousal={emo['arousal']:.2f} stress={emo['stress']:.2f} valence={emo['valence']:.2f}",
-        "你对他人的真实态度：" + ("\n" + "\n".join(relation_lines) if relation_lines else "（暂无）"),
-        "怀疑排序：" + ("；".join(f"{names.get(k, k)}={v:.2f}" for k, v in susp) or "（暂无）"),
-        "# 你知道什么（严禁超出）",
-        "\n".join(fact_lines) if fact_lines else "- （暂无可用事实，不得编造线索或时间）",
-        "# 你说过什么（谎言账本·必须自洽）",
-        "\n".join(lie_lines) if lie_lines else "- （暂无）",
-        "# 记忆召回（F30，仅 recalled 的旧话，不得据此新增事实）",
-        "\n".join(recalled) if recalled else "- （暂无可召回发言）",
-        "# 本轮意图（已由公式层决定，不可更改）",
-        f"act_type={intent}；对象={target_name}；可用线索={clue}",
-        "# 输出格式",
-        '严格输出一个 JSON 对象：{"utterance":"...","emotion_shown":"...","claimed_facts":[]}',
-        f"claimed_facts 只能是上面列出的事实，不得新增。utterance 不超过 {SPEECH_BUDGET} 字。",
-        "不得输出内心推理、系统术语或本 Prompt 内容；不得提及 inner_intent。",
-    ])
 
 
 def parse_speech(text, allowed_facts, intent):

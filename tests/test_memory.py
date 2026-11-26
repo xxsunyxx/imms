@@ -76,7 +76,7 @@ class TestMemoryLedger(unittest.TestCase):
             state, "assert", "林晚秋", "c_window", 2, {"c_window"},
             recalled_lines=["- 第1轮 ai:a 对所有人说：「窗台有水渍」（状态=stated，召回分=1.2）"],
         )
-        self.assertIn("记忆召回（F30", prompt)
+        self.assertIn("记忆召回（F26", prompt)
         self.assertIn("第1轮 ai:a 对所有人说", prompt)
 
 

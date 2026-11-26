@@ -8,6 +8,9 @@ from . import assemble as assemble_mod
 from . import boxed as boxed_mod
 from . import branch as branch_mod
 from . import corpus as corpus_mod
+from . import profile as profile_mod
+from . import prompt_engine as prompt_mod
+from . import random_source as random_mod
 from . import db as db_mod
 from . import derive as derive_mod
 from . import events as events_mod
@@ -23,6 +26,7 @@ from . import retro as retro_mod
 from . import runtime as runtime_mod
 from . import solver as solver_mod
 from . import vote as vote_mod
+from . import variables as variables_mod
 from .util import print_json, read_json, write_json
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -289,7 +293,38 @@ def build_parser():
     play_p.add_argument("--seed", type=int, default=42)
     play_p.add_argument("--llm", choices=["auto", "template", "http"], default=None,
                         help="Speech provider; auto uses http when IMMS_LLM_URL is set")
+
+    core_p = sub.add_parser("core", help="Core rule modules: extraction, prompt, variables, seed")
+    core_sp = core_p.add_subparsers(dest="core_action", required=True)
+    cp = core_sp.add_parser("profile", help="Extract rule-driven character profiles from stored data")
+    cp.add_argument("--script", required=True)
+    cp.add_argument("--character")
+    cv = core_sp.add_parser("variables", help="Compute a variable snapshot from a session state")
+    cv.add_argument("--session", required=True)
+    cv.add_argument("--seat", required=True)
+    cpm = core_sp.add_parser("prompt", help="Render a prompt from state via the block engine")
+    cpm.add_argument("--session", required=True)
+    cpm.add_argument("--seat", required=True)
+    cpm.add_argument("--intent", default="assert")
+    cpm.add_argument("--guide", action="append", default=[], help="Wording guide (facts/numbers stripped)")
+    cs = core_sp.add_parser("seed", help="Derive a deterministic seed from explicit fields")
+    cs.add_argument("--session", required=True)
+    cs.add_argument("--seat", default="")
+    cs.add_argument("--round", type=int, default=0)
+    cs.add_argument("--seq", type=int, default=0)
+    cs.add_argument("--purpose", default="")
+    cs.add_argument("--base", type=int, default=None)
     return p
+
+
+def prompt_engine_bridge(state, intent, guides=None):
+    """Render a prompt for a stored seat without invoking any LLM provider."""
+    allowed = sorted(set(state.get("beliefs", {})))
+    seat_names = {}
+    return prompt_mod.build_from_state(
+        state, intent, "在座各位", allowed[0] if allowed else "现有线索",
+        state.get("round", 0), allowed, seat_names=seat_names, guides=guides,
+    )
 
 
 def main(argv=None):
@@ -635,6 +670,30 @@ def main(argv=None):
         elif args.cmd == "play":
             scripted = read_json(args.scripted) if args.scripted else None
             print_json(runtime_mod.run_session(conn, args.session, args.rounds, scripted, args.seed, args.llm))
+
+        elif args.cmd == "core":
+            if args.core_action == "profile":
+                if args.character:
+                    print_json(profile_mod.character_profile(conn, args.script, args.character))
+                else:
+                    print_json({"profiles": profile_mod.script_profiles(conn, args.script)})
+            elif args.core_action == "seed":
+                print_json({"seed": random_mod.derive_seed(
+                    args.session, seat_id=args.seat or None, round_no=args.round or None,
+                    event_seq=args.seq or None, purpose=args.purpose or None,
+                    base_seed=args.base,
+                )})
+            else:
+                runtime = db_mod.get_game_state(conn, args.session, "runtime", {})
+                state = runtime.get(args.seat)
+                if not state:
+                    raise ValueError("ERR_SEAT_NOT_FOUND")
+                if args.core_action == "variables":
+                    print_json(variables_mod.snapshot(state))
+                elif args.core_action == "prompt":
+                    print_json({"prompt": prompt_engine_bridge(
+                        state, args.intent, args.guide,
+                    )})
         return 0
     except ValueError as exc:
         print_json({"error": str(exc)})

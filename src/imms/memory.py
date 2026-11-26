@@ -1,7 +1,7 @@
 """Belief graph and listener-aware memory ledger for the runtime.
 
 The runtime previously stored ``memory`` as ``{round, act, importance}`` and
-never consumed F30 (``formulas.memory_score``).  This module turns memory into
+never consumed F26 (``formulas.memory_score``).  This module turns memory into
 an auditable ledger of *who said what to whom, when*, adds a small commitment
 state machine (stated -> revised -> retracted), and exposes deterministic
 recall that can be injected into prompts and compared across GM branches.
@@ -176,7 +176,7 @@ def update_commitments(state, record):
 
 
 def recall(state, current_round, cue=None, limit=3, tau_m=3.0):
-    """Consume F30: rank remembered statements by age, importance and fit."""
+    """Consume F26: rank remembered statements by age, importance and fit."""
     tau_m = max(0.1, float(tau_m))
     emo = state.get("emotion") or {}
     cue = cue or ""

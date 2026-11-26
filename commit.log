@@ -144,3 +144,14 @@
 - 据此拆分：**G22 急性越界态（疯批）** = 1–2 轮、记忆连续、状态相关带通放宽；**G25 长期人格面（facet）** = 连续面（黑化/病娇，记忆共享、权重重排）与分离面（DID，按面隔离 beliefs/memory + 记忆断层），可跨局、由 `long_term_memory` 承载。
 - 新增硬约束：诊断名与流行标签只作 `docs/` 语义参照，不进角色卡/Prompt/玩家复盘；系统只写行为维度名（§4.4 三不原则）；`breakout_state` 与 `active_facet` 两套字段不得混用。
 - `GAP_AUDIT.md` 更新至 G17–G25；README 同步。本轮仅文档，未改运行时。
+
+## 2026-11-26 · 核心规则模块固化（四项能力）
+
+- 按用户要求把规则写进 IMMS 核心，落实分工「guide 提示词驱动变化，IMMS 控制和记忆人物数据」。新增四个模块：
+  - `src/imms/profile.py`：人物抽取编排，从 `persona_l1` + Ontology 产出 canon/abilities/evidence/gaps；缺证据留 `None + missing_evidence`，L1 只读。
+  - `src/imms/prompt_engine.py`：分块注册表式提示词引擎；guide 只改措辞，事实 id 与 `key=value` 注入被清洗；`llm.build_prompt` 委托给引擎且签名兼容。
+  - `src/imms/variables.py`：从席位状态算 PAD/泄露σ/决策温度/怀疑分布/关系焦点/张力，纯函数无副作用。
+  - `src/imms/random_source.py`：按 `(session, seat, round, seq, purpose, base)` 派生确定性种子，替代全局未种子 RNG。
+- CLI 新增 `imms core profile/variables/prompt/seed`；文档 `docs/CORE_MODULES.md`，README 索引同步。
+- 顺手修正编号漂移 C8/G15：`memory.py` 与 Prompt 记忆段统一为 F26（`test_memory.py` 断言同步）。
+- 验证：104 个 unittest 全通过（新增 test_core_modules.py 8 项）；CLI 四项均冒烟通过，guide 中 `f_fake=9` 被拦下。运行时主链路未改。

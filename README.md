@@ -6,6 +6,10 @@
 
 用户提供的 IMMS v1.0 全文逐字存于 `docs/ORIGINAL_SPEC.md`；与现有实现的冲突、公式落地情况和待补任务见 `docs/GAP_AUDIT.md`。当前范围冻结为「现成剧本装配 + 纯文本对局」，原书自动生成 / Web / TTS 未纳入。
 
+## 核心规则模块
+
+分工：**guide 提示词驱动变化，IMMS 控制和记忆人物数据**。四个核心模块把规则固化进 `src/imms/`：人物抽取（`profile`）、提示词生成引擎（`prompt_engine`）、变量计算（`variables`）、确定性随机源（`random_source`）。CLI 见 `imms core --help`，说明见 `docs/CORE_MODULES.md`。
+
 ## 安装
 
 ```bash
@@ -164,6 +168,7 @@ uv run python -m unittest discover -s tests
 - `docs/GM.md` — GM 决策策略、分支树、合并回滚与叙事 diff
 - `docs/RETRO.md` — 复盘回溯评估指标与决策时点复核
 - `docs/VOTE.md` — 投票规则、多轮复投、AI 策略与票据审计
+- `docs/CORE_MODULES.md` — 核心规则模块：人物抽取、提示词引擎、变量计算、确定性随机源
 - `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
 - `docs/ORIGINAL_SPEC.md` — 用户提供的 IMMS v1.0 原始设定（逐字归档）
 - `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（含 IPS G17–G25）
