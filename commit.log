@@ -187,3 +187,11 @@
 - G24：`runtime` 新增 `provoke` 意图与 `_provocation_from_act`；玩家 accuse/ally 与 AI 互燃都只把 `s_k` 注入目标 accumulator，并落 `provocation` 事件；玩家席位仍无 accumulator/delivery。
 - 文档：`docs/GAP_AUDIT.md` 标 G18/G24 完成，`docs/IPS_FUSION.md` 同步，README 更新 IPS 段。
 - 验证：135 个 unittest 全通过（新增 `tests/test_ips_burst.py` 9 项：强度/分档、Kairos、预算、令牌竞争与后效、策略确定性、IR5 拒绝无观察者、点火边界、端到端 provocation、端到端 improv_burst）；CLI 冒烟 `play --rounds 2` 产出 provocation 与 `improv_budget`，无回归。
+
+## 2026-11-26 · G05 L4 表演投影与人格护栏
+
+- 新增 `src/imms/l4.py`：按观察者/被观察者/轮次确定性投影他人的 L4 可见人格与态度；F18 `leak_sigma` 驱动噪声，F19 `shown_attitude` 驱动态度偏移；面具缺失标 gap、不编造数值，玩家席位不做模拟泄露。
+- R2 护栏用 OCEAN/values 以 0.5 为中心的余弦代理（项目无 embedder，C1 冻结）；低于 0.72 时按派生盐重生成或向 L1 锚回收，审计 `action/retries/cosine` 并以 `l4_guard` 事件留痕。
+- `prompt_engine` 增加 `perceived` 块，`llm.build_prompt` / `core prompt --perceived` 透传；运行链路每轮先算投影再发言，其他席位 Prompt 只有 L4，无他人 L1/L3 真值。
+- 文档：`docs/GAP_AUDIT.md` 标 G05 完成，README 增加 L4 说明。
+- 验证：新增 `tests/test_l4.py` 6 项（护栏/确定性/面具降级/极端面具重生成/Prompt 隔离/端到端），单测全通过；全量套件另见摄入测试因秒级时间戳偶发 1 次失败，单独重跑通过（非本次改动引入）。

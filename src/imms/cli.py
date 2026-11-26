@@ -19,6 +19,7 @@ from . import guides as guides_mod
 from . import infoguard as infoguard_mod
 from . import ingest as ingest_mod
 from . import journal as journal_mod
+from . import l4 as l4_mod
 from . import memory as memory_mod
 from . import normalize as normalize_mod
 from . import ontology as ontology_mod
@@ -311,6 +312,7 @@ def build_parser():
     cpm.add_argument("--round", type=int, default=0)
     cpm.add_argument("--guide", action="append", default=[], help="Wording guide (facts/numbers stripped)")
     cpm.add_argument("--guide-purpose", action="append", default=[], help="Fetch a guide from the library by purpose")
+    cpm.add_argument("--perceived", action="store_true", help="Include the L4 projection of other seats")
     cj = core_sp.add_parser("journal", help="Unified session state/event view with audit trail")
     cj.add_argument("--session", required=True)
     cj.add_argument("--seat", default="gm", help="Seat whose event view is rendered")
@@ -343,13 +345,14 @@ def build_parser():
     return p
 
 
-def prompt_engine_bridge(state, intent, guides=None):
+def prompt_engine_bridge(state, intent, guides=None, perceived=None):
     """Render a prompt for a stored seat without invoking any LLM provider."""
     allowed = sorted(set(state.get("beliefs", {})))
     seat_names = {}
     return prompt_mod.build_from_state(
         state, intent, "在座各位", allowed[0] if allowed else "现有线索",
         state.get("round", 0), allowed, seat_names=seat_names, guides=guides,
+        perceived=perceived,
     )
 
 
@@ -746,8 +749,14 @@ def main(argv=None):
                             session_id=args.session, seat_id=args.seat,
                             round_no=args.round,
                         )
+                    perceived = None
+                    if args.perceived:
+                        seen = l4_mod.project_table(
+                            runtime, args.session, args.round
+                        ).get(args.seat, {})
+                        perceived = seen
                     print_json({"prompt": prompt_engine_bridge(
-                        state, args.intent, guides,
+                        state, args.intent, guides, perceived,
                     )})
         elif args.cmd == "guides":
             if args.guides_action == "import":

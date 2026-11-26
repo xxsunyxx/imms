@@ -24,7 +24,7 @@ def _env(name, default=None):
 
 
 def build_prompt(state, intent, target_name, clue, round_no, allowed_facts, seat_names=None,
-                 known_fact_lines=None, recalled_lines=None, guides=None):
+                 known_fact_lines=None, recalled_lines=None, guides=None, perceived=None):
     """Build a drift-resistant, block-structured persona prompt.
 
     Compatibility wrapper: rendering now lives in prompt_engine (data blocks
@@ -36,7 +36,7 @@ def build_prompt(state, intent, target_name, clue, round_no, allowed_facts, seat
     return prompt_engine.build_from_state(
         state, intent, target_name, clue, round_no, allowed_facts,
         seat_names=seat_names, known_fact_lines=known_fact_lines,
-        recalled_lines=recalled_lines, guides=guides,
+        recalled_lines=recalled_lines, guides=guides, perceived=perceived,
     )
 
 

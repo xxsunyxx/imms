@@ -212,3 +212,5 @@ uv run python -m unittest discover -s tests
 - 多轮投票的 `majority_stop=false` 表示继续投满指定轮次，不能写成 `if not majority_stop: break`，否则第二轮永远不会发生。
 - 运行时每轮都会重读此前事件，记忆账本必须按事件 `seq` 去重，否则同一句话会被反复评价与召回。
 - 记忆检索是 F26（`formulas.memory_score`），F30 是派生能力；任务编号与公式编号不要混用。
+
+L4 表演层已落 G05：`l4.py` 把他人的 L1 真值 + L2 面具 + L3 状态投影成每席位专属的可见表现，泄露噪声按派生种子抽取；R2 以 OCEAN/values 中立基线的余弦代理做护栏，越阈重生成或回收并写 `l4_guard` 审计事件。其他角色 Prompt 只读该 L4 投影，读不到他人 L1/L3 真值。可用 `imms core prompt --session S --seat X --perceived` 检查。

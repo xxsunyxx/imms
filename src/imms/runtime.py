@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import db, events, formulas, infoguard, ips, lie, llm, memory, vote
+from . import db, events, formulas, infoguard, ips, l4, lie, llm, memory, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -441,6 +441,13 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     db.set_game_state(conn, session_id, "total_rounds", max(1, int(rounds)))
     first_round = start_round if start_round is not None else current_round + 1
     for round_no in range(first_round, rounds + 1):
+        # G05: build the perceiver's L4 view before anyone speaks this round.
+        # Only this projection reaches other seats; L1/L3 truth stays private.
+        perceived = l4.project_table(runtime, session_id, round_no, seed=seed)
+        for audit in l4.guard_audits(perceived):
+            db.append_game_event(
+                conn, session_id, round_no, "gm:l4", "l4_guard", audit, ["gm"]
+            )
         for seat_id, state in runtime.items():
             seen = db.visible_game_events(conn, session_id, seat_id, round_no - 1)
             parsed = []
@@ -525,6 +532,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                         state, intent, target_name, clue, round_no, allowed, seat_names,
                         known_fact_lines=known_lines,
                         recalled_lines=memory.recall_lines(recalled, seat_names),
+                        perceived=perceived.get(seat_id, {}),
                     )
                     try:
                         generated = llm.parse_speech(speaker.generate(prompt), allowed, intent)

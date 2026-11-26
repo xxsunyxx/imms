@@ -16,7 +16,7 @@ import re
 SPEECH_BUDGET = 120
 
 BLOCK_ORDER = [
-    "identity", "assigned", "emotion", "relations", "beliefs",
+    "identity", "assigned", "emotion", "relations", "perceived", "beliefs",
     "lies", "memory", "intent", "guides", "output",
 ]
 
@@ -76,6 +76,35 @@ def block_relations(view, ctx):
         "你对他人的真实态度：" + ("\n" + "\n".join(lines) if lines else "（暂无）"),
         "怀疑排序：" + (susp_line or "（暂无）"),
     ]
+
+
+def block_perceived(view, ctx):
+    """L4 only: what this observer can see of other seats, never their L1/L3."""
+    perceived = ctx.get("perceived") or {}
+    if not perceived:
+        return []
+    lines = ["# 他人对你的可见表现（L4 投影·非真值）"]
+    for seat, item in sorted(perceived.items()):
+        persona = item.get("shown_persona") or {}
+        attitude = item.get("shown_attitude") or {}
+        traits = "；".join(
+            f"{k.split('.')[-1]}={persona[k]:.2f}" for k in sorted(persona)
+            if isinstance(persona.get(k), (int, float))
+        )
+        rel = "；".join(
+            f"{k}={attitude[k]:.2f}" for k in ("like", "trust", "suspicion", "respect")
+            if isinstance(attitude.get(k), (int, float))
+        )
+        guard = item.get("guard") or {}
+        note = "（护栏重生成）" if guard.get("action") == "regenerated" else (
+            "（护栏回收）" if guard.get("action") == "clamped" else ""
+        )
+        lines.append(
+            f"- {(ctx.get('seat_names') or {}).get(seat, seat)}：可见性格 {traits or '（未配置）'}"
+            f"；可见态度 {rel or '（未配置）'}{note}"
+        )
+    lines.append("以上只是表演投影，可能看走眼；不得据此断定他人内心或隐藏事实。")
+    return lines
 
 
 def block_beliefs(view, ctx):
@@ -161,6 +190,7 @@ BLOCKS = {
     "assigned": block_assigned,
     "emotion": block_emotion,
     "relations": block_relations,
+    "perceived": block_perceived,
     "beliefs": block_beliefs,
     "lies": block_lies,
     "memory": block_memory,
@@ -201,7 +231,7 @@ def build(view, ctx=None, blocks=None):
 
 def build_from_state(state, intent, target_name, clue, round_no, allowed_facts,
                      seat_names=None, known_fact_lines=None, recalled_lines=None,
-                     guides=None):
+                     guides=None, perceived=None):
     """Bridge: build a prompt directly from a runtime state dict."""
     view = dict(state)
     view.setdefault("l1", state.get("l1", {}))
@@ -217,5 +247,6 @@ def build_from_state(state, intent, target_name, clue, round_no, allowed_facts,
         "round_no": round_no, "allowed_facts": allowed_facts,
         "seat_names": seat_names, "known_fact_lines": known_fact_lines,
         "recalled_lines": recalled_lines, "guides": guides,
+        "perceived": perceived,
     }
     return build(view, ctx)
