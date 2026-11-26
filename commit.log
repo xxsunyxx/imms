@@ -252,3 +252,9 @@
 - CLI `imms facets register/switch/list --session S --seat X`；运行时席位初始化加载面注册表；切换写 `facet_switch` 事件。
 - 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G25 完成，README 增加人格面段；IPS 链 G17–G25 全部收口。
 - 验证：新增 `tests/test_facets.py` 6 项（校验与去标签/连续面记忆共享/分离面桶隔离与回归/作用域过滤/Prompt 无诊断名/L2 持久化）；全量 182 项 unittest 通过（摄入测试曾因秒级时间戳偶发 1 次失败，单测与全量重跑均通过）；CLI 注册+切换冒烟通过。
+
+## 2026-11-26 · 清理 README 盒装本/语料库说明
+
+- README 删除「批量导入 100 套盒装本」与「自持语料库（外部 refer 可删除）」两节及其命令示例；文档索引移除 `docs/BOXED.md`、`docs/CORPUS.md` 两条（文档文件保留，统一摄入章节里的格式说明不动）。
+- `docs/GAP_AUDIT.md` 执行顺序段落收口：去掉残留的「下一步」字样并修正重复编号，G17–G28 全部标记完成。
+- 不影响代码与测试；全量 182 项 unittest 通过。

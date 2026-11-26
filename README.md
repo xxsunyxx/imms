@@ -98,28 +98,6 @@ uv run imms --db imms.db vote config --session snow-night-villa-s001
 
 投票支持弃票/自我投票拦截、非法目标处理、证据平票裁决、1–5 轮复投改票、AI `argmax`/`persona` 策略与完整票据账本。`play` 自动投票并保持旧的 `scripted.vote` 兼容；`scripted.votes` + `vote_config` 可指定多轮票型。复盘会附加投票审计。详见 `docs/VOTE.md`。
 
-## 批量导入 100 套盒装本
-
-```bash
-uv run imms --db imms.db import-boxed --dir refer/mystery-scripts-100/盒装本
-uv run imms --db imms.db scripts
-uv run imms --db imms.db assemble --script-id C01 --human c01_r02
-uv run imms --db imms.db play --session C01-s001 --rounds 2 \
-  --scripted examples/scripts/boxed_user_script.json --llm template
-```
-
-四类各 25 套（搞笑/恐怖/职场/反转），2–4 人本均可装配。线索文本取自清单；抽验 C01/H01 图片与清单一致，故不启用 OCR。映射与注意事项见 `docs/BOXED.md`。详见 `docs/RUNTIME.md`。
-
-## 自持语料库（外部 refer 可删除）
-
-```bash
-uv run imms --db corpus.db build-corpus
-uv run imms --db corpus.db corpus-report
-uv run imms --db corpus.db import-corpus --dir corpus
-```
-
-`corpus/` 保存来源副本、标准 Ontology 与准入清单；`refer/` 删除后仍可重建数据库。本次从 9 个候选中收 6 个纯文本推理本，放弃 3 个：mossvale 两个故事依赖鼠标实景搜证，《西游记·火焰山》没有凶手/证据链/结局裁决。缺失字段的补全只使用来源已有证据，全部记在 `completions[]` 与 manifest 中；规则见 `docs/CORPUS.md`。
-
 ## 统一摄入：先骨架，再归一化
 
 ```bash
@@ -166,8 +144,6 @@ uv run python -m unittest discover -s tests
 - `docs/STORAGE.md` — SQLite 表与只读约束
 - `docs/RUNTIME.md` — 对局引擎与回合循环
 - `docs/INFOGUARD.md` — 信息边界四层引擎与参考取舍
-- `docs/BOXED.md` — 100 套盒装本批量导入与映射
-- `docs/CORPUS.md` — 自持语料库、准入门禁与缺陷补全
 - `docs/INGEST.md` — 统一摄入管线、格式适配与自持存储
 - `docs/REGISTRY.md` — 骨架夹具、LLM 边界与剧本生命周期管理
 - `docs/SOLVER.md` — 可解性求解器、真值模型规则与时间线系统
