@@ -226,3 +226,5 @@ L4 表演层已落 G05：`l4.py` 把他人的 L1 真值 + L2 面具 + L3 状态�
 导演拨盘已落 G21：`imms director --session S --preset shakaiha [--set improv_gain=1.5]` 把 5 个旋钮（戏浓度/混乱度/阴影敏感/泄露率/爆点配额）写入 `session.l0`，运行时按派生值改 θ、策略温度、级联概率、ε 与阴影系数；无拨盘的旧会话保持中性。`retro` 现在输出 10 项 IPS 指标看板（有效即兴率、密度、意外度/保真度均值、OOC 拒绝率、兜底占比、级联深度分布、余波覆盖、人格漂移、可解性保持）。见 `docs/IPS_FUSION.md`。
 
 跨局长期记忆已落 G23：`long_term_memory` 表记录角色对稳定 `player_id` / NPC 的好恶与输赢，`longterm.py` 按 3 天半衰期衰减，低于 0.15 标 `faded`（不删除），再交互会重置时钟并增量强化；局末自动结算，开局把未衰退的好恶注入 L3 关系先验（带证据溯源），L1 不变。可用 `imms memory longterm [--owner X] [--as-of ISO]`、`--settle --session S`、`--forget` 管理。见 `docs/IPS_FUSION.md`。
+
+长期人格面已落 G25：`facets.py` 把「面」作为 L2 派生档案（不回写 L1）。连续面记忆共享、只重排行为权重；分离面切换时真正交换 `beliefs/memory/lie_ledger` 桶并写 `facet_switch` + `memory_gap`，InfoGuard 作用域按面过滤。只存 12 个行为维度，不存临床/流行标签。用 `imms facets register --session S --seat X --facet F --kind continuous|dissociative --dim KEY=VALUE --derived NOTE` 注册，`imms facets switch --facet F`（省略则回基面）切换。至此 IPS 融合链 G17–G25 全部完成。

@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, db, director, events, formulas, infoguard, ips, journal, l4, lie, llm, longterm, memory, vote
+from . import aftermath, breakout, db, director, events, facets, formulas, infoguard, ips, journal, l4, lie, llm, longterm, memory, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -93,6 +93,10 @@ def init_runtime(conn, session_doc):
                 else director.apply_to_accumulator(ips.new_accumulator(attrs), dials)
             ),
             "delivery": None,
+            # G25: L2-stored persona facets; L1 canon is never rewritten.
+            "facets": facets.load_registry(conn, session_id, cid),
+            "facet_buckets": {},
+            "facet_switch_log": [],
         }
     # Clue cards are not knowledge until a clue is actually released/revealed.
     # Every agent starts with only public facts plus its own canon knowledge.

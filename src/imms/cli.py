@@ -16,6 +16,7 @@ from . import db as db_mod
 from . import derive as derive_mod
 from . import director as director_mod
 from . import events as events_mod
+from . import facets as facets_mod
 from . import gm as gm_mod
 from . import guides as guides_mod
 from . import infoguard as infoguard_mod
@@ -205,6 +206,26 @@ def build_parser():
     pc.add_argument("--room", required=True)
     pl = priv_sp.add_parser("list", help="List rooms of a session")
     pl.add_argument("--session", required=True)
+
+    fac_p = sub.add_parser("facets", help="Manage long-term persona facets (G25)")
+    fac_sp = fac_p.add_subparsers(dest="facet_action", required=True)
+    fl = fac_sp.add_parser("list", help="List registered facets for a seat")
+    fl.add_argument("--session", required=True)
+    fl.add_argument("--seat", required=True)
+    fr = fac_sp.add_parser("register", help="Register a derivative facet from behaviour dimensions")
+    fr.add_argument("--session", required=True)
+    fr.add_argument("--seat", required=True)
+    fr.add_argument("--facet", required=True)
+    fr.add_argument("--kind", choices=list(facets_mod.KINDS), required=True)
+    fr.add_argument("--dim", action="append", default=[], metavar="KEY=VALUE",
+                    help="Behaviour dimension, e.g. goal_fixation=0.7")
+    fr.add_argument("--derived", action="append", default=[], metavar="TEXT",
+                    help="Evidence note (session/event id); no clinical labels")
+    fs = fac_sp.add_parser("switch", help="Switch the active facet for a seat")
+    fs.add_argument("--session", required=True)
+    fs.add_argument("--seat", required=True)
+    fs.add_argument("--facet", help="Facet id; omit to return to the base self")
+    fs.add_argument("--trigger", default="gm_token")
 
     br_p = sub.add_parser("branch", help="GM branch regression: fork at a round and replay")
     br_sp = br_p.add_subparsers(dest="branch_action", required=True)
@@ -536,6 +557,58 @@ def main(argv=None):
 
         elif args.cmd == "seats":
             print_json(db_mod.get_session(conn, args.session)["participants"])
+
+        elif args.cmd == "facets":
+            state_map = db_mod.get_game_state(conn, args.session, "runtime", {}) or {}
+            seat_state = state_map.get(args.seat) or {}
+            reg = seat_state.get("facets") or facets_mod.new_registry()
+            if args.facet_action == "register":
+                profile = {}
+                for item in args.dim:
+                    if "=" not in item:
+                        raise ValueError(f"ERR_FACET_DIM_FORMAT: {item}")
+                    key, value = item.split("=", 1)
+                    if key not in facets_mod.BEHAVIOUR_KEYS:
+                        raise ValueError(f"ERR_UNKNOWN_FACET_DIM: {key}")
+                    try:
+                        profile[key] = float(value)
+                    except ValueError:
+                        raise ValueError(f"ERR_FACET_DIM_VALUE: {value}")
+                derived = [{"note": x} for x in args.derived]
+                item = facets_mod.register(
+                    reg, args.facet, args.kind, profile, derived_from=derived
+                )
+                seat_state["facets"] = reg
+                db_mod.set_game_state(conn, args.session, "runtime", state_map)
+                facets_mod.save_registry(
+                    conn, args.session, seat_state.get("character_id") or args.seat, reg
+                )
+                print_json(item)
+            elif args.facet_action == "switch":
+                entry = facets_mod.switch(
+                    seat_state, args.facet,
+                    round_no=db_mod.get_game_state(conn, args.session, "round", 0),
+                    trigger=args.trigger,
+                )
+                if entry is None:
+                    raise ValueError("ERR_FACET_ALREADY_ACTIVE")
+                db_mod.set_game_state(conn, args.session, "runtime", state_map)
+                facets_mod.save_registry(
+                    conn, args.session, seat_state.get("character_id") or args.seat, reg
+                )
+                db_mod.append_game_event(
+                    conn, args.session,
+                    db_mod.get_game_state(conn, args.session, "round", 0),
+                    args.seat, "facet_switch", entry, ["gm:host"],
+                )
+                print_json(entry)
+            else:
+                print_json({
+                    "active_facet_id": reg.get("active_facet_id"),
+                    "facets": reg.get("facets", {}),
+                    "problems": facets_mod.validate(reg),
+                    "switch_log": seat_state.get("facet_switch_log", []),
+                })
 
         elif args.cmd == "memory":
             if args.memory_action == "longterm":

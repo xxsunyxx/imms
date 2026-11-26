@@ -16,8 +16,8 @@ import re
 SPEECH_BUDGET = 120
 
 BLOCK_ORDER = [
-    "identity", "assigned", "emotion", "relations", "perceived", "beliefs",
-    "lies", "memory", "intent", "guides", "output",
+    "identity", "assigned", "facet", "emotion", "relations", "perceived",
+    "beliefs", "lies", "memory", "intent", "guides", "output",
 ]
 
 
@@ -76,6 +76,24 @@ def block_relations(view, ctx):
         "你对他人的真实态度：" + ("\n" + "\n".join(lines) if lines else "（暂无）"),
         "怀疑排序：" + (susp_line or "（暂无）"),
     ]
+
+
+def block_facet(view, ctx):
+    """G25: active facet as behavioural weights only; no clinical/popular label."""
+    reg = view.get("facets") or {}
+    fid = reg.get("active_facet_id")
+    if not fid:
+        return []
+    item = (reg.get("facets") or {}).get(fid) or {}
+    dims = [f"{k}={v}" for k, v in sorted((item.get("profile") or {}).items())
+            if v is not None]
+    scope = item.get("memory_scope") or "shared"
+    lines = [f"# 当前行为面向（面 id {fid}）", f"行为权重：{', '.join(dims) or '未配置'}"]
+    if str(scope).startswith("isolated:"):
+        lines.append("记忆连续性：本面只记得自己经历过的对话（存在记忆断层）")
+    else:
+        lines.append("记忆连续性：与平时的自我连续共享")
+    return lines
 
 
 def block_perceived(view, ctx):
@@ -188,6 +206,7 @@ def block_output(view, ctx):
 BLOCKS = {
     "identity": block_identity,
     "assigned": block_assigned,
+    "facet": block_facet,
     "emotion": block_emotion,
     "relations": block_relations,
     "perceived": block_perceived,

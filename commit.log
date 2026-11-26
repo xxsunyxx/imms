@@ -244,3 +244,11 @@
 - runtime 开局注入 `longterm_prior` 事件、局末写 `longterm_settled` 事件；CLI `memory longterm` 支持查询 / `--settle --session` / `--forget`。
 - 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G23 完成，README 增加长期记忆段。
 - 验证：新增 `tests/test_longterm.py` 5 项（半衰期/再强化复活/显式遗忘/先验只改 L3 且跳 faded/端到端结算）；全量 176 项 unittest 通过；CLI 冒烟 settle 6 条并可读回。
+
+## 2026-11-26 · G25 长期人格面与记忆隔离
+
+- 新增 `src/imms/facets.py`：`continuous`（`memory_scope=shared`，只做行为权重重排）与 `dissociative`（`isolated:<facet_id>`，切换时交换 beliefs/memory/lie_ledger 桶，产生显式 memory_gap 且 nothing deleted）；注册表存 `persona_l2.facets.active`，L1 全程只读。
+- 只存 12 个行为维度（goal_fixation / memory_continuity 等）；诊断名与流行标签只留 docs，不进卡、Prompt 或复盘；`scope_filter` 给 InfoGuard 作用域附加面过滤；Prompt 新增 `facet` 块显示行为维度与记忆连续性。
+- CLI `imms facets register/switch/list --session S --seat X`；运行时席位初始化加载面注册表；切换写 `facet_switch` 事件。
+- 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G25 完成，README 增加人格面段；IPS 链 G17–G25 全部收口。
+- 验证：新增 `tests/test_facets.py` 6 项（校验与去标签/连续面记忆共享/分离面桶隔离与回归/作用域过滤/Prompt 无诊断名/L2 持久化）；全量 182 项 unittest 通过（摄入测试曾因秒级时间戳偶发 1 次失败，单测与全量重跑均通过）；CLI 注册+切换冒烟通过。

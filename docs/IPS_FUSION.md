@@ -145,7 +145,7 @@
 | ✅ **G22** ★（已完成） | 追加：**急性越界态（疯批）** | `breakout.py` 落 `normal/charged/frenzy` 三态、每局 token（默认 1）、入界需既有 `suppressed_burst`、带通 s_hi 3.2/3.6/4.6 与 F 0.72/0.65/0.55；退出记 exposure/morale/关系净损失；replay 第 6 节单列 | G17–G19；IR4 待 G09 | `s>3.2` 仅在 frenzy 态放行且记 `state`；`memory_scope=full`；IR1/IR2/R4/R5 与真相写入不变；token 默认 ≤1 |
 | ✅ **G23** ★（已完成） | 追加：长期体验记忆 | `long_term_memory` 表 + `longterm.py`：w=exp(-ln2·Δt/3d)、faded 不删除、再交互复活；局末 `settle_session` 从 relations+vote 结算；`init_runtime` 注入 L3 先验（含证据）且 L1 不变；CLI `memory longterm show/settle/forget` | 需稳定 `player_id`（`session.l0` 或参会元数据） | 跨局好恶/输赢可查；超过半衰期权重衰减且可 `faded`；再交互复活；**L1 不变**；证据可溯源 |
 | ✅ **G24**（已完成，并入 G18） | 追加：点火 Provocation | `provoke` 意图 + 玩家 accuse/ally/显式 impact 注入 `s_k` + AI 互燃；点火只写目标 accumulator，玩家席位自身不进 IPS | G17 + §2①/G04 冲击通道 | 玩家点火抬高目标 accumulator 且落库；玩家无 accumulator/delivery；受不应期与 budget 约束 |
-| **G25** ★★ | 追加：**长期人格面（facet）** | `persona_facets` 注册表；连续面（黑化/病娇，记忆共享、权重重排）与分离面（DID，`beliefs/memory/lie_ledger` 按面分桶 + 记忆断层）；`active_facet_id` 切换审计；诊断名不进数据 | G17/G19/G23；分离面需 InfoGuard scope 附加面过滤 | 两族 `memory_scope` 不同且可验证；分离面之间不共享信念；切换有 `facet_switch` + `memory_gap`；L1 不变；复盘无诊断名 |
+| ✅ **G25** ★★（已完成） | 追加：长期人格面 | `facets.py` 注册表存 L2；连续面 `shared` 记忆共享 + 行为权重重排；分离面 `isolated:<id>` 真正交换 beliefs/memory/lie_ledger 桶并记 `memory_gap`；`scope_filter` 附加面过滤；CLI `facets register/switch/list`；诊断名只留设计文档 | G17/G19/G23；分离面需 InfoGuard scope 附加面过滤 | 两族 `memory_scope` 不同且可验证；分离面之间不共享信念；切换有 `facet_switch` + `memory_gap`；L1 不变；复盘无诊断名 |
 
 **依赖链**：`G05 → G19 → G22`，`G09 → G18(IR4)`，`G06 → G18(Insertable)`，`G08/G12 → G21`，`G17 → G18 → G20 → G21`；`G17 → G24`；`G23` 独立（需 `player_id`），可与 G17 并行；`G23 + G19 → G25`。
 
