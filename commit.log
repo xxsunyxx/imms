@@ -195,3 +195,11 @@
 - `prompt_engine` 增加 `perceived` 块，`llm.build_prompt` / `core prompt --perceived` 透传；运行链路每轮先算投影再发言，其他席位 Prompt 只有 L4，无他人 L1/L3 真值。
 - 文档：`docs/GAP_AUDIT.md` 标 G05 完成，README 增加 L4 说明。
 - 验证：新增 `tests/test_l4.py` 6 项（护栏/确定性/面具降级/极端面具重生成/Prompt 隔离/端到端），单测全通过；全量套件另见摄入测试因秒级时间戳偶发 1 次失败，单独重跑通过（非本次改动引入）。
+
+## 2026-11-26 · G19 方向引擎与带通选择
+
+- 新增 `src/imms/direction.py`：`mask_gradient` 从 L2 mask 派生 canon→mask 梯度；`shadow_reversal` 仅接受显式 ζ_f（`l1/l0.zeta_f` 或调用方传入），缺失时 `enabled=false, zeta=null` 不编造。
+- 三候选 `canon_hold / mask_step / shadow_step` 经 §5 带通：surprise 由 `s_k` 冲击与动作位移代理，fidelity/alignment 用与 R2 一致的 centered OCEAN/values 代理；被拒逐条记 `reject_reasons`，无 mask/ζ 记 gap 并降级到 `safe_library`。
+- `ips.resolve_bursts()` 在 IR1/IR2 判定之后调用 `direction.apply_to_burst()`，只改 `action_key/speech_act.direction_delta`，claimed_facts 与真相图不变；`s_hi/f_min` 可由调用方（G22）调档。
+- 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G19 完成，README 增方向引擎段。
+- 验证：新增 `tests/test_direction.py` 6 项（梯度/ζ 缺失/保真与意外度代理/带通拒绝/ζ 启用/爆发接入不写真相）。

@@ -137,7 +137,7 @@
 |---|---|---|---|---|
 | ✅ **G17**（已完成） | P0 活人感 | `ips.py` 落地泄漏积分蓄能器（ρ/θ/不应期/冲击明细）、always-on `micro_perturb` 与 7 项安全库；只写 `delivery`；玩家席位按 B3 不进 IPS | 无（l0 已有 acting_skill；emotion 已有 arousal/stress） | 每轮 AI 席位产出 `delivery` 且进 `game_events`（玩家席位按 B3 例外）；`delivery` 不写 TruthGraph；旧测试不回归；`seed` 可复现 |
 | ✅ **G18**（已完成） | P1 会爆发 | `ips.resolve_bursts` 落 I/ε/Kairos 门槛、`ImprovBudget`、同轮令牌竞争、`suppressed_burst`、IR1/IR2/IR5 与三策略 aftermath；IR3/IR4 仍按计划待 G09/solver 唯一路径 | G17；IR4 部分需 G09，IR3 需 `is_unique_path()` | 同轮多人越阈只放最高者；未放行者 A 不清空且记 `suppressed_burst`；每次 meso/macro 有 ≥1 条 aftermath |
-| **G19** | P2 有方向 | 面具梯度 + 阴影反转 + 带通选择（意外度/保真度/方向对齐）；保真用规则代理，不引入向量库 | G05（L4/mask、G2 护栏）+ B2 定案 | `direction.mask_gradient` 可复盘；`s>3.2` 或 `F<0.72` 的候选被拒并记原因；ζ 缺失时降级不编造 |
+| ✅ **G19**（已完成） | P2 有方向 | `direction.py` 落面具梯度、ζ 显式阴影反转与三候选带通（s∈[1.2,3.2]、F≥0.72、对齐>0）；无 mask/ζ 时记录 gap 且不编造，L1 只读 | G05（L4/mask、G2 护栏）+ B2 定案 | `direction.mask_gradient` 可复盘；超限候选被拒并记原因；ζ 缺失时降级不编造 |
 | **G20** | P3 有后果 | 余波三策略接 `lie.reasoning_log` + 记忆烙印 + 级联传染阻尼；漂移只审计不回写 | G18 + lie.py + B1 定案 | `aftermath.strategy∈{regret,rationalize,escalate}`；级联 `d≤2` 且强制降档；`self_concept_delta` 不进 L1 |
 | **G21** | P4 可调可评 | 导演拨盘 5 旋钮入 `session.l0`（improv_gain/chaos/shadow_sensitivity/leak_rate/macro_quota）+ retro 指标看板 + 预设档位 | G17–G20；指标基线依赖 G08/G12 | 拨盘改 θ/quota/T 且可复现；retro 输出有效即兴率 30–60%、余波覆盖 100%、漂移 ≤0.08 |
 | **G22** ★ | 追加：**急性越界态（疯批）** | `breakout_token` + 状态机 `normal/charged/frenzy` + 状态相关带通阈值（s_hi 3.2→4.6）+ after-effect；记忆连续；越界单列复盘 | G17–G19；IR4 需 G09 | `s>3.2` 仅在 frenzy 态放行且记 `state`；记忆不隔离；IR1/IR2/R4/R5 不被突破；每局 token 默认 ≤1 |

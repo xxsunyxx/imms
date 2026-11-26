@@ -214,3 +214,5 @@ uv run python -m unittest discover -s tests
 - 记忆检索是 F26（`formulas.memory_score`），F30 是派生能力；任务编号与公式编号不要混用。
 
 L4 表演层已落 G05：`l4.py` 把他人的 L1 真值 + L2 面具 + L3 状态投影成每席位专属的可见表现，泄露噪声按派生种子抽取；R2 以 OCEAN/values 中立基线的余弦代理做护栏，越阈重生成或回收并写 `l4_guard` 审计事件。其他角色 Prompt 只读该 L4 投影，读不到他人 L1/L3 真值。可用 `imms core prompt --session S --seat X --perceived` 检查。
+
+方向引擎已落 G19：`direction.py` 从 L2 面具生成 canon→mask 梯度，ζ_f 只在数据存在时启用阴影反转；三候选经 s∈[1.2,3.2]、F≥0.72、方向对齐带通筛选，被拒原因随 `improv_burst.direction` 落库。保真用 centered OCEAN 规则代理而非向量库，L1 全程只读。

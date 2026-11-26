@@ -404,7 +404,8 @@ def _aftermath_strategy(state, seed, round_no):
 
 
 def resolve_bursts(states, round_no, events, heat, target, budget, public_facts,
-                   session_id="", seed=None, stage="roundtable"):
+                   session_id="", seed=None, stage="roundtable",
+                   s_hi=None, f_min=None):
     """§8 token competition + §10 IR1/IR2/IR5 guard + §11 aftermath.
 
     Only the highest-scoring eligible seat bursts this round; everyone else
@@ -511,6 +512,17 @@ def resolve_bursts(states, round_no, events, heat, target, budget, public_facts,
         },
         "seed": seed,
     }
+    # G19: direction selects an action descriptor only; IR1/IR2 claims above
+    # remain claim-only and never become TruthGraph facts.
+    from . import direction
+    kwargs = {}
+    if s_hi is not None:
+        kwargs["s_hi"] = s_hi
+    if f_min is not None:
+        kwargs["f_min"] = f_min
+    direction.apply_to_burst(
+        burst, state, events, round_no, seed=seed, **kwargs
+    )
     return {"bursts": [burst], "suppressed": suppressed, "changes": changes,
             "budget": budget.to_dict()}
 
