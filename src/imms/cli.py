@@ -18,6 +18,7 @@ from . import gm as gm_mod
 from . import guides as guides_mod
 from . import infoguard as infoguard_mod
 from . import ingest as ingest_mod
+from . import journal as journal_mod
 from . import memory as memory_mod
 from . import normalize as normalize_mod
 from . import ontology as ontology_mod
@@ -310,6 +311,13 @@ def build_parser():
     cpm.add_argument("--round", type=int, default=0)
     cpm.add_argument("--guide", action="append", default=[], help="Wording guide (facts/numbers stripped)")
     cpm.add_argument("--guide-purpose", action="append", default=[], help="Fetch a guide from the library by purpose")
+    cj = core_sp.add_parser("journal", help="Unified session state/event view with audit trail")
+    cj.add_argument("--session", required=True)
+    cj.add_argument("--seat", default="gm", help="Seat whose event view is rendered")
+    cj.add_argument("--round", type=int, default=None)
+    cj.add_argument("--state-key", default=None, help="Show only one state key")
+    cj.add_argument("--full", action="store_true", help="Host audit view: ignore visibility/redaction")
+    cj.add_argument("--audit", action="store_true", help="Include state change audit entries")
     cs = core_sp.add_parser("seed", help="Derive a deterministic seed from explicit fields")
     cs.add_argument("--session", required=True)
     cs.add_argument("--seat", default="")
@@ -701,6 +709,28 @@ def main(argv=None):
                     event_seq=args.seq or None, purpose=args.purpose or None,
                     base_seed=args.base,
                 )})
+            elif args.core_action == "journal":
+                if args.state_key:
+                    state = {args.state_key: journal_mod.get_state(conn, args.session, args.state_key)}
+                else:
+                    state = journal_mod.state_snapshot(conn, args.session)
+                if args.full:
+                    events = journal_mod.audit_events(conn, args.session, round_no=args.round)
+                else:
+                    events = []
+                    for row in journal_mod.visible_events(conn, args.session, args.seat, args.round):
+                        item = dict(row)
+                        item["payload"] = json.loads(item["payload_json"])
+                        item["visibility"] = json.loads(item["visibility_json"])
+                        events.append(item)
+                payload = {
+                    "session_id": args.session,
+                    "state": state,
+                    "events": events,
+                }
+                if args.audit:
+                    payload["state_audit"] = journal_mod.state_audit(conn, args.session)
+                print_json(payload)
             else:
                 runtime = db_mod.get_game_state(conn, args.session, "runtime", {})
                 state = runtime.get(args.seat)

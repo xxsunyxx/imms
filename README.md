@@ -12,6 +12,8 @@
 
 谎言账本严格私有：每个 agent 只看见并维护自己的谎言；`lie_id / inner_intent / recalled / guard` 在可见性层对他人（含玩家）裁剪，发言者与 GM 保留，落库不受影响以便复盘。见 `docs/CORE_MODULES.md` 的私有边界段。
 
+所有会话状态与事件读写统一走 `journal.py`：`game_state` 每次写入落 `state_change_audit`（改前/改后 + reason + actor），事件读取区分席位可见视图与全量审计视图，分叉时审计链一并克隆。可用 `imms core journal --session <id> --round N [--seat X | --full] [--audit]` 复查。见 `docs/MEMORY.md`。
+
 ## 安装
 
 ```bash

@@ -4,6 +4,7 @@ import json
 import sqlite3
 from datetime import datetime, timezone
 
+from . import journal
 from .util import write_json
 
 SCHEMA = """
@@ -117,6 +118,17 @@ CREATE TABLE IF NOT EXISTS game_state (
     PRIMARY KEY (session_id, key)
 );
 
+CREATE TABLE IF NOT EXISTS state_change_audit (
+    seq INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL,
+    key TEXT NOT NULL,
+    before_json TEXT,
+    after_json TEXT NOT NULL,
+    reason TEXT NOT NULL DEFAULT '',
+    actor TEXT NOT NULL DEFAULT 'system',
+    created_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS gm_branches (
     branch_id TEXT PRIMARY KEY,
     session_id TEXT NOT NULL,
@@ -183,6 +195,7 @@ CREATE INDEX IF NOT EXISTS idx_guide_purpose ON guide_rules(purpose, enabled);
 CREATE INDEX IF NOT EXISTS idx_l1_lookup ON persona_l1(script_id, character_id, extraction_version);
 CREATE INDEX IF NOT EXISTS idx_events_session ON attribute_events(session_id, seq);
 CREATE INDEX IF NOT EXISTS idx_game_events_session ON game_events(session_id, seq);
+CREATE INDEX IF NOT EXISTS idx_state_audit_session ON state_change_audit(session_id, seq);
 """
 
 
@@ -403,6 +416,7 @@ def export_db(conn, out_path):
         "state_snapshots": [dict(r) for r in conn.execute("SELECT * FROM state_snapshots")],
         "private_rooms": [dict(r) for r in conn.execute("SELECT * FROM private_rooms")],
         "game_state": [dict(r) for r in conn.execute("SELECT * FROM game_state")],
+        "state_change_audit": [dict(r) for r in conn.execute("SELECT * FROM state_change_audit")],
     }
     write_json(out_path, payload)
     return payload
@@ -424,95 +438,25 @@ def load_snapshot(conn, session_id, round_no):
     return {r["agent_id"]: json.loads(r["data_json"]) for r in rows}
 
 
-def set_game_state(conn, session_id, key, value):
-    conn.execute(
-        "INSERT OR REPLACE INTO game_state(session_id, key, value_json) VALUES(?,?,?)",
-        (session_id, key, json.dumps(value, ensure_ascii=False)),
-    )
-    conn.commit()
+# Backwards-compatible wrappers.  The implementation lives in ``journal`` so
+# that state writes are audited and every seat view uses one redaction rule.
+PRIVATE_PAYLOAD_FIELDS = journal.PRIVATE_PAYLOAD_FIELDS
+
+
+def set_game_state(conn, session_id, key, value, reason="", actor="system"):
+    return journal.set_state(conn, session_id, key, value, reason=reason, actor=actor)
 
 
 def get_game_state(conn, session_id, key, default=None):
-    row = conn.execute(
-        "SELECT value_json FROM game_state WHERE session_id=? AND key=?", (session_id, key)
-    ).fetchone()
-    return json.loads(row["value_json"]) if row else default
+    return journal.get_state(conn, session_id, key, default)
 
 
 def append_game_event(conn, session_id, round_no, actor, act_type, payload, visibility):
-    conn.execute(
-        """INSERT INTO game_events(session_id, round, actor, act_type, payload_json, visibility_json, created_at)
-           VALUES(?,?,?,?,?,?,?)""",
-        (
-            session_id,
-            round_no,
-            actor,
-            act_type,
-            json.dumps(payload, ensure_ascii=False),
-            json.dumps(visibility, ensure_ascii=False),
-            now(),
-        ),
-    )
-    conn.commit()
-    return conn.execute("SELECT MAX(seq) AS s FROM game_events WHERE session_id=?", (session_id,)).fetchone()["s"]
-
-
-PRIVATE_PAYLOAD_FIELDS = ("inner_intent", "lie_id", "recalled", "guard", "memory_gap")
-
-
-def _redact_private(payload, seat_id, actor):
-    """Strip speaker-private fields before an event reaches another seat.
-
-    A lie ledger is owned and maintained by its speaker alone.  Broadcasting
-    ``lie_id`` would mark "this utterance is a lie" to the whole table, and
-    ``inner_intent`` / ``recalled`` would expose thoughts the speaker never
-    said.  GM and the speaker themselves keep the full payload; everyone else
-    (including human players) sees only what could be observed at the table.
-    The stored row is untouched so replay/retro keep the full audit record.
-    """
-    if seat_id == "gm" or seat_id.startswith("gm:"):
-        return payload
-    if seat_id == actor:
-        return payload
-    return {k: v for k, v in payload.items() if k not in PRIVATE_PAYLOAD_FIELDS}
+    return journal.append_event(conn, session_id, round_no, actor, act_type, payload, visibility)
 
 
 def visible_game_events(conn, session_id, seat_id, round_no=None):
-    sql = "SELECT * FROM game_events WHERE session_id=?"
-    params = [session_id]
-    if round_no is not None:
-        sql += " AND round<=?"
-        params.append(round_no)
-    sql += " ORDER BY seq"
-    room_cache = {}
-
-    def in_room(token):
-        room_id = token[len("room:"):]
-        if room_id not in room_cache:
-            row = conn.execute(
-                "SELECT participants_json FROM private_rooms WHERE room_id=?", (room_id,)
-            ).fetchone()
-            room_cache[room_id] = json.loads(row["participants_json"]) if row else []
-        return seat_id in room_cache[room_id]
-
-    rows = []
-    for row in conn.execute(sql, params):
-        vis = json.loads(row["visibility_json"])
-        if (
-            "public" in vis
-            or seat_id in vis
-            or row["actor"] == seat_id
-            or seat_id.startswith("gm:")
-            or any(isinstance(t, str) and t.startswith("room:") and in_room(t) for t in vis)
-        ):
-            item = dict(row)
-            payload = json.loads(item["payload_json"])
-            if isinstance(payload, dict):
-                item["payload_json"] = json.dumps(
-                    _redact_private(payload, seat_id, item["actor"]), ensure_ascii=False
-                )
-            rows.append(item)
-    return rows
+    return journal.visible_events(conn, session_id, seat_id, round_no)
 
 
 def open_private_room(conn, session_doc, round_no, participants):

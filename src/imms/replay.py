@@ -3,22 +3,13 @@
 import json
 import re
 
-from . import db, formulas
+from . import db, formulas, journal
 
 SECTIONS = ["真相时间线", "角色内心独白", "关键转折点 Top 5", "谎言全景图", "反事实推演"]
 
 
 def _events(conn, session_id):
-    rows = conn.execute(
-        "SELECT * FROM game_events WHERE session_id=? ORDER BY seq", (session_id,)
-    ).fetchall()
-    out = []
-    for r in rows:
-        d = dict(r)
-        d["payload"] = json.loads(d["payload_json"])
-        d["visibility"] = json.loads(d["visibility_json"])
-        out.append(d)
-    return out
+    return journal.audit_events(conn, session_id)
 
 
 def _seat_names(session_doc):

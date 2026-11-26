@@ -6,7 +6,7 @@ The original session is never mutated: forks run inside an in-memory SQLite copy
 
 import json
 
-from . import db, formulas, runtime
+from . import db, formulas, journal, runtime
 
 GLOBAL = "@global"
 COPY_TABLES = (
@@ -36,14 +36,13 @@ def _rekey(session_id, fork_id):
 
 def _rebuild_user_script(conn, session_id, human_seat, total_rounds, override_round, override_utterance, base_vote):
     """Reconstruct the human seat's main-line utterances from the event log."""
-    rows = conn.execute(
-        """SELECT round, act_type, payload_json FROM game_events
-           WHERE session_id=? AND actor=? AND act_type!='private_say' ORDER BY seq""",
-        (session_id, human_seat),
-    ).fetchall()
+    rows = [
+        row for row in journal.audit_events(conn, session_id, actor=human_seat)
+        if row["act_type"] != "private_say"
+    ]
     by_round = {}
     for row in rows:
-        payload = json.loads(row["payload_json"])
+        payload = row["payload"]
         by_round[row["round"]] = {
             "act_type": row["act_type"],
             "utterance": payload.get("utterance", ""),
@@ -83,6 +82,7 @@ def fork(conn, session_id, at_round, override_round=None, override_utterance=Non
         _clone(conn, mem, table)
     _clone(conn, mem, "sessions", "WHERE session_id=?", (session_id,), _rekey(session_id, fork_id))
     _clone(conn, mem, "game_state", "WHERE session_id=?", (session_id,), _rekey(session_id, fork_id))
+    _clone(conn, mem, "state_change_audit", "WHERE session_id=?", (session_id,), _rekey(session_id, fork_id))
     _clone(conn, mem, "game_events", "WHERE session_id=? AND round<?", (session_id, at_round), _rekey(session_id, fork_id))
     _clone(conn, mem, "state_snapshots", "WHERE session_id=? AND round<?", (session_id, at_round), _rekey(session_id, fork_id))
 
@@ -92,10 +92,13 @@ def fork(conn, session_id, at_round, override_round=None, override_utterance=Non
             mem.close()
             raise ValueError("ERR_SNAPSHOT_NOT_FOUND")
         global_state = snap.pop(GLOBAL)
-        db.set_game_state(mem, fork_id, "runtime", snap)
-        db.set_game_state(mem, fork_id, "revealed_clues", global_state.get("revealed_clues", []))
-        db.set_game_state(mem, fork_id, "user_input_index", global_state.get("user_input_index", at_round - 1))
-        db.set_game_state(mem, fork_id, "round", at_round - 1)
+        journal.set_state(mem, fork_id, "runtime", snap, reason=f"fork_restore@{at_round - 1}", actor="gm:fork")
+        journal.set_state(mem, fork_id, "revealed_clues", global_state.get("revealed_clues", []),
+                          reason=f"fork_restore@{at_round - 1}", actor="gm:fork")
+        journal.set_state(mem, fork_id, "user_input_index", global_state.get("user_input_index", at_round - 1),
+                          reason=f"fork_restore@{at_round - 1}", actor="gm:fork")
+        journal.set_state(mem, fork_id, "round", at_round - 1,
+                          reason=f"fork_restore@{at_round - 1}", actor="gm:fork")
 
     human_seat = next(
         p["id"] for p in session_doc["participants"] if p["kind"] == "human_character"
@@ -132,21 +135,16 @@ def regress(base_result, fork_result, fork_conn, fork_id, at_round):
                     bounded = False
     checks["bounded"] = bounded
 
-    private_rows = fork_conn.execute(
-        "SELECT visibility_json FROM game_events WHERE session_id=? AND act_type='private_say'",
-        (fork_id,),
-    ).fetchall()
+    private_rows = journal.audit_events(fork_conn, fork_id, act_type="private_say")
     checks["info_isolation"] = all(
-        all(str(token).startswith("room:") for token in json.loads(r["visibility_json"]))
-        for r in private_rows
+        all(str(token).startswith("room:") for token in row["visibility"])
+        for row in private_rows
     )
 
-    known = set(db.get_game_state(fork_conn, fork_id, "revealed_clues", []))
+    known = set(journal.get_state(fork_conn, fork_id, "revealed_clues", []))
     claims_ok = True
-    for row in fork_conn.execute(
-        "SELECT actor, payload_json FROM game_events WHERE session_id=?", (fork_id,)
-    ):
-        payload = json.loads(row["payload_json"])
+    for row in journal.audit_events(fork_conn, fork_id):
+        payload = row["payload"]
         for fact in payload.get("claimed_facts", []):
             if fact not in known and fact not in runtime_state.get(row["actor"], {}).get("beliefs", {}):
                 claims_ok = False

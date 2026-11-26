@@ -68,3 +68,25 @@ imms --db imms.db memory commitments --session S --seat human:lin_wanqiu
 - 人类玩家可以声称任何事；`claimed_facts` 只在通过 `_guard` 后才进入记忆与承诺账本。
 - 记忆会随快照进入分叉回归，因此分支的记忆差异是重放结果，不是主会话被改写。
 - 召回影响 Prompt 与票型审计的输入，不改变意图选择或任何数值公式的确定性输出。
+
+## 统一日志入口（G28 · journal）
+
+`src/imms/journal.py` 是会话状态与事件历史唯一的读写门面；`db.get/set_game_state`、`db.append_game_event`、`db.visible_game_events` 保留为兼容包装，内部委托给它，因此既有 CLI 行为不变。
+
+| 入口 | 用途 |
+|---|---|
+| `get_state` / `set_state(conn, sid, key, value, reason="", actor="system")` | 读写单个状态键；每次写入追加一条 `state_change_audit`（before/after + reason + actor） |
+| `state_snapshot` / `state_keys` / `state_audit(since=0)` | 确定性快照（键排序稳定）与状态变更审计（seq 有序） |
+| `append_event` | 统一的事件追加，返回全局 `seq` |
+| `visible_events(conn, sid, seat, round_no=None)` | 席位视角：按 `visibility` 过滤并裁剪发言者私有字段，返回旧版 JSON 字符串行结构 |
+| `audit_events(conn, sid, round_no=None, act_type=None, actor=None)` | 主机审计视角：解码 `payload` / `visibility`，不做私有字段裁剪，按 `seq` 排序 |
+
+`branch.fork()` 会把 `state_change_audit` 与主会话状态/事件一并克隆进内存分叉，恢复轮次以 `reason=fork_restore@k` 记账；`replay`、`retro`、`gm.narrative_diff` 与 `branch.regress` 统一从 `audit_events` 取全量事件。
+
+```bash
+imms --db imms.db core journal --session S --state-key round --round 2 --audit
+imms --db imms.db core journal --session S --seat ai:char_02 --round 2
+imms --db imms.db core journal --session S --full
+```
+
+> 私有边界不因统一入口而改变：可见视图仍裁掉 `lie_id / inner_intent / recalled / guard / memory_gap`；只有发言者本人与 GM 看到全量，落库原表始终保留完整审计。

@@ -163,3 +163,12 @@
 - **G27（已完成）**：新增 `guides.py` + `config/guides.yaml` + `guide_rules` 表；五类 purpose（tone/delivery/pacing/improv/aftermath），导入与渲染双重闸门拦事实 id 与 `key=value`；`random_source` 确定性选取；CLI `guides import/list/select`，`core prompt --guide-purpose` 从库取 guide。新增 `tests/test_guides.py` 5 项。
 - **计划整理**：`GAP_AUDIT.md` 新增 G26–G28 与「下一批执行顺序」（G27 → G28 → G17/G18(+G24) → G05/G19/G22 → G20/G21/G23/G25）。G28（日志/记忆统一入口）尚未做。
 - 验证：113 个 unittest 全通过；CLI 冒烟：guides import/list/select 与 `core prompt --guide-purpose tone` 全通，事实/意图块注入前后一致。
+
+## 2026-11-26 · G28 日志/记忆统一读写入口
+
+- 新增 `src/imms/journal.py`：会话状态与事件的唯一门面。状态写入落 `state_change_audit`（before/after + reason + actor）；事件读取拆成「席位可见视图」与「全量审计视图」，统一 lie 私有字段裁剪规则；另提供确定性 `state_snapshot` 与 seq 有序的 `audit_events`。
+- `db.get/set_game_state`、`db.append_game_event`、`db.visible_game_events` 改为兼容委托；旧 CLI 行为不变。`export_db` 导出新增审计表。
+- 散落的直读 SQL 收拢：`branch`（重建发言/信息隔离检查/主张已知检查）、`gm.narrative_diff`、`replay._events` 统一走 `audit_events`；分叉克隆 `state_change_audit` 并用 `reason=fork_restore@k` 记账。
+- CLI 新增 `core journal`：可按席位或全量审计视图复查快照、事件与状态审计。
+- 文档：`docs/GAP_AUDIT.md` 标 G27/G28 完成并更新执行顺序；`docs/MEMORY.md` 新增统一入口章节；README 索引同步。
+- 验证：119 个 unittest 全通过（新增 `tests/test_journal.py` 6 项）；CLI 冒烟 `core journal --state-key round --full --audit` 通过。

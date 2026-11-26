@@ -16,7 +16,7 @@ decision specification plus a replay, not a second copy of the world.
 import json
 from datetime import datetime, timezone
 
-from . import branch, db, formulas, memory, runtime, solver
+from . import branch, db, formulas, journal, memory, runtime, solver
 
 WEIGHT_RE = solver.WEIGHT_RE
 
@@ -154,10 +154,14 @@ def narrative_diff(base_conn, fork_conn, base_id, fork_id):
     """Compare two branch sessions without mutating either."""
     def events(conn, sid):
         return [
-            dict(r) for r in conn.execute(
-                "SELECT round, actor, act_type, payload_json FROM game_events WHERE session_id=? ORDER BY seq",
-                (sid,),
-            )
+            {
+                "round": row["round"],
+                "actor": row["actor"],
+                "act_type": row["act_type"],
+                "payload_json": row["payload_json"],
+                "payload": row["payload"],
+            }
+            for row in journal.audit_events(conn, sid)
         ]
 
     base_events, fork_events = events(base_conn, base_id), events(fork_conn, fork_id)
