@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
+from . import archetypes as archetypes_mod
 from . import assemble as assemble_mod
 from . import boxed as boxed_mod
 from . import branch as branch_mod
@@ -99,6 +100,9 @@ def build_parser():
     imp_p.add_argument("--dir", default="refer/mystery-scripts-100/盒装本")
     imp_p.add_argument("--limit", type=int)
     imp_p.add_argument("--report", help="Optional JSON import report path")
+
+    arc_p = sub.add_parser("import-archetypes", help="Import anonymized trait cards into the persona database")
+    arc_p.add_argument("--file", default=str(ROOT / "config" / "archetypes.json"))
 
     build_p = sub.add_parser("build-corpus", help="Build project-owned corpus from disposable refer sources")
     build_p.add_argument("--source-root", default=str(ROOT / "refer"))
@@ -425,6 +429,9 @@ def main(argv=None):
             if args.report:
                 write_json(args.report, report)
             print_json({"imported": report["imported"], "ocr": "skipped", "scripts": report["scripts"][:5]})
+
+        elif args.cmd == "import-archetypes":
+            print_json(archetypes_mod.import_cards(conn, read_json(args.file)))
 
         elif args.cmd == "build-corpus":
             manifest = corpus_mod.build_corpus(args.source_root, args.out)

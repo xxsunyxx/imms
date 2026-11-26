@@ -218,3 +218,5 @@ L4 表演层已落 G05：`l4.py` 把他人的 L1 真值 + L2 面具 + L3 状态�
 方向引擎已落 G19：`direction.py` 从 L2 面具生成 canon→mask 梯度，ζ_f 只在数据存在时启用阴影反转；三候选经 s∈[1.2,3.2]、F≥0.72、方向对齐带通筛选，被拒原因随 `improv_burst.direction` 落库。保真用 centered OCEAN 规则代理而非向量库，L1 全程只读。
 
 急性越界态已落 G22：`breakout.py` 用 `normal/charged/frenzy` 三态机管理 1–2 轮疯批窗口，入界消耗全局 token（默认每局 1 次）且必须已有 `suppressed_burst`；带通上界按态放宽到 3.6/4.6，但 IR1/IR2/R4/R5 与真相图不变，记忆始终连续。退出一次性结算 exposure_risk +0.3、morale −0.2 与不可回收的关系损失，并在 replay 第 6 节单列「越界时刻」。
+
+匿名行为原型库：`config/archetypes.json` 收录九张只含特质与习惯用语的人物卡，已用 `imms import-archetypes` 注入 `imms.db`（`trait-archetypes-001`）。来源角色名与作品名不入库，姓名由固定种子随机生成；`archetypes.validate_cards()` 用摘要黑名单拦截原名回潮。可用 `imms persona --script-id trait-archetypes-001 --char arch_01 show` 查看特质、证据与习惯用语。见 `docs/MEMORY.md`。

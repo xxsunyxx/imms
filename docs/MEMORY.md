@@ -90,3 +90,20 @@ imms --db imms.db core journal --session S --full
 ```
 
 > 私有边界不因统一入口而改变：可见视图仍裁掉 `lie_id / inner_intent / recalled / guard / memory_gap`；只有发言者本人与 GM 看到全量，落库原表始终保留完整审计。
+
+## 匿名行为原型库（九例）
+
+`config/archetypes.json` 保存九张从公开人物资料中抽取的**行为特质卡**：只保留 OCEAN/values/技能锚点、`trait.tags` 与少量 `speech.habit_phrases`，不保留来源角色名、作品名和剧情事实。姓名由固定种子 `20261126` 从姓氏/双名池随机生成（江朝雨、陆衔舟、苏疏影、宋以宁、叶晚棠、唐未歇、程临川、卫南枝、顾野），彼此不重姓不重名。
+
+导入链路：
+
+```bash
+imms --db imms.db import-archetypes --file config/archetypes.json
+imms --db imms.db persona --script-id trait-archetypes-001 --char arch_01 show
+```
+
+- 每张卡的量化特质由两条公开行为摘要锚定（锚点取 `config/anchors.json`），证据不足的键保持 `null`，不补数值。
+- `src/imms/archetypes.py` 的 `validate_cards()` 用 SHA-256 摘要黑名单拒绝来源身份词回潮；名单只存摘要不存明文，导入和单测都会跑。
+- 卡片作为一条 script（`trait-archetypes-001`）与其 L1 人格卡写入 SQLite；L1 受 `persona_l1_no_update/no_delete` 触发器保护，重新导入会递增 `extraction_version`。
+
+> 这些卡是可装配的人格素材，不是原角色的替身：没有作品事实、没有专属道具、没有剧情关系，只有可复用的行为倾向与说话习惯。

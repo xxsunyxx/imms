@@ -212,3 +212,10 @@
 - 顺手修复可见性层 bug：`journal.visible_events` 原先只让 `gm:` 前缀席位读到 `gm:host/gm:l4` 可见性事件，普通 `gm` 席位读不到；现补齐 GM token 匹配，否则 G22 的前置 `suppressed_burst` 判定永远为 0。
 - 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G22 完成，README 增越界态段。
 - 验证：153 个 unittest 全通过（新增 `tests/test_breakout.py` 6 项：阈值/入界前置/退出代价不可逆/带通放宽不写真相/replay 列项/端到端越界事件）；CLI 冒烟 `play` 产出 `breakout_state` 与 `frenzy_burst`，`replay` 第 6 节列出「越界时刻」。
+
+## 2026-11-26 · 匿名行为原型库注入人物数据库
+
+- 网络检索九位公开角色的行为资料后只抽取特质与少量习惯用语，落 `config/archetypes.json`；姓名由种子 20261126 随机生成（江朝雨/陆衔舟/苏疏影/宋以宁/叶晚棠/唐未歇/程临川/卫南枝/顾野），来源角色名、作品名、剧情事实均未入库。
+- 新增 `src/imms/archetypes.py`：`validate_cards()` 用 SHA-256 前缀黑名单拒绝身份词回潮（名单只存摘要）；每条量化特质由两条行为摘要锚定，无证据键为 null；`identity.name/role`、`trait.tags`、`speech.habit_phrases` 作为 L1 属性落库。
+- CLI 新增 `imms import-archetypes [--file ...]`；已导入主库 `imms.db` 的 `trait-archetypes-001`（extraction_version=2，9 个人物卡）。
+- 验证：新增 `tests/test_archetypes.py` 4 项（证据完整/null 不编造/身份泄露拦截/L1 不可变/重导入版本递增）；全量 157 项 unittest 通过；CLI 导入与 persona 查询冒烟通过。
