@@ -155,3 +155,11 @@
 - CLI 新增 `imms core profile/variables/prompt/seed`；文档 `docs/CORE_MODULES.md`，README 索引同步。
 - 顺手修正编号漂移 C8/G15：`memory.py` 与 Prompt 记忆段统一为 F26（`test_memory.py` 断言同步）。
 - 验证：104 个 unittest 全通过（新增 test_core_modules.py 8 项）；CLI 四项均冒烟通过，guide 中 `f_fake=9` 被拦下。运行时主链路未改。
+
+## 2026-11-26 · lie 私有边界 + guide 库 + 计划整理（G26/G27/G28）
+
+- 用户要求确认「lie 只能 agent 自己看见自己的，自己来维护」。审计发现账本本身合规（每席位独立存储/维护），但 public 事件 payload 广播了 `lie_id`，等于向全场标记「这句是谎言」。
+- **G26（已完成）**：`db.visible_game_events()` 在可见性层裁掉 `lie_id / inner_intent / recalled / guard / memory_gap`；发言者与 GM 保留全量，落库原表不动（`replay._events()` 直读，谎言全景图/retro 不受影响）。新增 `tests/test_lie_privacy.py` 4 项。
+- **G27（已完成）**：新增 `guides.py` + `config/guides.yaml` + `guide_rules` 表；五类 purpose（tone/delivery/pacing/improv/aftermath），导入与渲染双重闸门拦事实 id 与 `key=value`；`random_source` 确定性选取；CLI `guides import/list/select`，`core prompt --guide-purpose` 从库取 guide。新增 `tests/test_guides.py` 5 项。
+- **计划整理**：`GAP_AUDIT.md` 新增 G26–G28 与「下一批执行顺序」（G27 → G28 → G17/G18(+G24) → G05/G19/G22 → G20/G21/G23/G25）。G28（日志/记忆统一入口）尚未做。
+- 验证：113 个 unittest 全通过；CLI 冒烟：guides import/list/select 与 `core prompt --guide-purpose tone` 全通，事实/意图块注入前后一致。

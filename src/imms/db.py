@@ -165,6 +165,21 @@ CREATE TABLE IF NOT EXISTS script_events (
 
 CREATE INDEX IF NOT EXISTS idx_script_events ON script_events(script_id, id);
 
+CREATE TABLE IF NOT EXISTS guide_rules (
+    guide_id TEXT NOT NULL,
+    version INT NOT NULL,
+    purpose TEXT NOT NULL,
+    text TEXT NOT NULL,
+    weight REAL NOT NULL DEFAULT 1.0,
+    tags_json TEXT NOT NULL DEFAULT '[]',
+    enabled INT NOT NULL DEFAULT 1,
+    source TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (guide_id, version)
+);
+
+CREATE INDEX IF NOT EXISTS idx_guide_purpose ON guide_rules(purpose, enabled);
+
 CREATE INDEX IF NOT EXISTS idx_l1_lookup ON persona_l1(script_id, character_id, extraction_version);
 CREATE INDEX IF NOT EXISTS idx_events_session ON attribute_events(session_id, seq);
 CREATE INDEX IF NOT EXISTS idx_game_events_session ON game_events(session_id, seq);
@@ -442,6 +457,26 @@ def append_game_event(conn, session_id, round_no, actor, act_type, payload, visi
     return conn.execute("SELECT MAX(seq) AS s FROM game_events WHERE session_id=?", (session_id,)).fetchone()["s"]
 
 
+PRIVATE_PAYLOAD_FIELDS = ("inner_intent", "lie_id", "recalled", "guard", "memory_gap")
+
+
+def _redact_private(payload, seat_id, actor):
+    """Strip speaker-private fields before an event reaches another seat.
+
+    A lie ledger is owned and maintained by its speaker alone.  Broadcasting
+    ``lie_id`` would mark "this utterance is a lie" to the whole table, and
+    ``inner_intent`` / ``recalled`` would expose thoughts the speaker never
+    said.  GM and the speaker themselves keep the full payload; everyone else
+    (including human players) sees only what could be observed at the table.
+    The stored row is untouched so replay/retro keep the full audit record.
+    """
+    if seat_id == "gm" or seat_id.startswith("gm:"):
+        return payload
+    if seat_id == actor:
+        return payload
+    return {k: v for k, v in payload.items() if k not in PRIVATE_PAYLOAD_FIELDS}
+
+
 def visible_game_events(conn, session_id, seat_id, round_no=None):
     sql = "SELECT * FROM game_events WHERE session_id=?"
     params = [session_id]
@@ -470,7 +505,13 @@ def visible_game_events(conn, session_id, seat_id, round_no=None):
             or seat_id.startswith("gm:")
             or any(isinstance(t, str) and t.startswith("room:") and in_room(t) for t in vis)
         ):
-            rows.append(dict(row))
+            item = dict(row)
+            payload = json.loads(item["payload_json"])
+            if isinstance(payload, dict):
+                item["payload_json"] = json.dumps(
+                    _redact_private(payload, seat_id, item["actor"]), ensure_ascii=False
+                )
+            rows.append(item)
     return rows
 
 

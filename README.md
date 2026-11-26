@@ -8,7 +8,9 @@
 
 ## 核心规则模块
 
-分工：**guide 提示词驱动变化，IMMS 控制和记忆人物数据**。四个核心模块把规则固化进 `src/imms/`：人物抽取（`profile`）、提示词生成引擎（`prompt_engine`）、变量计算（`variables`）、确定性随机源（`random_source`）。CLI 见 `imms core --help`，说明见 `docs/CORE_MODULES.md`。
+分工：**guide 提示词驱动变化，IMMS 控制和记忆人物数据**。核心模块把规则固化进 `src/imms/`：人物抽取（`profile`）、提示词生成引擎（`prompt_engine`）、变量计算（`variables`）、确定性随机源（`random_source`）、guide 提示词库（`guides`）。CLI 见 `imms core --help` / `imms guides --help`，说明见 `docs/CORE_MODULES.md`。
+
+谎言账本严格私有：每个 agent 只看见并维护自己的谎言；`lie_id / inner_intent / recalled / guard` 在可见性层对他人（含玩家）裁剪，发言者与 GM 保留，落库不受影响以便复盘。见 `docs/CORE_MODULES.md` 的私有边界段。
 
 ## 安装
 
@@ -168,10 +170,10 @@ uv run python -m unittest discover -s tests
 - `docs/GM.md` — GM 决策策略、分支树、合并回滚与叙事 diff
 - `docs/RETRO.md` — 复盘回溯评估指标与决策时点复核
 - `docs/VOTE.md` — 投票规则、多轮复投、AI 策略与票据审计
-- `docs/CORE_MODULES.md` — 核心规则模块：人物抽取、提示词引擎、变量计算、确定性随机源
+- `docs/CORE_MODULES.md` — 核心规则模块：人物抽取、提示词引擎、变量计算、确定性随机源、guide 库、谎言私有边界
 - `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
 - `docs/ORIGINAL_SPEC.md` — 用户提供的 IMMS v1.0 原始设定（逐字归档）
-- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（含 IPS G17–G25）
+- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（含 IPS G17–G25、G26–G28 与下一批执行顺序）
 - `docs/IPS_ORIGINAL_SPEC.md` — 用户提供的 IPS v1.0 即兴扰动系统原文（逐字归档）
 - `docs/IPS_FUSION.md` — IPS 九段流水线对照、可融入性结论与已定案边界；区分急性越界态（疯批）与长期人格面（黑化/病娇/DID，按记忆作用域分族），含跨局体验记忆，分期 G17–G25
 - `docs/EVENTS.md` — GM 事件注入库：七类外部扰动与多变量触发

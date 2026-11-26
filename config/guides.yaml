@@ -1,0 +1,112 @@
+# Guide prompt library — wording only.
+# Hard rule: a guide may change tone, phrasing, rhythm and delivery. It may
+# never inject a fact id, a claimed_facts entry, an intent, a target or a
+# numeric value. prompt_engine._sanitize_guide enforces this at render time;
+# guides.import_guides enforces it again at import time.
+
+version: 1
+rules:
+  - id: tone.cold
+    purpose: tone
+    text: 语气更冷，句子短一些，少用修饰词。
+    weight: 1.0
+    tags: [本格, 克制]
+    enabled: true
+
+  - id: tone.tense
+    purpose: tone
+    text: 显示出紧张，但不要直说你在紧张；让它从停顿里漏出来。
+    weight: 1.0
+    tags: [社会派, 高压]
+    enabled: true
+
+  - id: tone.archaic
+    purpose: tone
+    text: 用你自己的语言指纹说话，句式可更古雅，不要用现代词汇。
+    weight: 1.0
+    tags: [国风]
+    enabled: true
+
+  - id: tone.warm
+    purpose: tone
+    text: 语气放软，给人留余地，像在替对方找台阶。
+    weight: 0.8
+    tags: [情感]
+    enabled: true
+
+  - id: delivery.short
+    purpose: delivery
+    text: 本轮发言尽量短，可用沉默代替解释。
+    weight: 1.0
+    tags: [克制, 冷场]
+    enabled: true
+
+  - id: delivery.ellipsis
+    purpose: delivery
+    text: 说话可断续，留出犹豫的空白，不要一口气说完。
+    weight: 0.9
+    tags: [心虚, 高压]
+    enabled: true
+
+  - id: delivery.catchphrase
+    purpose: delivery
+    text: 让你惯用的口癖自然出现一次，不要刻意重复。
+    weight: 0.7
+    tags: [人物鲜明]
+    enabled: true
+
+  - id: pacing.probe
+    purpose: pacing
+    text: 把注意力引回尚未说清的细节，语气不必咄咄逼人。
+    weight: 0.9
+    tags: [冷场, 推进]
+    enabled: true
+
+  - id: pacing.ally
+    purpose: pacing
+    text: 先给对方一个可接受的台阶，再把话锋转回案件。
+    weight: 0.8
+    tags: [僵局]
+    enabled: true
+
+  - id: improv.quiet_burst
+    purpose: improv
+    text: 压抑了很久的话此刻脱口而出，语气比平时冲，但不要解释为什么。
+    weight: 1.0
+    tags: [蓄能, 爆发]
+    enabled: true
+
+  - id: improv.mask_slip
+    purpose: improv
+    text: 让真实态度从称呼和句长里露出一点，不要直接说破。
+    weight: 1.0
+    tags: [面具滑落]
+    enabled: true
+
+  - id: improv.safe_silence
+    purpose: improv
+    text: 不必给出戏剧动作，凝视片刻后继续原话题即可。
+    weight: 0.6
+    tags: [安全, 克制]
+    enabled: true
+
+  - id: aftermath.regret
+    purpose: aftermath
+    text: 为刚才的话找补，语气放软，但不要再重复那句话的内容。
+    weight: 1.0
+    tags: [后悔]
+    enabled: true
+
+  - id: aftermath.rationalize
+    purpose: aftermath
+    text: 把刚才的话说成早有考量，语气要稳，不要露出迟疑。
+    weight: 1.0
+    tags: [圆场]
+    enabled: true
+
+  - id: aftermath.escalate
+    purpose: aftermath
+    text: 不必退让，语气更硬，让在场的人知道你不是随口一说。
+    weight: 0.8
+    tags: [加码]
+    enabled: true

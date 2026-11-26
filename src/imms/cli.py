@@ -15,6 +15,7 @@ from . import db as db_mod
 from . import derive as derive_mod
 from . import events as events_mod
 from . import gm as gm_mod
+from . import guides as guides_mod
 from . import infoguard as infoguard_mod
 from . import ingest as ingest_mod
 from . import memory as memory_mod
@@ -306,7 +307,9 @@ def build_parser():
     cpm.add_argument("--session", required=True)
     cpm.add_argument("--seat", required=True)
     cpm.add_argument("--intent", default="assert")
+    cpm.add_argument("--round", type=int, default=0)
     cpm.add_argument("--guide", action="append", default=[], help="Wording guide (facts/numbers stripped)")
+    cpm.add_argument("--guide-purpose", action="append", default=[], help="Fetch a guide from the library by purpose")
     cs = core_sp.add_parser("seed", help="Derive a deterministic seed from explicit fields")
     cs.add_argument("--session", required=True)
     cs.add_argument("--seat", default="")
@@ -314,6 +317,21 @@ def build_parser():
     cs.add_argument("--seq", type=int, default=0)
     cs.add_argument("--purpose", default="")
     cs.add_argument("--base", type=int, default=None)
+
+    guides_p = sub.add_parser("guides", help="Manage the wording guide library")
+    guides_sp = guides_p.add_subparsers(dest="guides_action", required=True)
+    gimp = guides_sp.add_parser("import", help="Import guides from a YAML source")
+    gimp.add_argument("--file", default=None)
+    gls = guides_sp.add_parser("list", help="List current-version enabled guides")
+    gls.add_argument("--purpose")
+    gls.add_argument("--tag")
+    gsel = guides_sp.add_parser("select", help="Deterministically select guides")
+    gsel.add_argument("--purpose", action="append", default=[])
+    gsel.add_argument("--tag", action="append", default=[])
+    gsel.add_argument("--limit", type=int, default=1)
+    gsel.add_argument("--session", default="")
+    gsel.add_argument("--seat", default="")
+    gsel.add_argument("--round", type=int, default=0)
     return p
 
 
@@ -691,9 +709,30 @@ def main(argv=None):
                 if args.core_action == "variables":
                     print_json(variables_mod.snapshot(state))
                 elif args.core_action == "prompt":
+                    guides = list(args.guide)
+                    if args.guide_purpose:
+                        guides += guides_mod.select(
+                            conn, purpose=args.guide_purpose,
+                            session_id=args.session, seat_id=args.seat,
+                            round_no=args.round,
+                        )
                     print_json({"prompt": prompt_engine_bridge(
-                        state, args.intent, args.guide,
+                        state, args.intent, guides,
                     )})
+        elif args.cmd == "guides":
+            if args.guides_action == "import":
+                print_json(guides_mod.import_guides(conn, args.file))
+            elif args.guides_action == "list":
+                print_json({"guides": guides_mod.list_guides(
+                    conn, purpose=args.purpose, tag=args.tag
+                )})
+            elif args.guides_action == "select":
+                print_json({"guides": guides_mod.select(
+                    conn, purpose=args.purpose or None,
+                    tags=args.tag or None, limit=args.limit,
+                    session_id=args.session, seat_id=args.seat,
+                    round_no=args.round,
+                )})
         return 0
     except ValueError as exc:
         print_json({"error": str(exc)})
