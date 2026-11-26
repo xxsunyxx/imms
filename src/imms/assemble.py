@@ -1,6 +1,6 @@
 """Assemble GM + N-1 AI character agents + one human seat from parsed script and L1 cards."""
 
-from .db import get_persona_l1, get_script, save_session
+from .db import get_persona_l1, get_script, save_session, set_attribute
 
 
 def assemble(conn, script_id, human_character_id, difficulty=3):
@@ -60,4 +60,14 @@ def assemble(conn, script_id, human_character_id, difficulty=3):
         },
     }
     save_session(conn, session_doc)
+    # Bridge: the script's own public_identity is an assigned (L2) value, not
+    # canon. Persist it so the prompt's identity block stops rendering
+    # （未配置） while L1 stays evidence-first and read-only.
+    for cid, ch in playable.items():
+        identity = str(ch.get("public_identity") or ch.get("role") or "").strip()
+        if identity:
+            set_attribute(
+                conn, session_doc, "L2", cid, "public_identity", identity,
+                "script_assigned_public_identity", 0, actor="pipeline:v1",
+            )
     return session_doc

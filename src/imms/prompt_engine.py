@@ -35,10 +35,15 @@ def _persona_line(view):
 
 
 def block_identity(view, ctx):
+    l1 = view.get("l1", {})
+    # Text slots come from the script verbatim (source=script_text), never
+    # from the F29 bin scorer. Missing text stays （未配置）, never invented.
+    lexicon = l1.get("lexicon") or l1.get("speaking_style")
     return [
         "# 你是谁（L1 真实·仅你自知）",
         f"人格基线：{_persona_line(view)}",
-        f"语言指纹：{_fmt(view.get('l1', {}).get('lexicon'))}",
+        f"人设描述：{_fmt(l1.get('personality'))}",
+        f"语言指纹：{_fmt(lexicon)}",
     ]
 
 

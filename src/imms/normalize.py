@@ -48,6 +48,39 @@ STANDARD_KEYS = (
     "skill_set.observation", "skill_set.reasoning",
 )
 
+# Script text is NOT behavioural evidence. These slots carry the script's own
+# descriptive fields verbatim so the prompt has a persona anchor, but they are
+# marked source=script_text and never fed through the F29 anchor-bin scorer.
+# Missing text is still an explicit null slot (reason=missing_evidence).
+TEXT_SLOTS = ("personality", "speaking_style", "lexicon")
+
+
+def text_envelope(key, text, locator):
+    """Envelope for verbatim script text; no bin score is invented."""
+    value = str(text).strip() if text is not None else ""
+    has_text = bool(value)
+    return {
+        "key": key,
+        "value": value if has_text else None,
+        "layer": "L1",
+        "scope": "self",
+        "domain": None,
+        "visibility": "self",
+        "confidence": 1.0 if has_text else 0.0,
+        "source": "script_text",
+        "evidence": ([{
+            "source_id": f"txt_{locator}",
+            "quote": value,
+            "locator": locator,
+            "weight": 1.0,
+        }] if has_text else []),
+        "updated_at_round": 0,
+        "updated_by": "pipeline:v1",
+        "locked": True,
+        "extraction_version": 1,
+        "reason": None if has_text else "missing_evidence",
+    }
+
 
 def normalize_persona(onto, config_dir):
     anchors = read_json(config_dir / "anchors.json")
@@ -88,6 +121,10 @@ def normalize_persona(onto, config_dir):
                 continue
             score, confidence = score_evidence(items)
             attrs.append(envelope(key, score * factor, confidence, items, domain))
+
+        # Verbatim script text -> L1 text slots. Never scored, never fabricated.
+        for key in TEXT_SLOTS:
+            attrs.append(text_envelope(key, ch.get(key), f"characters[{ch['id']}].{key}"))
 
         personas.append({
             "character_id": ch["id"],

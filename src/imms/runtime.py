@@ -41,6 +41,18 @@ def init_runtime(conn, session_doc):
     onto = db.get_script(conn, script_id)
     persona = db.get_persona_l1(conn, script_id)
     l1map = {p["character_id"]: {a["key"]: a["value"] for a in p["attributes"] if a["value"] is not None} for p in persona["personas"]}
+    # L2 assigned values are session-scoped; reload them into the seat view so
+    # prompt blocks (public_identity/mask) read assigned data, not canon. Only
+    # keys absent from L1 are bridged -- L1 canon stays authoritative.
+    l2map = {}
+    for row in conn.execute(
+        "SELECT character_id, data_json FROM persona_l2 WHERE session_id=?", (session_id,)
+    ):
+        attr = json.loads(row["data_json"])
+        if attr.get("value") is not None and attr.get("key"):
+            l2map.setdefault(row["character_id"], {})[f"L2.{attr['key']}"] = attr["value"]
+    for cid, assigned in l2map.items():
+        l1map.setdefault(cid, {}).update(assigned)
 
     # G21: dials live on session.l0 and are copied to every seat so downstream
     # rules read the same validated values.  Legacy sessions (no dials) keep

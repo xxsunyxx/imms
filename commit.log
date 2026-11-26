@@ -258,3 +258,36 @@
 - README 删除「批量导入 100 套盒装本」与「自持语料库（外部 refer 可删除）」两节及其命令示例；文档索引移除 `docs/BOXED.md`、`docs/CORPUS.md` 两条（文档文件保留，统一摄入章节里的格式说明不动）。
 - `docs/GAP_AUDIT.md` 执行顺序段落收口：去掉残留的「下一步」字样并修正重复编号，G17–G28 全部标记完成。
 - 不影响代码与测试；全量 182 项 unittest 通过。
+
+## 2026-11-26 · G16 条件冻结标记
+
+- 用户定案：若不做客户端运行，G16 这一部分整体不做。G16 五个子项（原书抽取 / UGC / Web / TTS / 跨本元游戏）整组冻结，不单独解冻某一项；解冻的唯一前置是「决定做客户端运行」。
+- `docs/GAP_AUDIT.md`：C1 从「需用户拍板」改为「已拍板：条件冻结 G16」并写明冻结范围与解冻条件；§4 G16 行、执行顺序第 9 条同步（排期只含 G06–G15）。
+- `README.md` 原始设定与差距段、`docs/IPS_FUSION.md` §1「不可直接照搬」同步条件冻结口径。
+- 纯文档标记，不改代码与测试。
+
+## 2026-11-26 · G12 平衡目标改为 5 局 + 随机本 3 轮实测
+
+- 用户定案：平衡性不以 200 局为目标，改为 5 局冒烟。`docs/GAP_AUDIT.md`（§1 §11 行、G12 行）与 `docs/IPS_FUSION.md` §1 同步：5 局可复现（seed+版本），只记录胜方/冤案/冷场趋势，不设统计区间硬门槛，不编造数据。
+- 随机抽取（真随机，39 个候选本）：本 `O09`「空降第一周：述职定价」，4 角色 `o09_r01/r02/r03/r04`，人席 `o09_r03`。
+- 临时库 `output/o09_run.db` 跑 `parse→normalize→assemble→play(3 轮, seed=42)`：装配 GM+3AI+1 人席，24 条日志（实际发言 9 条 + 内部记账事件），投票 2:2 经 tie-break 判 `o09_r01` 胜、`solved=true`；`improv_burst(strategy=rationalize)` 与 `breakout_state` 在 R3 触发。
+- 实测暴露：离线模板台词高度重复（「这件事我记不清了」「我认为『现有线索』值得注意」），LLM 未配置时人格差异靠模板无法体现；日志里记账类 act（infoguard/provocation/breakout_state）utterance 为空，阅读时须与真实发言区分。
+- 只改文档；输出留在 gitignore 的 `output/`，不入库。
+
+## 2026-11-26 · 10 轮对话实测 + 提示词波动分析
+
+- 同一本 O09、同四角色、seed=42 跑 10 轮：`output/o09_10r_play.json`，166 条日志（40 条真实发言，78 条 `lie_revision`、17 条 `breakout_state` 等记账事件）。
+- 用 SpyProvider 强制走提示词渲染路径（台词仍回退模板），monkeypatch 捕获 30 份真实 Prompt 到 `output/o09_10r_prompts.json`；报告 `output/o09_10r_persona_report.md`。
+- 发现：本 O09 的四人 `persona_l1` 全 10 键均为 `value=null, evidence=[], confidence=0, reason=missing_evidence`（盒装本无行为证据句，按规则不编造）→ Prompt「人格基线/语言指纹」段四人全为「（未配置）」，人格恒定锚在 Prompt 里缺席。这是规则正确执行的代价，不是 bug。
+- Prompt 逐轮波动健康：L3 情绪（arousal 0.20→0.30、valence 摆动）、关系（like/trust 0→−1 与 0→+1）、L4 投影（0.44–0.55 微动）都在变；身份/事实/谎言/记忆/意图块按规则稳定。`f_o09_s01` 等 private 事实只出现在各自 owner 的 Prompt，隔离正确。
+- 对话问题：40 条发言里「我认为『现有线索』值得注意」7 次、「这件事我记不清了」4 次，模板高度重复；根因是 L1 空 + 未配 LLM，非数值层问题。
+- 复核要点：L1 信封缺证据的字段是 `reason: "missing_evidence"`（不是布尔 `missing_evidence`），写报告时勿臆造字段名。
+
+## 2026-11-26 · 人设桥接（A）+ O09 行为证据（C）
+
+- 根因：剧本有 `personality`/`speaking_style`/`public_identity`，但 `normalize` 只认 `canon_evidence`，盒装本该字段为空 → L1 全空 → Prompt 身份段全「（未配置）」；L2 表也从未回填 state。
+- A（代码）：`normalize.py` 增 `TEXT_SLOTS=(personality,speaking_style,lexicon)` 与 `text_envelope()`，逐字存 `source=script_text`、`confidence=1`，不进 F29 打分；`prompt_engine.block_identity` 增「人设描述」行、语言指纹回退 `speaking_style`；`assemble` 把 `public_identity` 写进 `persona_l2`；`runtime.init_runtime` 回填 L2 到 `l1map` 的 `L2.*` 键（不覆盖 L1）。
+- C（数据）：`output/patch_o09_evidence.py` 从 O09 各角色**自身字段**抽取 48 条证据（6 键×2 条×4 人），每条 quote 校验必须是该角色原文子串，锚点只用 anchors.json 的五档；重跑 normalize 得 version 2，insufficient/missing/invalid 全 0。
+- 结果：四人 OCEAN 明显分化（A 0.1–0.9、E 0.2–0.8、honesty 0.2–0.6），Prompt 身份段四项全部落地且各不相同。`mask` 仍空属正确（剧本未给，不编造）。
+- 验证：新增 `tests/test_persona_text_bridge.py` 4 项；全量 186 unittest 通过；带证据 10 轮端到端通过（196 日志，winner=o09_r02，solved=false）。
+- 注意：`data_json` 里没有 `character_id`，从 persona_l2 回填必须读 SQL 列而非 JSON 字段。

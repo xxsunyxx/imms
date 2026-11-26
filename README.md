@@ -4,11 +4,13 @@
 
 ## 原始设定与差距
 
-用户提供的 IMMS v1.0 全文逐字存于 `docs/ORIGINAL_SPEC.md`；与现有实现的冲突、公式落地情况和待补任务见 `docs/GAP_AUDIT.md`。当前范围冻结为「现成剧本装配 + 纯文本对局」，原书自动生成 / Web / TTS 未纳入。
+用户提供的 IMMS v1.0 全文逐字存于 `docs/ORIGINAL_SPEC.md`；与现有实现的冲突、公式落地情况和待补任务见 `docs/GAP_AUDIT.md`。当前范围冻结为「现成剧本装配 + 纯文本对局」。**G16（原书抽取流水线 / UGC / Web / TTS / 跨本元游戏）已标记为条件冻结：若不做客户端运行，则这一部分整体不做**；解冻的唯一前置是决定做客户端运行。详见 `docs/GAP_AUDIT.md` C1 与 §4 执行顺序。
 
 ## 核心规则模块
 
 分工：**guide 提示词驱动变化，IMMS 控制和记忆人物数据**。核心模块把规则固化进 `src/imms/`：人物抽取（`profile`）、提示词生成引擎（`prompt_engine`）、变量计算（`variables`）、确定性随机源（`random_source`）、guide 提示词库（`guides`）。CLI 见 `imms core --help` / `imms guides --help`，说明见 `docs/CORE_MODULES.md`。
+
+人设有两条来源，互不混淆：带行为证据句的 `canon_evidence` 经 F29 锚点打分进 L1 数值键（`source=canon_extract`）；剧本自述的 `personality` / `speaking_style` / `lexicon` 逐字进 L1 文本槽位（`source=script_text`，不打分、缺则 `None + missing_evidence`）；`public_identity` 属 L2，装配时从剧本写入 `persona_l2` 并回填席位视图。三者共同让 Prompt 身份段不再全为「（未配置）」。
 
 谎言账本严格私有：每个 agent 只看见并维护自己的谎言；`lie_id / inner_intent / recalled / guard` 在可见性层对他人（含玩家）裁剪，发言者与 GM 保留，落库不受影响以便复盘。见 `docs/CORE_MODULES.md` 的私有边界段。
 
