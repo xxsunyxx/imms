@@ -117,8 +117,15 @@ def _lie_section(events, runtime):
         for seat, lie in ledger:
             lines.append(
                 f"- {seat} 第{lie.get('round_created', '?')}轮对 {','.join(lie.get('audience', []))} "
-                f"声称 {lie.get('claimed_facts', [])}；策略={lie.get('strategy', 'maintain')}，热度={lie.get('heat', 0)}"
+                f"声称「{lie.get('proposition') or lie.get('claimed_facts', [])}」"
+                f"（真实={lie.get('true_value', False)}；策略={lie.get('strategy', 'maintain')}，热度={lie.get('heat', 0)}）"
             )
+            lines.append(f"  - 听众反应：{lie.get('reception') or '未知'}")
+            for revision in lie.get("revisions") or []:
+                lines.append(
+                    f"  - 第{revision.get('round', '?')}轮 · {revision.get('status', '?')} · "
+                    f"{revision.get('rationale', '')}"
+                )
     else:
         lines.append("- 谎言账本为空（本局未产生需持续维护的谎言）。")
     challenges = [e for e in events if e["act_type"] in {"lie_exposed", "caught_lying", "contradiction"}]

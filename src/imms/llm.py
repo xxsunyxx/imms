@@ -40,10 +40,17 @@ def build_prompt(state, intent, target_name, clue, round_no, allowed_facts, seat
     fact_lines = [f"- {f}" for f in sorted(allowed_facts)]
     if known_fact_lines:
         fact_lines += [f"- {line}" for line in known_fact_lines]
-    lie_lines = [
-        f"- 第{lie.get('round_created', '?')}轮对{','.join(lie.get('audience', []))}声称：{'；'.join(lie.get('claimed_facts', []))}"
-        for lie in lies
-    ]
+    lie_lines = []
+    for item in lies:
+        reception = item.get("reception") or {}
+        latest = (item.get("revisions") or [])[-1:]
+        revision = latest[0].get("rationale", "") if latest else "尚无修订"
+        lie_lines.append(
+            f"- 第{item.get('round_created', '?')}轮对{','.join(item.get('audience', []))}声称："
+            f"{item.get('proposition') or '；'.join(item.get('claimed_facts', []))}"
+            f"（真实={item.get('true_value', False)}；热度={item.get('heat', 0)}；策略={item.get('strategy', 'maintain')}）"
+        )
+        lie_lines.append(f"  听众反应：{reception or '未知'}；最近修订：{revision}；本轮必须据此自洽。")
     recalled = list(recalled_lines or [])
     lexicon = attrs.get("lexicon") or attrs.get("L1.lexicon") or "（未配置语言指纹）"
     persona = "；".join(

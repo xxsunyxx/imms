@@ -115,3 +115,11 @@
 - 关键冲突：`runtime.init_runtime` 把全部线索发给每个席位（破坏信息不对称）；`heat_target(round_no, max(1, round_no), 3.0)` 使目标热度恒为 3.0（GM 每轮放线索、永不休整）；谎言账本只有读取没有写入（R3/F20/F21 空转）；L4 表演层与 G2 人格护栏缺失；原书自动生成 / Web / TTS 与项目既定范围冲突，需用户确认才启动。
 - README 增「原始设定与差距」段并补两条文档索引；本轮只做归档与审计，未改运行时代码。
 - 验证：83 个 unittest 全通过（审计前基线），审计仅新增/修改文档。
+
+## 2026-11-26 · G01–G04：节奏/信念/谎言闭环/事件注入
+
+- G01：`T_total` 进入 `game_state` 与 `@global` 快照；`gm.suggest_decision` / `runtime._gm_step` 共用，修复 F22 目标热度恒为 3.0、GM 每轮放线索且永不休整的问题；旧会话回退到已跑轮数。
+- G02：信念图按 `facts.visibility=public` 与角色 `known_fact_ids` 初始化，取消「全场默认知道全部线索」；线索释放时才把 `reveals_fact_ids` 写入各席位 beliefs；移除角色信念里的 `is_true`。
+- G03：新增 `src/imms/lie.py` + 运行时接线。F20 决定是否说谎，创建有来源依据的谎言（不编造 fact_id），F21 heat 升级；每位 agent 的 `reasoning_log` 记录 created / believed / exposed / challenged / rejustified，被相信与被揭穿都追加修订并改策略；Prompt 与 replay 展示听众反应与最近修订。
+- G04：新增 `src/imms/events.py` 七类外部扰动库（多变量触发 + 强度排序 + 落库审计）；CLI `gm inject`（支持 `--dry-run` / `--event`），`gm branch --inject-event` 可在分叉重放中强制注入；retro 增加 `event_injections` 审计与 Markdown 段。文档见 `docs/EVENTS.md`。
+- 验证：96 个 unittest 全通过（新增 test_pacing / test_beliefs / test_lie / test_events）；CLI `gm inject --dry-run` 在既有会话上选出 blackout 候选。GAP_AUDIT 的 C2/C3/C4 与 G01–G04 标记为已完成。

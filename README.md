@@ -62,6 +62,20 @@ uv run imms --db imms.db memory commitments --session snow-night-villa-s001 --se
 
 详见 `docs/MEMORY.md`。
 
+## 谎言推理闭环与事件注入
+
+每个 agent 维护 `lie_ledger` + `reasoning_log`：说谎由 F20 决定，被相信或被揭穿都会写入一次修订，heat>0.8 时发言前强制重新自圆其说。Prompt 与复盘均可追溯「何时说谎、谁相信、谁戳穿、如何改口」。
+
+GM 事件注入库支持 7 类外部扰动（第二具尸体/停电/信件/匿名举报/旧情复燃/酒后失言/天气），由局势变量确定性触发：
+
+```bash
+uv run imms --db imms.db gm inject --session S --round 2 --dry-run
+uv run imms --db imms.db gm inject --session S --round 2 --event blackout
+uv run imms --db imms.db gm branch --session S --at-round 2 --inject-event blackout
+```
+
+注入写入 `game_events` / `attribute_events`，复盘追加「GM 事件注入审计」。详见 `docs/EVENTS.md`。
+
 ## 投票体系
 
 ```bash
@@ -153,6 +167,7 @@ uv run python -m unittest discover -s tests
 - `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
 - `docs/ORIGINAL_SPEC.md` — 用户提供的 IMMS v1.0 原始设定（逐字归档）
 - `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务
+- `docs/EVENTS.md` — GM 事件注入库：七类外部扰动与多变量触发
 
 ## 已踩过的坑
 

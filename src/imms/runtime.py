@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import db, formulas, infoguard, llm, memory, vote
+from . import db, events, formulas, infoguard, lie, llm, memory, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -44,11 +44,23 @@ def init_runtime(conn, session_doc):
 
     seats = [p for p in session_doc["participants"] if p["kind"] != "gm"]
     others = [p["id"] for p in seats]
+    facts = {f.get("id"): f for f in onto.get("facts", []) if f.get("id")}
+    public_ids = {fid for fid, f in facts.items() if f.get("visibility") == "public"}
+    known_by_char = {
+        c.get("id"): set(c.get("known_fact_ids") or [])
+        for c in onto.get("characters", [])
+    }
     runtime = {}
     for p in seats:
         cid = p["script_character_id"]
         attrs = l1map.get(cid, {})
         N = attrs.get("OCEAN.N", 0.5)
+        beliefs = {
+            fid: {"belief": 0.8, "source": "public", "evidence": []}
+            for fid in sorted(public_ids)
+        }
+        for fid in sorted(known_by_char.get(cid, set())):
+            beliefs[fid] = {"belief": 0.9, "source": "canon", "evidence": []}
         runtime[p["id"]] = {
             "character_id": cid,
             "l1": attrs,
@@ -63,14 +75,13 @@ def init_runtime(conn, session_doc):
             "ell": {o: 0.0 for o in others if o != p["id"]},
             "suspicion": {o: 0.1 for o in others if o != p["id"]},
             "faction": None,
-            "beliefs": {},
+            "beliefs": beliefs,
             "lie_ledger": [],
             "memory": [],
             "commitments": {},
         }
-    for clue in onto.get("clue_pool", []):
-        for state in runtime.values():
-            state["beliefs"][clue] = {"belief": 0.6, "source": "public", "is_true": True}
+    # Clue cards are not knowledge until a clue is actually released/revealed.
+    # Every agent starts with only public facts plus its own canon knowledge.
 
     db.set_game_state(conn, session_id, "runtime", runtime)
     db.set_game_state(conn, session_id, "round", 0)
@@ -207,8 +218,10 @@ def _utter(intent, target_name, clue):
 def _guard(state, act, public_facts):
     claims = [f for f in act["claimed_facts"] if f in state["beliefs"] or f in public_facts]
     act["claimed_facts"] = claims
-    for lie in state["lie_ledger"]:
-        if lie.get("heat", 0) > 0.3 and any(c in lie.get("claimed_facts", []) for c in act["claimed_facts"]):
+    if not state.get("is_human"):
+        act = lie.guard_escalation(state, act)
+    for entry in state["lie_ledger"]:
+        if entry.get("heat", 0) > 0.3 and any(c in entry.get("claimed_facts", []) for c in act["claimed_facts"]):
             if "记不清" not in act["utterance"]:
                 act["utterance"] = "这件事我记不清了。"
                 act["act_type"] = "deflect"
@@ -274,10 +287,27 @@ def _gm_step(conn, session_id, round_no, onto, runtime, guard=None, seat_map=Non
     n_contra = sum(1 for e in events if e["round"] == round_no and e["act_type"] == "contradiction")
     mean_arousal = sum(s["emotion"]["arousal"] for s in runtime.values()) / max(1, len(runtime))
     heat = formulas.actual_heat(n_accuse, n_contra, mean_arousal)
-    target = formulas.heat_target(round_no, max(1, round_no), 3.0)
+    total_rounds = int(
+        db.get_game_state(conn, session_id, "total_rounds", 0)
+        or db.get_game_state(conn, session_id, "round", 0)
+        or round_no
+    )
+    target = formulas.heat_target(round_no, max(1, total_rounds), 3.0)
     injected = None
     gm_changes = []
     chosen = None
+    if decision and decision.get("inject_event"):
+        applied = events.apply(
+            conn, session_id, decision["inject_event"], round_no, runtime, guard,
+        )
+        injected = {
+            "type": "gm_event_injection", "event_id": applied["event_id"],
+            "seq": applied["seq"], "label": applied["label"],
+        }
+        return {
+            "heat": round(heat, 4), "target": round(target, 4),
+            "injected": injected, "changes": [], "event_injection": applied,
+        }
     if decision and decision.get("release_clue") and decision["release_clue"] not in revealed:
         if decision["release_clue"] in onto.get("clue_pool", []):
             chosen = decision["release_clue"]
@@ -289,8 +319,11 @@ def _gm_step(conn, session_id, round_no, onto, runtime, guard=None, seat_map=Non
         clue = chosen
         revealed.append(clue)
         db.set_game_state(conn, session_id, "revealed_clues", revealed)
-        exempted = guard.exempt_clue(clue) if guard else []
+        exempted = guard.exempt_clue(clue) if guard else list(onto.get("clue_fact_map", {}).get(clue, []))
         injected = {"type": "clue_release", "clue": clue, "facts_now_public": exempted}
+        for state in runtime.values():
+            for fid in exempted:
+                state["beliefs"][fid] = {"belief": 0.7, "source": "clue", "evidence": [clue]}
         match = re.search(r"logLR:(\w+)=([-\d.]+)", clue)
         if match:
             target_raw = match.group(1)
@@ -364,6 +397,9 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     log = []
 
     current_round = db.get_game_state(conn, session_id, "round", 0)
+    # F22 needs the planned session length, not the current round; otherwise the
+    # target heat is always 3.0 and the pacing controller never rests.
+    db.set_game_state(conn, session_id, "total_rounds", max(1, int(rounds)))
     first_round = start_round if start_round is not None else current_round + 1
     for round_no in range(first_round, rounds + 1):
         for seat_id, state in runtime.items():
@@ -385,6 +421,13 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 _, changes = _appraise(state, ev, round_no)
                 round_changes.extend(changes)
             round_changes.extend(_update_suspicion(state, parsed))
+            for change in lie.update_from_events(state, parsed):
+                log.append({
+                    "round": round_no, "actor": seat_id, "act": "lie_revision",
+                    "lie_id": change["lie_id"], "trigger": change["trigger"],
+                    "status": change["status"], "strategy": change["strategy"],
+                    "before": change["before"], "after": change["after"],
+                })
             for ev in parsed:
                 observation = memory.observe(
                     state, ev, round_no, audience=_audience_for(ev, all_seats)
@@ -403,7 +446,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 raw = _user_act(scripted, user_index, names.get(state["character_id"], state["character_id"]))
                 user_index += 1
                 if raw["claimed_facts"]:
-                    state["beliefs"].update({f: {"belief": 0.8, "source": "user", "is_true": True} for f in raw["claimed_facts"]})
+                    state["beliefs"].update({f: {"belief": 0.8, "source": "user", "evidence": []} for f in raw["claimed_facts"]})
                 act = raw
                 recalled = memory.recall(state, round_no, cue=act.get("utterance"), limit=3)
             else:
@@ -413,12 +456,21 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 clue = next(iter(public_facts), "现有线索")
                 act = {
                     "act_type": intent,
+                    "intent": intent,
+                    "round": round_no,
                     "utterance": _utter(intent, target_name, clue),
                     "claimed_facts": [clue] if intent == "assert" and clue in state["beliefs"] else [],
                     "target": target_id,
                     "inner_intent": f"意图={intent}；怀疑最高={target_name}",
                     "emotion_shown": "平静",
+                    "lie_id": None,
                 }
+                if lie.should_lie(state, intent):
+                    entry = lie.create(
+                        state, round_no, act["utterance"],
+                        audience=[s for s in all_seats if s != seat_id], intent=intent,
+                    )
+                    act["lie_id"] = entry["lie_id"]
                 recalled = memory.recall(
                     state, round_no, cue=f"{intent} {target_name} {clue}", limit=3
                 )
@@ -494,6 +546,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 "emotion_shown": act.get("emotion_shown", "平静"),
                 "guard": guard_info,
                 "recalled": _recall_payload(recalled),
+                "lie_id": act.get("lie_id"),
             }
             seq = db.append_game_event(
                 conn, session_id, round_no, seat_id, act["act_type"], payload, ["public"]
@@ -546,6 +599,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             "revealed_clues": db.get_game_state(conn, session_id, "revealed_clues", []),
             "user_input_index": user_index,
             "round": round_no,
+            "total_rounds": db.get_game_state(conn, session_id, "total_rounds", rounds),
         })
         db.set_game_state(conn, session_id, "round", round_no)
 

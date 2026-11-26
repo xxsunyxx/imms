@@ -10,6 +10,7 @@ from . import branch as branch_mod
 from . import corpus as corpus_mod
 from . import db as db_mod
 from . import derive as derive_mod
+from . import events as events_mod
 from . import gm as gm_mod
 from . import infoguard as infoguard_mod
 from . import ingest as ingest_mod
@@ -202,6 +203,11 @@ def build_parser():
     gd.add_argument("--session", required=True)
     gd.add_argument("--round", type=int, required=True)
     gd.add_argument("--policy", choices=["heat", "information", "adaptive"], default="adaptive")
+    gi = gm_sp.add_parser("inject", help="Inject one deterministic external perturbation event")
+    gi.add_argument("--session", required=True)
+    gi.add_argument("--round", type=int)
+    gi.add_argument("--event", help="Force an event id; otherwise pick the strongest trigger")
+    gi.add_argument("--dry-run", action="store_true", help="List candidates without applying")
     gb = gm_sp.add_parser("branch", help="Create a replayed branch and register it in the tree")
     gb.add_argument("--session", required=True)
     gb.add_argument("--at-round", type=int, required=True)
@@ -210,6 +216,7 @@ def build_parser():
     gb.add_argument("--override-utterance")
     gb.add_argument("--policy", choices=["heat", "information", "adaptive"], default="adaptive")
     gb.add_argument("--release-clue", help="Force the GM to release this clue (must be in clue_pool)")
+    gb.add_argument("--inject-event", help="Force a deterministic event injection on the forked round")
     gb.add_argument("--seed", type=int, default=42)
     gt = gm_sp.add_parser("tree", help="List the branch tree")
     gt.add_argument("--session", required=True)
@@ -498,10 +505,27 @@ def main(argv=None):
                 print_json(gm_mod.suggest_decision(
                     conn, args.session, args.round, onto, state, args.policy
                 ))
+            elif args.gm_action == "inject":
+                ctx = events_mod.build_context(conn, args.session, args.round)
+                if args.dry_run:
+                    print_json({
+                        "session_id": args.session, "round": ctx["round"],
+                        "candidates": events_mod.select(ctx, only=[args.event] if args.event else None),
+                    })
+                else:
+                    guard = infoguard_mod.build_engine(ctx["onto"])
+                    print_json(events_mod.apply(
+                        conn, args.session, args.event, args.round, ctx["runtime"], guard,
+                    ))
             elif args.gm_action == "branch":
                 decision = {"policy": args.policy}
+                overrides = {}
                 if args.release_clue:
-                    decision["overrides"] = {"release_clue": args.release_clue}
+                    overrides["release_clue"] = args.release_clue
+                if args.inject_event:
+                    overrides["inject_event"] = args.inject_event
+                if overrides:
+                    decision["overrides"] = overrides
                 print_json(gm_mod.create_branch(
                     conn, args.session, args.at_round, args.label,
                     args.override_round, args.override_utterance, decision, args.seed,

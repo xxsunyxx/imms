@@ -245,6 +245,27 @@ def _branch_counterfactual(conn, session_id, solution):
     return report
 
 
+def injection_audit(events):
+    """Summarise deterministic GM perturbations recorded in game_events."""
+    rows = [e for e in events if e.get("act_type") == "gm_event_injection"]
+    by_event = {}
+    rounds = []
+    for row in rows:
+        payload = row.get("payload") or {}
+        event_id = payload.get("event_id", "unknown")
+        by_event[event_id] = by_event.get(event_id, 0) + 1
+        rounds.append({
+            "round": row.get("round"), "event_id": event_id,
+            "score": payload.get("score", 0), "changes": len(payload.get("changes") or []),
+        })
+    return {
+        "status": "ok" if rows else "empty",
+        "count": len(rows),
+        "by_event": by_event,
+        "rounds": rounds,
+    }
+
+
 def evaluate(conn, session_id, scripted_motive=None):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -268,6 +289,7 @@ def evaluate(conn, session_id, scripted_motive=None):
             },
             "counterfactual": _branch_counterfactual(conn, session_id, audit["solution"]),
             "vote_audit": vote.audit(conn, session_id),
+            "event_injections": injection_audit(events),
             "timeline": {
                 "order_conflicts": audit["timeline"]["order_conflicts"],
                 "warnings": audit["timeline"]["warnings"],
@@ -328,6 +350,18 @@ def render_evaluation(report):
         )
     else:
         lines.append("- （无投票账本，无法审计；旧会话只保留胜负结果）")
+    inj = retro["event_injections"]
+    lines.extend(["", "**GM 事件注入审计**", ""])
+    if inj["status"] == "ok":
+        lines.append(
+            f"- 注入 {inj['count']} 次：{inj['by_event']}"
+        )
+        for item in inj["rounds"]:
+            lines.append(
+                f"  - 第{item['round']}轮 {item['event_id']}（强度 {item['score']}，变量变更 {item['changes']} 项）"
+            )
+    else:
+        lines.append("- 本局无外部扰动注入")
     lines.extend(["", "**转折点 Top 5**", ""])
     if retro["turning_points"]:
         for idx, item in enumerate(retro["turning_points"], 1):

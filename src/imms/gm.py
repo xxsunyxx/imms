@@ -61,7 +61,12 @@ def suggest_decision(conn, session_id, round_no, onto, runtime_state,
     n_contra = sum(1 for e in events if e["round"] == round_no and e["act_type"] == "contradiction")
     mean_arousal = sum(s["emotion"]["arousal"] for s in runtime_state.values()) / max(1, len(runtime_state))
     heat = formulas.actual_heat(n_accuse, n_contra, mean_arousal)
-    target = formulas.heat_target(round_no, max(1, round_no), 3.0)
+    total_rounds = int(
+        db.get_game_state(conn, session_id, "total_rounds", 0)
+        or db.get_game_state(conn, session_id, "round", 0)
+        or round_no
+    )
+    target = formulas.heat_target(round_no, max(1, total_rounds), 3.0)
 
     rationale = [f"policy={policy}，热度 {heat:.3f} / 目标 {target:.3f}"]
     chosen = None

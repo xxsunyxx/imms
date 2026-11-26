@@ -23,10 +23,10 @@
 | §3 五层人格 | ◐ | L1 Canon 只读 + 证据化打分（F29）；L2/L3 信封与变更审计；L0 以 `session.l0` 字段存在（`difficulty/acting_skill/lying_skill/play_style`） | L4 表演层不存在；其他角色直接读真实 L3；`assemble` 未从剧本提取 `public_identity/mask/goals/script_locks`（`script_locks=[]`） |
 | §4 关系场与情绪 | ◐ | F02/F03/F04/F05 进入 `_appraise`；F07 PAD 更新；关系域 clip 与 `attribute_events` 审计 | F06 信任负向不对称只写在配置说明，运行时统一 `λ=0.95`；F08 创伤放大未接；F09 离散情绪未由 PAD 映射；F10/F11 阵营漂移只有纯函数，运行时 `faction` 恒为 `None` |
 | §5 信念图与怀疑 | ◐ | log-odds 怀疑更新、sigmoid、证据权重、投票分布（`vote.py` + `replay.py`） | 每个席位开局把**全部** `clue_pool` 写成已知（C2）；`is_true` 分离存储未建立；F17 矛盾事件只登记不生成；`Timeline_Narrated` 与 `alibi_gap` 无 |
-| §6 表演与说谎 | ❌ | F18–F21 均为 `formulas.py` 纯函数；`lie_ledger` 字段初始化为空数组 | 没有说谎决策、谎言创建、heat 更新、圆谎/崩盘策略；`F19 shown_attitude` 未进入 Prompt 或台词 |
+| §6 表演与说谎 | ◐ | `src/imms/lie.py`：F20 决策、F21 heat、谎言创建/修订；每个 agent 有 `reasoning_log`，被相信/被揭穿都追加自洽记录；Prompt 与 replay 可见 | L4 表演投影与 `shown_attitude` 噪声未接；G2 人格余弦护栏仍缺 |
 | §7 世界状态与本体 | ◐ | Ontology 九槽位（facts/clues/clue_pool/timeline_true/truth_graph/evaluation/plot_locks/endings/completions/skeleton）+ solver 门禁 | `truth_graph` 是字符串列表而非 `(s,p,o,t,visibility)` 三元组；线索的 `discover/forgeable/decay_rounds/chain` 未建模；`endings` 只存文本，不参与裁决 |
 | §8 回合流程与节奏 | ◐ | `play` 逐轮发言→评价→GM→投票；私聊房间独立 CLI；F22/F23 有纯函数 | 无幕/阶段状态机；无 AP、搜证、质询 token、时限；GM 只做线索释放 + 休整，且热度目标恒定（C3）；`advance_stage/private_allowed` 未被消费 |
-| §8.2 GM 事件注入库 | ❌ | 仅线索释放与休整两类 `gm_decision`；策略 `heat/information/adaptive` | 7 类扰动事件（第二具尸体/停电/信件/匿名举报/旧情复燃/酒后失言/天气）无事件目录、无多变量触发器、无效果回归 |
+| §8.2 GM 事件注入库 | ✅ | `src/imms/events.py` 七类事件 + 多变量触发 + `gm inject` / `gm branch --inject-event` + `attribute_events` 审计 + retro 注入审计 | `ap_penalty` / `clue_decay_multiplier` 已入局势层但搜证与衰减流程尚未消费（G06/G14）；默认回合不隐式注入 |
 | §9 Agent 决策循环 | ◐ | 感知→确定性评价→F26 召回→效用 F24→softmax F25→模板/LLM→护栏→落库 | `appraise` 是按 `act_type` 的固定映射，不是小模型分类 + 归因；意图集合固定 7 个；反思记忆/语义记忆未实现；人类发言固定 `assert` |
 | §10 三重护栏 | ◐ | G1 知识护栏；InfoGuard 四层（含输入传闻化与输出改写）；人类输出不拦 | G2 人格一致性余弦无；G3 谎言一致性无（账本空）；G4 只覆盖已知事实泄露，未覆盖玩家提示注入诱导 |
 | §11 原书→剧本自动生成 | ⚠ | 只做"用户给现成剧本 → 解析/归一化/装配/准入"；solver 做可解性校验 | 与项目既定边界冲突（C1）：原书抽取、案件模板匹配、200 局平衡仿真、UGC 发布均未实现且当前不在范围 |
@@ -43,19 +43,18 @@
 原始设定 §11/§15 要求「原书 → 剧本自动生成」和 UGC、Web 前端、语音扩展；项目 README / `SCHEMA.md` 明确「系统不创作剧本、无 Web UI、纯文本、以用户剧本为输入」。
 **当前按项目既定边界实现**。若要启用原书抽取流水线，属于范围变更，需要先确认，不能用"补全"名义默默塞进来。
 
-### C2 · 信息不对称破口（P0）
+### C2 · 信息不对称破口（P0，已修）
 `runtime.init_runtime()` 把 `onto.clue_pool` 的**每条**线索写入**每个席位**的 `beliefs`（`belief=0.6, is_true=True`）。这与 §1.3、§5.1「每人只有世界一块碎片」直接矛盾，也让 InfoGuard 的 scope 与信念图失去意义。
-修法：按 `known_fact_ids` / 线索 `visibility` / `stage` / 发现者初始化，缺证据写 `value=None + missing_evidence`，不要给全场发全量线索。
+已按 `facts.visibility=public` 与角色 `known_fact_ids` 初始化；线索卡进入 `clue_pool` 不等于知识，只有释放后才把 `reveals_fact_ids` 写入各席位信念图。`is_true` 不再进入角色信念。
 
-### C3 · F22 热度目标恒定（P0）
+### C3 · F22 热度目标恒定（P0，已修）
 `runtime._gm_step()` 调用 `heat_target(round_no, max(1, round_no), 3.0)`。`formulas.heat_target(t, total_rounds, ...)` 在 `total_rounds == t` 时恒返回 `3.0`：
 - `heat < target - 0.3` 几乎每轮成立 → 每轮都放线索；
 - `heat > target + 0.3` 永不成立 → 休整/私聊分支从未触发。
-修法：`T_total` 写入 `game_state` 与 `@global` 快照，策略与 `_gm_step` 都读它；分叉恢复时一并恢复。
+`T_total` 已写入 `game_state` 与 `@global` 快照，策略与 `_gm_step` 共用；旧会话无该字段时回退到已跑轮数。测试覆盖「早期高热度触发休整」。
 
-### C4 · 谎言账本空转（P0）
-`lie_ledger` 初始化为 `[]`，全仓仅 `llm.build_prompt` 和 `replay` 读取，没有任何写入点。`F20 LieGain`、`F21 lie_heat` 只是纯函数。
-后果：R3「不可自相矛盾」无运行时护栏；§6.3 的 heat>0.3 注入 Prompt 恒为空；复盘「谎言全景图」必然为空。
+### C4 · 谎言账本空转（P0，已修）
+原状态：`lie_ledger` 初始化为 `[]` 且无写入点。现已补 `src/imms/lie.py`：F20 决策、F21 heat、创建/修订/策略升级、被相信与被揭穿双分支推理记录（`reasoning_log`），LLM Prompt 与 replay 均可读。剩余缺口只在 L4 表演投影与 G2 人格护栏，见 C5。
 
 ### C5 · 人格层数口径不一致
 原始设定是 L0–L4 五层；项目是 L1–L3 三层 + `session.l0` 字段。L4 表演层缺失，Prompt 注入的是真实 L3，其他角色能"读到真心"，§3.4「看走眼」机制无法发生。
@@ -97,8 +96,8 @@
 | F17 | 矛盾检测 | ◐ | `contradiction_strength()` 纯函数，无 `contradiction_event` 生成 |
 | F18 | 泄露强度 σ | ◐ | `derive.py` 使用；未驱动角色表演噪声 |
 | F19 | 表现态度 | ❌ | `shown_attitude()` 未接 |
-| F20 | 说谎收益 | ❌ | 纯函数，无决策入口 |
-| F21 | 谎言热度 | ❌ | 纯函数，账本空转（C4） |
+| F20 | 说谎收益 | ✅ | `lie.should_lie()` 接入 AI 意图分支 |
+| F21 | 谎言热度 | ✅ | `lie.update_from_events()`，被揭穿/矛盾时升级策略 |
 | F22 | 目标热度曲线 | ⚠ | 函数正确，调用错误（C3） |
 | F23 | 实际热度与调控 | ◐ | 只实现「放线索 / 休整」两支 |
 | F24 | 行为效用 | ✅ | `_choose_intent()` |
@@ -115,10 +114,10 @@
 
 | ID | 任务 | 依据 | 验收口径 | 旧计划 |
 |---|---|---|---|---|
-| G01 | 修 `T_total`：入 `game_state` / `@global` 快照，`gm.suggest_decision` 与 `_gm_step` 共用 | C3 | 第 1 轮目标 < 第 T 轮目标；热度过高能触发休整；分叉恢复后目标一致 | — |
-| G02 | 按可见性初始化信念图，取消全场全量线索 | C2 / §5.1 | N×F 断言：角色只持有自己 `known_fact_ids` 与已公开事实；InfoGuard scope 与信念一致 | — |
-| G03 | 谎言账本闭环：LieGain 决策、创建、heat 更新、圆谎/弃车/坦白、Prompt 注入 | C4 / §6.3 | 一局内出现至少一条可追踪谎言；heat>0.3 进 Prompt；replay 谎言图非空；不改数值所有权 | — |
-| G04 | GM 事件注入库：7 类事件目录 + 多变量触发条件 + `gm inject` + 效果落库 + retro 效果评估 | §8.2 | 每类事件有触发变量、影响变量、可见性、可回归；分叉能复现；无 LLM 决定数值 | — |
+| G01 | ~~修 `T_total`~~ **已完成**：入 `game_state` / `@global` 快照，`gm.suggest_decision` 与 `_gm_step` 共用 | C3 | 第 1 轮目标 < 第 T 轮目标；热度过高能触发休整；分叉恢复后目标一致 | — |
+| G02 | ~~按可见性初始化信念图~~ **已完成**：取消全场全量线索，释放线索才补 `reveals_fact_ids` | C2 / §5.1 | N×F 断言：角色只持有自己 `known_fact_ids` 与已公开事实；InfoGuard scope 与信念一致 | — |
+| G03 | ~~谎言账本闭环~~ **已完成**：LieGain、创建/heat/策略、被相信与被揭穿双分支推理记录、Prompt/replay 可见 | C4 / §6.3 | 一局内出现可追踪谎言；reasoning_log 有 created/believed/exposed/rejustified；replay 谎言图非空 | — |
+| G04 | ~~GM 事件注入库~~ **已完成**：7 类事件 + 多变量触发 + `gm inject` + 分叉注入 + retro 审计 | §8.2 | 每类事件有触发变量、影响变量、可见性、可回归；分叉能复现；无 LLM 决定数值 | — |
 | G05 | L4 表演投影 + G2 人格余弦护栏 | C5 / §3.4 / R2 | 感知层只读 L4；L1/L3 真值不进他人 Prompt；越阈重生成并留审计 | — |
 | G06 | 幕/阶段状态机：AP、搜证、质询 token、私聊窗口、GM 注入节点、终幕 | C6 / §8 | 阶段顺序不可跳；AP/token 消耗可审计；`advance_stage/private_allowed` 被消费 | #31 |
 | G07 | 双轨时间线 + `alibi_gap` + 语义级冲突（低误报口径） | C7 / §7.3 | 角色证词可对齐真相；空洞有数值；只报真实倒挂 | #31 |
