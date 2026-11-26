@@ -283,7 +283,7 @@ def _style_for_seat(conn, session_id, seat_id, state, round_no, seed, target_id,
             env = json.loads(row["data_json"])
         except (TypeError, ValueError):
             continue
-        for ev in (env.get("evidence") or [])[:2]:
+        for ev in (env.get("evidence") or []):
             if ev.get("quote"):
                 quotes.append(ev["quote"])
     ctx["evidence_quotes"] = quotes[:5]

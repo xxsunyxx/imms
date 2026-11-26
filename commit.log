@@ -309,3 +309,13 @@
 - 重要限制（据实记录）：无 embedder/numpy，余弦是字符 bigram 代理而非语义相似度；剧本无逐字台词样本 → O09 结构比实测 0.50–0.54，未达 0.78–0.82，`structure_ok=false`，不自造台词补数。
 - 验证：`tests/test_speech_style.py` 17 项（预算封顶、确定性、缺字段不编造、三块结构、三道闸、账本）；全量 203 unittest 通过；O09 10 轮 30 条账本、均值 0.131、四人锚点各异；spy provider 强制 LLM 路径确认三块完整渲染（3883 字符）。
 - 文档：`docs/SPEECH_STYLE.md`（新建）、README 核心模块段。
+
+## 2026-11-26 · 风格引擎按现有数据重写 + 措辞词库补全
+
+- 用户指出「算法调用的关键词不够用」。盘点确认两层缺口：数据层只用了 like/trust/suspicion（实际 relations 有 11 维）、emotion 只用了 arousal/valence/stress（实际 7 维）、L0 技能与 IPS rho/theta 未用；词表层 OCEAN 只有高低二值共 10 个硬编码短语。
+- 新建 `config/speech_style_lexicon.json`：OCEAN 5 维 × 5 档（terms+syntax）、relations 11 维正负、emotion 7 维、L0 4 项、IPS accumulator/breakout、delivery.params 10 项。词库是措辞规则（怎么说），不是人物事实（说什么），不产生 claimed_fact/intent/数值；`lexicon()` 只读缓存，缺失返回空映射。
+- 重写 `speech_style.py`：fingerprint 的 syntax/rhythm/catchphrase/sample_lines 全部从现有数据派生（OCEAN 5 档词库、personality 原文引号、canon_evidence 引用句），`missing` 从 4 项降到只剩 `taboo_words`（剧本真没有禁用词表）。漂移信号改用真实 `emotion.dominance`（此前错误地用 1−stress 代理）、11 维关系、honorific_step + breakout.state、exposure×load + A−theta、IPS 已采样 delivery.probability。变体直接编译 IPS delivery.params 10 项系数。
+- 修复词库桶名 bug：emotion valence 词库用 positive/negative，原 emotion_terms 按 high/low 取导致 valence 永不触发；已按维度分桶。
+- runtime 拉取 canon_evidence 时不再每 attribute 截 2 条，取满 5 条作锚点样本。
+- 验证：`tests/test_speech_style.py` 扩到 25 项；全量 211 unittest 通过；O09 三端到端通过，锚点 8 行派生、漂移块 11 维关系 + 7 维情绪 + IPS 措辞完整渲染。结构比仍约 0.50（证据句只有 5–29 字，不自造台词凑数），如实报告。
+- 文档 `docs/SPEECH_STYLE.md` 按新算法重写。
