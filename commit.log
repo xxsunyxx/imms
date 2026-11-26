@@ -291,3 +291,10 @@
 - 结果：四人 OCEAN 明显分化（A 0.1–0.9、E 0.2–0.8、honesty 0.2–0.6），Prompt 身份段四项全部落地且各不相同。`mask` 仍空属正确（剧本未给，不编造）。
 - 验证：新增 `tests/test_persona_text_bridge.py` 4 项；全量 186 unittest 通过；带证据 10 轮端到端通过（196 日志，winner=o09_r02，solved=false）。
 - 注意：`data_json` 里没有 `character_id`，从 persona_l2 回填必须读 SQL 列而非 JSON 字段。
+
+## 2026-11-26 · 提交后 10 轮复测
+
+- 提交 `70935d7`：A+C 的代码、测试、文档、证据数据一并入库。`examples/scripts/o09_with_evidence.json` 随库携带 48 条 `canon_evidence`——`imms.db` 被 gitignore，若只存本地库则 clone 后无法复现。
+- 全新库从示例本走完整链 `parse → normalize → assemble → play 10 轮`（seed=42）：196 日志 / 40 发言 / winner=ai:o09_r02 / solved=false / infoguard `output_flagged=10`（全为 soft leak）。
+- 复测结论（重要）：Prompt 身份段四项（人格基线 / 人设描述 / 语言指纹 / 公开身份）全部落地且四人不同；但**离线模板 provider 不读 Prompt**，台词重复与修复前几乎一样：「我认为『现有线索』值得注意」仍 7 次，前后 unique 发言都是 20 条。A+C 修的是「人格信号缺席」，不是「模板台词重复」；后者必须接 `IMMS_LLM_URL` 才能验证。
+- 新暴露问题：人设与行为脱节——严总监人设「温和表态」却 R3/R9 两次 `provoke`，华 P7 反复 `accuse` 同时又被严总监 `ally`；模板按 intent 独立选句，没有关系/人设一致性约束。属 provider 层与 G06 阶段状态机范畴，不在本次 A+C 范围。
