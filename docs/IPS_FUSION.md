@@ -2,7 +2,7 @@
 
 > 基线：`docs/IPS_ORIGINAL_SPEC.md`（用户 2026-11-26 提供的 IPS 原文，逐字归档）。
 > 代码快照：`db87ae5`，96 个 unittest 全通过。
-> 结论：**可融入**——但需要按依赖顺序分五期落地，且有三处必须先拍板的边界问题。
+> 结论：**可融入**——按依赖顺序分五期落地。三处边界已于 2026-11-26 拍板（见 §3），另按用户追加需求新增「越界态」与「跨局长期体验记忆」（见 §4），合计 G17–G24。
 
 ---
 
@@ -14,7 +14,8 @@
 | ✅ **挂载点最小** | 原文 §17.1 自述「只需改动 3 处」：评价函数复用、效用排序处插入覆盖分支、生成时注入 delivery。现有 `runtime._appraise` / `_choose_intent` / `llm.build_prompt` 正好是这三处 |
 | ✅ **可复盘可确定性** | IPS 要求 `seed=hash(session, agent, round, event_id)`；IMMS 已有 `game_events`/快照/branch replay，天然承接 |
 | ⚠ **有前置依赖** | 面具梯度依赖 L4/mask（G05）；剧本锁护栏 IR4 依赖 G09；AP 前置依赖 G06；保真锚依赖 G2 人格护栏（G05） |
-| ⚠ **有三处冲突需拍板** | 自我概念漂移 vs L1 Canon 只读；阴影系数 ζ 来源 vs C1 原书抽取冻结；玩家点火/同权即兴 vs 玩家席位边界 |
+| ✅ **三处边界已拍板** | B1 漂移只审计、不回写 L1；B2 ζ 缺证据即降级；B3 玩家不进 IPS，但玩家与 AI 都可点火他人（见 §3） |
+| ✅ **追加两项已纳入** | 越界态（疯批 / 多重人格，可突破常规带通）+ 跨局长期体验记忆（输赢、对 NPC/玩家好恶，约 3 天衰退、再强化复活）|
 | ❌ **不可直接照搬的部分** | 200 局自对弈调参（G12 尚未做）、向量嵌入保真度（当前无 embedder，须用规则代理）、TTS 与 Web 看板（C1 冻结） |
 
 **定位修正**：原文末尾问「即兴系统的一部分」——在 IMMS 中 IPS 不是独立系统，而是**行为调制层**，插在 `_choose_intent`（F24/F25）之后、`llm`/模板生成之前，并以 `aftermath` 回写 L3/LieLedger/Memory。它是 G05（L4 表演层）的动态执行面，而非并列模块。
@@ -39,23 +40,68 @@
 
 ---
 
-## 3. 必须先拍板的三处边界
+## 3. 三处边界（2026-11-26 已拍板）
 
-### B1 · 自我概念漂移 vs L1 Canon 只读（阻塞 G20）
-原文 §11.3 允许 `Δself_concept` 跨局累积 cap 0.08/局、0.20 多局，并称「允许 canon 极缓慢演化」。
-IMMS 铁律 R1 与 `SCHEMA.md` 明确 L1 Canon 只读、人格守恒。**默认处置**：漂移只写入审计字段 `self_concept_delta` 与 `attribute_events`，**不回写 L1**；跨本继承属于元游戏（C1 冻结）。若要真让 canon 演化，需用户显式解除 R1。
+### B1 · 基础人格不回写 ✅
+用户明确：**基础人格依照原文完成，不写回**。原文 §11.3 的 `Δself_concept` 只写入审计字段 `self_concept_delta` 与 `attribute_events`，**不回写 L1 Canon**。L1 保持只读、人格守恒（R1）。「跨本 canon 演化」继续冻结。用户新增长期体验记忆（§4.1）解决跨局连续感，但不触碰 L1。
 
-### B2 · 阴影系数 ζ_f 来源 vs C1 原书抽取冻结（阻塞 G19）
-原文要求 ζ_f 在「原书抽取阶段」产出，例 `尤二姐 ζ_A=0.95`。项目 C1 已冻结原书抽取（只处理用户现成剧本）。
-**默认处置**：ζ_f 作为新可选属性接入 `skeleton` 九槽位与 `persona_l1`；缺证据写 `value=None + missing_evidence`，此时阴影反转降级为纯面具梯度（无反转）。不编造 ζ 值。若用户要按原著行为证据算 ζ，属于解除 C1 的范围变更。
+### B2 · ζ 缺证据即降级 ✅
+按推荐处置：ζ_f 作为新可选属性接入 `skeleton` 九槽位与 `persona_l1`；缺证据写 `value=None + missing_evidence`，此时阴影反转降级为纯面具梯度（无反转）。不编造 ζ 值。若用户要按原著行为证据算 ζ，属于解除 C1 的范围变更。
 
-### B3 · 玩家点火 / 玩家同权即兴（扩展项，不进 P0–P4）
-原文 §17.3 的 Provocation 与「玩家提交即兴意图」需要玩家侧输入 `intent` 而不只是 `utterance`。现有 `runtime._user_act()` 只返回固定脚本发言；G13 交互驱动层尚未做。
-**默认处置**：列入 G21 之后的扩展，不改现有玩家席位契约；若要开放，需同时定义防滥用与余波结算口径。
+### B3 · 玩家不即兴，但玩家与 AI 都可点火 ✅
+用户澄清：**玩家依赖自己的情绪，无需即兴**——玩家席位不进 IPS 管道（无 accumulator、无带通、无余波结算）。但 **玩家和其他 agent 都可以点火**：点火（Provocation）= 发言作为冲击源抬高目标 `accumulator`，走 §4.2 的 `s_k` 通道，不改玩家席位契约，只在目标身上记账。
+- 玩家点火：`runtime._user_act()` 产出的发言经 appraisal 后，可对目标注入正/负 `s_k`（戳创伤、揭短、示好）。
+- AI 点火：`_choose_intent` 增加 `provoke` 意图，选中焦点对象注入冲击；AI 之间互燃。
+- 防滥用：点火同样受目标不应期 `Θ_refr` 与 budget 约束；玩家点火计入 `game_events` 并可复盘。
+- 交付：并入 G18（触发与配额），不单列新任务。
 
 ---
 
-## 4. 分期计划（映射原文 P0–P4 → G17–G21）
+## 4. 用户追加需求（2026-11-26）
+
+### 4.1 越界态：即兴不止于安全，允许突破带通 ★
+用户要求即兴**不能只有安全库**，要有突破安全的状态——疯批、多重人格等。这是对原文 §6「带通拒绝 s>3.2」与 §10「人格守恒」的显式扩展。
+
+**设计原则**：越界态是**受控的、可复盘的、有退出条件的临时状态**，不是随机失控（原文 §1 的「失控行为 = 幻觉」仍然禁止）。核心是把「带通上界」从硬闸门改为**状态相关阈值**：
+
+| 态 | 进入条件 | 带通上界 s_hi | 保真下限 F | 人格锚 | 退出与代价 |
+|---|---|---|---|---|---|
+| 常态 normal | 默认 | 3.2 | 0.72 | 主锚 canon | — |
+| 临界 charged | A ≥ θ 且未越界 | 3.6 | 0.65 | 主锚 + 阴影临时投影 | 令牌未放行者蓄能不清空 |
+| **疯批 frenzy** | A ≥ 1.1 ∧ I ≥ 0.85 ∧ 消耗 `breakout_token` | 4.6 | 0.55（仅动作合法性，不降 IR1/IR2 铁律） | 主锚 + 阴影全开 ζ | 1–2 轮；exposure_risk +0.3、morale −0.2；关系净损失不可回收 |
+| **多重人格 multi-self** | 命中 `trauma` 反转 ∧ ζ_f ≥ 0.8 ∧ 同一 session 已出现 ≥1 次 macro | 4.2 | 0.60 | **临时切换到次锚**（由 L1 阴影面派生，写 `active_anchor_id` 审计） | 1–2 轮后回归主锚；`self_concept_delta` 只审计不回写（B1） |
+
+**不可突破的底线（五条铁律仍硬）**：
+1. IR1 即兴不创造事实：`frenzy/multi-self` 产出一律 `unverified_claim`，禁写 TruthGraph。
+2. IR2 不超知：只能操作 `beliefs ∪ secrets ∪ public`。
+3. **R4 剧本锁 + R5 真相归引擎**：越界态不得跳过 `script_locks`、不得写真相——越界只破「面具」，不破「世界」。
+4. `breakout_token` 全局每局默认 ≤1（导演拨盘 `macro_quota` 可上调），且进入前必须有 ≥1 条 `suppressed_burst` 记录，避免"上来就疯"。
+5. 每次越界必须产生 aftermath（IR5），并在 replay 中单列「越界时刻 Top N」。
+
+**次锚来源（不编造）**：只从已有 L1 `OCEAN/values/trauma/shadow_coef` 派生（例如把 `A` 维取对立极性、`honesty` 降到对立面），写 `anchor_derived_from=[fact_ids]`；无证据维度保持主锚值。**不新增角色、不新增真相**。
+
+### 4.2 跨局长期体验记忆（3 天衰退 + 再强化）★
+用户要求：记录**输赢、对 NPC、对玩家的好恶**，约 3 天记忆期，随后衰退，除非再强化。
+
+**定位**：这是 L0 元属性层 / 跨局状态，**不是 L1**（呼应 B1：基础人格不回写）。它与 IPS 的 `memory` 不同——后者是局内情节记忆，前者跨 session 存活。
+
+| 字段 | 含义 | 来源 |
+|---|---|---|
+| `owner_character_id` | 记忆归属角色 | `persona_l1` |
+| `target_kind` / `target_id` | `npc` / `player`，目标标识 | 玩家用稳定 `player_id`（非席位号），NPC 用角色 id |
+| `sentiment` | 好恶分 `[-1,1]`，含信任倾向 | 局末从 `relations`/`commitments`/`vote` 结算 |
+| `outcome` | 该局对该目标的输赢 `win/loss/draw` | `vote.audit` + retro 评分 |
+| `evidence[]` | 来源 `session_id` + event seq | 事件溯源 |
+| `last_interacted_at` | 最近交互时间 | 时间戳 |
+| `decay_half_life_days` | 半衰期，默认 3 | 导演拨盘可配 |
+
+**衰退公式**：`w(t) = exp(-ln2 · (t − last_interacted_at) / 3d)`；`sentiment` 与 `outcome` 权重同时衰减。低于阈值（如 0.15）时标记 `faded`，不删除（可复盘）。**再强化**：新一局再次交互 → `last_interacted_at` 重置、`sentiment` 按新证据增量更新、`faded` 清除；这就是用户说的「除非再强加」。
+
+**注入**：开局 `init_runtime()` 时按角色读取未 faded 的记录，注入 L3 关系初值（`like/trust` 先验）与 `outcome` 偏置，并在 Prompt 中写明「你上次与这位玩家的关系」。**不写 L1**。需要新表 `long_term_memory`（`db.py`），并补 CLI `memory longterm show/forget`。
+
+---
+
+## 5. 分期计划（原文 P0–P4 → G17–G21，追加 G22–G24）
 
 | 新 ID | 原文阶段 | 内容 | 前置 | 验收口径 |
 |---|---|---|---|---|
@@ -63,18 +109,24 @@ IMMS 铁律 R1 与 `SCHEMA.md` 明确 L1 Canon 只读、人格守恒。**默认�
 | **G18** | P1 会爆发 | 越阈触发 + 三档幅度 + `ImprovBudget`（macro 1/幕、meso 2/人、d≤2）+ IR1/IR2/IR5；`suppressed_burst` 日志 | G17；IR4 部分需 G09，IR3 需 `is_unique_path()` | 同轮多人越阈只放最高者；未放行者 A 不清空且记 `suppressed_burst`；每次 meso/macro 有 ≥1 条 aftermath |
 | **G19** | P2 有方向 | 面具梯度 + 阴影反转 + 带通选择（意外度/保真度/方向对齐）；保真用规则代理，不引入向量库 | G05（L4/mask、G2 护栏）+ B2 定案 | `direction.mask_gradient` 可复盘；`s>3.2` 或 `F<0.72` 的候选被拒并记原因；ζ 缺失时降级不编造 |
 | **G20** | P3 有后果 | 余波三策略接 `lie.reasoning_log` + 记忆烙印 + 级联传染阻尼；漂移只审计不回写 | G18 + lie.py + B1 定案 | `aftermath.strategy∈{regret,rationalize,escalate}`；级联 `d≤2` 且强制降档；`self_concept_delta` 不进 L1 |
-| **G21** | P4 可调可评 | 导演拨盘 5 旋钮入 `session.l0`（improv_gain/chaos/shadow_sensitivity/leak_rate/macro_quota）+ retro 指标看板 + 预设档位 | G17–G20；指标基线依赖 G08/G12 | 拨盘改 θ/quota/T 且可复现；retro 输出有效即兴率 30–60%、余波覆盖 100%、漂移 ≤0.08；玩家点火仍冻结（B3） |
+| **G21** | P4 可调可评 | 导演拨盘 5 旋钮入 `session.l0`（improv_gain/chaos/shadow_sensitivity/leak_rate/macro_quota）+ retro 指标看板 + 预设档位 | G17–G20；指标基线依赖 G08/G12 | 拨盘改 θ/quota/T 且可复现；retro 输出有效即兴率 30–60%、余波覆盖 100%、漂移 ≤0.08 |
+| **G22** ★ | 追加：越界态 | `breakout_token` + 状态机 `normal/charged/frenzy/multi-self` + 状态相关带通阈值 + 次锚派生 + after-effect；越界单列复盘 | G17–G19；IR4 需 G09 | `s>3.2` 在疯批态可放行且记 `state`；次锚有 `anchor_derived_from`；IR1/IR2/R4/R5 不被突破；每局 token 默认 ≤1 |
+| **G23** ★ | 追加：长期体验记忆 | 新表 `long_term_memory` + 3 天半衰期 + 再强化 + `init_runtime` 关系先验注入 + CLI `memory longterm` | 需稳定 `player_id`（`session.l0` 或参会元数据） | 跨局好恶/输赢可查；超过半衰期权重衰减且可 `faded`；再交互复活；**L1 不变**；证据可溯源 |
+| **G24** | 追加：点火 Provocation | `provoke` 意图 + 玩家发言注入 `s_k` + AI 互燃；玩家席位自身不进 IPS | G17 + §2①/G04 冲击通道 | 玩家点火抬高目标 accumulator 且落库；玩家无 accumulator/delivery；受不应期与 budget 约束 |
 
-**依赖链**：`G05 → G19`，`G09 → G18(IR4)`，`G06 → G18(Insertable)`，`G08/G12 → G21`，`G17 → G18 → G20 → G21`。
-G17 可立即开工（无阻塞）；G18 的 IR3/IR4 可先以「降级为 claim-only / 跳过锁检查并标红」过渡，待 G09 完成后转正。
+**依赖链**：`G05 → G19 → G22`，`G09 → G18(IR4)`，`G06 → G18(Insertable)`，`G08/G12 → G21`，`G17 → G18 → G20 → G21`；`G17 → G24`；`G23` 独立（需 `player_id`），可与 G17 并行。
+
+**建议执行顺序**：G17（无阻塞）→ G18（含 G24 点火）→ G19（待 G05）→ G20 → G22 → G21 → G23。G18 的 IR3/IR4 可先以「降级为 claim-only / 跳过锁检查并标红」过渡，待 G09 完成后转正。
 
 ---
 
-## 5. 执行约束（沿用 GAP_AUDIT §5， IPS 特有补充）
+## 6. 执行约束（沿用 GAP_AUDIT §5，IPS 特有补充）
 
-1. **即兴只破面具，不破世界**：`delivery` 与 `improv` 字段不得写入 `truth_graph` / `facts` / `timeline_true`。
+1. **即兴只破面具，不破世界**：`delivery` 与 `improv` 字段不得写入 `truth_graph` / `facts` / `timeline_true`；越界态同样受此约束（§4.1）。
 2. **不新增第二套账本**：余波复用 `lie.reasoning_log` 与 `memory`，令牌/意外度入 `@global` 快照与 `game_events`。
-3. **缺证据不编造**：ζ、mask、动作库未覆盖的维度一律 `None + missing_evidence`，即兴降级为安全库。
+3. **缺证据不编造**：ζ、mask、次锚、动作库未覆盖的维度一律 `None + missing_evidence`，即兴降级为安全库。
 4. **确定性**：每次即兴记录 `seed=hash(session_id, seat_id, round, triggering_event_seq)`；分叉注入须能复现同一动作。
-5. **人格守恒保险丝**：阴影反转仅 1–2 轮窗口；`self_concept_delta` 只审计，跨局累积 cap 0.08 待 B1 定案。
-6. **回归基线**：每期补对应 unittest，96 项既有测试不得回归。
+5. **人格守恒保险丝**：阴影反转与越界态仅 1–2 轮窗口；基础人格 L1 永不回写（B1 已拍板）；`self_concept_delta` 仅审计。
+6. **玩家不即兴，但可点火**：玩家席位不进 IPS 管道；玩家发言只作为冲击源影响目标角色（B3 已拍板）。
+7. **长期记忆不碰 L1**：跨局好恶/输赢只写 `long_term_memory` 与 L3 初值，不改 canon（B1）。
+8. **回归基线**：每期补对应 unittest，96 项既有测试不得回归。
