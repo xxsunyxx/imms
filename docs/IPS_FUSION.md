@@ -59,26 +59,56 @@
 
 ## 4. 用户追加需求（2026-11-26）
 
-### 4.1 越界态：即兴不止于安全，允许突破带通 ★
-用户要求即兴**不能只有安全库**，要有突破安全的状态——疯批、多重人格等。这是对原文 §6「带通拒绝 s>3.2」与 §10「人格守恒」的显式扩展。
+### 4.1 急性越界态：疯批是「状态」，不是「人格」★
+用户要求即兴**不能只有安全库**，要有突破安全的状态。结合用户 2026-11-26 提供的分类学，先明确一个决定：**疯批属于短期状态（state），多重人格/DID 属于长期人格面（facet），二者不是同一机制，必须分开建**。
 
-**设计原则**：越界态是**受控的、可复盘的、有退出条件的临时状态**，不是随机失控（原文 §1 的「失控行为 = 幻觉」仍然禁止）。核心是把「带通上界」从硬闸门改为**状态相关阈值**：
+**设计原则**：急性越界态是**受控、可复盘、有退出条件的临时状态**，不是随机失控（原文 §1「失控行为 = 幻觉」仍禁止）。核心是把「带通上界」从硬闸门改为**状态相关阈值**：
 
-| 态 | 进入条件 | 带通上界 s_hi | 保真下限 F | 人格锚 | 退出与代价 |
-|---|---|---|---|---|---|
-| 常态 normal | 默认 | 3.2 | 0.72 | 主锚 canon | — |
-| 临界 charged | A ≥ θ 且未越界 | 3.6 | 0.65 | 主锚 + 阴影临时投影 | 令牌未放行者蓄能不清空 |
-| **疯批 frenzy** | A ≥ 1.1 ∧ I ≥ 0.85 ∧ 消耗 `breakout_token` | 4.6 | 0.55（仅动作合法性，不降 IR1/IR2 铁律） | 主锚 + 阴影全开 ζ | 1–2 轮；exposure_risk +0.3、morale −0.2；关系净损失不可回收 |
-| **多重人格 multi-self** | 命中 `trauma` 反转 ∧ ζ_f ≥ 0.8 ∧ 同一 session 已出现 ≥1 次 macro | 4.2 | 0.60 | **临时切换到次锚**（由 L1 阴影面派生，写 `active_anchor_id` 审计） | 1–2 轮后回归主锚；`self_concept_delta` 只审计不回写（B1） |
+| 态 | 进入条件 | 带通上界 s_hi | 保真下限 F | 人格锚 | 记忆作用域 | 退出与代价 |
+|---|---|---|---|---|---|---|
+| 常态 normal | 默认 | 3.2 | 0.72 | 主锚 canon | 完整 | — |
+| 临界 charged | A ≥ θ 且未越界 | 3.6 | 0.65 | 主锚 + 阴影临时投影 | 完整 | 令牌未放行者蓄能不清空 |
+| **疯批 frenzy** | A ≥ 1.1 ∧ I ≥ 0.85 ∧ 消耗 `breakout_token` | 4.6 | 0.55（仅动作合法性，不降 IR1/IR2 铁律） | 主锚 + 阴影全开 ζ | **完整、连续**（还是同一个人，记得自己说过什么） | 1–2 轮；exposure_risk +0.3、morale −0.2；关系净损失不可回收 |
 
 **不可突破的底线（五条铁律仍硬）**：
-1. IR1 即兴不创造事实：`frenzy/multi-self` 产出一律 `unverified_claim`，禁写 TruthGraph。
+1. IR1 即兴不创造事实：`frenzy` 产出一律 `unverified_claim`，禁写 TruthGraph。
 2. IR2 不超知：只能操作 `beliefs ∪ secrets ∪ public`。
 3. **R4 剧本锁 + R5 真相归引擎**：越界态不得跳过 `script_locks`、不得写真相——越界只破「面具」，不破「世界」。
 4. `breakout_token` 全局每局默认 ≤1（导演拨盘 `macro_quota` 可上调），且进入前必须有 ≥1 条 `suppressed_burst` 记录，避免"上来就疯"。
 5. 每次越界必须产生 aftermath（IR5），并在 replay 中单列「越界时刻 Top N」。
 
-**次锚来源（不编造）**：只从已有 L1 `OCEAN/values/trauma/shadow_coef` 派生（例如把 `A` 维取对立极性、`honesty` 降到对立面），写 `anchor_derived_from=[fact_ids]`；无证据维度保持主锚值。**不新增角色、不新增真相**。
+### 4.3 长期人格面：黑化 / 病娇 / DID 是「面」，要长期持有 ★
+用户明确指出「长期的人格面切换，和短期的状态是两个情况」。**决定**：另建 `facet`（人格面）机制，与急性 `breakout_state` 分离。人格面**不是回写 L1**（呼应 B1）：它只是把 `active_facet_id` 指向某个从 L1 派生的 profile，原文基础人格只读不变。
+
+**两族根本区别 = 记忆作用域**，不是行为强度：
+
+| 族 | 对应标签（仅语义参照） | 时长 | 记忆作用域 | 锚 | 退出 |
+|---|---|---|---|---|---|
+| **连续面 continuous** | 黑化、病娇（执念/转向） | 多轮 → 整局 → 可跨局 | **完整连续**，同一自我；改的是目标权重、态度基线、语言指纹 | 次锚（L1 派生，长期持有） | 剧情节点 / GM 令牌 / 跨局保留 |
+| **分离面 dissociative** | 多重人格（临床对应 DID） | 多轮 → 可跨局 | **按面隔离**：各面有独立 `beliefs` / `memory`，互不共享；切换产生记忆断层 | 各面独立次锚 | 显式触发回归；回归后按规则处理断片记忆 |
+
+**`persona_facets` 注册表**（从 L1 派生，不编造）：
+
+| 字段 | 含义 |
+|---|---|
+| `facet_id` / `kind` | `continuous` 或 `dissociative` |
+| `derived_from[]` | 来源 L1 维度 / trauma / 事件 id；缺证据写 `None + missing_evidence` |
+| `profile` | 行为维度向量（见 §4.4），**不写诊断名** |
+| `memory_scope` | `shared`（连续面）或 `isolated:<facet_id>`（分离面） |
+| `entry` / `exit` | 触发与退出条件（阈值 + 令牌 + 剧情节点） |
+| `audit[]` | 每次切换写入 `attribute_events`，可复盘 |
+
+**分离面的记忆隔离实现**：`runtime` 的 `beliefs` / `memory` / `lie_ledger` 按 `active_facet_id` 分桶；`_audience_for()` 与 InfoGuard scope 在计算可见性时附加面过滤；切换写 `facet_switch` 事件与 `memory_gap` 标记。**分离面仍不得创造事实**（IR1 照常），只是"这个面不知道那个面的事"。
+
+**与长期记忆（§4.2）衔接**：人格面的当前持有状态写入 `long_term_memory`，跨局保留；"上次那个玩家把她逼到了黑化面"可在下一局作为 `facet_bias` 注入——这解释了跨局连续感，但**不改变 L1**。
+
+### 4.4 诊断名只做语义参照，不进系统数据 ★
+用户提供的分类（DID / BPD / ASPD / NPD / 偏执型 / 黑暗三联征 / 疯批 / 病娇 / 黑化）用于**设计侧的语义对齐**，落到系统时做两步转换：
+
+1. **转成行为维度**，不贴标签。系统字段只用维度名：`goal_fixation`（执念）、`possessiveness`（占有）、`abandonment_fear`（被抛弃恐惧）、`empathy_suppression`（共情抑制）、`manipulation`（操控）、`remorse_deficit`（无悔意）、`hostile_attribution`（敌意归因 η）、`suspicion_baseline`、`affect_instability`（情绪不稳）、`attention_seeking`（求关注）、`identity_continuity`（自我连续）、`memory_continuity`（记忆连续）。
+2. **三不原则**：角色卡 / Prompt / 面向玩家的复盘文本里**不出现临床诊断名或流行标签**（不写"BPD""疯批""病娇"）；诊断名只在 `docs/` 设计文档里作为参照；不做自动诊断、不给玩家贴标签。
+
+> 这条同时消解了用户提到的风险：把临床诊断当人设标签会失真，而"身份/记忆的整合被破坏"（DID）与"持久僵化的情绪化/操控模式"（B类）本来就是不同机制——系统用 `memory_scope: isolated` 与 `continuous` 两族分开表达，不用一个"多重人格"标签混过去。
 
 ### 4.2 跨局长期体验记忆（3 天衰退 + 再强化）★
 用户要求：记录**输赢、对 NPC、对玩家的好恶**，约 3 天记忆期，随后衰退，除非再强化。
@@ -101,7 +131,7 @@
 
 ---
 
-## 5. 分期计划（原文 P0–P4 → G17–G21，追加 G22–G24）
+## 5. 分期计划（原文 P0–P4 → G17–G21，追加 G22–G25）
 
 | 新 ID | 原文阶段 | 内容 | 前置 | 验收口径 |
 |---|---|---|---|---|
@@ -110,13 +140,14 @@
 | **G19** | P2 有方向 | 面具梯度 + 阴影反转 + 带通选择（意外度/保真度/方向对齐）；保真用规则代理，不引入向量库 | G05（L4/mask、G2 护栏）+ B2 定案 | `direction.mask_gradient` 可复盘；`s>3.2` 或 `F<0.72` 的候选被拒并记原因；ζ 缺失时降级不编造 |
 | **G20** | P3 有后果 | 余波三策略接 `lie.reasoning_log` + 记忆烙印 + 级联传染阻尼；漂移只审计不回写 | G18 + lie.py + B1 定案 | `aftermath.strategy∈{regret,rationalize,escalate}`；级联 `d≤2` 且强制降档；`self_concept_delta` 不进 L1 |
 | **G21** | P4 可调可评 | 导演拨盘 5 旋钮入 `session.l0`（improv_gain/chaos/shadow_sensitivity/leak_rate/macro_quota）+ retro 指标看板 + 预设档位 | G17–G20；指标基线依赖 G08/G12 | 拨盘改 θ/quota/T 且可复现；retro 输出有效即兴率 30–60%、余波覆盖 100%、漂移 ≤0.08 |
-| **G22** ★ | 追加：越界态 | `breakout_token` + 状态机 `normal/charged/frenzy/multi-self` + 状态相关带通阈值 + 次锚派生 + after-effect；越界单列复盘 | G17–G19；IR4 需 G09 | `s>3.2` 在疯批态可放行且记 `state`；次锚有 `anchor_derived_from`；IR1/IR2/R4/R5 不被突破；每局 token 默认 ≤1 |
+| **G22** ★ | 追加：**急性越界态（疯批）** | `breakout_token` + 状态机 `normal/charged/frenzy` + 状态相关带通阈值（s_hi 3.2→4.6）+ after-effect；记忆连续；越界单列复盘 | G17–G19；IR4 需 G09 | `s>3.2` 仅在 frenzy 态放行且记 `state`；记忆不隔离；IR1/IR2/R4/R5 不被突破；每局 token 默认 ≤1 |
 | **G23** ★ | 追加：长期体验记忆 | 新表 `long_term_memory` + 3 天半衰期 + 再强化 + `init_runtime` 关系先验注入 + CLI `memory longterm` | 需稳定 `player_id`（`session.l0` 或参会元数据） | 跨局好恶/输赢可查；超过半衰期权重衰减且可 `faded`；再交互复活；**L1 不变**；证据可溯源 |
 | **G24** | 追加：点火 Provocation | `provoke` 意图 + 玩家发言注入 `s_k` + AI 互燃；玩家席位自身不进 IPS | G17 + §2①/G04 冲击通道 | 玩家点火抬高目标 accumulator 且落库；玩家无 accumulator/delivery；受不应期与 budget 约束 |
+| **G25** ★★ | 追加：**长期人格面（facet）** | `persona_facets` 注册表；连续面（黑化/病娇，记忆共享、权重重排）与分离面（DID，`beliefs/memory/lie_ledger` 按面分桶 + 记忆断层）；`active_facet_id` 切换审计；诊断名不进数据 | G17/G19/G23；分离面需 InfoGuard scope 附加面过滤 | 两族 `memory_scope` 不同且可验证；分离面之间不共享信念；切换有 `facet_switch` + `memory_gap`；L1 不变；复盘无诊断名 |
 
-**依赖链**：`G05 → G19 → G22`，`G09 → G18(IR4)`，`G06 → G18(Insertable)`，`G08/G12 → G21`，`G17 → G18 → G20 → G21`；`G17 → G24`；`G23` 独立（需 `player_id`），可与 G17 并行。
+**依赖链**：`G05 → G19 → G22`，`G09 → G18(IR4)`，`G06 → G18(Insertable)`，`G08/G12 → G21`，`G17 → G18 → G20 → G21`；`G17 → G24`；`G23` 独立（需 `player_id`），可与 G17 并行；`G23 + G19 → G25`。
 
-**建议执行顺序**：G17（无阻塞）→ G18（含 G24 点火）→ G19（待 G05）→ G20 → G22 → G21 → G23。G18 的 IR3/IR4 可先以「降级为 claim-only / 跳过锁检查并标红」过渡，待 G09 完成后转正。
+**建议执行顺序**：G17（无阻塞）→ G18（含 G24 点火）→ G19（待 G05）→ G20 → G22 → G21 → G23 → G25。G18 的 IR3/IR4 可先以「降级为 claim-only / 跳过锁检查并标红」过渡，待 G09 完成后转正。**G25 单独排最后**：它需要长期记忆的跨局承载与 G19 的方向引擎，且记忆隔离会动到 InfoGuard 的可见性口径，风险最高。
 
 ---
 
@@ -129,4 +160,6 @@
 5. **人格守恒保险丝**：阴影反转与越界态仅 1–2 轮窗口；基础人格 L1 永不回写（B1 已拍板）；`self_concept_delta` 仅审计。
 6. **玩家不即兴，但可点火**：玩家席位不进 IPS 管道；玩家发言只作为冲击源影响目标角色（B3 已拍板）。
 7. **长期记忆不碰 L1**：跨局好恶/输赢只写 `long_term_memory` 与 L3 初值，不改 canon（B1）。
-8. **回归基线**：每期补对应 unittest，96 项既有测试不得回归。
+8. **状态与面分离**：`breakout_state`（急性、记忆连续、1–2 轮）与 `active_facet`（长期、可跨局、连续面共享记忆 / 分离面隔离记忆）是两套字段，不得混用或互相降级。
+9. **诊断名不入数据**：临床诊断名与流行标签只作 `docs/` 语义参照；角色卡 / Prompt / 玩家复盘只写行为维度名（§4.4 三不原则）。
+10. **回归基线**：每期补对应 unittest，96 项既有测试不得回归。

@@ -166,9 +166,9 @@ uv run python -m unittest discover -s tests
 - `docs/VOTE.md` — 投票规则、多轮复投、AI 策略与票据审计
 - `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
 - `docs/ORIGINAL_SPEC.md` — 用户提供的 IMMS v1.0 原始设定（逐字归档）
-- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（含 IPS G17–G24）
+- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（含 IPS G17–G25）
 - `docs/IPS_ORIGINAL_SPEC.md` — 用户提供的 IPS v1.0 即兴扰动系统原文（逐字归档）
-- `docs/IPS_FUSION.md` — IPS 九段流水线对照、可融入性结论、已定案边界；含越界态（疯批/多重人格）与跨局长期体验记忆设计，分期 G17–G24
+- `docs/IPS_FUSION.md` — IPS 九段流水线对照、可融入性结论与已定案边界；区分急性越界态（疯批）与长期人格面（黑化/病娇/DID，按记忆作用域分族），含跨局体验记忆，分期 G17–G25
 - `docs/EVENTS.md` — GM 事件注入库：七类外部扰动与多变量触发
 
 ## 已踩过的坑
