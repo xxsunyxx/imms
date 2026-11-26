@@ -123,3 +123,11 @@
 - G03：新增 `src/imms/lie.py` + 运行时接线。F20 决定是否说谎，创建有来源依据的谎言（不编造 fact_id），F21 heat 升级；每位 agent 的 `reasoning_log` 记录 created / believed / exposed / challenged / rejustified，被相信与被揭穿都追加修订并改策略；Prompt 与 replay 展示听众反应与最近修订。
 - G04：新增 `src/imms/events.py` 七类外部扰动库（多变量触发 + 强度排序 + 落库审计）；CLI `gm inject`（支持 `--dry-run` / `--event`），`gm branch --inject-event` 可在分叉重放中强制注入；retro 增加 `event_injections` 审计与 Markdown 段。文档见 `docs/EVENTS.md`。
 - 验证：96 个 unittest 全通过（新增 test_pacing / test_beliefs / test_lie / test_events）；CLI `gm inject --dry-run` 在既有会话上选出 blackout 候选。GAP_AUDIT 的 C2/C3/C4 与 G01–G04 标记为已完成。
+
+## 2026-11-26 · IPS v1.0 原文归档与融合审计
+
+- 用户追加「人物即兴扰动系统（IPS v1.0）」全文，逐字归档到 `docs/IPS_ORIGINAL_SPEC.md`（978 行，与 IMMS 原文同样的基线口径）。
+- 新增 `docs/IPS_FUSION.md`：结论为可融入——定位是行为调制层，插在 `_choose_intent` 与生成之间，不新增真相、不新增第二套账本；给出九段流水线 × 现有代码逐段对照，标注复用点（F24/F25 排序、InfoGuard IR2、solver coverage IR3、`lie.reasoning_log` 承接余波）与缺口。
+- 三处待拍板边界：B1 自我概念漂移 vs L1 Canon 只读（默认只审计不回写）；B2 ζ 来源 vs C1 原书抽取冻结（默认缺证据即降级）；B3 玩家点火/同权即兴（默认冻结，不进 P0–P4）。
+- `docs/GAP_AUDIT.md` 增加 G17–G21（IPS 原文 P0–P4 分期）与依赖链，`README.md` 同步索引。
+- 本轮仅文档，未改运行时；96 个 unittest 全通过。
