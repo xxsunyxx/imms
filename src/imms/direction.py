@@ -39,12 +39,18 @@ def shadow_reversal(state, zeta=None):
     explicitly by the operator.  Missing ζ_f disables reversal; it is never
     assumed to be 1.0.
     """
+    from . import director  # local import: director has no dependency on direction
     if zeta is None:
         l1 = state.get("l1") or {}
         l0 = state.get("l0") or {}
         zeta = l1.get("zeta_f", l0.get("zeta_f"))
     if zeta is None:
         return {"enabled": False, "zeta": None, "vector": {}, "reason": "zeta_missing"}
+    # G21: shadow_sensitivity is a global multiplier on zeta_f.  A dial of 0
+    # disables reversal even when the character has an explicit zeta_f.
+    zeta = _num(zeta, 0.0) * director.shadow_multiplier(
+        director.dials_for_state(state)
+    )
     z = formulas.clip(_num(zeta, 0.0), 0.0, 1.0)
     canon = l4.canon_vector(state)
     vector = {

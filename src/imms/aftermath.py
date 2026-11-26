@@ -252,9 +252,11 @@ def cascade_probability(state, source_seat, burst, depth):
     arousal = formulas.clip(_num((state.get("emotion") or {}).get("arousal")), 0.0, 1.0)
     rel = (state.get("relations") or {}).get(source_seat) or {}
     intimacy = formulas.clip(_num(rel.get("intimacy")), 0.0, 1.0)
+    from . import director  # local import avoids a module-load cycle
     p = (
         CASCADE_P0 * (1.0 - C) * arousal * (1.0 + 0.6 * intimacy)
         * (0.5 ** depth) * beta_surprise(burst)
+        * director.cascade_multiplier(director.dials_for_state(state))
     )
     return round(formulas.clip(p, 0.0, 1.0), 4)
 

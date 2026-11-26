@@ -395,7 +395,11 @@ def _aftermath_strategy(state, seed, round_no):
                     + 1.0 * (1 - _num(emo.get("morale"), 0.8))
                     + 0.9 * _num(emo.get("arousal"), 0.0) - 0.8 * loyalty,
     }
-    probs = formulas.softmax(z, 0.5)
+    # G21: chaos widens the strategy draw; legacy sessions (no dials) keep 0.5.
+    from . import director
+    probs = formulas.softmax(z, director.softmax_temperature(
+        director.dials_for_state(state), base=0.5
+    ))
     rng = random_source.rng_for(
         state.get("session_id", ""), seat_id=state.get("seat_id"), round_no=round_no,
         purpose="ips.aftermath", base_seed=seed,
@@ -464,7 +468,9 @@ def resolve_bursts(states, round_no, events, heat, target, budget, public_facts,
                            "kairos": K, "intensity": I, "accumulator": acc["A"]})
         return {"bursts": [], "suppressed": suppressed, "changes": [],
                 "budget": budget.to_dict()}
-    eps = epsilon(I, (state.get("l1") or {}).get("acting_skill", 0.5))
+    from . import director
+    eps = round(epsilon(I, (state.get("l1") or {}).get("acting_skill", 0.5))
+                * director.epsilon_multiplier(director.dials_for_state(state)), 4)
     # IR1/IR2: claim-only intersection with known facts; no TruthGraph write.
     known = set(state.get("beliefs") or {}) | set(public_facts or [])
     claimed = sorted(f for f in known)[:1] if tier != "micro" else []

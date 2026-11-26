@@ -222,3 +222,5 @@ L4 表演层已落 G05：`l4.py` 把他人的 L1 真值 + L2 面具 + L3 状态�
 匿名行为原型库：`config/archetypes.json` 收录九张只含特质与习惯用语的人物卡，已用 `imms import-archetypes` 注入 `imms.db`（`trait-archetypes-001`）。来源角色名与作品名不入库，姓名由固定种子随机生成；`archetypes.validate_cards()` 用摘要黑名单拦截原名回潮。可用 `imms persona --script-id trait-archetypes-001 --char arch_01 show` 查看特质、证据与习惯用语。见 `docs/MEMORY.md`。
 
 余波闭环已落 G20：`aftermath.py` 把后悔/圆场/加码三种策略落到既有的关系、情绪、谎言与记忆账本（不新建第二套）。即兴记忆按 `0.6+0.4I` 烙印、τ×3 并带情绪一致标签；自我概念漂移只审计、L1 范数保险丝 0.08；级联传染限 2 跳、逐跳降档并受全局令牌配额约束。
+
+导演拨盘已落 G21：`imms director --session S --preset shakaiha [--set improv_gain=1.5]` 把 5 个旋钮（戏浓度/混乱度/阴影敏感/泄露率/爆点配额）写入 `session.l0`，运行时按派生值改 θ、策略温度、级联概率、ε 与阴影系数；无拨盘的旧会话保持中性。`retro` 现在输出 10 项 IPS 指标看板（有效即兴率、密度、意外度/保真度均值、OOC 拒绝率、兜底占比、级联深度分布、余波覆盖、人格漂移、可解性保持）。见 `docs/IPS_FUSION.md`。

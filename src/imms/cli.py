@@ -14,6 +14,7 @@ from . import prompt_engine as prompt_mod
 from . import random_source as random_mod
 from . import db as db_mod
 from . import derive as derive_mod
+from . import director as director_mod
 from . import events as events_mod
 from . import gm as gm_mod
 from . import guides as guides_mod
@@ -284,6 +285,12 @@ def build_parser():
     retro_p.add_argument("--session", required=True)
     retro_p.add_argument("--out", help="Optional JSON evaluation path")
     retro_p.add_argument("--markdown", help="Optional Markdown evaluation path")
+
+    dir_p = sub.add_parser("director", help="Set or inspect IPS director dials on a session")
+    dir_p.add_argument("--session", required=True)
+    dir_p.add_argument("--preset", choices=sorted(director_mod.PRESETS), help="Apply a style preset")
+    dir_p.add_argument("--set", action="append", default=[], metavar="KEY=VALUE",
+                       help="Set one dial; repeat for several")
 
     rep_p = sub.add_parser("replay", help="Generate five-section post-game replay")
     rep_p.add_argument("--session", required=True)
@@ -677,6 +684,26 @@ def main(argv=None):
                 state = db_mod.get_game_state(conn, args.session, "vote_state", {}) or {}
                 print_json(state.get("rules") or vote_mod.normalize_rules())
 
+        elif args.cmd == "director":
+            session_doc = db_mod.get_session(conn, args.session)
+            changes = {}
+            for item in args.set:
+                if "=" not in item:
+                    raise ValueError(f"ERR_DIAL_FORMAT: {item}")
+                key, value = item.split("=", 1)
+                if key not in director_mod.RANGES:
+                    raise ValueError(f"ERR_UNKNOWN_DIAL: {key}")
+                changes[key] = value
+            if args.preset or changes:
+                director_mod.set_session_dials(session_doc, changes, preset=args.preset)
+                db_mod.save_session(conn, session_doc)
+            print_json({
+                "session_id": args.session,
+                "style": (session_doc.get("l0") or {}).get("style"),
+                "dials": director_mod.from_session(session_doc) or director_mod.DEFAULT,
+                "presets": sorted(director_mod.PRESETS),
+            })
+
         elif args.cmd == "retro":
             report, markdown = retro_mod.evaluate_and_render(conn, args.session)
             if args.out:
@@ -686,6 +713,7 @@ def main(argv=None):
             print_json({
                 "session_id": args.session,
                 "metrics": report["metrics"],
+                "improvisation": report["retrospective"]["improvisation"],
                 "solvability": report["retrospective"]["solvability"]["verdict"],
             })
 

@@ -266,6 +266,112 @@ def injection_audit(events):
     }
 
 
+def improvisation_metrics(events, runtime_state=None, solvability_verdict=None):
+    """G21 §15.1: ten deterministic metrics from stored improv_burst events.
+
+    No LLM and no new numeric facts: every value is derived from event payloads
+    already written by G17–G20.  ``target`` is the acceptance band from the
+    original spec; ``ok`` is a descriptive check, not a gate on gameplay.
+    """
+    bursts = [e for e in events if e.get("act_type") == "improv_burst"]
+    overt = [e for e in bursts if (e.get("payload") or {}).get("tier") in ("meso", "macro")]
+    total_rounds = max(1, int((runtime_state or {}).get("round") or len(
+        {e.get("round") for e in events}
+    ) or 1))
+    seats = [k for k in (runtime_state or {}) if not str(k).startswith("gm:")]
+    person_rounds = max(1, len(seats) * total_rounds)
+
+    effective = 0
+    surprises, fidelities = [], []
+    rejected = 0
+    candidates = 0
+    fallback = 0
+    depth_counts = {1: 0, 2: 0}
+    aftermath_covered = 0
+    max_drift = 0.0
+    for event in overt:
+        payload = event.get("payload") or {}
+        aft = payload.get("aftermath") or {}
+        choices = aft.get("observers_delta") or {}
+        # Effective = somebody's relationship vector moved > 0.15, or a cascade
+        # reached another seat, or a commitment/claim changed.
+        moved = any(
+            abs(_num((delta or {}).get("trust"))) > 0.15
+            or abs(_num((delta or {}).get("like"))) > 0.15
+            for delta in choices.values()
+        )
+        if moved or aft.get("cascade"):
+            effective += 1
+        if aft.get("strategy"):
+            aftermath_covered += 1
+        direction = payload.get("direction") or {}
+        chosen = direction.get("selected") or {}
+        if chosen:
+            surprises.append(_num(chosen.get("surprise")))
+            fidelities.append(_num(chosen.get("fidelity")))
+        for candidate in direction.get("candidates") or []:
+            candidates += 1
+            if not candidate.get("accepted"):
+                rejected += 1
+        if (payload.get("action_key") or "") == "safe_library":
+            fallback += 1
+        for item in aft.get("cascade") or []:
+            depth = int(item.get("depth") or 0)
+            if depth in depth_counts:
+                depth_counts[depth] += 1
+        max_drift = max(max_drift, abs(_num(
+            (aft.get("self_concept_delta") or {}).get("l1_norm")
+        )))
+
+    def band(value, lo, hi):
+        return lo <= value <= hi
+
+    rate = round(effective / len(overt), 4) if overt else 0.0
+    density = round(len(overt) / person_rounds, 4)
+    surprise_mean = round(sum(surprises) / len(surprises), 4) if surprises else None
+    fidelity_mean = round(sum(fidelities) / len(fidelities), 4) if fidelities else None
+    ooc_rate = round(rejected / candidates, 4) if candidates else 0.0
+    fallback_rate = round(fallback / len(bursts), 4) if bursts else 0.0
+    total_cascade = depth_counts[1] + depth_counts[2]
+    d1_share = round(depth_counts[1] / total_cascade, 4) if total_cascade else 0.0
+    coverage = round(aftermath_covered / len(overt), 4) if overt else 1.0
+    return {
+        "effective_improv_rate": rate,
+        "improv_density": density,
+        "surprise_mean": surprise_mean,
+        "fidelity_mean": fidelity_mean,
+        "ooc_reject_rate": ooc_rate,
+        "fallback_share": fallback_rate,
+        "cascade_depth": {"d1": d1_share, "d2": round(1 - d1_share, 4), "d3plus": 0},
+        "aftermath_coverage": coverage,
+        "persona_drift": round(max_drift, 6),
+        "solvability_preserved": solvability_verdict == "ok",
+        "bursts": len(bursts), "overt": len(overt),
+        "checks": {
+            "effective_improv_rate": band(rate, 0.30, 0.60) if overt else None,
+            "improv_density": band(density, 0.15, 0.35) if overt else None,
+            "surprise_mean": band(surprise_mean, 1.8, 2.3) if surprise_mean is not None else None,
+            "fidelity_mean": (fidelity_mean >= 0.80) if fidelity_mean is not None else None,
+            "ooc_reject_rate": band(ooc_rate, 0.10, 0.25) if candidates else None,
+            "fallback_share": band(fallback_rate, 0.30, 0.45) if bursts else None,
+            "cascade_depth": (total_cascade == 0) or (
+                band(d1_share, 0.60, 0.80) and depth_counts[2] > 0
+            ),
+            "aftermath_coverage": coverage == 1.0,
+            "persona_drift": max_drift <= 0.08,
+            "solvability_preserved": solvability_verdict == "ok",
+        },
+    }
+
+
+def _num(value, default=0.0):
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return default
+    return v if -1e9 < v < 1e9 else default
+
+
 def evaluate(conn, session_id, scripted_motive=None):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -290,6 +396,11 @@ def evaluate(conn, session_id, scripted_motive=None):
             "counterfactual": _branch_counterfactual(conn, session_id, audit["solution"]),
             "vote_audit": vote.audit(conn, session_id),
             "event_injections": injection_audit(events),
+            "improvisation": improvisation_metrics(
+                events,
+                db.get_game_state(conn, session_id, "runtime", {}),
+                audit["verdict"],
+            ),
             "timeline": {
                 "order_conflicts": audit["timeline"]["order_conflicts"],
                 "warnings": audit["timeline"]["warnings"],
@@ -371,6 +482,31 @@ def render_evaluation(report):
             )
     else:
         lines.append("- （无显著数值转折）")
+    ips = retro["improvisation"]
+    lines.extend(["", "**IPS 即兴指标看板**", ""])
+    lines.append(
+        f"- 有效即兴率 {ips['effective_improv_rate']:.0%}（目标 30–60%）"
+        f"｜即兴密度 {ips['improv_density']:.2f}/人轮"
+        f"｜爆发 {ips['overt']} 次（总计 {ips['bursts']}）"
+    )
+    lines.append(
+        f"- 意外度均值 {ips['surprise_mean']}（1.8–2.3）"
+        f"｜保真度均值 {ips['fidelity_mean']}（≥0.80）"
+        f"｜OOC 拒绝率 {ips['ooc_reject_rate']:.0%}（10–25%）"
+        f"｜兜底占比 {ips['fallback_share']:.0%}（30–45%）"
+    )
+    depth = ips["cascade_depth"]
+    lines.append(
+        f"- 级联 d1 {depth['d1']:.0%} / d2 {depth['d2']:.0%} / d≥3 {depth['d3plus']:.0%}"
+        f"｜余波覆盖 {ips['aftermath_coverage']:.0%}"
+        f"｜人格漂移 {ips['persona_drift']}（≤0.08）"
+        f"｜可解性保持 {'是' if ips['solvability_preserved'] else '否'}"
+    )
+    failed = [k for k, v in ips["checks"].items() if v is False]
+    if failed:
+        lines.append("- 未落目标区间：" + "、".join(failed))
+    else:
+        lines.append("- 全部有样本的指标均落在目标区间")
     warnings = retro["timeline"]["order_conflicts"] + retro["timeline"]["warnings"]
     lines.extend(["", "**时间线检查**", ""])
     if warnings:

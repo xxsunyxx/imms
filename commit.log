@@ -228,3 +228,11 @@
 - `ips.resolve_bursts` 尊重级联 `tier_cap`；runtime 在事件落库前结算余波并把 heat 调整跨轮累积到 `ips_heat_adjustment`；`_log_changes` 保留余波 reason。
 - 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G20 完成，README 增加余波段。
 - 验证：新增 `tests/test_aftermath.py` 8 项（三策略后果/τ×3 召回/漂移保险丝/L1 不变/级联降档与配额/人类排除/端到端结算）；全量 165 项 unittest 通过。
+
+## 2026-11-26 · G21 导演拨盘与 retro 即兴指标看板
+
+- 新增 `src/imms/director.py`：5 旋钮范围钳制、5 个风格预设（本格冷推理/社会派/国风宅斗/闹剧本/情感本）；improv_gain→θ 反向缩放，chaos→余波 softmax 温度与级联 p0，shadow_sensitivity→ζ_f 乘子，leak_rate→ε 乘子，macro_quota→令牌池；老会话无拨盘时取中性乘子、行为不变。
+- CLI `imms director --session S [--preset X] [--set KEY=VALUE]`；拨盘存 `session.l0.dials` 并复制到每个席位 l0，L1 不变。
+- `retro.improvisation_metrics` 从 `improv_burst` 事件派生 §15.1 的 10 项指标与验收区间，渲染进回溯评估第 6 节；CLI retro 输出新增 `improvisation`。
+- 文档：`docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md` 标 G21 完成，README 增加拨盘段。
+- 验证：新增 `tests/test_director.py` 6 项（钳制/预设/乘子方向/老会话中性/运行时不改 L1/指标区间）；全量 171 项 unittest 通过；CLI 冒烟 `director --preset --set` 与 `retro` 指标输出通过。

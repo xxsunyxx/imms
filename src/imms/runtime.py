@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, db, events, formulas, infoguard, ips, journal, l4, lie, llm, memory, vote
+from . import aftermath, breakout, db, director, events, formulas, infoguard, ips, journal, l4, lie, llm, memory, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -42,6 +42,13 @@ def init_runtime(conn, session_doc):
     persona = db.get_persona_l1(conn, script_id)
     l1map = {p["character_id"]: {a["key"]: a["value"] for a in p["attributes"] if a["value"] is not None} for p in persona["personas"]}
 
+    # G21: dials live on session.l0 and are copied to every seat so downstream
+    # rules read the same validated values.  Legacy sessions (no dials) keep
+    # neutral multipliers and identical behaviour.
+    dials = director.from_session(session_doc)
+    if dials and not (session_doc.get("l0") or {}).get("dials"):
+        session_doc.setdefault("l0", {})["dials"] = dials
+        db.save_session(conn, session_doc)
     seats = [p for p in session_doc["participants"] if p["kind"] != "gm"]
     others = [p["id"] for p in seats]
     facts = {f.get("id"): f for f in onto.get("facts", []) if f.get("id")}
@@ -64,7 +71,7 @@ def init_runtime(conn, session_doc):
         runtime[p["id"]] = {
             "character_id": cid,
             "l1": attrs,
-            "l0": p.get("l0", {}),
+            "l0": {**(p.get("l0") or {}), "dials": dials} if dials else dict(p.get("l0") or {}),
             "relations": {o: dict(REL_DEFAULT) for o in others if o != p["id"]},
             "emotion": {
                 "valence": 0.0, "arousal": 0.2, "dominance": 0.5,
@@ -83,7 +90,7 @@ def init_runtime(conn, session_doc):
             # the IPS pipe; AI seats carry a leaky accumulator from canon OCEAN.
             "accumulator": (
                 None if session_doc["human_character_id"] in p["id"]
-                else ips.new_accumulator(attrs)
+                else director.apply_to_accumulator(ips.new_accumulator(attrs), dials)
             ),
             "delivery": None,
         }
@@ -442,7 +449,8 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     db.set_game_state(conn, session_id, "total_rounds", max(1, int(rounds)))
     # G22: one breakout token per session by default; G21's macro_quota can
     # raise the cap when it is present in the stored session metadata.
-    quota = (session_doc.get("l0") or {}).get("macro_quota")
+    session_dials = director.from_session(session_doc) or {}
+    quota = session_dials.get("macro_quota") or (session_doc.get("l0") or {}).get("macro_quota")
     breakout_tokens = db.get_game_state(conn, session_id, "breakout_tokens")
     if not isinstance(breakout_tokens, dict):
         breakout_tokens = breakout.tokens(quota)
