@@ -217,6 +217,30 @@ CREATE TABLE IF NOT EXISTS long_term_memory (
 );
 
 CREATE INDEX IF NOT EXISTS idx_longterm_owner ON long_term_memory(owner_character_id, target_id);
+
+-- Speech-style engine: per-round drift ledger (explainable, never fabricated).
+CREATE TABLE IF NOT EXISTS drift_ledger (
+    seq INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL,
+    round INT NOT NULL,
+    seat_id TEXT NOT NULL,
+    character_id TEXT NOT NULL,
+    target TEXT NOT NULL DEFAULT '',
+    emotion REAL NOT NULL DEFAULT 0,
+    relation REAL NOT NULL DEFAULT 0,
+    mask REAL NOT NULL DEFAULT 0,
+    stress REAL NOT NULL DEFAULT 0,
+    noise REAL NOT NULL DEFAULT 0,
+    drift_total REAL NOT NULL DEFAULT 0,
+    anchor_cos REAL,
+    outcome TEXT NOT NULL DEFAULT 'pass',
+    triggers_json TEXT NOT NULL DEFAULT '[]',
+    structure_ratio REAL,
+    forced_baseline INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_drift_ledger_session ON drift_ledger(session_id, round);
 """
 
 
@@ -565,3 +589,41 @@ def private_say(conn, session_id, room_id, actor, utterance, target=None, claime
     }
     seq = append_game_event(conn, session_id, room["round"], actor, "private_say", payload, [f"room:{room_id}"])
     return {"room_id": room_id, "seq": seq, "actor": actor, "claimed_facts": claims}
+
+
+def append_drift_record(conn, session_id, round_no, seat_id, character_id, record,
+                        target="", anchor_cos=None, outcome="pass", triggers=None,
+                        structure_ratio=None, forced_baseline=False):
+    """Append one row to the speech-style drift ledger."""
+    drift = record or {}
+    conn.execute(
+        """INSERT INTO drift_ledger
+           (session_id, round, seat_id, character_id, target, emotion, relation,
+            mask, stress, noise, drift_total, anchor_cos, outcome, triggers_json,
+            structure_ratio, forced_baseline, created_at)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+        (
+            session_id, int(round_no), seat_id, character_id, target or "",
+            float(drift.get("emotion") or 0), float(drift.get("relation") or 0),
+            float(drift.get("mask") or 0), float(drift.get("stress") or 0),
+            float(drift.get("noise") or 0), float(drift.get("total") or 0),
+            anchor_cos, outcome, json.dumps(triggers or [], ensure_ascii=False),
+            structure_ratio, 1 if forced_baseline else 0, now(),
+        ),
+    )
+    conn.commit()
+    return True
+
+
+def get_drift_ledger(conn, session_id, seat_id=None):
+    """Read drift ledger rows for a session, ordered by seq."""
+    if seat_id:
+        rows = conn.execute(
+            "SELECT * FROM drift_ledger WHERE session_id=? AND seat_id=? ORDER BY seq",
+            (session_id, seat_id),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT * FROM drift_ledger WHERE session_id=? ORDER BY seq", (session_id,)
+        ).fetchall()
+    return [dict(row) for row in rows]

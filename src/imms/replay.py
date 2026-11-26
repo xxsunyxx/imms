@@ -6,7 +6,7 @@ import re
 from . import db, formulas, journal
 
 SECTIONS = ["真相时间线", "角色内心独白", "关键转折点 Top 5", "谎言全景图",
-            "反事实推演", "越界时刻 Top N"]
+            "反事实推演", "越界时刻 Top N", "说话风格漂移账"]
 
 
 def _events(conn, session_id):
@@ -210,6 +210,43 @@ def _breakout_section(events, names):
     return lines
 
 
+def _style_section(conn, session_id, names):
+    """Speech-style drift replay: every modulation must be explainable."""
+    lines = ["## 7. 说话风格漂移账", ""]
+    try:
+        rows = db.get_drift_ledger(conn, session_id)
+    except (AttributeError, TypeError):
+        rows = []
+    if not rows:
+        lines.append("- （本局无风格漂移账本记录）")
+        return lines
+    lines.append("> 风格锚点逐字复用；漂移为 5 类受控信号，账本逐轮可回溯。")
+    lines.append("")
+    for row in rows[:12]:
+        triggers = []
+        try:
+            triggers = json.loads(row.get("triggers_json") or "[]")
+        except (TypeError, ValueError):
+            pass
+        lines.append(
+            f"- 第{row['round']}轮 · {names.get(row['seat_id'], row['seat_id'])} → "
+            f"{names.get(row['target'], row['target']) or '在座各位'}："
+            f"总漂移={row['drift_total']:.3f}"
+            f"（情绪 {row['emotion']:.3f} / 关系 {row['relation']:.3f} / "
+            f"面具 {row['mask']:.3f} / 应激 {row['stress']:.3f} / 噪声 {row['noise']:.3f}），"
+            f"余弦代理={row['anchor_cos']}，结构比={row['structure_ratio']}，"
+            f"结果={row['outcome']}"
+            + ("，强制回落基线" if row["forced_baseline"] else "")
+        )
+        if triggers:
+            lines.append(f"    - 触发：{'；'.join(str(t) for t in triggers)}")
+    if len(rows) > 12:
+        lines.append(f"- （其余 {len(rows) - 12} 条见 `imms style ledger`）")
+    lines.append("")
+    lines.append("> 余弦为字符 bigram 规则代理，非语义 embedding；漂移只改措辞，不改事实与谎言账本。")
+    return lines
+
+
 def build_replay(conn, session_id):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -239,4 +276,6 @@ def build_replay(conn, session_id):
     lines += _counterfactual_section(events, runtime, names)
     lines.append("")
     lines += _breakout_section(events, names)
+    lines.append("")
+    lines += _style_section(conn, session_id, names)
     return "\n".join(lines) + "\n"

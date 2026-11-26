@@ -281,6 +281,13 @@ def build_parser():
     igc.add_argument("--text", required=True)
     igc.add_argument("--direction", choices=["in", "out"], default="out")
 
+    style_p = sub.add_parser("style", help="Speech-style engine: inspect drift ledger")
+    style_sp = style_p.add_subparsers(dest="style_action", required=True)
+    style_led = style_sp.add_parser("ledger", help="Show per-round style drift records")
+    style_led.add_argument("--session", required=True)
+    style_led.add_argument("--seat", default=None)
+    style_led.add_argument("--out", default=None)
+
     audit_script_p = sub.add_parser("audit-script", help="Audit script solvability and consistency")
     audit_script_p.add_argument("--script-id", required=True)
     audit_script_p.add_argument("--out", help="Optional JSON report path")
@@ -739,6 +746,25 @@ def main(argv=None):
             else:
                 findings = engine.check_output(args.char, args.text)
                 print_json({"character_id": args.char, "findings": [f.as_dict() for f in findings]})
+
+        elif args.cmd == "style":
+            if args.style_action == "ledger":
+                rows = db_mod.get_drift_ledger(conn, args.session, args.seat)
+                report = {
+                    "session": args.session, "count": len(rows),
+                    "drift_total_mean": round(
+                        sum(float(r["drift_total"]) for r in rows) / max(1, len(rows)), 4),
+                    "structure_ok_count": sum(
+                        1 for r in rows if r["structure_ratio"] is not None
+                        and 0.78 <= r["structure_ratio"] <= 0.82),
+                    "forced_baseline_count": sum(1 for r in rows if r["forced_baseline"]),
+                    "rows": rows,
+                }
+                if args.out:
+                    write_json(args.out, report)
+                    print_json({"written": args.out, "count": len(rows)})
+                else:
+                    print_json(report)
 
         elif args.cmd == "audit-script":
             report = solver_mod.audit_script_by_id(conn, args.script_id)

@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, db, director, events, facets, formulas, infoguard, ips, journal, l4, lie, llm, longterm, memory, vote
+from . import aftermath, breakout, db, director, events, facets, formulas, infoguard, ips, journal, l4, lie, llm, longterm, memory, speech_style, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -258,6 +258,46 @@ def _utter(intent, target_name, clue):
         "provoke": f"{target_name}，你敢说这件事与你无关？",
     }
     return templates.get(intent, "...")
+
+
+def _style_for_seat(conn, session_id, seat_id, state, round_no, seed, target_id,
+                    target_name, allowed_facts, script_id):
+    """Build the speech-style prompt parts and persist one drift ledger row.
+
+    The engine only reads stored state.  Canon evidence quotes are pulled from
+    L1 envelopes (read-only) and used as verbatim anchors, never as invented
+    dialogue.  A failed/missing field stays empty and is reported in `missing`.
+    """
+    recent = db.get_drift_ledger(conn, session_id, seat_id)[-speech_style.POST_GATE_ROUNDS:]
+    ctx = {
+        "session_id": session_id, "seat_id": seat_id, "round_no": round_no,
+        "seed": seed, "target_name": target_name, "allowed_facts": list(allowed_facts),
+        "recent_drift_totals": [r["drift_total"] for r in recent],
+    }
+    quotes = []
+    for row in conn.execute(
+        "SELECT data_json FROM persona_l1 WHERE script_id=? AND character_id=?",
+        (script_id, state["character_id"]),
+    ):
+        try:
+            env = json.loads(row["data_json"])
+        except (TypeError, ValueError):
+            continue
+        for ev in (env.get("evidence") or [])[:2]:
+            if ev.get("quote"):
+                quotes.append(ev["quote"])
+    ctx["evidence_quotes"] = quotes[:5]
+    # Audience signal resolves on the seat id, not the display name.
+    if target_id in state.get("relations", {}):
+        ctx["target_name"] = target_id
+    view = dict(state)
+    onto = db.get_script(conn, script_id)
+    names = {c["id"]: c.get("name") for c in onto.get("characters", [])}
+    view["name"] = names.get(state["character_id"], state["character_id"])
+    view["public_identity"] = state.get("l1", {}).get("public_identity") \
+        or state.get("l1", {}).get("L2.public_identity")
+    parts = speech_style.render(view, ctx)
+    return parts, ctx
 
 
 def _guard(state, act, public_facts):
@@ -595,8 +635,23 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 recalled = memory.recall(
                     state, round_no, cue=f"{intent} {target_name} {clue}", limit=3
                 )
+                allowed = sorted(set(public_facts) | set(state["beliefs"]))
+                # Speech-style engine: read-only persona -> 80/20 style prompt.
+                # Runs for every AI seat/round so the drift ledger is complete
+                # even when the offline template provider is used.
+                style_parts, style_ctx = _style_for_seat(
+                    conn, session_id, seat_id, state, round_no, seed,
+                    target_id, target_name, allowed, session_doc["script_id"],
+                )
+                act["style"] = {
+                    "drift": style_parts["drift_record"],
+                    "structure_ratio": style_parts["structure_ratio"],
+                    "structure_ok": style_parts["structure_ok"],
+                    "missing": style_parts["missing"],
+                    "forced_baseline": style_parts["forced_baseline"],
+                    "triggers": style_parts["triggers"],
+                }
                 if speaker.name != "template":
-                    allowed = sorted(set(public_facts) | set(state["beliefs"]))
                     scope = guard_engine.scope_for(state["character_id"])
                     known_lines = (
                         [f"{fid}: {guard_engine.fact_text(fid)}" for fid in sorted(scope.known_fact_ids)]
@@ -607,9 +662,22 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                         known_fact_lines=known_lines,
                         recalled_lines=memory.recall_lines(recalled, seat_names),
                         perceived=perceived.get(seat_id, {}),
+                        style_parts=style_parts,
                     )
                     try:
                         generated = llm.parse_speech(speaker.generate(prompt), allowed, intent)
+                        # Mid gate: post-generation cosine proxy audit.
+                        audit = speech_style.audit(generated["utterance"],
+                                                   speech_style.extract_fingerprint(
+                                                       dict(state), style_ctx),
+                                                   speech_style.DriftRecord(
+                                                       **{k: style_parts["drift_record"][k]
+                                                          for k in speech_style.SIGNALS}))
+                        act["style"]["audit"] = audit
+                        if audit["regenerate_hint"]:
+                            log.append({"round": round_no, "actor": seat_id,
+                                        "act": "style_regenerate_hint",
+                                        "hint": audit["regenerate_hint"]})
                         act["utterance"] = generated["utterance"]
                         act["emotion_shown"] = generated["emotion_shown"]
                         act["claimed_facts"] = generated["claimed_facts"]
@@ -674,7 +742,29 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 "recalled": _recall_payload(recalled),
                 "lie_id": act.get("lie_id"),
                 "delivery": delivery,
+                "style": act.get("style"),
             }
+            # Speech-style drift ledger: always written for AI seats, with the
+            # final guarded utterance audited against the anchor proxy.
+            if "style" in act:
+                # The R2 cosine gate applies to LLM-generated text only.  The
+                # offline template provider is not a persona attempt, so a
+                # zero-overlap score would be noise, not an audit result.
+                _audit = act["style"].get("audit")
+                db.append_drift_record(
+                    conn, session_id, round_no, seat_id, state["character_id"],
+                    act["style"]["drift"], target=style_ctx.get("target_name") or "",
+                    anchor_cos=(_audit or {}).get("anchor_cos_proxy"),
+                    outcome="pass" if (_audit is None or _audit["pass"]) else "regenerate_hint",
+                    triggers=act["style"]["triggers"],
+                    structure_ratio=act["style"]["structure_ratio"],
+                    forced_baseline=act["style"]["forced_baseline"],
+                )
+                log.append({"round": round_no, "actor": seat_id, "act": "style_drift",
+                            "drift_total": act["style"]["drift"]["total"],
+                            "anchor_cos": (_audit or {}).get("anchor_cos_proxy"),
+                            "cosine_kind": "skipped_template" if _audit is None else "bigram_proxy",
+                            "structure_ok": act["style"]["structure_ok"]})
             seq = db.append_game_event(
                 conn, session_id, round_no, seat_id, act["act_type"], payload, ["public"]
             )

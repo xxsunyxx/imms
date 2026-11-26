@@ -298,3 +298,14 @@
 - 全新库从示例本走完整链 `parse → normalize → assemble → play 10 轮`（seed=42）：196 日志 / 40 发言 / winner=ai:o09_r02 / solved=false / infoguard `output_flagged=10`（全为 soft leak）。
 - 复测结论（重要）：Prompt 身份段四项（人格基线 / 人设描述 / 语言指纹 / 公开身份）全部落地且四人不同；但**离线模板 provider 不读 Prompt**，台词重复与修复前几乎一样：「我认为『现有线索』值得注意」仍 7 次，前后 unique 发言都是 20 条。A+C 修的是「人格信号缺席」，不是「模板台词重复」；后者必须接 `IMMS_LLM_URL` 才能验证。
 - 新暴露问题：人设与行为脱节——严总监人设「温和表态」却 R3/R9 两次 `provoke`，华 P7 反复 `accuse` 同时又被严总监 `ally`；模板按 intent 独立选句，没有关系/人设一致性约束。属 provider 层与 G06 阶段状态机范畴，不在本次 A+C 范围。
+
+## 2026-11-26 · 人格→说话风格 Prompt 引擎（80/20）
+
+- 按用户提供的参考设计实现 `src/imms/speech_style.py`：5 步流水线（指纹提取 / 预算分配 / 变体生成 / 三块组装 / 一致性审计）；5 类漂移权重 emotion .30 / relation .25 / mask .20 / stress .15 / noise .10，各上限 .06/.05/.04/.03/.02，总硬顶 0.20。
+- 适配原则：设计里的 `syntax/rhythm/catchphrase/taboo_words/sample_lines` 在现有 schema 无字段 → 显式留空并在 `missing` 报告，不编造；L1 证据句可作逐字锚点但不冒充台词。PAD 的 dominance 用 1−stress 代理，temperature 用 seed 派生确定性噪声。
+- 三块 prompt `[ANCHOR]/[DRIFT]/[BOUNDARY]` 经 `prompt_engine` 的 `style` 块注入（位于 identity 后、assigned 前）；只改措辞，不碰事实/意图/数值/谎言账本。
+- 三道闸：预闸上下界；中闸仅 LLM 生成文本做余弦审计（模板 provider 标 `skipped_template`，避免零重叠噪声刷 regenerate）；后闸连续 3 轮 >0.18 强制回落基线。
+- 新表 `drift_ledger` 每 AI 席位每轮入账（5 类漂移、结构比、触发原因、是否强制回落）；CLI `imms style ledger`；replay 新增第 7 节「说话风格漂移账」。
+- 重要限制（据实记录）：无 embedder/numpy，余弦是字符 bigram 代理而非语义相似度；剧本无逐字台词样本 → O09 结构比实测 0.50–0.54，未达 0.78–0.82，`structure_ok=false`，不自造台词补数。
+- 验证：`tests/test_speech_style.py` 17 项（预算封顶、确定性、缺字段不编造、三块结构、三道闸、账本）；全量 203 unittest 通过；O09 10 轮 30 条账本、均值 0.131、四人锚点各异；spy provider 强制 LLM 路径确认三块完整渲染（3883 字符）。
+- 文档：`docs/SPEECH_STYLE.md`（新建）、README 核心模块段。

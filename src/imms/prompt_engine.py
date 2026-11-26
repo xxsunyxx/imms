@@ -16,7 +16,7 @@ import re
 SPEECH_BUDGET = 120
 
 BLOCK_ORDER = [
-    "identity", "assigned", "facet", "emotion", "relations", "perceived",
+    "identity", "style", "assigned", "facet", "emotion", "relations", "perceived",
     "beliefs", "lies", "memory", "intent", "guides", "output",
 ]
 
@@ -44,6 +44,22 @@ def block_identity(view, ctx):
         f"人格基线：{_persona_line(view)}",
         f"人设描述：{_fmt(l1.get('personality'))}",
         f"语言指纹：{_fmt(lexicon)}",
+    ]
+
+
+def block_style(view, ctx):
+    """Speech-style engine: [ANCHOR]/[DRIFT]/[BOUNDARY] three-block prompt.
+
+    Rendered by speech_style.render and passed in via ctx["style_parts"].  The
+    block is data-only: it never touches facts, intents or numeric state.
+    """
+    parts = ctx.get("style_parts")
+    if not parts:
+        return []
+    return [
+        parts["anchor"], "", parts["drift"], "", parts["boundary"],
+        "（风格结构比 %.2f；未达目标区间时据实标注，不得自造台词样本补数）"
+        % float(parts.get("structure_ratio") or 0),
     ]
 
 
@@ -210,6 +226,7 @@ def block_output(view, ctx):
 
 BLOCKS = {
     "identity": block_identity,
+    "style": block_style,
     "assigned": block_assigned,
     "facet": block_facet,
     "emotion": block_emotion,
@@ -255,7 +272,7 @@ def build(view, ctx=None, blocks=None):
 
 def build_from_state(state, intent, target_name, clue, round_no, allowed_facts,
                      seat_names=None, known_fact_lines=None, recalled_lines=None,
-                     guides=None, perceived=None):
+                     guides=None, perceived=None, style_parts=None):
     """Bridge: build a prompt directly from a runtime state dict."""
     view = dict(state)
     view.setdefault("l1", state.get("l1", {}))
@@ -271,6 +288,6 @@ def build_from_state(state, intent, target_name, clue, round_no, allowed_facts,
         "round_no": round_no, "allowed_facts": allowed_facts,
         "seat_names": seat_names, "known_fact_lines": known_fact_lines,
         "recalled_lines": recalled_lines, "guides": guides,
-        "perceived": perceived,
+        "perceived": perceived, "style_parts": style_parts,
     }
     return build(view, ctx)
