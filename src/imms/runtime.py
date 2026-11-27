@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, db, director, events, facets, formulas, infoguard, ips, journal, l4, lie, llm, longterm, memory, performance_guide, speech_style, style_compiler, vote
+from . import aftermath, breakout, db, director, events, facets, formulas, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, speech_style, style_compiler, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -287,9 +287,10 @@ def _style_for_seat(conn, session_id, seat_id, state, round_no, seed, target_id,
             if ev.get("quote"):
                 quotes.append(ev["quote"])
     ctx["evidence_quotes"] = quotes[:5]
-    # Audience signal resolves on the seat id, not the display name.
+    # Relation vectors are keyed by seat id; the prompt must still show the
+    # script's character name, never an internal ai:/human: identifier.
     if target_id in state.get("relations", {}):
-        ctx["target_name"] = target_id
+        ctx["target_id"] = target_id
     view = dict(state)
     onto = db.get_script(conn, script_id)
     names = {c["id"]: c.get("name") for c in onto.get("characters", [])}
@@ -362,7 +363,7 @@ def _user_act(scripted, scripted_index, target_name):
     return {"act_type": "assert", "utterance": item, "claimed_facts": [], "target": None, "inner_intent": "用户自行决定"}
 
 
-def _audience_for(row, all_seats):
+def _audience_for(conn, row, all_seats):
     """Who actually received an event, derived from its visibility tokens."""
     try:
         vis = json.loads(row.get("visibility_json") or "[]")
@@ -377,7 +378,7 @@ def _audience_for(row, all_seats):
             continue
         if token.startswith("room:"):
             try:
-                room = db.get_private_room(token[len("room:"):])
+                room = db.get_private_room(conn, token[len("room:"):])
                 audience.update(room.get("participants") or [])
             except ValueError:
                 continue
@@ -484,8 +485,162 @@ def _vote(conn, session_id, runtime, session_doc, scripted, seed=42):
     return result
 
 
+def _self_intro_prompt(state, script_title, seat_names, names):
+    """First-person self-intro prompt for one seat (public information only)."""
+    l1 = state.get("l1", {}) or {}
+    cid = state.get("character_id")
+    public = l1.get("public_identity") or l1.get("L2.public_identity") or names.get(cid, cid)
+    persona = l1.get("personality") or l1.get("L1.personality") or "（未配置）"
+    return "\n".join([
+        "# 读本与自我介绍",
+        f"剧本：{script_title or '本局'}",
+        f"你的公开身份：{public}",
+        f"你的人设：{persona}",
+        "# 玩家规则",
+        *[f"- {r}" for r in __import__("imms.prompt_engine", fromlist=["PLAYER_RULES"]).PLAYER_RULES],
+        "# 任务",
+        "用第一人称做一段自我介绍：姓名、职业、案发时段在做什么、与在座者的明面关系。",
+        "只说公开信息，绝不提私有秘密、任务、真凶或作案细节；不照本念。",
+        '严格输出 JSON：{"utterance":"...","emotion_shown":"..."}',
+    ])
+
+
+def _run_pre_discussion(conn, session_id, scripted, speaker, gm_agent, gm_voice,
+                        seed, seat_names, names):
+    """Drive intro -> self-intro -> investigate before the discussion rounds."""
+    session_doc = db.get_session(conn, session_id)
+    onto = db.get_script(conn, session_doc["script_id"])
+    runtime = db.get_game_state(conn, session_id, "runtime") or {}
+    seats = list(runtime.keys())
+    log = []
+    scripted = scripted or {}
+
+    phases.set_phase(conn, session_id, "intro", round_no=0)
+    voice = gm_narrator.pick_voice_fp(conn, session_id, runtime, gm_voice, 0, seed=seed)
+    report = phases.narrate_phase(conn, session_id, "intro", gm_agent, 0, seat_names, voice)
+    db.append_game_event(conn, session_id, 0, "gm:host", "gm_phase_narration", report, ["public"])
+    log.append({"round": 0, "actor": "gm:host", "act": "phase:intro",
+                "phase": "intro", "status": report["status"]})
+
+    phases.set_phase(conn, session_id, "self_intro", round_no=0)
+    intros = scripted.get("self_intros") or {}
+    for seat_id in seats:
+        state = runtime.get(seat_id, {})
+        cid = state.get("character_id")
+        label = seat_names.get(seat_id, names.get(cid, cid))
+        custom = intros.get(seat_id) or intros.get(label)
+        if custom:
+            utterance = str(custom)
+        else:
+            utterance = f"我是{label}。案发那会儿我在场，先后顺序大家可以对。"
+            if speaker.name != "template":
+                prompt = _self_intro_prompt(state, onto.get("title"), seat_names, names)
+                try:
+                    if hasattr(speaker, "bind"):
+                        speaker.bind(0, seat_id, "self_intro")
+                    parsed = llm.parse_speech(speaker.generate(prompt), [], "self_intro")
+                    utterance = parsed["utterance"]
+                except llm.LLMError:
+                    pass
+        payload = {"utterance": utterance, "emotion_shown": "平静",
+                   "target": None, "claimed_facts": [], "self_intro": True}
+        seq = db.append_game_event(conn, session_id, 0, seat_id, "self_intro", payload, ["public"])
+        log.append({"round": 0, "actor": seat_id, "act": "self_intro", "seq": seq})
+    report = phases.narrate_phase(conn, session_id, "self_intro", gm_agent, 0, seat_names, voice)
+    db.append_game_event(conn, session_id, 0, "gm:host", "gm_phase_narration", report, ["public"])
+    log.append({"round": 0, "actor": "gm:host", "act": "phase:self_intro",
+                "phase": "self_intro", "status": report["status"]})
+
+    phases.set_phase(conn, session_id, "investigate", round_no=0)
+    investigation.init_investigation(conn, session_id, onto, seats, seed=seed)
+    searches = scripted.get("searches") or []
+    if not searches:
+        targets = investigation.available_targets(onto)
+        searches = [{"seat": s, "target": targets[i % len(targets)] if targets else "现场",
+                     "make_public": True} for i, s in enumerate(seats)]
+    for item in searches:
+        seat_id = item.get("seat") or item.get("actor")
+        if seat_id not in runtime:
+            continue
+        target = item.get("target")
+        if not target:
+            continue
+        try:
+            found = investigation.search(
+                conn, session_id, seat_id, target, onto,
+                make_public=bool(item.get("make_public", True)), seed=seed,
+            )
+            log.append({"round": 0, "actor": seat_id, "act": "clue_found",
+                        "card_id": found["card_id"], "visibility": found["visibility"]})
+        except ValueError as exc:
+            log.append({"round": 0, "actor": seat_id, "act": "clue_found",
+                        "status": "rejected", "reason": str(exc)})
+    rooms = scripted.get("private_rooms") or []
+    for room in rooms:
+        participants = [s for s in room.get("seats", []) if s in runtime]
+        if len(participants) < 2:
+            continue
+        opened = investigation.open_private_chat(conn, session_doc, 0, participants)
+        for msg in room.get("utterances") or []:
+            actor = msg.get("seat") or msg.get("actor")
+            if actor not in participants:
+                continue
+            try:
+                investigation.private_chat(
+                    conn, session_doc, opened["room_id"], actor,
+                    msg.get("target"), msg.get("utterance", ""),
+                    claimed_facts=msg.get("claimed_facts"),
+                )
+            except ValueError:
+                continue
+        investigation_done = db.get_private_room(conn, opened["room_id"])
+        db.close_private_room(conn, session_id, opened["room_id"])
+        log.append({"round": 0, "actor": "gm:host", "act": "private_room",
+                    "room_id": opened["room_id"], "participants": participants})
+    report = phases.narrate_phase(conn, session_id, "investigate", gm_agent, 0, seat_names, voice)
+    db.append_game_event(conn, session_id, 0, "gm:host", "gm_phase_narration", report, ["public"])
+    log.append({"round": 0, "actor": "gm:host", "act": "phase:investigate",
+                "phase": "investigate", "status": report["status"]})
+    return log
+
+
+def run_phased_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=None,
+                       start_round=None, gm_policy=None, speaker=None, gm_agent=None,
+                       gm_voice=None):
+    """Full 剧本杀 flow: intro -> self-intro -> investigate -> discuss -> vote -> reveal.
+
+    The pre-discussion phases are new; discussion/voting reuse the unchanged
+    :func:`run_session` loop so all formula, IPS, InfoGuard and replay contracts
+    stay intact.  Legacy callers of ``run_session`` see no behaviour change.
+    """
+    session_doc = db.get_session(conn, session_id)
+    init_runtime(conn, session_doc)
+    onto = db.get_script(conn, session_doc["script_id"])
+    runtime = db.get_game_state(conn, session_id, "runtime") or {}
+    names = {v: k for k, v in _name_map(onto).items()}
+    seat_names = {p["id"]: p["seat_label"] for p in session_doc["participants"]}
+    speaker = speaker if speaker is not None else llm.build_provider(llm_name)
+    gm_agent = gm_agent if gm_agent is not None else speaker
+    pre_log = _run_pre_discussion(
+        conn, session_id, scripted, speaker, gm_agent, gm_voice, seed, seat_names, names,
+    )
+    phases.set_phase(conn, session_id, "discuss", round_no=1)
+    out = run_session(
+        conn, session_id, rounds=rounds, scripted=scripted, seed=seed,
+        llm_name=None, start_round=start_round if start_round is not None else 1,
+        gm_policy=gm_policy, speaker=speaker, gm_agent=gm_agent, gm_voice=gm_voice,
+    )
+    out["log"] = pre_log + out["log"]
+    out["phases"] = phases.phase_log(conn, session_id)
+    phases.set_phase(conn, session_id, "vote", status="resolved", round_no=rounds)
+    phases.set_phase(conn, session_id, "reveal", status="resolved", round_no=rounds)
+    out["phases"] = phases.phase_log(conn, session_id)
+    return out
+
+
 def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=None,
-                start_round=None, gm_policy=None, speaker=None):
+                start_round=None, gm_policy=None, speaker=None, gm_agent=None,
+                gm_voice=None):
     session_doc = db.get_session(conn, session_id)
     init_runtime(conn, session_doc)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -505,9 +660,16 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     public_facts = set(db.get_game_state(conn, session_id, "revealed_clues", []))
     names = {v: k for k, v in _name_map(onto).items()}
     seat_names = {p["id"]: p["seat_label"] for p in session_doc["participants"]}
+    # The host reads the whole script: each seat receives its own private
+    # goals / hidden conflicts.  These are behavioural directions, never new
+    # facts and never part of the public narration.
+    directions = gm_direction.private_directions(onto)
     # Optional provider injection: lets an external driver supply an agent-backed
     # provider without registering a new llm_name. Default path is unchanged.
     speaker = speaker if speaker is not None else llm.build_provider(llm_name)
+    # GM narrator is optional and independent of the seat provider.  When no
+    # agent is supplied, narration falls back to deterministic scene sketches.
+    gm_agent = gm_agent if gm_agent is not None else speaker
     judge = guard_engine.make_judge(speaker) if speaker.name != "template" else None
     llm_stats = {"provider": speaker.name, "generated": 0, "fallback": 0}
     guard_stats = {"input_wrapped": 0, "output_rewritten": 0, "output_flagged": 0, "judge_calls": 0}
@@ -593,7 +755,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 })
             for ev in parsed:
                 observation = memory.observe(
-                    state, ev, round_no, audience=_audience_for(ev, all_seats)
+                    state, ev, round_no, audience=_audience_for(conn, ev, all_seats)
                 )
                 if not observation:
                     continue
@@ -616,7 +778,10 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 intent = _choose_intent(state, rng)
                 target_id = max(state["suspicion"], key=state["suspicion"].get) if state["suspicion"] else None
                 target_name = seat_names.get(target_id, target_id) or "在座各位"
-                clue = next(iter(public_facts), "现有线索")
+                # Display text only: strip engine internals such as
+                # ``|logLR:x=1.5`` before a clue reaches the seat prompt.  The
+                # raw fact ids remain in `allowed` for claim validation.
+                clue = infoguard.display_text(next(iter(public_facts), "现有线索"))
                 act = {
                     "act_type": intent,
                     "intent": intent,
@@ -643,7 +808,9 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 # even when the offline template provider is used.
                 style_parts, style_ctx = _style_for_seat(
                     conn, session_id, seat_id, state, round_no, seed,
-                    target_id, target_name, allowed, session_doc["script_id"],
+                    target_id, target_name,
+                    [infoguard.display_text(f) for f in allowed],
+                    session_doc["script_id"],
                 )
                 act["style"] = {
                     "drift": style_parts["drift_record"],
@@ -687,15 +854,29 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                     # suspicion and emotion to wording only.  Never touches
                     # facts, targets or numbers; sanitised twice (here + block).
                     guides = performance_guide.build(state, intent, target_id)
+                    # GM input side: stage/atmosphere guides from the host's
+                    # read of the room.  Wording only, never facts or numbers.
+                    if gm_agent is not None:
+                        guides += gm_narrator.build_stage_guides(
+                            conn, session_id, round_no, rounds)
                     act["performance_guides"] = guides
                     prompt = llm.build_prompt(
-                        state, intent, target_name, clue, round_no, allowed, seat_names,
+                        state, intent, target_name, clue, round_no,
+                        [infoguard.display_text(f) for f in allowed], seat_names,
                         known_fact_lines=known_lines,
                         recalled_lines=memory.recall_lines(recalled, seat_names),
                         perceived=perceived.get(seat_id, {}),
                         style_parts=style_parts,
                         guides=guides,
                     )
+                    dir_lines = directions.get(state["character_id"]) or []
+                    prompt = gm_direction.inject_seat(prompt, dir_lines)
+                    act["gm_direction"] = list(dir_lines)
+                    if dir_lines and round_no == 1:
+                        db.append_game_event(
+                            conn, session_id, round_no, seat_id, "gm_direction",
+                            {"lines": dir_lines}, ["gm"],
+                        )
                     try:
                         # Let an injected provider know which seat/round this
                         # speech prompt belongs to (harmless no-op otherwise).
@@ -929,6 +1110,23 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 _log_changes(conn, session_id, round_no, change_seat, change_char, [change])
         log.append({"round": round_no, "actor": "gm:host", "act": "pacing", "result": gm_result})
 
+        # GM narrator (output side): one scene per round.  A detected stampede
+        # is wording guidance inside this narration, never a second host
+        # utterance or a separate redirect event.
+        if gm_agent is not None and getattr(gm_agent, "name", "") != "template":
+            voice_fp = gm_narrator.pick_voice_fp(
+                conn, session_id, runtime, gm_voice, round_no, seed=seed)
+            drift = gm_narrator.detect_drift(conn, session_id, round_no)
+            report = gm_narrator.narrate(
+                conn, session_id, round_no, gm_agent, rounds, seat_names,
+                voice_fp=voice_fp, drift=drift)
+            db.append_game_event(
+                conn, session_id, round_no, "gm:host", "gm_narration", report, ["public"],
+            )
+            log.append({"round": round_no, "actor": "gm:host", "act": "gm_narration",
+                        "status": report["status"], "narration": report.get("narration"),
+                        "drift": sorted(drift)})
+
         for snap_seat, snap_state in runtime.items():
             db.save_snapshot(conn, session_id, round_no, snap_seat, snap_state)
         db.save_snapshot(conn, session_id, round_no, "@global", {
@@ -944,6 +1142,28 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     db.set_game_state(conn, session_id, "infoguard_stats", guard_stats)
     result = _vote(conn, session_id, runtime, session_doc, scripted, seed)
     db.set_game_state(conn, session_id, "result", result)
+    # GM narrator: host the vote reveal.  The winner/solved flags come from the
+    # deterministic tally; the agent only supplies atmosphere and wording.
+    if gm_agent is not None and getattr(gm_agent, "name", "") != "template":
+        phase = "tie" if result.get("tie") else "reveal"
+        voice_fp = gm_narrator.pick_voice_fp(
+            conn, session_id, runtime, gm_voice, rounds, seed=seed)
+        vote_prompt = gm_narrator.build_vote_prompt(
+            conn, session_id, phase, result, seat_names, voice_fp=voice_fp)
+        try:
+            vote_report = gm_narrator.parse_narration(
+                gm_agent.generate(vote_prompt), vote_prompt,
+                gm_narrator.allowed_quotes(conn, session_id, rounds),
+                forbidden_terms=gm_narrator.hidden_truth_terms(conn, session_id),
+                required_anchors=gm_narrator.case_anchors(conn, session_id))
+        except Exception as exc:
+            vote_report = {"status": "fallback", "reason": f"ERR_GM_VOTE: {exc}"}
+        vote_report["phase"] = phase
+        db.append_game_event(
+            conn, session_id, rounds, "gm:host", "gm_vote_narration", vote_report, ["public"],
+        )
+        log.append({"round": rounds, "actor": "gm:host", "act": "gm_vote_narration",
+                    "status": vote_report["status"], "narration": vote_report.get("narration")})
     # G23: settle cross-session sentiment/outcome after the vote is final.
     settled = longterm.settle_session(
         conn, session_id, player_id=(session_doc.get("l0") or {}).get("player_id")

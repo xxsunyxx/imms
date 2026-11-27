@@ -13,6 +13,7 @@ world state; it only reports findings and supplies rewritten text to the caller.
 """
 
 import json
+import re
 from dataclasses import dataclass
 
 MIN_SHINGLE = 6
@@ -79,6 +80,23 @@ class AdjudicatedLeak:
         if self.verdict == "downgraded":
             return "soft"
         return self.finding.severity
+
+
+_ID_PREFIX_RE = re.compile(r"^(?:c|f|t|p|clue|ev)_[A-Za-z0-9_-]+\s*")
+
+
+def display_text(value, limit=80):
+    """Human-readable clue/fact wording for prompts and transcripts.
+
+    Stored clue strings look like ``c_report 急救初步判断记录|logLR:han_ziang=1.5``.
+    The id prefix and the ``|logLR:...`` weight are engine internals; letting
+    them reach a seat prompt invites the agent to speak numbers it should not
+    know.  This strips both while leaving the plain fact text intact.  It is a
+    display-only helper -- it never changes stored state or the claim whitelist.
+    """
+    text = str(value or "").strip()
+    text = _ID_PREFIX_RE.sub("", text)
+    return text.split("|")[0].strip()[:limit]
 
 
 def fact_map(onto):

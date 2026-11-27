@@ -163,6 +163,14 @@ class TestRuntimeIntegration(unittest.TestCase):
             payload = json.loads(clue["payload_json"])
             self.assertIn("facts_now_public", payload)
 
+    def test_display_text_strips_engine_internals(self):
+        raw = "c_report 急救初步判断记录|logLR:han_ziang=1.5"
+        shown = infoguard.display_text(raw)
+        self.assertEqual(shown, "急救初步判断记录")
+        self.assertNotIn("logLR", shown)
+        self.assertNotIn("1.5", shown)
+        self.assertNotIn("c_report", shown)
+
     def _facts_text(self, fact_id):
         onto = db.get_script(self.conn, self.session["script_id"])
         return infoguard.fact_map(onto)[fact_id]["content"]

@@ -3,10 +3,172 @@
 import json
 import re
 
-from . import db, formulas, journal
+from . import db, formulas, gm_debrief, journal
 
 SECTIONS = ["真相时间线", "角色内心独白", "关键转折点 Top 5", "谎言全景图",
             "反事实推演", "越界时刻 Top N", "说话风格漂移账"]
+
+INTENT_LABELS = {
+    "assert": "主张", "ask": "追问", "accuse": "质疑", "defend": "辩解",
+    "ally": "声援", "deflect": "回避", "confess": "承认", "provoke": "挑衅",
+}
+_GM_ACTS = {
+    "gm_narration": "场景叙述", "gm_redirect": "跑偏拉回",
+    "gm_vote_narration": "投票揭晓", "gm_phase_narration": "阶段串场",
+}
+_ID_PREFIX_RE = re.compile(r"^(?:c|f|t|p|clue|ev)_[A-Za-z0-9_-]+\s*")
+
+
+def _clean_reveal(text):
+    """Human-readable clue wording: strip fact ids and logLR parameters."""
+    value = str(text or "").strip()
+    value = _ID_PREFIX_RE.sub("", value)
+    return value.split("|")[0].strip()[:80]
+
+
+def _transcript_section(conn, session_id, session_doc, names, result):
+    """Chronological table talk: host line, every seat's line, then the vote.
+
+    This is the readable replay.  The numbered sections that follow are the
+    audit ledger (truth, inner state, deltas) -- they are not a substitute
+    for knowing who actually said what, in what order.
+    """
+    lines = ["## 对局实录（按轮）", ""]
+    rows = conn.execute(
+        "SELECT round, actor, act_type, payload_json FROM game_events "
+        "WHERE session_id=? ORDER BY seq", (session_id,),
+    ).fetchall()
+    rounds = sorted({int(r["round"]) for r in rows if int(r["round"] or 0) >= 1})
+    if not rounds:
+        return lines + ["（本局没有产生任何公开事件）", ""]
+
+    kinds = {p["id"]: p.get("kind", "") for p in session_doc["participants"]}
+    order = {p["id"]: i for i, p in enumerate(session_doc["participants"])
+             if p.get("script_character_id")}
+    by_round, gm_lines = {}, {}
+    ballots, vote_scenes = [], []
+    for row in rows:
+        payload = json.loads(row["payload_json"] or "{}")
+        rnd = int(row["round"] or 0)
+        act = row["act_type"]
+        if act == "vote_cast":
+            ballots.append(payload)
+            continue
+        if act == "gm_vote_narration":
+            vote_scenes.append(payload)
+            continue
+        if act in _GM_ACTS:
+            gm_lines.setdefault(rnd, []).append((act, payload))
+            continue
+        if act in ("clue_release", "clue_found"):
+            if payload.get("visibility") == "hidden":
+                continue  # finder-only clue never enters the public transcript
+            label = _clean_reveal(payload.get("clue") or payload.get("label")
+                                  or payload.get("title"))
+            if label:
+                by_round.setdefault(rnd, {}).setdefault("_clues", []).append(label)
+            continue
+        utterance = str(payload.get("utterance") or "").strip()
+        if not utterance or row["actor"] not in names:
+            continue
+        by_round.setdefault(rnd, {}).setdefault(row["actor"], []).append(
+            (row["act_type"], payload))
+
+    if gm_lines.get(0) or by_round.get(0):
+        lines.append("### 开场 · 读本 · 搜证")
+        for act, payload in gm_lines.get(0, []):
+            text = str(payload.get("narration") or "").strip()
+            if text:
+                lines.append(f"**GM · {_GM_ACTS.get(act, act)}**：{text}")
+                lines.append("")
+        for actor in sorted((by_round.get(0) or {}).keys()):
+            if actor == "_clues":
+                continue
+            who = names.get(actor, actor)
+            for act_type, payload in by_round[0][actor]:
+                tag = "人类玩家" if str(kinds.get(actor, "")).startswith("human") \
+                    else INTENT_LABELS.get(act_type, "发言")
+                if payload.get("utterance"):
+                    lines.append(f"**{who}（{tag}）**：{payload['utterance']}")
+                    lines.append("")
+        for clue in by_round.get(0, {}).get("_clues", []):
+            lines.append(f"**公开线索**：{clue}")
+            lines.append("")
+
+    for rnd in rounds:
+        lines.append(f"### 第 {rnd} 轮")
+        round_gm = gm_lines.get(rnd, [])
+        narrations = [p for a, p in round_gm if a == "gm_narration"]
+        redirects = [p for a, p in round_gm if a == "gm_redirect"]
+        if narrations:
+            main = narrations[0]
+            label = "场景叙述" + ("（含拉回）" if main.get("drift") or redirects else "")
+            text = str(main.get("narration") or "（回退，未生成叙述）").strip()
+            # Old sessions logged the redirect as its own event.  A pull-back
+            # is part of the host's narration, so fold it back into that line.
+            for extra in redirects:
+                wording = str(extra.get("narration") or "").strip()
+                if wording:
+                    text += "\n\n" + wording
+            lines.append(f"**GM · {label}**：{text}")
+            lines.append("")
+        for act, payload in round_gm:
+            if act in ("gm_narration", "gm_redirect"):
+                continue
+            label = _GM_ACTS.get(act, act)
+            text = str(payload.get("narration") or "（回退，未生成叙述）").strip()
+            lines.append(f"**GM · {label}**：{text}")
+            lines.append("")
+        for clue in by_round.get(rnd, {}).get("_clues", []):
+            lines.append(f"**公开线索**：{clue}")
+            lines.append("")
+        seats = [a for a in by_round.get(rnd, {}) if a != "_clues"]
+        seats.sort(key=lambda a: order.get(a, len(order)))
+        for actor in seats:
+            who = names.get(actor, actor)
+            for act_type, payload in by_round[rnd][actor]:
+                intent = payload.get("intent") or payload.get("act_type") or act_type
+                if str(kinds.get(actor, "")).startswith("human"):
+                    tag = "人类玩家"
+                else:
+                    tag = INTENT_LABELS.get(intent, intent or "发言")
+                target = names.get(payload.get("target"))
+                suffix = f"（{tag}" + (f"；对 {target}" if target else "") + "）"
+                lines.append(f"**{who}{suffix}**：{payload['utterance']}")
+                lines.append("")
+        if rnd not in gm_lines and rnd not in by_round:
+            lines.append("（本轮无公开发言）")
+            lines.append("")
+
+    lines.append("### 投票")
+    if not ballots:
+        lines.append("- 本局未进行投票。")
+        lines.append("")
+    else:
+        for ballot_set in ballots:
+            lines.append(f"- 第 {ballot_set.get('ballot_no', '?')} 次投票")
+            for entry in ballot_set.get("ballots") or []:
+                voter = names.get(entry.get("voter"), entry.get("voter", "?"))
+                choice_id = entry.get("choice")
+                choice = names.get(choice_id, "弃权") if choice_id else "弃权"
+                valid = "" if entry.get("valid", True) else "（无效票）"
+                lines.append(f"  - {voter} → {choice}{valid}")
+        tally = result.get("tally") or {}
+        if tally:
+            lines.append("- 票数：" + "、".join(
+                f"{names.get(k, k)} {v}" for k, v in tally.items()))
+        winner = result.get("winner")
+        if winner or result.get("tie"):
+            tail = "；平票按证据裁定" if result.get("tie") else ""
+            lines.append(f"- 结果：{names.get(winner, winner) if winner else '无'}"
+                         f"｜破案：{'是' if result.get('solved') else '否'}{tail}")
+        for payload in vote_scenes:
+            text = str(payload.get("narration") or "").strip()
+            if text:
+                lines.append("")
+                lines.append(f"**GM · 投票揭晓**：{text}")
+        lines.append("")
+    return lines
 
 
 def _events(conn, session_id):
@@ -269,6 +431,33 @@ def _style_compile_section(conn, session_id, names):
     return lines
 
 
+def _gm_narration_section(conn, session_id, names):
+    """GM narration ledger: what the host said, and why (narrative/vote/drift)."""
+    lines = ["## 9. GM 叙事与场面把控", ""]
+    rows = conn.execute(
+        "SELECT round, act_type, payload_json FROM game_events "
+        "WHERE session_id=? AND act_type IN ('gm_narration','gm_redirect','gm_vote_narration') "
+        "ORDER BY seq", (session_id,),
+    ).fetchall()
+    labels = {
+        "gm_narration": "场景叙述", "gm_redirect": "跑偏拉回", "gm_vote_narration": "投票揭晓",
+    }
+    if not rows:
+        return lines + ["（未启用 GM 叙事通道）", ""]
+    for row in rows:
+        payload = json.loads(row["payload_json"] or "{}")
+        status = payload.get("status") or "—"
+        text = payload.get("narration") or "（回退）"
+        lines.append(f"### 第 {row['round']} 轮 · {labels.get(row['act_type'], row['act_type'])} · {status}")
+        lines.append(text)
+        if row["act_type"] == "gm_redirect" and payload.get("drift"):
+            lines.append("- 跑偏信号：" + "、".join(payload["drift"]))
+        if payload.get("tone"):
+            lines.append(f"- 氛围：{payload['tone']}")
+        lines.append("")
+    return lines
+
+
 def build_replay(conn, session_id):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -287,6 +476,11 @@ def build_replay(conn, session_id):
         f"会话：{session_id}",
         "",
     ]
+    lines += _transcript_section(conn, session_id, session_doc, names, result)
+    lines.append("")
+    lines += gm_debrief.debrief(conn, session_id, onto, result, names)
+    lines.append("> 以下为审计与指标明细（真相、内心、数值、风格账本）。")
+    lines.append("")
     lines += _truth_section(onto, session_doc, result, names)
     lines.append("")
     lines += _inner_section(events, names)
@@ -302,4 +496,6 @@ def build_replay(conn, session_id):
     lines += _style_section(conn, session_id, names)
     lines.append("")
     lines += _style_compile_section(conn, session_id, names)
+    lines.append("")
+    lines += _gm_narration_section(conn, session_id, names)
     return "\n".join(lines) + "\n"

@@ -159,6 +159,7 @@ uv run python -m unittest discover -s tests
 - `docs/IPS_ORIGINAL_SPEC.md` — 用户提供的 IPS v1.0 即兴扰动系统原文（逐字归档）
 - `docs/IPS_FUSION.md` — IPS 九段流水线对照、可融入性结论与已定案边界；区分急性越界态（疯批）与长期人格面（黑化/病娇/DID，按记忆作用域分族），含跨局体验记忆，分期 G17–G25
 - `docs/EVENTS.md` — GM 事件注入库：七类外部扰动与多变量触发
+- `docs/JUBENSHA_RULES_AND_GM_PLAN.md` — 剧本杀通用玩法/DM 职责调研（带来源）与 IMMS GM 工作安排（已确认：阶段化 + 搜证私聊第一轮 + replay 内 DM 复盘）
 
 ## 已踩过的坑
 
@@ -206,3 +207,21 @@ L4 表演层已落 G05：`l4.py` 把他人的 L1 真值 + L2 面具 + L3 状态�
 跨局长期记忆已落 G23：`long_term_memory` 表记录角色对稳定 `player_id` / NPC 的好恶与输赢，`longterm.py` 按 3 天半衰期衰减，低于 0.15 标 `faded`（不删除），再交互会重置时钟并增量强化；局末自动结算，开局把未衰退的好恶注入 L3 关系先验（带证据溯源），L1 不变。可用 `imms memory longterm [--owner X] [--as-of ISO]`、`--settle --session S`、`--forget` 管理。见 `docs/IPS_FUSION.md`。
 
 长期人格面已落 G25：`facets.py` 把「面」作为 L2 派生档案（不回写 L1）。连续面记忆共享、只重排行为权重；分离面切换时真正交换 `beliefs/memory/lie_ledger` 桶并写 `facet_switch` + `memory_gap`，InfoGuard 作用域按面过滤。只存 12 个行为维度，不存临床/流行标签。用 `imms facets register --session S --seat X --facet F --kind continuous|dissociative --dim KEY=VALUE --derived NOTE` 注册，`imms facets switch --facet F`（省略则回基面）切换。至此 IPS 融合链 G17–G25 全部完成。
+
+GM 叙事/导演层：`gm_narrator` 按轮把已公开前情与本轮事件讲成连续场景，并按焦点角色个性调视角；`gm_direction` 让 GM 读到全本真相，在 GM prompt 的「导演视角」段掌握真凶、手法与私怨，同时给各席位注入自己的私人目标、暗线与真凶的隐藏/搅浑水/栽赃策略。导演信息只进各自私有 prompt，公开叙述由 `parse_narration` 拦截事实编号、数值、未公开线索关键词与自造台词；席位 `claimed_facts` 仍由 InfoGuard 裁剪。
+
+每轮 GM 只输出一次场景叙述；「跑偏拉回」是干预而非常规输出，仅在人类玩家把话题带离公开记录且至少两名 AI 席位跟随时触发。选角只展示公开人设与角色姓名，绝不标注真凶；席位 agent 与 GM agent 在协议和报告里一律用剧本里的角色姓名（如「郑可欣」「主持人」），不使用 `ai:<id>`、`actor-xxx` 等内部标识。
+
+复盘首先输出「对局实录（按轮）」：每轮按 GM 叙述 / 跑偏拉回、公开线索、各席位发言（含意图与对象）的顺序展开，随后单列投票段（谁投谁、票数、裁定、GM 揭晓）。原先按角色分组的「内心独白」等内容保留为后续审计与指标明细，不再充当主线叙事。
+
+GM 场景叙述必须带信息：prompt 的「案情事实」段由剧本 brief、public facts、已公开线索及这些线索证实的私有事实组成（数字转成中文措辞），叙述校验会拒绝不含任何案情锚点的空泛文字；回退叙述也至少带一条客观事实。未揭示的真相仍只留在 GM 独知的导演段，线索一旦公开，其证实的事实才进入可讲述范围。
+
+跑偏拉回不再单独生成：每轮只有一次 GM 叙述。检测到「人类把话题带离公开记录且至少两名席位跟随」时，拉回作为「本轮拉回指引」写进同一份叙述 prompt，靠叙事中的具体转场完成，不另起主持词。历史库里的独立 `gm_redirect` 事件在复盘中会折叠回该轮 GM 叙述行。
+
+第一轮剧本杀骨架已落地（P0–P3）：`phases.py` 定义 `intro → self_intro → investigate → discuss → vote → reveal` 六阶段状态机，`runtime.run_phased_session` 编排全程，旧 `run_session` 保持原行为；CLI 用 `imms play --session S --rounds 3 --phased` 跑完整流程。`investigation.py` 提供行动点、线索卡持有与公开/隐藏决定：公开线索进 `revealed_clues` 并由 InfoGuard 解锁事实，隐藏线索只对发现者可见；私聊复用房间机制（`room:<id>` 可见性），GM 不决定线索内容。席位 prompt 新增玩家规则块（第一人称、角色姓名互称、不自曝、不贴脸、不跳车），GM prompt 新增 DM 职责与禁忌。
+
+`replay` 现在是「对局实录（含开场/读本/搜证）→ 主持复盘 → 审计明细」三段式。`gm_debrief.py` 确定性生成 DM 讲述式复盘（铺垫 → 手法/时间线 → 动机/关系 → 互动提问 → 结束语），投对先讲人物关系与动机、投错先讲手法与时间线；真相只在复盘段公开，不调用 LLM。端到端自检 `output/phase_e2e_check.py` 产出 `phase_e2e.json` 与两种分支复盘样本（仅验接线，不论文风）。
+
+P5 真 agent 验收（4 个独立 agent 读 prompt 写回复，无桩）：原生 4 人本 midnight-meeting，人类坐沈巍，5 轮完整阶段流程。结果：六阶段齐备、15 次席位生成 0 回退、GM 9 次调用（3 阶段串场 + 5 场景叙述 + 1 投票揭晓）全部合规、投票 3:1 命中真凶、破解成功。真 GM 叙述按轮累积案情（反锁/无搏斗 → 发绀对心衰 → 奶泡剂 → 抽屉文件 → 平票收束），按角色个性调视角，无数值/真相/票数泄露。产物在 `output/phased_replay.md`、`phased_summary.json`、`phased_protocol/prompts|replies/`。
+
+真跑暴露并修复一个信息边界 bug：席位 prompt 把线索展示串里的 `|logLR:han_ziang=1.5` 直接送给 agent，导致台词念出「一点五」。新增 `infoguard.display_text()` 统一清洗 prompt 展示文本（id 前缀 + logLR 权重），不改变 `claimed_facts` 白名单与数值计算；修复后端到端自检席位 prompt 中 logLR 出现次数为 0。`phased_replay.md` 是修复前真跑的原始记录（`seat_hygiene_driver.py` 可用于复验修复后的席位台词）。

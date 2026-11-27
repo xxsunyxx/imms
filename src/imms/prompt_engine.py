@@ -16,8 +16,19 @@ import re
 SPEECH_BUDGET = 120
 
 BLOCK_ORDER = [
-    "identity", "style", "assigned", "facet", "emotion", "relations", "perceived",
+    "identity", "rules", "style", "assigned", "facet", "emotion", "relations", "perceived",
     "beliefs", "lies", "memory", "intent", "guides", "output",
+]
+
+# P0: table rules that apply to every seat.  These are behavioural constraints
+# only -- no facts, no numbers, no internal ids and no truth-graph references.
+# Kept in sync with config/gm_narration_lexicon.json's `player_rules`.
+PLAYER_RULES = [
+    "用第一人称说话：你就是这个人，只说自己亲历、亲见、亲闻的事。",
+    "用剧本里的角色姓名互称，不用座位号、内部编号或场外称呼。",
+    "不自曝：核心任务、私有秘密、真凶身份与作案细节绝不主动说出口。",
+    "不贴脸：不用场外发誓、现实身份或「我保证」这类话替角色担保。",
+    "不跳车：不中途脱离角色，不把游戏当讨论会，不照本念台词。",
 ]
 
 
@@ -45,6 +56,13 @@ def block_identity(view, ctx):
         f"人设描述：{_fmt(l1.get('personality'))}",
         f"语言指纹：{_fmt(lexicon)}",
     ]
+
+
+def block_rules(view, ctx):
+    """P0: player conduct rules.  Behaviour only, never facts or numbers."""
+    rules = list(ctx.get("player_rules") or PLAYER_RULES)
+    return ["# 玩家规则（必须遵守，优先于任何表演欲）",
+            *[f"- {_sanitize_guide(r)}" for r in rules]]
 
 
 def block_style(view, ctx):
@@ -226,6 +244,7 @@ def block_output(view, ctx):
 
 BLOCKS = {
     "identity": block_identity,
+    "rules": block_rules,
     "style": block_style,
     "assigned": block_assigned,
     "facet": block_facet,

@@ -378,10 +378,11 @@ def _noise_signal(view, ctx):
 def allocate_drift(view, ctx=None):
     """Allocate the 0.20 budget from stored signals; never fabricate a signal."""
     ctx = ctx or {}
-    audience = ctx.get("target_name") or ctx.get("audience") or ""
+    audience_key = ctx.get("target_id") or ctx.get("audience") or ctx.get("target_name") or ""
+    audience_name = ctx.get("target_name") or audience_key
     sig = {
         "emotion": _emotion_signal(view.get("emotion") or {}),
-        "relation": _relation_signal(view, audience) if audience else 0.0,
+        "relation": _relation_signal(view, audience_key) if audience_key else 0.0,
         "mask": _mask_signal(view),
         "stress": _stress_signal(view),
         "noise": _noise_signal(view, ctx),
@@ -397,10 +398,10 @@ def allocate_drift(view, ctx=None):
         triggers.append("emotion:arousal=%.2f,valence=%.2f,dominance=%.2f" % (
             _num(emo.get("arousal")), _num(emo.get("valence")),
             _num(emo.get("dominance"), 0.5)))
-    if sig["relation"] > 0.2 and audience:
-        rel = (view.get("relations") or {}).get(audience) or {}
+    if sig["relation"] > 0.2 and audience_key:
+        rel = (view.get("relations") or {}).get(audience_key) or {}
         triggers.append("relation:%s like=%.2f,trust=%.2f,suspicion=%.2f,grudge=%.2f" % (
-            audience, _num(rel.get("like")), _num(rel.get("trust")),
+            audience_name, _num(rel.get("like")), _num(rel.get("trust")),
             _num(rel.get("suspicion")), _num(rel.get("grudge"))))
     params = (view.get("delivery") or {}).get("params") or {}
     if sig["mask"] > 0:
@@ -500,7 +501,7 @@ def assemble(fp, variants, drift, view, ctx=None):
         sample_lines,
         "# ============ [/ANCHOR] ============",
     ])
-    rel_kw = relation_terms(view, ctx.get("target_name") or "")
+    rel_kw = relation_terms(view, ctx.get("target_id") or "")
     emo_kw = emotion_terms(view)
     ips_kw = list(fp.get("ips_terms") or []) + delivery_param_terms(variants)
     params_line = (

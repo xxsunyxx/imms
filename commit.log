@@ -351,3 +351,90 @@
 - harness 落在 gitignore 的 output/：bridge provider（prompt 落盘 + 等 reply + 编译/judge 分流）、随机抽签 casting、后台 driver、4 个 actor agent、逐轮导出。
 - snow-night-villa 5 人本（1 人席 + 4 AI 席）真跑 10 轮：40 prompt / 38 生成 / 2 回退（agent 写空 reply）；50 事件 / 41 去重台词；投票 4:1 命中真凶。台词第一次真正体现意图/怀疑/情绪的逐轮演进与角色语言指纹，而非桩的固定 5 句。
 - 报告 `output/agent4_dialogue.md`、原始数据 `output/agent4_dialogue.json`、全部 prompt/reply 在 `output/agent_protocol/`。
+
+## 2026-11-26 · GM 叙事通道（叙事 / 投票 / 跑偏拉回 + 借用角色措辞）
+
+- 用户指出 GM 最重要的是生动讲故事，并负责 agent 的输入输出；随后补充三块责任：叙事、投票、跑偏拉回，核心痛点是「怎么讲才像真人」；再补充「把角色说话风格注入 GM，但按责任完成对应工作」。
+- 新增 `src/imms/gm_narrator.py` + `config/gm_narration_lexicon.json`：三块 prompt（build_narration_prompt / build_vote_prompt / build_redirect_prompt）+ 确定性跑偏检测（detect_drift: cold/pile_on/stall/loop）+ 输入侧 stage guides。
+- **真人技法层**：词库 `storyteller_craft`（画面 frame / 节奏 rhythm / 悬念 suspense / 声音 voice / 人性 humanity）共 10 条，作为重点段落注入每块 prompt；投票有独立 vote_craft（before/tie/reveal），拉回有 redirect_craft。
+- **风格借用边界**：`pick_voice_fp` 从某席位（固定/rotate/lead）取 speech_style 指纹；`voice_from_fingerprint` 只保留 tone/syntax/rhythm/catchphrase，去掉全部数值与事实；`inject_voice` 附带 `DUTY_BOUNDARY`——叙事不给结论、投票不宣布票数真凶、拉回不点名施压。风格是手段、责任是边界。
+- fail-closed：`parse_narration` 拒绝事实 id、数值、真相字段、未授权引号台词、超长；失败回退确定性场景句。runtime 全部可选参数（gm_agent/gm_voice），默认 template 路径零变化。
+- 接线：发言前 stage guides 进角色 prompt；每轮末写 `gm_narration` 与（有跑偏信号时）`gm_redirect`；投票后写 `gm_vote_narration`。replay 第 9 节展示台账。
+- 参考对照：读了 `refer/lockedroom-ai` 的 README/architecture——它是前端+FastAPI 的 7 阶段状态机产品（自述→搜证→圆桌→私聊→质询→GM 注入→终幕）；IMMS 是纯后端引擎 + 单一 round loop，GM 叙事层缺失已由本轮补齐，但阶段化流程仍属 G06 未做范围。
+- 验证：新增 `tests/test_gm_narrator.py` 18 项；全量 **252** 项 unittest 通过。桩 GM agent 3 轮：`gm_narration` 3 / `gm_redirect` 3 / `gm_vote_narration` 1，7 个 GM prompt 全部含真人技法、借用风格与责任边界；报告 `output/verify_gm.json` / `verify_gm_prompts.json` / `verify_gm_replay.md`。
+
+## 2026-11-26 · GM 叙事补「公开角色卡」：修 verify 里没有性格的问题
+
+- 用户看 `verify_gm_replay.md` 后指出：GM 讲解很差、几个人物没有性格、像在瞎编。诊断分两层：① verify 用的是固定桩（GM 永远返回同一句、席位 provider 永远返回同一句），所以那份 replay 不能代表真实文风；② 但 GM prompt 确实没给角色性格——只有事件标签，借气质只剩节奏与一个口癖，真 agent 也讲不出人味。
+- 新增 `gm_narrator.public_persona_fields/public_cast`：只从 L1 `source=script_text` 取 `personality`/`speaking_style`（lexicon 去重），清洗引号、数字、事实编号、真相字段；私有事实/目标/怀疑/OCEAN 数值一律不进 GM prompt。三块 GM prompt 均新增「# 场上人物（公开人设，仅供你把握说话与节奏）」。
+- `pick_voice_fp` 现在把同一份脚本人设附到 fingerprint；`voice_from_fingerprint` 增加人设底色 / 说话习惯 / 语词偏好三行（默认 4→6 行），仍保留责任边界。
+- verify 的桩改为 prompt-aware 模拟器：台词带 prompt 里的性格前缀，GM 叙述带角色卡里的气质词；`verify_gm.json` 新增 `cast_hits=7`、`voice_persona_hits=7`、`seat_persona_hits=12`。**注意：这仍是管线验证，不是文风评测——要判断「讲得好不好」必须用真 GM agent。**
+- 验证：新增 2 项测试（公开人设进 prompt / 私有事实不进）；全量 254 unittest 通过；重跑 verify 并重建 `verify_gm_replay.md`。
+
+## 2026-11-26 · GM 叙事改为按轮连续、按焦点角色个性调口吻
+
+- 用户指出：GM 掌握全景，叙事应按轮累积气氛和故事线，并依据附加的角色个性做个性化调整；先前实现「只用本轮事件」把 GM 的历史视角掐掉了。
+- 新增 `gm_narrator.public_history()`：从已落库的前几轮公开事件与 GM 自己的历次叙述生成「故事前情」（默认最近 3 轮 / 8 行），只取公开线索措辞与点名关系，去掉事实编号与数值参数；真相与私有信息不进 prompt。
+- 新增 `gm_narrator.round_focus()`：按本轮发言与被点名频次挑出焦点人物，配上其脚本人设，作为叙事视角指引；新增 `story_lines()` 与词库 `story_craft`（continuity / arc / persona）。
+- 三块 GM prompt（叙事 / 拉回 / 投票）均加入「故事前情」「本轮焦点人物」与连续性技法；`narration_rules` 从「只用本轮事件」改为「可引用前情与本轮已公开内容，不得新增未公开事实」；`allowed_quotes` 扩展到截至当前轮的全部已公开台词。
+- 责任边界不变：GM 仍不写真相、数值、票数、未公开线索，不替角色说话；个性只调观察角度与节奏。
+- 按用户要求本轮不跑测试，仅完成代码与词库改动。
+
+## 2026-11-26 · 4 人本真人对局（沈巍人席 + 3 agent + 真 GM agent）
+
+- 原生 4 人本 `midnight-meeting`（午夜会议室，真凶韩子昂）；用户坐沈巍，5 轮；郑可欣/孟晓萌/韩子昂各由独立席位 agent 读 prompt 生成，GM 由独立主持 agent 读新 prompt 生成。harness 在 gitignore 的 output/（live_setup/live_bridge/live_driver/live_repair_gm）。
+- 结果：5 轮、15 次席位生成零回退；人类席 5 句按沈巍人设代填（可替换重跑）；投票 2:2 平局按证据裁到 ai:han_ziang，solved=true。AI 台词前 3 轮试探、第 4 轮起集中质疑韩子昂，韩子昂全程技术化回避，孟晓萌回避身世，郑可欣从慢速否认转为精确质询。
+- **发现并修复两个真 bug**：① `allowed_quotes` 只收带引号的公开原句，而席位台词落库是不带引号的明文，GM 正确引用反被 `ERR_GM_INVENTED_QUOTE` 拒（前两轮叙述回退）；改为把 utterance/clue/label 原文也纳入白名单，并让 redirect/vote 解析也传白名单。② 文件协议在 reply 文件刚出现、内容未稳定时就读，导致一次 `ERR_GM_EMPTY`；bridge 改为校验 JSON 且含 narration/utterance 才返回。
+- 用已落盘的 10 份 GM 回复重验修复：10/10 narrated；重建 replay（顺带修 driver 把 build_replay 返回字符串再 `"\n".join` 导致逐字换行的错误）。GM 叙述承接前情、焦点人物个性与线索累积，无数字/事实编号/真相泄露。
+- 产物：`output/live_replay.md`、`live_play.json`、`live_summary.json`、`live_gm_repair.json`、`live_protocol/prompts|replies/`。
+
+## 2026-11-26 · GM 干预/命名/选角/导演层修正
+
+- 用户指出四点：跑偏拉回不应每轮都出；agent 应用剧本角色姓名；选角不能泄露真凶；GM 掌握全貌后应知道真凶并给真凶目标、给相关角色私怨关系。
+- `gm_narrator.detect_drift` 改写成「人类误导 + ≥2 席位跟随」才返回漂移；冷场/停滞/重复句式归叙述处理。runtime 每轮一次场景叙述，无漂移则不调用拉回。
+- prompt 名字统一：`_public_lines` 用席位显示名并清洗 `clue_release` 的 `c_xxx`/`logLR`；`_style_for_seat` 分离 `target_id`（关系查表）与 `target_name`（显示），`speech_style` 用二者各司其职，prompt 中不再出现 `ai:`/`gm:host`。
+- 新增 `gm_direction.py`：GM prompt 注入导演视角（真凶/手法/私怨），席位 prompt 注入目标/暗线/真凶策略；输出校验增加未公开线索关键词拦截。边界不变：真相不进公开叙述，claimed_facts 由 InfoGuard 裁剪。
+- 修复 runtime 中未限定的 `allowed_quotes` 导致投票叙述静默回退 `ERR_GM_VOTE`；错误原因现在带异常文本。
+- 新增 9 项测试，全量 262 unittest 通过；`output/live_pipeline_check.py` 自检：0 内部 ID、0 拉回、0 回退、5 叙述 + 1 投票叙述、所有 GM/席位 prompt 带导演信息。
+- 文档/约定：README 增 GM 叙事与导演层说明；项目 MEMORY 固化「选角不泄露真凶」「agent 用剧本姓名」。
+
+## 2026-11-26 · 复盘改为逐轮实录格式
+
+- 用户要求复盘主线是「GM 说了什么 → 各角色说了什么 → 是否投票/投了谁」，而不是按角色分组的内心独白 + 分散的 GM 章节。
+- `replay.py` 新增 `_transcript_section` 并置于复盘首段：按轮列出 GM 叙述/跑偏拉回、公开线索、按席位表顺序的各角色发言（意图取自事件 act_type，对象显示剧本姓名），末尾列出投票明细、票数、裁定与 GM 揭晓；原编号章节保留为审计明细。
+- 修复转录里意图取值遗漏 act_type 导致全部显示「发言」的问题。
+- 新增 3 项测试，全量 265 unittest 通过；从旧 live DB 重建 `output/live_replay.md`（旧库含修复前生成的拉回事件，属历史记录）。
+
+## 2026-11-26 · GM 叙述注入案情事实、拉回并入叙述
+
+- 用户反馈：GM 空讲气氛、没有客观案情与已揭示真相，玩家无法据此推理；拉回应写在叙述里而不是单独输出。
+- `gm_narrator.py` 新增 `case_text` / `case_brief` / `case_anchors`：剧本 brief、public facts、已公开线索及线索证实的私有事实进入叙述 prompt（数字转中文）；`parse_narration` 增加 `required_anchors`，空泛叙述回退 `ERR_GM_UNGROUNDED`；`fallback_narration` 至少带一条客观事实。投票 prompt 同步注入案情并校验锚点。
+- `drift_guidance` 把漂移信号与 `redirect_craft` 写进叙述 prompt；runtime 移除第二次 GM 生成与 `gm_redirect` 事件，每轮只生成一次叙述，`gm_narration` 载荷带 drift 字段。复盘把历史独立 redirect 折叠进该轮 GM 叙述行。
+- 修复 `revealed_clues` 展示串未按裸线索 id 比较的问题：新增 `gm_direction.revealed_ids()`，`hidden_truth_terms`、案情事实、锚点、漂移检测统一使用；旧逻辑会把已公开线索误判为未公开。
+- 新增 5 项测试，全量 270 unittest 通过；管线自检：案情事实 6/6、叙述 5、独立拉回 0、回退 0、内部 ID 0；重建新格式复盘样本。
+
+## 2026-11-27 · 剧本杀规则调研与 GM 工作安排草案
+
+- 用户要求先检索真实剧本杀玩法、整理规则，再确定 GM 后续工作安排。检索了 7 类公开来源（流程干货、DM 攻略、新手指南、术语/类型、谋杀悬疑派对规则、DM 复盘教程、开本流程指南）。
+- 新增 `docs/JUBENSHA_RULES_AND_GM_PLAN.md`：带来源的通用流程表（开场发本→自我介绍→搜证→公聊→分幕→投票→复盘）、DM 职责与禁忌、IMMS 现状差距（缺开场/搜证/私聊/分幕/DM 式复盘/玩家行为规范/任务判定）、分期工作安排 P0–P5。
+- 建议顺序 P0→P1→P3→P5 最小闭环，P2/P4 第二轮增强；核心判断：当前最大缺口不是文风而是流程骨架。三个待确认决策点（阶段化、私聊搜证是否入第一轮、复盘是否独立产物）写进文档，README 索引同步。
+- 本次为调研与规划，未改动运行时代码。
+
+## 2026-11-27 · GM 工作安排定稿（用户确认）
+
+- 用户在三个决策点上的选择：①阶段化改造 runtime（不是按轮叠加叙述）；②私聊与玩家主动搜证进第一轮；③复盘改造现有 replay，不做独立产物。
+- `docs/JUBENSHA_RULES_AND_GM_PLAN.md` 据此定稿：第一轮 P0（规则边界）+ P1（阶段化）+ P2（搜证私聊）+ P3（replay 内 DM 式复盘），末尾 P5 真 agent 验收；P4 任务结算放第二轮。
+
+## 2026-11-27 · 剧本杀第一轮骨架 P0–P3
+
+- 按已确认的工作安排落地第一轮：P0 规则边界、P1 阶段化、P2 搜证私聊、P3 replay 内 DM 式复盘。
+- 新增模块：`phases.py`（六阶段状态机与阶段串场 prompt）、`investigation.py`（行动点/线索卡/公开隐藏/私聊）、`gm_debrief.py`（确定性 DM 复盘，投对投错分支）。
+- `runtime.run_phased_session` 编排全程并复用 `run_session`，旧 API 不变；CLI `play --phased`；`prompt_engine` 加玩家规则 block；GM 词库加 DM 职责禁忌；`replay` 三段式（实录含开场/搜证 → 主持复盘 → 审计明细）。
+- 修复 `_audience_for` 对 `get_private_room` 漏传 conn 的潜在崩溃（私聊事件进入主流流程后暴露）。
+- 全量 281 unittest 通过；端到端自检产出 `phase_e2e.json` 与两种分支复盘样本。
+
+## 2026-11-27 · 第一轮 P5 真 agent 验收 + 席位 prompt 信息边界修复
+
+- 4 个真 agent（3 席位 + 1 GM）按新阶段流程跑完整一局：六阶段齐备、15 席位生成 0 回退、GM 9 次全部合规、投票 3:1 命中真凶。真 GM 叙述按轮累积案情并按角色个性调视角，无数值/真相/票数泄露。
+- 真跑暴露：席位 prompt 把线索展示串里的 `|logLR:han_ziang=1.5` 送给 agent，台词念出「一点五」。新增 `infoguard.display_text()` 清洗 prompt 展示文本；runtime 用它清洗 clue / allowed 展示 / style allowed_facts；claimed_facts 校验白名单不变。端到端自检席位 prompt 的 logLR 命中 15→0。
+- 新增 3 项测试（display_text、席位 prompt 无 logLR、阶段 prompt hygiene），全量 283 unittest 通过。真跑产物：`phased_replay.md` / `phased_summary.json` / `phased_protocol/`（修复前原始记录）。

@@ -347,6 +347,8 @@ def build_parser():
     play_p.add_argument("--seed", type=int, default=42)
     play_p.add_argument("--llm", choices=["auto", "template", "http"], default=None,
                         help="Speech provider; auto uses http when IMMS_LLM_URL is set")
+    play_p.add_argument("--phased", action="store_true",
+                        help="Run the full 剧本杀 flow: intro → self-intro → investigate → discuss → vote")
 
     core_p = sub.add_parser("core", help="Core rule modules: extraction, prompt, variables, seed")
     core_sp = core_p.add_subparsers(dest="core_action", required=True)
@@ -875,7 +877,9 @@ def main(argv=None):
 
         elif args.cmd == "play":
             scripted = read_json(args.scripted) if args.scripted else None
-            print_json(runtime_mod.run_session(conn, args.session, args.rounds, scripted, args.seed, args.llm))
+            runner = runtime_mod.run_phased_session if getattr(args, "phased", False) \
+                else runtime_mod.run_session
+            print_json(runner(conn, args.session, args.rounds, scripted, args.seed, args.llm))
 
         elif args.cmd == "core":
             if args.core_action == "profile":
