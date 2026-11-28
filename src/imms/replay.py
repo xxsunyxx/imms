@@ -543,6 +543,36 @@ def _script_lock_section(conn, session_id):
     return lines
 
 
+def _affect_section(conn, session_id, names, char_names=None):
+    char_names = char_names or {}
+    """G10 audit summary: trauma hits, attributed contradictions, faction shifts."""
+    events = journal.audit_events(conn, session_id)
+    trauma = [e for e in events if e["act_type"] == "trauma_trigger"]
+    conflicts = [e for e in events if e["act_type"] == "contradiction_event"]
+    shifts = [e for e in events if e["act_type"] == "faction_shift"]
+    runtime = db.get_game_state(conn, session_id, "runtime", {}) or {}
+    lines = [
+        "## 13. 情绪、矛盾与阵营", "",
+        f"- 创伤触发：{len(trauma)} 次（命中放大 1.8 倍）",
+        f"- 矛盾事件：{len(conflicts)} 次（归因强度均 ≥0.35）",
+        f"- 阵营变更：{len(shifts)} 次（滞回 + 冷却期）",
+    ]
+    for seat, state in sorted(runtime.items()):
+        name = char_names.get(state.get("character_id"), state.get("character_id"))
+        lines.append(
+            f"- {name}：离散情绪={state.get('emotion', {}).get('discrete', '平静')}；"
+            f"阵营={state.get('faction_state', {}).get('candidate') or '未结盟'}"
+        )
+    for event in conflicts[-3:]:
+        payload = event.get("payload") or {}
+        lines.append(
+            f"  - 第{event['round']}轮 矛盾：见证={names.get(payload.get('witness'), payload.get('witness'))}"
+            f"｜对象={names.get(payload.get('subject'), payload.get('subject'))}"
+            f"｜强度={payload.get('strength')}"
+        )
+    return lines
+
+
 def build_replay(conn, session_id):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -589,4 +619,6 @@ def build_replay(conn, session_id):
     lines += _settlement_section(conn, session_id)
     lines.append("")
     lines += _script_lock_section(conn, session_id)
+    lines.append("")
+    lines += _affect_section(conn, session_id, names, char_names)
     return "\n".join(lines) + "\n"

@@ -481,3 +481,10 @@
 - `solver.evidence_paths()` / `is_unique_path()` / `unique_path_audit()` 支持 IR3；`ips.resolve_bursts()` 接入 IR3 唯一路径降级与 IR4 锁/核心目标降级，动作仍为 claim-only。
 - ontology YAML 解析保留显式锁字段；runtime 写 `script_lock_violation`（GM+本人可见）与终幕 `script_locks` 状态；replay 第 12 节、retro 看板展示红标统计但不展示锁文本。
 - 新增 `tests/test_script_locks.py`（7 项）；全量 321 unittest 通过。同步 `docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md`、`README.md`。
+
+## 2026-11-28 · #126 情绪与阵营运行时接线（G10）
+
+- 新增 `emotion.py` / `contradiction.py` / `faction.py`：显式 trauma 触发 ×1.8 放大与 tau 延长、PAD→离散情绪、供述冲突归因事件与 arousal/suspicion 数值、阵营滞回/冷却/忠诚闸门。
+- runtime 在事件评价后写 GM+本人可见的 `trauma_trigger` / `contradiction_event` / `faction_shift`；AI 下一轮优先抛出已记录矛盾，仍不新增事实。replay 第 13 节与 retro 看板可见审计计数。
+- ontology YAML 解析保留显式 `trauma` / `faction` / `goal_fit` 字段；未声明的输入保持空/未结盟，并记 `gaps`，不从叙事推断。
+- 新增 `tests/test_affect.py`（5 项）；全量 326 unittest 通过。同步 `docs/GAP_AUDIT.md` 与 `README.md`。

@@ -137,6 +137,10 @@ uv run imms --db imms.db vote config --session snow-night-villa-s001
 
 `solver.is_unique_path()` 提供 IR3 的唯一证据路径查询：即兴动作若销毁/伪造唯一路径会降级为 `damaged_recoverable` / `forgery_failed`；IR4 检查显式锁与权重 >0.8 的主线目标，违规降级为 `safe_library`（仅 morale<0.15 且有 GM 令牌才放行）。当前默认即兴是 claim-only，销毁/伪造动作需显式传入，不会自行发生。
 
+## 情绪、矛盾与阵营
+
+`emotion.py` 只对剧本显式 `trauma[]` 生效：命中后 PAD 冲击 ×1.8、tau ×1.8，并写 GM+本人可见的 `trauma_trigger`；离散情绪由 PAD 区域映射（愤怒/恐惧/悲伤/愉悦/平静）。`contradiction.py` 把已记录的供述冲突变成带见证人、对象、来源 seq 与强度的 `contradiction_event`，数值效果是 arousal +0.3、对象 suspicion +0.2，下一轮 AI 会优先抛出这个已记录矛盾，不新增事实。`faction.py` 用滞回阈值（0.70/0.50）、2 轮冷却和忠诚闸门更新阵营；没有声明阵营的剧本保持未结盟并记录原因。replay 第 13 节与 retro 看板给审计计数。
+
 ## 统一摄入：先骨架，再归一化
 
 ```bash
@@ -192,7 +196,7 @@ uv run python -m unittest discover -s tests
 - `docs/CORE_MODULES.md` — 核心规则模块：人物抽取、提示词引擎、变量计算、确定性随机源、guide 库、谎言私有边界
 - `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
 - `docs/ORIGINAL_SPEC.md` — 用户提供的 IMMS v1.0 原始设定（逐字归档）
-- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（G06/G07/G08/G09/G12–G14 已完成；IPS G17–G25、G26–G28 已完成；G10/G11/G15 待办）
+- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（G06–G10/G12–G14 已完成；IPS G17–G25、G26–G28 已完成；G11/G15 待办）
 - `docs/IPS_ORIGINAL_SPEC.md` — 用户提供的 IPS v1.0 即兴扰动系统原文（逐字归档）
 - `docs/IPS_FUSION.md` — IPS 九段流水线对照、可融入性结论与已定案边界；区分急性越界态（疯批）与长期人格面（黑化/病娇/DID，按记忆作用域分族），含跨局体验记忆，分期 G17–G25
 - `docs/EVENTS.md` — GM 事件注入库：七类外部扰动与多变量触发

@@ -12,7 +12,7 @@ the story and no session state is mutated.
 
 import json
 
-from . import db, infoguard, replay, scoring, solver, vote
+from . import db, infoguard, journal, replay, scoring, solver, vote
 
 WEIGHT_HARD = 1.0
 WEIGHT_SOFT = 0.3
@@ -408,6 +408,14 @@ def evaluate(conn, session_id, scripted_motive=None):
             "scoring": db.get_game_state(conn, session_id, "scoring", {})
             or scoring.evaluate(conn, session_id),
             "script_locks": db.get_game_state(conn, session_id, "script_locks", {}),
+            "affect": {
+                "trauma_triggers": len(journal.audit_events(
+                    conn, session_id, act_type="trauma_trigger")),
+                "contradiction_events": len(journal.audit_events(
+                    conn, session_id, act_type="contradiction_event")),
+                "faction_shifts": len(journal.audit_events(
+                    conn, session_id, act_type="faction_shift")),
+            },
         },
     }
 
@@ -537,6 +545,13 @@ def render_evaluation(report):
         lines.append(f"- 状态：{locks.get('status')}｜统计：{locks.get('counts')}")
         for item in locks.get("failed") or []:
             lines.append(f"- 未通过：{item.get('owner')}｜{item.get('type')}｜{item.get('status')}")
+    affect = retro.get("affect") or {}
+    if affect:
+        lines.extend(["", "**情绪与阵营**", ""])
+        lines.append(
+            f"- 创伤触发 {affect['trauma_triggers']}｜矛盾事件 {affect['contradiction_events']}"
+            f"｜阵营变更 {affect['faction_shifts']}"
+        )
     return "\n".join(lines) + "\n"
 
 

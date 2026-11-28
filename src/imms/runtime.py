@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, db, director, events, facets, formulas, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, scoring, script_locks, speech_style, stage_gate, style_compiler, timeline, vote
+from . import aftermath, breakout, contradiction, db, director, emotion, events, faction, facets, formulas, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, scoring, script_locks, speech_style, stage_gate, style_compiler, timeline, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -72,6 +72,7 @@ def init_runtime(conn, session_doc):
         c.get("id"): set(c.get("known_fact_ids") or [])
         for c in onto.get("characters", [])
     }
+    char_by_id = {c.get("id"): c for c in onto.get("characters", [])}
     runtime = {}
     for p in seats:
         cid = p["script_character_id"]
@@ -91,7 +92,7 @@ def init_runtime(conn, session_doc):
             "emotion": {
                 "valence": 0.0, "arousal": 0.2, "dominance": 0.5,
                 "stress": 0.1, "cognitive_load": 0.1, "intoxication": 0.0,
-                "morale": 0.8, "exposure_risk": 0.1,
+                "morale": 0.8, "exposure_risk": 0.1, "discrete": "平静",
             },
             "nu": formulas.nu(N),
             "ell": {o: 0.0 for o in others if o != p["id"]},
@@ -115,6 +116,11 @@ def init_runtime(conn, session_doc):
             # G09: per-seat lock ledger is part of the snapshot, so a GM branch
             # cannot start from a state with already-satisfied/skipped locks.
             "script_lock_state": script_locks.seat_state(session_doc, p["id"]),
+            # G10: explicit trauma triggers and faction bookkeeping.  Both
+            # stay empty/unaligned when the script did not author them.
+            "trauma": list((char_by_id.get(cid) or {}).get("trauma") or []),
+            "faction_state": {"current": None, "cooldown_until": 0},
+            "pending_contradictions": [],
         }
     # Clue cards are not knowledge until a clue is actually released/revealed.
     # Every agent starts with only public facts plus its own canon knowledge.
@@ -163,10 +169,17 @@ def _appraise(state, event, round_no):
         after = formulas.relation_update(before, REL_DEFAULT[dim], 0.95, coeff, eta, kappa_v, state["nu"], lo, hi)
         state["relations"][actor][dim] = after
         changed.append({"dim": dim, "target": actor, "before": round(before, 4), "after": round(after, 4)})
-    emo = state["emotion"]
     impact = {"valence": -0.15 if coeff < 0 else 0.10, "arousal": 0.12, "dominance": 0.05}
-    state["emotion"] = formulas.pad_update(emo, 2.0, 1.0, impact)
-    state["emotion"].update({k: v for k, v in emo.items() if k not in formulas.PAD_DOMAIN})
+    text = " ".join([
+        str(payload.get("utterance") or ""),
+        " ".join(str(x) for x in (payload.get("claimed_facts") or [])),
+    ])
+    emo_report = emotion.apply_impact(state, impact, text, round_no)
+    for dim, value in emo_report["after"].items():
+        changed.append({
+            "dim": dim, "target": None, "before": emo_report["before"][dim],
+            "after": value, "reason": "F08 trauma" if emo_report["hit"] else "F08 PAD",
+        })
     return key, changed
 
 
@@ -684,6 +697,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     session_doc = db.get_session(conn, session_id)
     init_runtime(conn, session_doc)
     onto = db.get_script(conn, session_doc["script_id"])
+    char_by_id = {c.get("id"): c for c in onto.get("characters", [])}
     runtime = db.get_game_state(conn, session_id, "runtime")
     guard_engine = infoguard.build_engine(onto)
     for clue in db.get_game_state(conn, session_id, "revealed_clues", []):
@@ -769,6 +783,13 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             for ev in parsed:
                 _, changes = _appraise(state, ev, round_no)
                 round_changes.extend(changes)
+            for hit in state.pop("trauma_hits", []):
+                db.append_game_event(
+                    conn, session_id, round_no, "gm:host", "trauma_trigger",
+                    {"seat": seat_id, **hit}, ["gm:host", seat_id],
+                )
+                log.append({"round": round_no, "actor": "gm:host", "act": "trauma_trigger",
+                            "seat": seat_id, "multiplier": hit["multiplier"]})
             round_changes.extend(_update_suspicion(state, parsed))
             ips.accumulate(state, parsed, round_no, session_id=session_id, seed=seed)
             acc = state.get("accumulator")
@@ -800,12 +821,14 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                     "status": change["status"], "strategy": change["strategy"],
                     "before": change["before"], "after": change["after"],
                 })
+            observations = []
             for ev in parsed:
                 observation = memory.observe(
                     state, ev, round_no, audience=_audience_for(conn, ev, all_seats)
                 )
                 if not observation:
                     continue
+                observations.append(observation)
                 conflict_seq = _emit_conflict(
                     conn, session_id, round_no, seat_id, observation.get("conflict"),
                 )
@@ -821,8 +844,30 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                         "witness": seat_id, "fact": change["fact"],
                         "from": change["from"], "to": change["to"],
                     })
+            conflicts = contradiction.detect(observations, state, round_no)
+            for item in conflicts:
+                db.append_game_event(
+                    conn, session_id, round_no, "gm:host", "contradiction_event",
+                    item, ["gm:host", seat_id],
+                )
+                log.append({"round": round_no, "actor": "gm:host", "act": "contradiction_event",
+                            "witness": seat_id, "subject": item.get("subject"),
+                            "strength": item["strength"]})
+            round_changes.extend(contradiction.apply(state, conflicts, round_no))
+            faction_shift = faction.update(
+                state, round_no, onto, char_by_id.get(state["character_id"]) or {}
+            )
+            if faction_shift:
+                db.append_game_event(
+                    conn, session_id, round_no, "gm:host", "faction_shift",
+                    faction_shift, ["gm:host", seat_id],
+                )
+                log.append({"round": round_no, "actor": "gm:host", "act": "faction_shift",
+                            "seat": seat_id, "from": faction_shift["from"],
+                            "to": faction_shift["to"]})
             _log_changes(conn, session_id, round_no, seat_id, state["character_id"], round_changes)
             recalled = []
+            pending = contradiction.pending_for_round(state, round_no)
             if state["is_human"]:
                 raw = _user_act(scripted, user_index, names.get(state["character_id"], state["character_id"]))
                 user_index += 1
@@ -833,6 +878,12 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             else:
                 intent = _choose_intent(state, rng)
                 target_id = max(state["suspicion"], key=state["suspicion"].get) if state["suspicion"] else None
+                # G10: an unresolved contradiction from an earlier round is
+                # raised first.  It only changes which already-known conflict
+                # is voiced; it never adds a fact or invents a quote.
+                if pending and pending.get("subject") in state["suspicion"]:
+                    intent = "accuse"
+                    target_id = pending["subject"]
                 target_name = seat_names.get(target_id, target_id) or "在座各位"
                 # Display text only: strip engine internals such as
                 # ``|logLR:x=1.5`` before a clue reaches the seat prompt.  The
@@ -849,6 +900,11 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                     "emotion_shown": "平静",
                     "lie_id": None,
                 }
+                if pending and pending.get("subject") in state["suspicion"]:
+                    act["utterance"] = f"{target_name}，你前后的说法有矛盾。"
+                    act["claimed_facts"] = []
+                    act["inner_intent"] = "优先抛出已记录的矛盾"
+                    contradiction.mark_expressed(state, pending)
                 if lie.should_lie(state, intent):
                     entry = lie.create(
                         state, round_no, act["utterance"],
@@ -1048,6 +1104,8 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 "claimed_facts": act["claimed_facts"],
                 "target": act["target"],
                 "emotion_shown": act.get("emotion_shown", "平静"),
+                "discrete_emotion": state["emotion"].get("discrete"),
+                "faction": state.get("faction"),
                 "guard": guard_info,
                 "recalled": _recall_payload(recalled),
                 "lie_id": act.get("lie_id"),

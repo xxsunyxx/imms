@@ -117,6 +117,12 @@ def parse_yaml_script(path):
                 "must_say": c.get("must_say", []),
                 "must_trigger": c.get("must_trigger", []),
                 "taboo": c.get("taboo", c.get("taboo_topics", [])),
+                # G10: emotional triggers and faction inputs are only carried
+                # when authored explicitly in the script.
+                "trauma": c.get("trauma", []),
+                "faction": c.get("faction"),
+                "goal_fit": c.get("goal_fit"),
+                "goal_fit_by_faction": c.get("goal_fit_by_faction", {}),
                 "canon_evidence": [],
             }
             for c in characters
@@ -126,6 +132,7 @@ def parse_yaml_script(path):
         "clue_fact_map": clue_fact_map,
         "plot_locks": [],
         "script_locks": data.get("script_locks", []),
+        "factions": data.get("factions", []),
         "endings": [
             f"指认{killer_name}则真凶伏法",
             "指认其他人则冤案",

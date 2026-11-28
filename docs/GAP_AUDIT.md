@@ -23,7 +23,7 @@
 | §1 目标与五条铁律          | ◐  | R1 知识护栏 = `claimed_facts` 白名单 + InfoGuard；R4 剧本锁在 runtime 输出侧硬检查并终幕审计；R5 GM 单一真相写入 + 事件溯源                             | R2 人格余弦闸门无；R3 谎言账本空转；信息不对称有破口（见 C2）                                                                     |
 | §2 总体架构             | ◐  | Content（ingest/corpus/registry）、Agent（persona/runtime/llm/memory）、Adjudication（vote/gm/infoguard）、复盘（replay/retro）均有模块      | 无表现层/Web；EventBus 是 SQLite `game_events` 轮询而非推送；无小模型事件分类层                                                              |
 | §3 五层人格             | ◐  | L1 Canon 只读 + 证据化打分（F29）；L2/L3 信封与变更审计；L0 以 `session.l0` 字段存在（`difficulty/acting_skill/lying_skill/play_style`）             | L4 表演层不存在；其他角色直接读真实 L3；`assemble` 未从剧本提取 `public_identity/mask/goals/script_locks`（`script_locks=[]`）                  |
-| §4 关系场与情绪           | ◐  | F02/F03/F04/F05 进入 `_appraise`；F07 PAD 更新；关系域 clip 与 `attribute_events` 审计                                                  | F06 信任负向不对称只写在配置说明，运行时统一 `λ=0.95`；F08 创伤放大未接；F09 离散情绪未由 PAD 映射；F10/F11 阵营漂移只有纯函数，运行时 `faction` 恒为 `None`               |
+| §4 关系场与情绪           | ◐  | F02/F03/F04/F05 进入 `_appraise`；F07 PAD 更新；F08 显式创伤放大、F09 离散情绪、F11 阵营滞回已接 runtime；关系域 clip 与 `attribute_events` 审计 | F06 信任负向不对称只写在配置说明，运行时统一 `λ=0.95`；未声明的 trauma/faction 保持空，不编造               |
 | §5 信念图与怀疑           | ◐  | log-odds 怀疑更新、sigmoid、证据权重、投票分布（`vote.py` + `replay.py`）                                                                    | 每个席位开局把**全部** `clue_pool` 写成已知（C2）；`is_true` 分离存储未建立；F17 矛盾事件只登记不生成；`Timeline_Narrated` 与 `alibi_gap` 无                |
 | §6 表演与说谎            | ◐  | `src/imms/lie.py`：F20 决策、F21 heat、谎言创建/修订；每个 agent 有 `reasoning_log`，被相信/被揭穿都追加自洽记录；Prompt 与 replay 可见                      | L4 表演投影与 `shown_attitude` 噪声未接；G2 人格余弦护栏仍缺                                                                             |
 | §7 世界状态与本体          | ◐  | Ontology 九槽位（facts/clues/clue_pool/timeline_true/truth_graph/evaluation/plot_locks/endings/completions/skeleton）+ solver 门禁 | `truth_graph` 是字符串列表而非 `(s,p,o,t,visibility)` 三元组；线索的 `discover/forgeable/decay_rounds/chain` 未建模；`endings` 只存文本，不参与裁决 |
@@ -137,7 +137,7 @@
 | ✅ G07 | ~~双轨时间线 + `alibi_gap` + 语义级冲突（低误报口径）~~ **已完成**：`timeline.audit` 对齐 `timeline_true` 与角色证词，只在双端有时间且对齐时报倒挂；`alibi_gap` 数值化并抬高 `exposure_risk`；`memory.detect_conflict` 低误报判定改口/撤回/交代 | C7 / §7.3       | 角色证词可对齐真相；空洞有数值；只报真实倒挂                                                       | #31 |
 | ✅ G08 | ~~多结局与个人目标评分（F27 + 玩家六维）~~ **已完成**：`scoring.py` 条件结局判定、显式目标判据结算、F27/玩家六维评分；纯文本目标不猜测；runtime 落公共结局 + 席位私有目标事件；replay 第 11 节与 retro 看板可见 | §14             | 结局按脚本条件文本触发；评分可从事件复算；lockedroom 5 指标不变                                         | #32 |
 | ✅ G09 | ~~运行时剧本锁 R4~~ **已完成**：`script_locks.py` 只编译显式声明的锁，output 侧拦截 taboo、终幕审计 must_say/must_trigger，分叉继承同一套规则；`solver.is_unique_path()` 使 IR3/IR4 转正 | §1 / §3.2 / IPS IR3/IR4 | 未触发/被违反的锁在 audit 中标红；不可被分叉绕过；IR3 唯一路径降级、IR4 锁/核心目标降级可审计 | #125 |
-| G10 | 矛盾事件 + 创伤触发器 + PAD→离散情绪 + 阵营滞回运行时接线                                                         | F08/F09/F11/F17 | `contradiction_event` 有归因与数值；阵营变更有冷却期；不再恒为 `None`                            | —   |
+| ✅ G10 | ~~情绪与阵营运行时接线~~ **已完成**：`emotion.py` 显式创伤触发 1.8 倍放大 + tau 延长 + PAD→离散情绪；`contradiction.py` 归因事件 + arousal+0.3 / suspicion+0.2 + 下一轮优先抛出；`faction.py` 滞回阈值、2 轮冷却与忠诚闸门 | F08/F09/F11/F17 | `contradiction_event` 有见证/对象/强度；阵营变更可审计且不再恒为 `None`；未声明的创伤/阵营保持空 | #126 |
 | G11 | 记忆四层补齐：语义记忆、反思记忆（每幕 3 条高层洞察）                                                                | §9.3            | 反思有来源事件、权重加倍；检索可同时命中情节与反思                                                    | —   |
 | ✅ G12 | ~~盲测 oracle + 5 局自对弈平衡冒烟~~ **已完成**：`oracle.py` 公共证据盲推嫌疑人（真相只进 audit_only 对照）、作者准入校验、固定 seed 5 局 scratch DB 冒烟；CLI `oracle check/smoke`，`audit-all` 带准入标记 | §11.3 / §14.3   | 5 局可复现（seed + 版本）；记录每局胜方/冤案/冷场率，抽样看趋势，不设统计区间硬门槛；不编造数据                | #33 |
 | ✅ G13 | ~~交互驱动层~~ **已完成**：`driver.py` headless 逐轮 step、输入回调/JSON 文件、按持久化 round/resume、JSONL 事件流；CLI `drive status/step/run`；`run_session(finalize=False)` 只跑单轮 | §13.2 / #34     | 现有 CLI 行为不变；新增驱动可替换输入输出                                                      | #34 |
@@ -190,7 +190,8 @@
 11. ~~**G12 盲测 oracle 与自动验收**~~ — 已完成公共证据盲推、作者准入与 5 局可复现冒烟，`audit-all` 带准入标记。
 12. ~~**G13 交互驱动层**~~ — 已完成 headless 逐轮驱动、resume 与事件流，不引入 Web UI。
 13. ~~**G14 剧本质量分层**~~ — 已完成五档质量标签、来源类型、缺口标注与派生清单；100 套盒装本标 `explicit_partial`、6 套显式真凶本标 `explicit_full`，不补造缺失字段。
-14. ~~**G09 剧本锁 R4**~~ — 已完成显式锁编译、输出侧硬拦截、终幕红标与分叉继承；IR3/IR4 由此转正。G10、G11、G15 按既有依赖插入；**G16 条件冻结**——若不做客户端运行则不做这一部分（用户 2026-11-26 定案，见 C1）。解冻条件只有一个：决定做客户端运行。
+14. ~~**G09 剧本锁 R4**~~ — 已完成显式锁编译、输出侧硬拦截、终幕红标与分叉继承；IR3/IR4 由此转正。
+15. ~~**G10 情绪与阵营接线**~~ — 已完成创伤触发器、矛盾事件归因与数值、PAD→离散情绪、阵营滞回/冷却/忠诚闸门。G11、G15 按既有依赖插入；**G16 条件冻结**——若不做客户端运行则不做这一部分（用户 2026-11-26 定案，见 C1）。解冻条件只有一个：决定做客户端运行。
 
 > 旧计划 #31–#35 已完成（G06/G07/G08/G12/G13/G14）；本表把它们映射到具体可执行项，不新增第二套编号。
 
