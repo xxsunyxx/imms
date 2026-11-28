@@ -454,3 +454,9 @@
 - runtime 在投票结算后写公共 `ending_settled`（角色姓名，不含内部 id）与逐席私有 `goal_settled`（本人 + GM），状态写 `scoring`，同 Result 重复结算会跳过避免事件重复。
 - replay 新增第 11 节「结局与个人目标结算」；retro 增加结局/玩家评分看板。lockedroom 5 指标未改。
 - 新增 `tests/test_scoring.py`（5 项）；全量 299 unittest 通过。同步 `docs/GAP_AUDIT.md`、`docs/JUBENSHA_RULES_AND_GM_PLAN.md`、`README.md`。
+
+## 2026-11-28 · #33 盲测 oracle 与自动验收（G12）
+
+- 新增 `oracle.py`：`authoring_validation` 在 solver 可解性之上检查结局条件字段与目标判据类型；`blind_play_check` 只用公开线索推导嫌疑人，真相放 `audit_only` 事后对照；`oracle_report` 合并作者准入、盲测与结局；`smoke` 在临时库按固定 seed 跑 N 局并给指纹/胜方/冤案/冷场率。
+- CLI 增加 `oracle check`（会话或脚本）与 `oracle smoke`；`audit-all` 每条加 `authoring` / `admitted` 门禁，列表输出结构保持不变。
+- 新增 `tests/test_oracle.py`（6 项），含真相改写不影响盲推、5 局指纹可重跑、scratch 库不改原库。全量 305 unittest 通过。

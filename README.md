@@ -59,6 +59,11 @@ uv run imms --db imms.db gm merge --branch snow-night-villa-s001-gm001 --rationa
 # 复盘回溯评估（5 指标 + 决策时点复核 + 分支对照）
 uv run imms --db imms.db retro --session snow-night-villa-s001 --out retro.json --markdown retro.md
 uv run imms --db imms.db replay --session snow-night-villa-s001 --with-eval --out full_replay.md
+
+# 盲测 oracle / 作者准入 / 5 局固定 seed 冒烟
+uv run imms --db imms.db oracle check --session snow-night-villa-s001 --out oracle.json
+uv run imms --db imms.db oracle smoke --script-id snow-night-villa --games 5 --rounds 2 --out smoke.json
+uv run imms --db imms.db audit-all --out audit.json
 ```
 
 LLM 台词（可选）：设 `IMMS_LLM_URL` / `IMMS_LLM_MODEL` 后 `play --llm auto`；未配置时用离线模板。LLM 只写台词，不碰数值与事实。
@@ -103,6 +108,10 @@ uv run imms --db imms.db vote config --session snow-night-villa-s001
 ## 结局与个人目标评分
 
 每局投票结束后由 `scoring.py` 从事件溯源复算：条件结局（脚本 `endings` 里的 `condition`，支持 `solved` / `tie` / `winner` / `motive_correct` / `min_clue_coverage` / `min_goal_completion` / `max_violations` 与 `all`/`any`/`not`，无 `eval`）、真凶策略行为记录、F27 五项 AI 评分与玩家六维评分。公共事件 `ending_settled` 只带角色姓名和评分，不含内部席位 id；个人目标逐席写 `goal_settled`（可见性仅本人 + GM）。只有脚本给出 `check` 判据（secret / identify / escape / frame / vote_for）的目标才判完成，纯文本目标记 `unscored`，不按措辞猜测。复盘第 11 节与 `retro` 看板都会显示结算；旧会话没有落库评分时按需离线复算。
+
+## 盲测 oracle 与准入
+
+`oracle.py` 的盲测只从公开线索推导嫌疑人；真相仅在同一份报告的 `audit_only` 段用于事后对照，不参与推导。`oracle check --session` 出单局报告，`oracle check --script-id` 出静态作者准入；`audit-all` 在每条 solvability 摘要上附 `authoring` / `admitted` 门禁。`oracle smoke` 在独立临时库用固定 seed 跑 5 局（默认 2 轮、模板 LLM、轮换固定票型），记录每局胜方、冤案、冷场率和指纹；小样本只报告观察值，不做统计区间硬门槛。
 
 ## 统一摄入：先骨架，再归一化
 

@@ -27,6 +27,7 @@ from . import memory as memory_mod
 from . import longterm as longterm_mod
 from . import normalize as normalize_mod
 from . import ontology as ontology_mod
+from . import oracle as oracle_mod
 from . import registry as registry_mod
 from . import replay as replay_mod
 from . import retro as retro_mod
@@ -45,6 +46,17 @@ def _value(raw):
         return json.loads(raw)
     except (ValueError, TypeError):
         return raw
+
+
+def audit_all_with_gate(conn, limit=None):
+    """Solvability summary plus the G12 authoring admission gate per script."""
+    report = solver_mod.audit_all(conn, limit)
+    for item in report:
+        authoring = oracle_mod.authoring_validation(db_mod.get_script(conn, item["script_id"]))
+        item["authoring"] = authoring["verdict"]
+        item["authoring_checks"] = authoring["checks"]
+        item["admitted"] = authoring["verdict"] == "pass"
+    return report
 
 
 def build_parser():
@@ -299,6 +311,19 @@ def build_parser():
     audit_all_p = sub.add_parser("audit-all", help="Audit every stored script (summary only)")
     audit_all_p.add_argument("--limit", type=int)
     audit_all_p.add_argument("--out", help="Optional JSON report path")
+
+    oracle_p = sub.add_parser("oracle", help="Blind oracle, authoring gate and balance smoke")
+    oracle_sp = oracle_p.add_subparsers(dest="oracle_action", required=True)
+    oc = oracle_sp.add_parser("check", help="Check one session or one script")
+    oc.add_argument("--session", help="Session id for a blind-play check")
+    oc.add_argument("--script-id", help="Script id for static authoring validation")
+    oc.add_argument("--out", help="Optional JSON report path")
+    osm = oracle_sp.add_parser("smoke", help="Run fixed-seed headless games")
+    osm.add_argument("--script-id", required=True)
+    osm.add_argument("--games", type=int, default=oracle_mod.GAMES)
+    osm.add_argument("--rounds", type=int, default=oracle_mod.ROUNDS)
+    osm.add_argument("--seed", type=int, default=42)
+    osm.add_argument("--out", help="Optional JSON report path")
 
     vote_p = sub.add_parser("vote", help="Run and audit the voting phase")
     vote_sp = vote_p.add_subparsers(dest="vote_action", required=True)
@@ -797,10 +822,31 @@ def main(argv=None):
             })
 
         elif args.cmd == "audit-all":
-            report = solver_mod.audit_all(conn, args.limit)
+            report = audit_all_with_gate(conn, args.limit)
             if args.out:
                 write_json(args.out, report)
             print_json(report)
+
+        elif args.cmd == "oracle":
+            if args.oracle_action == "check":
+                if args.session:
+                    report = oracle_mod.oracle_report(conn, args.session)
+                elif args.script_id:
+                    report = oracle_mod.authoring_validation(
+                        db_mod.get_script(conn, args.script_id)
+                    )
+                else:
+                    raise ValueError("ERR_ORACLE_NEED_SESSION_OR_SCRIPT")
+                if args.out:
+                    write_json(args.out, report)
+                print_json(report)
+            else:
+                report = oracle_mod.smoke(
+                    conn, args.script_id, args.games, args.rounds, args.seed
+                )
+                if args.out:
+                    write_json(args.out, report)
+                print_json(report)
 
         elif args.cmd == "vote":
             if args.vote_action == "run":
