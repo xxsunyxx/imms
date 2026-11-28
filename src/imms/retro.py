@@ -12,7 +12,7 @@ the story and no session state is mutated.
 
 import json
 
-from . import db, infoguard, journal, memory, replay, scoring, solver, vote
+from . import db, degradation, infoguard, journal, memory, replay, scoring, solver, vote
 
 WEIGHT_HARD = 1.0
 WEIGHT_SOFT = 0.3
@@ -408,6 +408,8 @@ def evaluate(conn, session_id, scripted_motive=None):
             "scoring": db.get_game_state(conn, session_id, "scoring", {})
             or scoring.evaluate(conn, session_id),
             "script_locks": db.get_game_state(conn, session_id, "script_locks", {}),
+            "situation": db.get_game_state(conn, session_id, "situation", {}),
+            "degradation": degradation.audit(conn, session_id),
             "affect": {
                 "trauma_triggers": len(journal.audit_events(
                     conn, session_id, act_type="trauma_trigger")),
@@ -569,6 +571,20 @@ def render_evaluation(report):
         total_semantic = sum(item.get("semantic", 0) for item in layers.values())
         total_reflections = sum(item.get("reflections", 0) for item in layers.values())
         lines.append(f"- 记忆分层：语义 {total_semantic} 条｜反思 {total_reflections} 条（权重加倍）")
+    degradation_report = retro.get("degradation") or {}
+    if degradation_report:
+        lines.append(
+            f"- 防退化：{degradation_report.get('status')}"
+            f"｜告警 {('、'.join(degradation_report.get('warning_risks') or []) or '无')}"
+            f"｜无数据 {('、'.join(degradation_report.get('no_data_risks') or []) or '无')}"
+        )
+    situation = retro.get("situation") or {}
+    if situation:
+        lines.append(
+            f"- 局势层：进度 {situation.get('round_t', 0)}/{situation.get('total_rounds', 0)}"
+            f"｜信念熵 {situation.get('info_entropy', 0.0)}"
+            f"｜阵营极化 {situation.get('faction_polarization', 0.0)}"
+        )
     return "\n".join(lines) + "\n"
 
 

@@ -3,7 +3,7 @@
 import json
 import re
 
-from . import db, formulas, gm_debrief, journal, memory, scoring
+from . import db, degradation, formulas, gm_debrief, journal, memory, scoring
 
 SECTIONS = ["真相时间线", "角色内心独白", "关键转折点 Top 5", "谎言全景图",
             "反事实推演", "越界时刻 Top N", "说话风格漂移账"]
@@ -611,6 +611,26 @@ def _memory_section(conn, session_id, char_names=None):
     return lines
 
 
+def _situation_section(conn, session_id):
+    situation = db.get_game_state(conn, session_id, "situation", {}) or {}
+    report = degradation.audit(conn, session_id)
+    lines = [
+        "## 16. 局势层与防退化（GM 专用）", "",
+        f"- 进度：第 {situation.get('round_t', 0)}/{situation.get('total_rounds', 0)} 轮"
+        f"｜热度 {situation.get('heat', 0.0)}｜调控增益 {situation.get('pacing_gain', 1.0)}",
+        f"- 信念熵 {situation.get('info_entropy', 0.0)}"
+        f"｜指认众数 {situation.get('consensus_culprit')}"
+        f"｜阵营极化 {situation.get('faction_polarization', 0.0)}",
+        f"- 线索释放率 {situation.get('clue_revealed_ratio', 0.0)}"
+        f"｜存活人数 {situation.get('alive_count', 0)}",
+    ]
+    if situation.get("gaps"):
+        lines.append("- 数据缺口：" + "、".join(situation["gaps"]))
+    lines.append("")
+    lines.append(degradation.render_markdown(report).rstrip())
+    return lines
+
+
 def build_replay(conn, session_id):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -663,4 +683,6 @@ def build_replay(conn, session_id):
     lines += _frame_section(conn, session_id, names)
     lines.append("")
     lines += _memory_section(conn, session_id, char_names)
+    lines.append("")
+    lines += _situation_section(conn, session_id)
     return "\n".join(lines) + "\n"

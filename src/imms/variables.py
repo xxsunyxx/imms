@@ -8,6 +8,8 @@ Guides drive variation; this module only reports the numbers that variation is
 constrained by.  Missing data falls back to neutral and is reported in ``gaps``.
 """
 
+import math
+
 from . import formulas
 
 NEUTRAL = 0.5
@@ -109,4 +111,70 @@ def snapshot(state, abilities=None):
         "relation": relation_summary(state),
         "tension": tension_snapshot(state, abilities=abilities),
         "gaps": [],
+    }
+
+
+def situation_snapshot(states, session_state=None):
+    """§12.5 global situation layer. Pure: reads seat states, mutates nothing.
+
+    ``states`` is the runtime map (seat -> state).  ``session_state`` may carry
+    ``revealed_clues``, ``total_rounds``, ``heat`` and ``pacing_gain``; absent
+    values fall back to neutral and are listed in ``gaps``.  This snapshot is
+    for GM regulation only -- it is never exposed to a player prompt.
+    """
+    session_state = session_state or {}
+    values = list((states or {}).values())
+    if not values:
+        return {
+            "round_t": 0, "total_rounds": 0, "heat": 0.0,
+            "info_entropy": 0.0, "consensus_culprit": None,
+            "clue_revealed_ratio": 0.0, "faction_polarization": 0.0,
+            "alive_count": 0, "pacing_gain": 1.0,
+            "gaps": ["no_seats"],
+        }
+    gaps = []
+    entropies, accusations = [], {}
+    factions = []
+    for state in values:
+        probs = suspicion_snapshot(state)["probabilities"]
+        n = max(1, len(probs))
+        if probs:
+            entropy = -sum(p * math.log(max(p, 1e-9)) for p in probs.values())
+            entropies.append(min(1.0, entropy / math.log(max(2, n))))
+            leader = max(probs, key=probs.get)
+            accusations[leader] = accusations.get(leader, 0) + _num(probs[leader])
+        faction = state.get("faction")
+        if isinstance(faction, bool):
+            factions.append(faction)
+    total_accusation = sum(accusations.values())
+    consensus = (max(accusations, key=accusations.get),
+                 round(max(accusations.values()) / total_accusation, 4)
+                 if total_accusation else 0.0)
+    if factions:
+        p_true = sum(1 for f in factions if f) / len(factions)
+        polarization = round(4 * p_true * (1 - p_true), 4)
+    else:
+        polarization = 0.0
+        gaps.append("no_explicit_factions")
+    total_clues = len((session_state.get("clue_pool") or []))
+    revealed = len(session_state.get("revealed_clues") or [])
+    if total_clues:
+        ratio = round(min(1.0, revealed / total_clues), 4)
+    else:
+        ratio = 0.0
+        gaps.append("no_clue_pool_count")
+    round_t = int(_num(session_state.get("round"), 0))
+    total_rounds = int(_num(session_state.get("total_rounds"), round_t))
+    return {
+        "round_t": round_t,
+        "total_rounds": total_rounds,
+        "heat": round(_num(session_state.get("heat"), 0.0), 4),
+        "info_entropy": round(sum(entropies) / len(entropies), 4) if entropies else 0.0,
+        "consensus_culprit": {"target": consensus[0], "share": consensus[1]}
+                             if consensus[1] else None,
+        "clue_revealed_ratio": ratio,
+        "faction_polarization": polarization,
+        "alive_count": int(_num(session_state.get("alive_count"), len(values))),
+        "pacing_gain": round(_num(session_state.get("pacing_gain"), 1.0), 4),
+        "gaps": gaps,
     }

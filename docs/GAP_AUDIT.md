@@ -20,21 +20,21 @@
 
 | 原始设定章节              | 状态 | 现有实现                                                                                                                        | 主要缺口                                                                                                                   |
 | ------------------- | -- | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| §1 目标与五条铁律          | ◐  | R1 知识护栏 = `claimed_facts` 白名单 + InfoGuard；R4 剧本锁在 runtime 输出侧硬检查并终幕审计；R5 GM 单一真相写入 + 事件溯源                             | R2 人格余弦闸门无；R3 谎言账本空转；信息不对称有破口（见 C2）                                                                     |
+| §1 目标与五条铁律          | ✅  | R1 白名单 + InfoGuard；R2 L4 投影 + 人格余弦护栏；R3 `lie.py` 账本闭环；R4 `script_locks` 输出侧硬检查与终幕审计；R5 GM 单一真相写入 + 事件溯源                | 五条铁律均有运行时落点；信息不对称破口见 C2（已修）                                                                     |
 | §2 总体架构             | ◐  | Content（ingest/corpus/registry）、Agent（persona/runtime/llm/memory）、Adjudication（vote/gm/infoguard）、复盘（replay/retro）均有模块      | 无表现层/Web；EventBus 是 SQLite `game_events` 轮询而非推送；无小模型事件分类层                                                              |
-| §3 五层人格             | ◐  | L1 Canon 只读 + 证据化打分（F29）；L2/L3 信封与变更审计；L0 以 `session.l0` 字段存在（`difficulty/acting_skill/lying_skill/play_style`）             | L4 表演层不存在；其他角色直接读真实 L3；`assemble` 未从剧本提取 `public_identity/mask/goals/script_locks`（`script_locks=[]`）                  |
-| §4 关系场与情绪           | ◐  | F02/F03/F04/F05 进入 `_appraise`；F07 PAD 更新；F08 显式创伤放大、F09 离散情绪、F11 阵营滞回已接 runtime；关系域 clip 与 `attribute_events` 审计 | F06 信任负向不对称只写在配置说明，运行时统一 `λ=0.95`；未声明的 trauma/faction 保持空，不编造               |
-| §5 信念图与怀疑           | ◐  | log-odds 怀疑更新、sigmoid、证据权重、投票分布（`vote.py` + `replay.py`）                                                                    | 每个席位开局把**全部** `clue_pool` 写成已知（C2）；`is_true` 分离存储未建立；F17 矛盾事件只登记不生成；`Timeline_Narrated` 与 `alibi_gap` 无                |
+| §3 五层人格             | ◐  | L1 Canon 只读 + 证据化打分（F29）；L2/L3 信封与变更审计；L0 `session.l0`；L4 `l4.py` 表演投影 + 余弦护栏（G05）；显式 `script_locks` 装配（G09）           | `meta_bias` 仍只在配置说明，未进元层配置表                                                                          |
+| §4 关系场与情绪           | ✅  | F02–F05 + F06 信任不对称（负向 β×2.5、λ⁻>λ⁺）进入 `_appraise`；F07–F11 创伤、离散情绪、矛盾事件、阵营滞回均接 runtime；关系域 clip 与审计齐全       | 未声明的 trauma/faction 保持空，不编造（按设计如此，不是缺口）                                              |
+| §5 信念图与怀疑           | ◐  | log-odds 怀疑更新、sigmoid、证据权重、投票分布；按可见性初始化（C2）；F17 `contradiction_event` 归因生成（G10）；双轨 `Timeline_Narrated` + `alibi_gap`（G07）      | `is_true` 分离存储未建立（真相只留引擎与审计，席位信念不写）                                                      |
 | §6 表演与说谎            | ◐  | `src/imms/lie.py`：F20 决策、F21 heat、谎言创建/修订；每个 agent 有 `reasoning_log`，被相信/被揭穿都追加自洽记录；Prompt 与 replay 可见                      | L4 表演投影与 `shown_attitude` 噪声未接；G2 人格余弦护栏仍缺                                                                             |
-| §7 世界状态与本体          | ◐  | Ontology 九槽位（facts/clues/clue_pool/timeline_true/truth_graph/evaluation/plot_locks/endings/completions/skeleton）+ solver 门禁 | `truth_graph` 是字符串列表而非 `(s,p,o,t,visibility)` 三元组；线索的 `discover/forgeable/decay_rounds/chain` 未建模；`endings` 只存文本，不参与裁决 |
-| §8 回合流程与节奏          | ◐  | `play` 逐轮发言→评价→GM→投票；私聊房间独立 CLI；F22/F23 有纯函数                                                                                | 无幕/阶段状态机；无 AP、搜证、质询 token、时限；GM 只做线索释放 + 休整，且热度目标恒定（C3）；`advance_stage/private_allowed` 未被消费                           |
+| §7 世界状态与本体          | ◐  | Ontology 九槽位 + solver 门禁；`endings[].condition` 参与裁决（G08）；线索可见性与 AP 搜证已建模（G06）                                          | `truth_graph` 仍是字符串列表而非 `(s,p,o,t,visibility)` 三元组；线索 `forgeable/decay_rounds/chain` 属性未建模（补造会违反缺证据不编造）    |
+| §8 回合流程与节奏          | ✅  | `phases` 阶段状态机 + AP/搜证/质询 token；GM `advance_stage/private_allowed` 消费为状态；F22 用 `T_total`；F23 热度调控；阶段化 `play` 与 headless 逐轮驱动（G06/G13）    | 时限未建模（纯文本回合制按设计不需要）                                                                         |
 | §8.2 GM 事件注入库       | ✅  | `src/imms/events.py` 七类事件 + 多变量触发 + `gm inject` / `gm branch --inject-event` + `attribute_events` 审计 + retro 注入审计           | `ap_penalty` / `clue_decay_multiplier` 已入局势层但搜证与衰减流程尚未消费（G06/G14）；默认回合不隐式注入                                            |
-| §9 Agent 决策循环       | ◐  | 感知→确定性评价→F26 召回→效用 F24→softmax F25→模板/LLM→护栏→落库                                                                             | `appraise` 是按 `act_type` 的固定映射，不是小模型分类 + 归因；意图集合固定 7 个；反思记忆/语义记忆未实现；人类发言固定 `assert`                                    |
-| §10 三重护栏            | ◐  | G1 知识护栏；InfoGuard 四层（含输入传闻化与输出改写）；人类输出不拦                                                                                    | G2 人格一致性余弦无；G3 谎言一致性无（账本空）；G4 只覆盖已知事实泄露，未覆盖玩家提示注入诱导                                                                    |
+| §9 Agent 决策循环       | ◐  | 感知→评价→F26 三层召回→效用 F24→softmax F25→模板/LLM→护栏→落库；语义/反思记忆已实现（G11）；F01 张力调温                                             | `appraise` 是按 `act_type` 的固定映射，不是小模型分类 + 归因；意图集合固定 8 个；人类发言由输入脚本提供                                |
+| §10 三重护栏            | ◐  | G1 白名单 + InfoGuard；G2 `l4.persona_guard` 余弦护栏 + 锚点重注入（G05）；G3 `lie.py` 谎言账本闭环；G4 输入传闻化 + 输出改写 + 角色化拒绝                        | G4 的提示注入只做传闻化与改写，不做意图分类级判定                                                                      |
 | §11 原书→剧本自动生成       | ⚠  | 只做"用户给现成剧本 → 解析/归一化/装配/准入"；solver 做可解性校验；`oracle` 做盲测与 5 局平衡冒烟                                                             | 与项目既定边界冲突（C1）：原书抽取、案件模板匹配、UGC 发布均未实现且当前不在范围                                                                  |
-| §12 变量总表            | ◐  | SCHEMA.md 已登记 L1/L2/L3 全部键；`formulas.py` 覆盖 F01–F28                                                                         | 局势层（info_entropy/consensus/polarization/alive_count）未计算；L0 `meta_bias`、L4 投影缺失；60+ 参数未做成可编辑配置表                         |
+| §12 变量总表            | ◐  | SCHEMA.md 已登记 L1/L2/L3；`formulas.py` 覆盖 F01–F28；`variables.situation_snapshot` 计算全部 8 项局势层变量（GM 专用，不暴露玩家）                         | L0 `meta_bias` 与 60+ 参数未做成可编辑配置表                                                                        |
 | §13 数据模型/API/Prompt | ◐  | SQLite 事件溯源；LLM Prompt 分块注入且裁剪事实；CLI 替代 HTTP API；记忆段统一写 F26                                                            | 无 HTTP/WebSocket API；`state_snapshots` 只服务分叉；无 `claim/rewrite` 字段级留痕                                                          |
-| §14 评分与复盘           | ◐  | `retro` 有 lockedroom 5 指标、转折点、决策时点复核、时间线检查、投票审计、分支对照；`scoring` 提供 F27 AI 评分、玩家六维与条件结局                                                  | 防退化清单多为文档约定，无自动检测；纯文本个人目标无机读判据时记 unscored                                                           |
+| §14 评分与复盘           | ✅  | `retro` lockedroom 5 指标、转折点、时间线/投票/分支审计；`scoring` F27 与玩家六维；`degradation.audit` 覆盖 §14.3 全部 9 项风险并进 replay 第 16 节                             | 纯文本个人目标无机读判据时记 unscored（按设计如此，不按措辞猜）                                                        |
 | §15 路线与扩展           | ⚠  | MVP 的纯文本对局已可跑；V1 的投票/记忆/分叉已补                                                                                                | 三阶段时间表不适用；Web/TTS/赛季化 Meta-Persona/导演模式未实现；末尾三个选项未显式记录（C9）                                                             |
 
 ---
@@ -65,15 +65,15 @@
 
 原状态：`lie_ledger` 初始化为 `[]` 且无写入点。现已补 `src/imms/lie.py`：F20 决策、F21 heat、创建/修订/策略升级、被相信与被揭穿双分支推理记录（`reasoning_log`），LLM Prompt 与 replay 均可读。剩余缺口只在 L4 表演投影与 G2 人格护栏，见 C5。
 
-### C5 · 人格层数口径不一致
+### C5 · 人格层数口径不一致（已修：G05）
 
 原始设定是 L0–L4 五层；项目是 L1–L3 三层 + `session.l0` 字段。L4 表演层缺失，Prompt 注入的是真实 L3，其他角色能"读到真心"，§3.4「看走眼」机制无法发生。
 
-### C6 · 流程状态机口径不一致
+### C6 · 流程状态机口径不一致（已修：G06/G13）
 
 原始设定 §8 是「自述→搜证→圆桌→私聊→质询→GM 注入→终幕」；`play` 是单一 round loop。`gm.suggest_decision` 输出的 `advance_stage` / `private_allowed` 没有任何消费者。AP、搜证、challenge token 均无；`SPEECH_BUDGET=120` 只在 LLM 路径截断，不是全局资源。
 
-### C7 · 真相图与时间线被降级为字符串
+### C7 · 真相图与时间线被降级为字符串（时间线已修：G07；真相图三元组仍未建模）
 
 `truth_graph` / `timeline_true` / 角色 `timeline` 都是字符串列表；`solver.audit_timeline()` 只解析时间戳做顺序检查。§7.1 的结构化三元组、§7.3 双轨时间线与 `alibi_gap` 未建立。
 
@@ -91,28 +91,28 @@
 
 | ID  | 公式          | 状态 | 说明                                                        |
 | --- | ----------- | -- | --------------------------------------------------------- |
-| F01 | 戏剧张力        | ◐  | `formulas.tension()` 纯函数，未被 GM/护栏消费                       |
+| F01 | 戏剧张力        | ✅  | `variables.tension_snapshot()` 入 runtime，抬高决策温度与 L4 泄露 σ              |
 | F02 | 关系更新        | ✅  | `_appraise()` 调用                                          |
 | F03 | 关系放大 κ      | ✅  | `_appraise()` 调用                                          |
 | F04 | 个体敏感度 ν     | ✅  | `init_runtime()` 调用                                       |
 | F05 | β 影响矩阵      | ✅  | `formulas.BETA_MATRIX` 被 `_appraise()` 使用                 |
-| F06 | 信任不对称       | ◐  | 仅文档/配置说明；运行时统一 `λ=0.95`，无按符号分档                            |
+| F06 | 信任不对称       | ✅  | `_appraise()` 负向 β×2.5、λ⁻=0.92 > λ⁺=0.85，变更写审计 reason        |
 | F07 | PAD 更新      | ✅  | `_appraise()` 调用                                          |
-| F08 | 创伤放大        | ❌  | `trauma[]` 只在 L1，未触发                                      |
-| F09 | 离散情绪映射      | ❌  | `emotion_shown` 默认"平静"，无 PAD→情绪映射                         |
-| F10 | 阵营对齐        | ◐  | 纯函数，`faction` 恒为 `None`                                   |
-| F11 | 滞回与背叛闸门     | ◐  | `faction_decision()` 纯函数，未接运行时                            |
+| F08 | 创伤放大        | ✅  | `emotion.apply_impact()` 显式创伤命中时 PAD 冲击 ×1.8、tau ×1.8       |
+| F09 | 离散情绪映射      | ✅  | `emotion.py` PAD→愤怒/恐惧/悲伤/兴奋/平静，进表演指引                    |
+| F10 | 阵营对齐        | ✅  | `faction.py` 阈值对齐，`faction_state` 入席位状态并落审计             |
+| F11 | 滞回与背叛闸门     | ✅  | 0.70/0.50 滞回 + 2 轮冷却 + 忠诚闸门，`faction_shift` 事件化         |
 | F12 | 怀疑 log-odds | ✅  | `_update_suspicion()` / GM 线索释放                           |
 | F13 | Sigmoid     | ✅  | 同上                                                        |
 | F14 | 证据权重        | ◐  | 调用时写死 `cred=0.8, strength=1.0, bias=0.1`                  |
 | F15 | logLR 表     | ◐  | 配置样例；剧本权重来自 `clue_pool` 文本                                |
 | F16 | 归一化投票分布     | ✅  | `vote.py` softmax；`replay.py` 反事实                         |
-| F17 | 矛盾检测        | ◐  | `contradiction_strength()` 纯函数，无 `contradiction_event` 生成 |
-| F18 | 泄露强度 σ      | ◐  | `derive.py` 使用；未驱动角色表演噪声                                  |
-| F19 | 表现态度        | ❌  | `shown_attitude()` 未接                                     |
+| F17 | 矛盾检测        | ✅  | `contradiction.py` 归因事件 + 强度 + 下一轮优先抛出                  |
+| F18 | 泄露强度 σ      | ✅  | `l4.leak_sigma()` 驱动投影噪声，并叠加 F01 张力                        |
+| F19 | 表现态度        | ✅  | `l4.py` 用 `shown_attitude()` 生成 `shown_attitude` 投影              |
 | F20 | 说谎收益        | ✅  | `lie.should_lie()` 接入 AI 意图分支                             |
 | F21 | 谎言热度        | ✅  | `lie.update_from_events()`，被揭穿/矛盾时升级策略                    |
-| F22 | 目标热度曲线      | ⚠  | 函数正确，调用错误（C3）                                             |
+| F22 | 目标热度曲线      | ✅  | `T_total` 入 `game_state`，GM 策略与 `_gm_step` 共用（C3 已修）        |
 | F23 | 实际热度与调控     | ◐  | 只实现「放线索 / 休整」两支                                           |
 | F24 | 行为效用        | ✅  | `_choose_intent()`                                        |
 | F25 | 温度与 softmax | ✅  | `_choose_intent()` / `vote.py` |
@@ -175,6 +175,7 @@
 | G27 | ~~guide 提示词库~~ **已完成**：`guides.py` + 版本化 `guide_rules` 表，`prompt_engine` 按 purpose 注入措辞；事实 id 与 `key=value` 双重清洗 | 用户分工「guide 驱动变化」 | guide 只改措辞不改事实/数值；有 CLI 管理入口；注入前后 claimed_facts 不变 | 核心模块已落地 |
 | G28 | ~~日志/记忆统一读写入口~~ **已完成**：`journal.py` 收拢 state/event 读写；状态写入落 `state_change_audit`（before/after + reason + actor），事件读分「席位可见视图」与「全量审计视图」，分支克隆同步审计链 | 用户 2026-11-26「等等吧」 | 现有 CLI 行为不变；新入口可追溯、可复现 | G26 |
 | G29 | ~~真凶专用栽赃系统~~ **已完成**：`frame.py` 只为真凶席位从公开事件/已揭示线索/自身怀疑计算他人破绽候选与可引用片段，agent 按私有 prompt 段自行措辞；引擎不编造事实 | 用户 2026-11-28「真凶专用栽赃系统…提示词驱动的伪代码也可以」 | 仅真凶席位可见；候选有依据；无内部 id/真相文本进 prompt；replay/retro 可审计 | G08/G10 |
+| ✅ G30 | ~~规则闭环补漏~~ **已完成**：F06 信任不对称（β⁻×2.5、λ⁻>λ⁺）、F01 张力入决策温度与 L4 泄露 σ；`variables.situation_snapshot` 计算 §12.5 全部局势层变量；`degradation.audit` 覆盖 §14.3 九类风险并进 replay 第 16 节与 retro | §12.5 / §14.3 / F01 / F06 | F06 负向跌幅大于正向回补；张力调温/泄露有数值；局势层纯函数不暴露玩家；防退化按证据判 `ok/warn/no_data` | G05/G10 |
 
 ### 执行顺序（2026-11-26 定；G17–G28 全部完成）
 
@@ -194,9 +195,20 @@
 14. ~~**G09 剧本锁 R4**~~ — 已完成显式锁编译、输出侧硬拦截、终幕红标与分叉继承；IR3/IR4 由此转正。
 15. ~~**G10 情绪与阵营接线**~~ — 已完成创伤触发器、矛盾事件归因与数值、PAD→离散情绪、阵营滞回/冷却/忠诚闸门。
 16. ~~**G29 真凶栽赃系统**~~ — 已完成破绽候选评分、可引用事实片段、真凶私有 prompt 块与 GM 审计；自然语言栽赃由 agent 生成，引擎不写假事实。
-17. ~~**G11 语义与反思记忆**~~、~~**G15 F26 编号修正**~~ — 已完成四层记忆补齐与编号锁定。**G16 条件冻结**——若不做客户端运行则不做这一部分（用户 2026-11-26 定案，见 C1）。解冻条件只有一个：决定做客户端运行。
+17. ~~**G11 语义与反思记忆**~~、~~**G15 F26 编号修正**~~ — 已完成四层记忆补齐与编号锁定。
+18. ~~**G30 规则闭环补漏**~~ — 已完成 F01/F06 接线、局势层变量与 §14.3 防退化自动检测；同时修正公式矩阵中 10 项「已做但标错」的状态。**G16 条件冻结**——若不做客户端运行则不做这一部分（用户 2026-11-26 定案，见 C1）。解冻条件只有一个：决定做客户端运行。
 
 > 旧计划 #31–#35 已完成（G06/G07/G08/G12/G13/G14）；本表把它们映射到具体可执行项，不新增第二套编号。
+
+### 仍未覆盖的设定项（当前不做，不是遗漏）
+
+| 项 | 状态 | 不做的理由 |
+|---|---|---|
+| `truth_graph` 结构化 `(s,p,o,t,visibility)` 三元组 | 未建模 | 现有脚本只提供字符串事实；从文本反推三元组等于编造，违反「缺证据不编造」。待作者显式提供结构化真相再接。 |
+| 线索 `forgeable/decay_rounds/chain` 属性 | 未建模 | 存量本无这些字段；补造会改变可解性与平衡，需作者显式声明。 |
+| 小模型事件分类层替代 `act_type` 固定映射 | 未做 | 当前确定性评价可复算、可审计；引入分类模型会把数值裁决交给 LLM，违反「数值归公式」。 |
+| L0 `meta_bias` 与 60+ 参数可编辑配置表 | 未做 | 只在原始设定中列举，缺具体取值与证据；做成配置表需要用户给定参数来源。 |
+| HTTP/WebSocket API、Web UI、UGC、TTS、原书抽取 | 条件冻结 | 属 G16，用户 2026-11-26 定案：不做客户端运行则整体不做。 |
 
 ---
 

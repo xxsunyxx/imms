@@ -82,11 +82,17 @@ def persona_guard(candidate, anchor, threshold=COSINE_MIN):
 
 
 def leak_sigma(state):
-    """F18 leak sigma for the observed seat (higher arousal/stress = leakier)."""
+    """F18 leak sigma for the observed seat (higher arousal/stress = leakier).
+
+    F01 adds canon-vs-mask tension to the base sigma: the harder a seat has to
+    hold its mask, the more it leaks.  A missing tension stays neutral (0.0).
+    """
     emo = state.get("emotion") or {}
     acting = _num((state.get("l0") or {}).get("acting_skill"), 0.5)
+    tension = max(0.0, _num(state.get("tension"), 0.0))
     return round(formulas.leak_sigma(
-        0.05, _num(emo.get("arousal"), 0.0), _num(emo.get("stress"), 0.0), acting
+        0.05 + 0.4 * tension, _num(emo.get("arousal"), 0.0),
+        _num(emo.get("stress"), 0.0), acting
     ), 6)
 
 

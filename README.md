@@ -149,6 +149,12 @@ uv run imms --db imms.db vote config --session snow-night-villa-s001
 
 `memory.py` 在情节记忆之外补齐语义记忆与反思记忆：语义只取公开事实、显式规则与角色自己的目标，不复制私有真相；每次幕切换或终幕生成最多 3 条带来源事件 seq 的反思，权重是普通条目的 2 倍。F26 检索同时给情节、语义、反思三层打分，prompt 的召回段会标明「剧本知识 / 反思」。replay 第 15 节与 retro 看板给分层计数。
 
+## 局势层与防退化
+
+`variables.situation_snapshot()` 纯函数计算 §12.5 的 8 项局势变量（进度、热度、信念熵、指认众数、线索释放率、阵营极化、存活人数、调控增益），结果写入 `game_state.situation`，只供 GM 调控，不进玩家 prompt。F01 张力由 canon/mask 差与当前压力算出，抬高决策温度并加大 L4 泄露 σ；F06 让信任跌得快（负向 β×2.5、λ⁻=0.92）而回得慢（λ⁺=0.85）。
+
+`degradation.audit()` 覆盖原设定 §14.3 的九类风险（人格漂移、关系爆炸、数值抖动、幻觉造事实、记忆爆炸、逻辑死锁、并发竞态、提示注入、全员理性），只读 drift ledger、席位状态、护栏统计与事件流。每条检查给 `ok` / `warn` / `no_data` 和证据；无数据不冒充通过。replay 第 16 节与 retro 看板显示结果。
+
 ## 统一摄入：先骨架，再归一化
 
 ```bash
@@ -204,7 +210,7 @@ uv run python -m unittest discover -s tests
 - `docs/CORE_MODULES.md` — 核心规则模块：人物抽取、提示词引擎、变量计算、确定性随机源、guide 库、谎言私有边界
 - `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
 - `docs/ORIGINAL_SPEC.md` — 用户提供的 IMMS v1.0 原始设定（逐字归档）
-- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（G06–G15/G29 已完成；IPS G17–G28 已完成；G16 条件冻结）
+- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（G01–G15/G17–G30 已完成；G16 条件冻结；未覆盖项单列理由）
 - `docs/IPS_ORIGINAL_SPEC.md` — 用户提供的 IPS v1.0 即兴扰动系统原文（逐字归档）
 - `docs/IPS_FUSION.md` — IPS 九段流水线对照、可融入性结论与已定案边界；区分急性越界态（疯批）与长期人格面（黑化/病娇/DID，按记忆作用域分族），含跨局体验记忆，分期 G17–G25
 - `docs/EVENTS.md` — GM 事件注入库：七类外部扰动与多变量触发

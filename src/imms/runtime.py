@@ -4,7 +4,14 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, contradiction, db, director, emotion, events, faction, facets, formulas, frame, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, scoring, script_locks, speech_style, stage_gate, style_compiler, timeline, vote
+from . import aftermath, breakout, contradiction, db, director, emotion, events, faction, facets, formulas, frame, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, scoring, script_locks, speech_style, stage_gate, style_compiler, timeline, variables, vote
+
+# F06: trust is asymmetric -- bad news lands harder and recovery is slower.
+# lambda multiplies (before - baseline), so a larger lambda amplifies the
+# beta response at equilibrium; negative beta therefore uses the larger one.
+TRUST_LAMBDA_NEG = 0.92
+TRUST_LAMBDA_POS = 0.85
+TRUST_BETA_NEG_GAIN = 2.5
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -168,9 +175,19 @@ def _appraise(state, event, round_no):
             continue
         lo, hi = REL_DOMAIN[dim]
         before = state["relations"].setdefault(actor, dict(REL_DEFAULT))[dim]
-        after = formulas.relation_update(before, REL_DEFAULT[dim], 0.95, coeff, eta, kappa_v, state["nu"], lo, hi)
+        lam, beta_eff = 0.95, coeff
+        reason = "F02 事件评价"
+        if dim == "trust":
+            if coeff < 0:
+                lam, beta_eff = TRUST_LAMBDA_NEG, coeff * TRUST_BETA_NEG_GAIN
+                reason = "F06 信任负向放大"
+            else:
+                lam = TRUST_LAMBDA_POS
+                reason = "F06 信任缓慢恢复"
+        after = formulas.relation_update(before, REL_DEFAULT[dim], lam, beta_eff, eta, kappa_v, state["nu"], lo, hi)
         state["relations"][actor][dim] = after
-        changed.append({"dim": dim, "target": actor, "before": round(before, 4), "after": round(after, 4)})
+        changed.append({"dim": dim, "target": actor, "before": round(before, 4),
+                        "after": round(after, 4), "reason": reason})
     impact = {"valence": -0.15 if coeff < 0 else 0.10, "arousal": 0.12, "dominance": 0.05}
     text = " ".join([
         str(payload.get("utterance") or ""),
@@ -266,7 +283,10 @@ def _choose_intent(state, rng):
         risk = emo["exposure_risk"] if intent in {"accuse", "confess"} else 0.1
         cost = (1 - attrs.get("values.honesty", 0.5)) if intent == "confess" else 0.1
         utilities[intent] = formulas.utility(weights, fit, gain, impulse, social, risk, cost)
-    temp = formulas.decision_temperature(1.0, emo["arousal"], emo["intoxication"])
+    base_temp = formulas.decision_temperature(1.0, emo["arousal"], emo["intoxication"])
+    # F01: canon-vs-mask tension raises decision temperature, so a seat whose
+    # public mask diverges from canon under stress becomes less predictable.
+    temp = round(base_temp * (1.0 + 0.5 * float(state.get("tension") or 0.0)), 6)
     probs = formulas.softmax(utilities, temp)
     return rng.choices(list(probs), weights=list(probs.values()), k=1)[0]
 
@@ -869,6 +889,10 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                             "seat": seat_id, "from": faction_shift["from"],
                             "to": faction_shift["to"]})
             _log_changes(conn, session_id, round_no, seat_id, state["character_id"], round_changes)
+            # F01 feeds both the intent temperature and L4 leak noise; compute
+            # it after appraisal so current stress is reflected, and store it
+            # in state so the projection layer reads the same number.
+            state["tension"] = variables.tension_snapshot(state).get("tension", 0.0)
             recalled = []
             pending = contradiction.pending_for_round(state, round_no)
             if state["is_human"]:
@@ -1343,6 +1367,16 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
         db.set_game_state(conn, session_id, "round", round_no)
 
     db.set_game_state(conn, session_id, "runtime", runtime)
+    # §12.5 situation layer: GM-only regulation input, never shown to a seat.
+    situation = variables.situation_snapshot(runtime, {
+        "round": db.get_game_state(conn, session_id, "round", 0),
+        "total_rounds": db.get_game_state(conn, session_id, "total_rounds", rounds),
+        "heat": db.get_game_state(conn, session_id, "ips_heat_adjustment", 0.0),
+        "revealed_clues": db.get_game_state(conn, session_id, "revealed_clues", []),
+        "clue_pool": onto.get("clue_pool") or [],
+        "alive_count": db.get_game_state(conn, session_id, "alive_count", len(runtime)),
+    })
+    db.set_game_state(conn, session_id, "situation", situation)
     db.set_game_state(conn, session_id, "llm_stats", llm_stats)
     db.set_game_state(conn, session_id, "infoguard_stats", guard_stats)
     result = {}

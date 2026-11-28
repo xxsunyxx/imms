@@ -501,3 +501,12 @@
 - `memory.py` 新增 `seed_semantic()` / `reflect()` / `_recall_items()`：语义记忆只取公开事实、显式规则和角色目标；幕切换与终幕生成 3 条带来源事件、`weight_factor=2` 的反思；F26 检索同时命中情节/语义/反思，prompt 召回段标明来源。
 - runtime 在初始化时播种语义记忆，在阶段切换和终幕写 GM+本人可见的 `reflection` 事件；replay 第 15 节与 retro 看板给分层计数。
 - `cli.py` 记忆帮助由 F30 改为 F26；派生能力 `derive.py` 与 `docs/FORMULAS.md` 的 F30 保持不变。新增 `tests/test_memory_layers.py`（4 项）与 `tests/test_formula_numbering.py`（3 项）。
+
+## 2026-11-28 · #130–#133 规则闭环补漏（G30）
+
+- F06 信任不对称：`_appraise()` 对 `trust` 负向事件用 β×2.5、λ⁻=0.92，正向恢复用 λ⁺=0.85，变更 reason 写进 `attribute_events`；之前所有维度统一 λ=0.95。
+- F01 张力接线：`variables.tension_snapshot()` 每轮在评价后计算，进 `_choose_intent()` 抬高决策温度、`l4.leak_sigma()` 加大泄露 σ；两者都读同一个 state 数值。
+- `variables.situation_snapshot()` 纯函数计算 §12.5 八项局势变量，runtime 写 `game_state.situation`，只供 GM 调控，不进玩家 prompt。
+- 新增 `degradation.audit()`：§14.3 九类风险逐项给 `ok/warn/no_data` + 证据，只读 ledger/state/统计/事件；replay 第 16 节与 retro 看板可见。
+- 修正 `docs/GAP_AUDIT.md` 里 10 项「已做但标未完成」的公式状态与 8 处逐章描述；新增「仍未覆盖的设定项」表，把三元组真相图、线索属性、小模型分类、参数配置表、G16 的理由写明。
+- 新增 `tests/test_rules_closure.py`（6 项）；全量 342 unittest 通过。
