@@ -31,6 +31,7 @@ from . import ontology as ontology_mod
 from . import oracle as oracle_mod
 from . import registry as registry_mod
 from . import replay as replay_mod
+from . import script_quality as quality_mod
 from . import retro as retro_mod
 from . import runtime as runtime_mod
 from . import solver as solver_mod
@@ -53,10 +54,15 @@ def audit_all_with_gate(conn, limit=None):
     """Solvability summary plus the G12 authoring admission gate per script."""
     report = solver_mod.audit_all(conn, limit)
     for item in report:
-        authoring = oracle_mod.authoring_validation(db_mod.get_script(conn, item["script_id"]))
+        onto = db_mod.get_script(conn, item["script_id"])
+        authoring = oracle_mod.authoring_validation(onto)
         item["authoring"] = authoring["verdict"]
         item["authoring_checks"] = authoring["checks"]
         item["admitted"] = authoring["verdict"] == "pass"
+        quality = quality_mod.classify(onto)
+        item["quality"] = quality["tier"]
+        item["source_type"] = quality["source_type"]
+        item["quality_gaps"] = quality["gaps"]
     return report
 
 
@@ -311,7 +317,17 @@ def build_parser():
 
     audit_all_p = sub.add_parser("audit-all", help="Audit every stored script (summary only)")
     audit_all_p.add_argument("--limit", type=int)
+    audit_all_p.add_argument("--by-tier", action="store_true", help="Summarize by quality tier")
     audit_all_p.add_argument("--out", help="Optional JSON report path")
+
+    quality_p = sub.add_parser("quality", help="Script quality tiers and derived manifest")
+    quality_sp = quality_p.add_subparsers(dest="quality_action", required=True)
+    qs = quality_sp.add_parser("summary", help="Summarize stored scripts by tier/source")
+    qs.add_argument("--manifest", default=str(ROOT / "corpus" / "manifest.json"))
+    qs.add_argument("--out", help="Optional JSON report path")
+    qb = quality_sp.add_parser("build", help="Write a derived quality manifest")
+    qb.add_argument("--manifest", default=str(ROOT / "corpus" / "manifest.json"))
+    qb.add_argument("--out", default=str(ROOT / "corpus" / "quality_manifest.json"))
 
     drive_p = sub.add_parser("drive", help="Headless step-by-step session driver")
     drive_sp = drive_p.add_subparsers(dest="drive_action", required=True)
@@ -841,7 +857,23 @@ def main(argv=None):
 
         elif args.cmd == "audit-all":
             report = audit_all_with_gate(conn, args.limit)
+            if args.by_tier:
+                summary = quality_mod.summarize(conn)
+                summary["admitted"] = sum(1 for item in report if item["admitted"])
+                summary["needs_work"] = sum(1 for item in report if not item["admitted"])
+                payload = summary
+            else:
+                payload = report
             if args.out:
+                write_json(args.out, payload)
+            print_json(payload)
+
+        elif args.cmd == "quality":
+            if args.quality_action == "summary":
+                report = quality_mod.summarize(conn, args.manifest)
+            else:
+                report = quality_mod.build_quality_manifest(conn, args.manifest, args.out)
+            if args.out and args.quality_action == "summary":
                 write_json(args.out, report)
             print_json(report)
 

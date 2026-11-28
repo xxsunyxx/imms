@@ -467,3 +467,10 @@
 - `runtime.run_session(finalize=False)` 保留已声明的 `total_rounds`，避免逐轮调用把 F22 热度目标压成单轮长度。
 - CLI 增加 `drive status/step/run`；`run` 接受每轮 JSON 输入数组，可选先跑 intro/搜证阶段。旧 CLI 与 `run_session` 默认行为不变。
 - 新增 `tests/test_driver.py`（5 项）；全量 310 unittest 通过。同步 `docs/GAP_AUDIT.md` 与 `README.md`。
+
+## 2026-11-28 · #35 剧本质量分层与存量补齐（G14）
+
+- 新增 `script_quality.py`：五档质量 tier、来源类型标签与具体缺口，全部从已存 Ontology / manifest 字段派生；缺失项只标注不补全。
+- 生成派生 `corpus/quality_manifest.json`，源 `corpus/manifest.json` 与 raw 文件未改。当前存量：100 套盒装本 `explicit_partial`、6 套显式真凶本 `explicit_full`。
+- CLI 增加 `quality summary/build`，`audit-all --by-tier` 按层汇总；`audit-all` 每条附 `quality` / `source_type` / `quality_gaps`。
+- 新增 `tests/test_script_quality.py`（4 项）；全量 314 unittest 通过。同步 `docs/GAP_AUDIT.md` 与 `README.md`。

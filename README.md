@@ -69,6 +69,11 @@ uv run imms --db imms.db audit-all --out audit.json
 uv run imms --db imms.db drive status --session snow-night-villa-s001
 uv run imms --db imms.db drive step --session snow-night-villa-s001 --rounds 3 --utterance "我只说公开信息" --out events.jsonl
 uv run imms --db imms.db drive run --session snow-night-villa-s001 --inputs inputs.json --phases --out events.jsonl
+
+# 剧本质量分层（派生清单，不改来源）
+uv run imms --db imms.db quality summary
+uv run imms --db imms.db audit-all --by-tier
+uv run imms --db imms.db quality build --out corpus/quality_manifest.json
 ```
 
 LLM 台词（可选）：设 `IMMS_LLM_URL` / `IMMS_LLM_MODEL` 后 `play --llm auto`；未配置时用离线模板。LLM 只写台词，不碰数值与事实。
@@ -121,6 +126,10 @@ uv run imms --db imms.db vote config --session snow-night-villa-s001
 ## Headless 交互驱动
 
 `driver.py` 不另造引擎：每次 `step` 调一次现有 runtime，`finalize=False` 只跑当前讨论轮，最后一轮才投票、结算结局与个人目标。`drive status` 从持久化 `round` / `game_events` 复原游标（进程重启后可续），`drive step` 逐轮送用户发言，`drive run` 从 JSON 数组读每轮输入，均可把新增事件追加成 JSONL 事件流。事件是宿主侧全量审计视图，带 `visibility` 字段，消费方需自行按席位过滤；不提供 Web UI 或 WebSocket 协议。
+
+## 剧本质量分层
+
+`script_quality.py` 按已存字段把剧本分五档（`explicit_full` / `explicit_partial` / `explicit_minimal` / `narrative_only` / `insufficient`），并标来源类型（盒装本 md、显式 yaml、RPG JSON、配置、未知）与具体缺口（无真凶、无线索、无结构化事实、无时间线等）。当前存量：100 套盒装本为 `explicit_partial`（有真凶与线索但无 `timeline_true`），6 套显式真凶本为 `explicit_full`。`quality build` 只写派生 `corpus/quality_manifest.json`，不改 `manifest.json` 或来源字节；`audit-all --by-tier` 出分层汇总。
 
 ## 统一摄入：先骨架，再归一化
 
