@@ -458,6 +458,55 @@ def _gm_narration_section(conn, session_id, names):
     return lines
 
 
+def _continuity_section(conn, session_id, names):
+    """Audit section for stage gates, resource spends and timeline conflicts."""
+    lines = ["## 10. 时序门控与供述自洽", ""]
+    actions = {
+        "stage_gate": "时序门控",
+        "stage_advance": "阶段推进",
+        "private_window": "私聊窗口",
+        "challenge_token": "质询 token",
+        "action_point": "行动点",
+        "statement_conflict": "供述冲突",
+        "timeline_audit": "双轨时间线",
+    }
+    rows = conn.execute(
+        "SELECT round, actor, act_type, payload_json FROM game_events "
+        "WHERE session_id=? AND act_type IN ("
+        "'stage_gate','stage_advance','private_window','challenge_token',"
+        "'action_point','statement_conflict','timeline_audit') ORDER BY seq",
+        (session_id,),
+    ).fetchall()
+    if not rows:
+        return lines + ["（本局未记录时序门控或审计事件）", ""]
+    for row in rows:
+        payload = json.loads(row["payload_json"] or "{}")
+        actor = names.get(row["actor"], row["actor"])
+        label = actions[row["act_type"]]
+        if row["act_type"] == "statement_conflict":
+            detail = f"{payload.get('detail', '')}（强度 {payload.get('strength', 0)}）"
+        elif row["act_type"] == "timeline_audit":
+            gaps = payload.get("gaps") or {}
+            detail = "；".join(
+                f"{names.get(cid, cid)} 空洞 {v.get('gap', 0)}"
+                for cid, v in gaps.items()
+            ) or "无角色空洞数据"
+            if payload.get("inversions"):
+                detail += "；倒挂 " + str(len(payload["inversions"]))
+        elif row["act_type"] == "stage_gate":
+            detail = "提前披露被拦下：" + "、".join(
+                h.get("fact_id", "") for h in payload.get("hits", [])
+            )
+        else:
+            detail = "；".join(
+                f"{k}={v}" for k, v in payload.items()
+                if k in {"from", "to", "after", "action", "target", "resource", "card_id"}
+            )
+        lines.append(f"- 第 {row['round']} 轮 · {label} · {actor}：{detail}")
+    lines.append("")
+    return lines
+
+
 def build_replay(conn, session_id):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -498,4 +547,6 @@ def build_replay(conn, session_id):
     lines += _style_compile_section(conn, session_id, names)
     lines.append("")
     lines += _gm_narration_section(conn, session_id, names)
+    lines.append("")
+    lines += _continuity_section(conn, session_id, names)
     return "\n".join(lines) + "\n"

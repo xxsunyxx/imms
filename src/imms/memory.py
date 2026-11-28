@@ -21,13 +21,16 @@ CJK_RE = re.compile(r"[\u4e00-\u9fff]+")
 
 RETRACT_MARKERS = ("我撤回", "收回刚才", "刚才那句作废", "不算我说的", "我说错了", "我改口")
 REVISE_MARKERS = ("其实", "更正", "不是这样", "我刚才说错", "准确地说", "换句话说")
+CONFESS_MARKERS = ("我承认", "是我做的", "我交代", "我坦白", "坦白说")
 WEAKEN_MARKERS = ("记不清", "不确定", "大概是")
 HIGH_IMPACT_ACTS = {"accuse", "confess", "contradiction", "lie_exposed", "caught_lying"}
+NEGATION_MARKERS = ("不是", "没有", "并未", "没在", "不在", "我没", "我否认")
 
 TRANSITIONS = {
-    "active": {"revised", "retracted", "weakened"},
-    "revised": {"retracted", "weakened"},
-    "weakened": {"revised", "retracted"},
+    "active": {"revised", "retracted", "weakened", "confessed"},
+    "revised": {"retracted", "weakened", "confessed"},
+    "weakened": {"revised", "retracted", "confessed"},
+    "confessed": {"retracted"},
     "retracted": set(),
 }
 
@@ -67,11 +70,56 @@ def classify_statement(utterance, act_type=""):
     text = str(utterance or "")
     if any(m in text for m in RETRACT_MARKERS) or act_type == "retract":
         return "retracted"
+    if any(m in text for m in CONFESS_MARKERS) or act_type == "confess":
+        return "confessed"
     if any(m in text for m in REVISE_MARKERS) or act_type == "revise":
         return "revised"
     if any(m in text for m in WEAKEN_MARKERS) or act_type == "deflect":
         return "weakened"
     return "stated"
+
+
+def detect_conflict(prior, record):
+    """Low-false-positive new-vs-old statement conflict.
+
+    A conflict is reported only when both statements are from the same
+    speaker, name the same fact, and the new one contains an explicit
+    negation or a status transition.  Mere topical overlap is never enough.
+    The numeric strength uses F17 with the two statements' beliefs.
+    """
+    prior = [p for p in (prior or []) if isinstance(p, dict)]
+    current = record or {}
+    facts = {str(f) for f in (current.get("claimed_facts") or [])}
+    if not facts or current.get("speaker") is None:
+        return None
+    text = str(current.get("utterance") or "")
+    status = current.get("status", "stated")
+    negated = any(marker in text for marker in NEGATION_MARKERS)
+    if not negated and status not in {"revised", "retracted", "confessed", "weakened"}:
+        return None
+    for old in reversed(prior):
+        if old.get("speaker") != current.get("speaker") or old.get("seq") == current.get("seq"):
+            continue
+        shared = facts & {str(f) for f in (old.get("claimed_facts") or [])}
+        if not shared:
+            continue
+        if old.get("status") == "retracted" and status == "retracted":
+            continue
+        belief_a = float(old.get("importance", 0.5))
+        belief_b = float(current.get("importance", 0.5))
+        # importance is bounded in [0.3, 1]; the formula needs >0.5 beliefs,
+        # so use a deterministic floor rather than inventing new evidence.
+        strength = formulas.contradiction_strength(
+            max(belief_a, 0.6), max(belief_b, 0.6), 0.6,
+        )
+        return {
+            "kind": "statement_conflict",
+            "detail": f"同一供述发生变化：{sorted(shared)[0]}",
+            "prior_seq": old.get("seq"), "seq": current.get("seq"),
+            "speaker": current.get("speaker"), "fact_ids": sorted(shared),
+            "status": status, "strength": round(strength, 4),
+        }
+    return None
 
 
 def importance_of(act_type, claimed_facts=None, target=None, is_self=False):
@@ -103,6 +151,7 @@ def observe(state, event, round_no, audience=None):
     earlier events each round, so de-duplication by event sequence is required).
     """
     memory = state.setdefault("memory", [])
+    prior = [item for item in memory if isinstance(item, dict)]
     seq = _seq_of(event, round_no)
     if any(item.get("seq") == seq for item in memory if isinstance(item, dict)):
         return None
@@ -130,7 +179,11 @@ def observe(state, event, round_no, audience=None):
     if len(memory) > MAX_MEMORY:
         del memory[:len(memory) - MAX_MEMORY]
     changes = update_commitments(state, record)
-    return {"record": record, "commitment_changes": changes}
+    return {
+        "record": record,
+        "commitment_changes": changes,
+        "conflict": detect_conflict(prior, record),
+    }
 
 
 def update_commitments(state, record):

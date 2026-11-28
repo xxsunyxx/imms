@@ -18,7 +18,7 @@ Visibility contract:
 
 import random
 
-from . import db
+from . import db, stage_gate
 
 
 def init_investigation(conn, session_id, onto, seats, points=2, seed=42):
@@ -82,6 +82,8 @@ def search(conn, session_id, seat_id, target, onto, make_public=True, seed=None)
         raise ValueError("ERR_NO_ACTION_POINTS")
     if target not in available_targets(onto, seat_id):
         raise ValueError("ERR_INVALID_SEARCH_TARGET")
+    if not stage_gate.private_allowed(conn, session_id):
+        raise ValueError("ERR_PRIVATE_WINDOW_CLOSED")
     cards = state.get("cards") or []
     current_round = int(db.get_game_state(conn, session_id, "round", 0) or 0)
     candidates = [
@@ -118,6 +120,11 @@ def search(conn, session_id, seat_id, target, onto, make_public=True, seed=None)
                 }
         db.set_game_state(conn, session_id, "runtime", runtime)
     seq = db.append_game_event(conn, session_id, current_round, seat_id, "clue_found", payload, event_vis)
+    db.append_game_event(conn, session_id, current_round, seat_id, "action_point", {
+        "resource": "ap", "seat": seat_id, "target": target,
+        "before": int(points.get(seat_id, 0)) + 1, "after": int(points.get(seat_id, 0)),
+        "card_id": card["id"],
+    }, ["gm:host"])
     state["log"].append({"seq": seq, "seat": seat_id, "card_id": card["id"],
                          "visibility": payload["visibility"]})
     db.set_game_state(conn, session_id, "investigation", state)
@@ -139,4 +146,6 @@ def private_chat(conn, session_doc, room_id, seat_id, target, utterance, claimed
 
 
 def open_private_chat(conn, session_doc, round_no, seats):
+    if not stage_gate.private_allowed(conn, session_doc["session_id"]):
+        raise ValueError("ERR_PRIVATE_WINDOW_CLOSED")
     return db.open_private_room(conn, session_doc, round_no, seats)

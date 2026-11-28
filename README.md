@@ -65,7 +65,7 @@ LLM 台词（可选）：设 `IMMS_LLM_URL` / `IMMS_LLM_MODEL` 后 `play --llm a
 
 ## 记忆与承诺
 
-运行时为每个席位维护听众账本（谁在何时对谁说了什么）、承诺状态机（`stated → revised/weakened → retracted`）与 F26 召回评分。召回结果只进 Prompt 与事件载荷，不生成新事实、不改数值。GM 分叉 diff 会列出记忆与承诺差异。
+运行时为每个席位维护听众账本（谁在何时对谁说了什么）、承诺状态机（`stated → revised/confessed/weakened → retracted`）与 F26 召回评分。新供述与旧供述共享事实且出现否定/改口/撤回时，写 GM-only `statement_conflict`（带归因与强度）；双轨时间线只在证词与真相同步倒挂时报警，并用 `alibi_gap` 数值抬高暴露风险。召回结果只进 Prompt 与事件载荷，不生成新事实、不改数值。GM 分叉 diff 会列出记忆与承诺差异。
 
 ```bash
 uv run imms --db imms.db memory show --session snow-night-villa-s001 --seat ai:gu_chengye --cue "书房 争吵"
@@ -155,7 +155,7 @@ uv run python -m unittest discover -s tests
 - `docs/CORE_MODULES.md` — 核心规则模块：人物抽取、提示词引擎、变量计算、确定性随机源、guide 库、谎言私有边界
 - `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
 - `docs/ORIGINAL_SPEC.md` — 用户提供的 IMMS v1.0 原始设定（逐字归档）
-- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（含 IPS G17–G25、G26–G28 与下一批执行顺序）
+- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（G06/G07 已完成；IPS G17–G25、G26–G28 已完成；G08–G15 待办）
 - `docs/IPS_ORIGINAL_SPEC.md` — 用户提供的 IPS v1.0 即兴扰动系统原文（逐字归档）
 - `docs/IPS_FUSION.md` — IPS 九段流水线对照、可融入性结论与已定案边界；区分急性越界态（疯批）与长期人格面（黑化/病娇/DID，按记忆作用域分族），含跨局体验记忆，分期 G17–G25
 - `docs/EVENTS.md` — GM 事件注入库：七类外部扰动与多变量触发

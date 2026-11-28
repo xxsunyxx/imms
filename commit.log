@@ -438,3 +438,11 @@
 - 4 个真 agent（3 席位 + 1 GM）按新阶段流程跑完整一局：六阶段齐备、15 席位生成 0 回退、GM 9 次全部合规、投票 3:1 命中真凶。真 GM 叙述按轮累积案情并按角色个性调视角，无数值/真相/票数泄露。
 - 真跑暴露：席位 prompt 把线索展示串里的 `|logLR:han_ziang=1.5` 送给 agent，台词念出「一点五」。新增 `infoguard.display_text()` 清洗 prompt 展示文本；runtime 用它清洗 clue / allowed 展示 / style allowed_facts；claimed_facts 校验白名单不变。端到端自检席位 prompt 的 logLR 命中 15→0。
 - 新增 3 项测试（display_text、席位 prompt 无 logLR、阶段 prompt hygiene），全量 283 unittest 通过。真跑产物：`phased_replay.md` / `phased_summary.json` / `phased_protocol/`（修复前原始记录）。
+
+## 2026-11-28 · #31 时序门控与台词自洽闭环（G06/G07）
+
+- 新增 `stage_gate.py`：把 `plot_locks` / `plot_lock` fact 编成运行时门控；发言落库前检查提前披露，命中即改写为回避并写 GM-only `stage_gate` 事件。公开事实/已揭示线索豁免，避免阻断合法推理。
+- G06 资源审计：阶段迁移拒绝跳阶（`phases.validate_transition`）；搜证 AP 写 `action_point` 事件；质询 token 每席 2 次，写 `challenge_token` 事件，耗尽后质询改为回避；GM `advance_stage` / `private_allowed` 转为 `stage_advance` / `private_window` 状态与事件，私聊窗口关闭时拒绝开房。
+- G07 双轨时间线：`timeline.py` 只在证词与 `timeline_true` 都有可解析时间且对齐时计算 `alibi_gap` 和倒挂，倒挂写 GM-only `timeline_audit`；空洞数值抬高 `exposure_risk`。
+- `memory.py` 补 `confessed` 状态与 `detect_conflict()`：同人、同事实且出现否定/改口/撤回才报冲突，写 GM-only `statement_conflict`（带强度）。`runtime` 接线，replay 新增「时序门控与供述自洽」审计段。
+- 新增 `tests/test_stage_gate.py`（6 项）与 `tests/test_timeline.py`（5 项）。全量 294 unittest 通过。

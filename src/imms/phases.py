@@ -51,9 +51,27 @@ PHASE_CUES = {
 }
 
 
+def validate_transition(current, phase):
+    """Reject skipped or backwards phase transitions.
+
+    Re-entering the same phase is allowed for status updates (e.g. resolving a
+    vote), but no phase may jump over an unplayed stage.
+    """
+    if not current or current == phase:
+        return phase
+    try:
+        before, after = PHASES.index(current), PHASES.index(phase)
+    except ValueError as exc:
+        raise ValueError("ERR_PHASE_UNKNOWN") from exc
+    if after < before or after > before + 1:
+        raise ValueError("ERR_PHASE_ORDER")
+    return phase
+
+
 def set_phase(conn, session_id, phase, status="active", round_no=0):
     """Persist the current phase transition (append-only via journal)."""
     from . import journal
+    validate_transition(phase_of(conn, session_id), phase)
     phases = list(db.get_game_state(conn, session_id, "phase_log", []) or [])
     phases.append({"phase": phase, "status": status, "round": int(round_no)})
     db.set_game_state(conn, session_id, "phase_log", phases)

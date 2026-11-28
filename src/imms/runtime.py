@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, db, director, events, facets, formulas, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, speech_style, style_compiler, vote
+from . import aftermath, breakout, db, director, events, facets, formulas, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, speech_style, stage_gate, style_compiler, timeline, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -129,6 +129,10 @@ def init_runtime(conn, session_doc):
     db.set_game_state(conn, session_id, "round", 0)
     db.set_game_state(conn, session_id, "revealed_clues", [])
     db.set_game_state(conn, session_id, "user_input_index", 0)
+    stage_gate.init_resources(conn, session_id, others)
+    timeline.update_session(conn, session_id, onto, 0, {
+        p["id"]: p["script_character_id"] for p in seats
+    })
 
 
 def _appraise(state, event, round_no):
@@ -388,6 +392,18 @@ def _audience_for(conn, row, all_seats):
     return sorted(audience)
 
 
+def _emit_conflict(conn, session_id, round_no, seat_id, conflict):
+    """Record a low-false-positive statement conflict for GM audit only."""
+    if not conflict:
+        return None
+    payload = dict(conflict)
+    payload["witness"] = seat_id
+    seq = db.append_game_event(
+        conn, session_id, round_no, "gm:host", "statement_conflict", payload, ["gm:host"]
+    )
+    return seq
+
+
 def _recall_payload(items):
     return [{
         "round": item.get("round"), "speaker": item.get("speaker"),
@@ -412,6 +428,14 @@ def _gm_step(conn, session_id, round_no, onto, runtime, guard=None, seat_map=Non
     injected = None
     gm_changes = []
     chosen = None
+    stage_advance = None
+    private_window = None
+    if decision and decision.get("advance_stage"):
+        stage_advance = stage_gate.advance(conn, session_id, round_no)
+    if decision and decision.get("private_allowed") is not None:
+        private_window = stage_gate.set_private_allowed(
+            conn, session_id, round_no, decision["private_allowed"], decision,
+        )
     if decision and decision.get("inject_event"):
         applied = events.apply(
             conn, session_id, decision["inject_event"], round_no, runtime, guard,
@@ -423,6 +447,7 @@ def _gm_step(conn, session_id, round_no, onto, runtime, guard=None, seat_map=Non
         return {
             "heat": round(heat, 4), "target": round(target, 4),
             "injected": injected, "changes": [], "event_injection": applied,
+            "stage_advance": stage_advance, "private_window": private_window,
         }
     if decision and decision.get("release_clue") and decision["release_clue"] not in revealed:
         if decision["release_clue"] in onto.get("clue_pool", []):
@@ -468,7 +493,11 @@ def _gm_step(conn, session_id, round_no, onto, runtime, guard=None, seat_map=Non
     elif heat > target + 0.3:
         injected = {"type": "rest"}
         db.append_game_event(conn, session_id, round_no, "gm:host", "rest", injected, ["public"])
-    return {"heat": round(heat, 4), "target": round(target, 4), "injected": injected, "changes": gm_changes}
+    return {
+        "heat": round(heat, 4), "target": round(target, 4), "injected": injected,
+        "changes": gm_changes, "stage_advance": stage_advance,
+        "private_window": private_window,
+    }
 
 
 def _vote(conn, session_id, runtime, session_doc, scripted, seed=42):
@@ -759,6 +788,15 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 )
                 if not observation:
                     continue
+                conflict_seq = _emit_conflict(
+                    conn, session_id, round_no, seat_id, observation.get("conflict"),
+                )
+                if conflict_seq:
+                    log.append({
+                        "round": round_no, "actor": seat_id, "act": "statement_conflict",
+                        "detail": observation["conflict"]["detail"],
+                        "strength": observation["conflict"]["strength"],
+                    })
                 for change in observation["commitment_changes"]:
                     log.append({
                         "round": round_no, "actor": seat_id, "act": "commitment",
@@ -945,6 +983,21 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                     guard_stats["output_flagged"] += 1
                     action = "flag"
                 guard_info = {"action": action, "facts": ids, "leaks": leaks}
+            stage_report = stage_gate.guard_output(
+                conn, session_id, onto, act, round_no, public_facts,
+            )
+            if stage_report:
+                guard_stats["stage_gate_rewritten"] = guard_stats.get("stage_gate_rewritten", 0) + 1
+                guard_info = {**(guard_info or {}), "stage_gate": stage_report}
+                log.append({"round": round_no, "actor": "gm:host", "act": "stage_gate",
+                            "status": "rewrite", "hits": stage_report["hits"]})
+            challenge = stage_gate.consume_challenge(
+                conn, session_id, round_no, seat_id, act,
+            )
+            if challenge:
+                log.append({"round": round_no, "actor": seat_id, "act": "challenge_token",
+                            "action": challenge["action"], "before": challenge["before"],
+                            "after": challenge["after"]})
             # IPS P0: expression only.  Delivery never feeds intent selection,
             # claimed facts, beliefs or TruthGraph (IR1).
             delivery = ips.micro_perturb(state, session_id, round_no, seed=seed)
@@ -1011,6 +1064,19 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 audience=[s for s in all_seats if s != seat_id],
             )
             if own_observation:
+                own_conflict = own_observation.get("conflict")
+                if own_conflict and not any(
+                    e["payload"].get("witness") == seat_id
+                    and e["payload"].get("seq") == own_conflict["seq"]
+                    for e in journal.audit_events(
+                        conn, session_id, act_type="statement_conflict"
+                    ) if isinstance(e.get("payload"), dict)
+                ):
+                    _emit_conflict(conn, session_id, round_no, seat_id, own_conflict)
+                    log.append({
+                        "round": round_no, "actor": seat_id, "act": "statement_conflict",
+                        "detail": own_conflict["detail"], "strength": own_conflict["strength"],
+                    })
                 for change in own_observation["commitment_changes"]:
                     log.append({
                         "round": round_no, "actor": seat_id, "act": "commitment",
@@ -1127,6 +1193,14 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                         "status": report["status"], "narration": report.get("narration"),
                         "drift": sorted(drift)})
 
+        timeline.update_session(
+            conn, session_id, onto, round_no,
+            {
+                p["id"]: p["script_character_id"]
+                for p in session_doc["participants"] if p.get("script_character_id")
+            },
+            runtime_state=runtime,
+        )
         for snap_seat, snap_state in runtime.items():
             db.save_snapshot(conn, session_id, round_no, snap_seat, snap_state)
         db.save_snapshot(conn, session_id, round_no, "@global", {
