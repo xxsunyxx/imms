@@ -583,16 +583,27 @@ def ingest_source(path, root=None, force=False, llm=None):
     if Path(detection["file"]).resolve() != raw_path.resolve():
         shutil.copy2(detection["file"], raw_path)
 
+    script_rel = f"scripts/{script_id}.json"
+    # Byte-level idempotence: re-importing an unchanged source must not move
+    # ingested_at.  Otherwise a second ingest differs by one second and breaks
+    # reproducibility checks on the canonical file.
+    prior_ingest = {}
+    if (root / script_rel).exists():
+        try:
+            prior_ingest = (read_json(root / script_rel).get("ingest") or {})
+        except (OSError, ValueError):
+            prior_ingest = {}
+    ingested_at = prior_ingest.get("ingested_at") \
+        if prior_ingest.get("source_sha256") == source_sha else None
     onto["source_files"] = [raw_rel]
     onto["ingest"] = {
         "adapter": detection["kind"],
         "detected_evidence": detection["evidence"],
         "source_path": detection["path"],
         "source_sha256": source_sha,
-        "ingested_at": _now(),
+        "ingested_at": ingested_at or _now(),
         "checks": result["checks"],
     }
-    script_rel = f"scripts/{script_id}.json"
     write_canonical(root / script_rel, onto)
     skeleton_rel = f"skeletons/{script_id}.json"
     result["skeleton"]["source_sha256"] = source_sha

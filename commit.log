@@ -494,3 +494,4 @@
 - 新增 `frame.py`：只为真凶席位从公开事件、已揭示线索指向、自身怀疑与供述矛盾计算其他角色的破绽分（矛盾 0.40 / 证据 0.25 / 怀疑 0.20 / 沉默 0.15），挑最多 3 个候选并列出可引用片段；无可观察依据时不生成候选。
 - 通过 `prompt_engine.register_block` 注入真凶私有 prompt 段，措辞由 agent 生成；引擎不编造新事实、不写真相时间线、不放内部 id，`claimed_facts` 仍走既有白名单与 InfoGuard。
 - `frame_guidance` 事件只写真凶席位 + GM；replay 第 14 节与 retro 看板给审计计数。新增 `tests/test_frame.py`（3 项），全量 329 unittest 通过。
+- 顺手修 `ingest`：同一 source_sha256 重导入时保留原 `ingested_at`，canonical 文件做到字节级幂等（此前跨秒会偶发失败）。
