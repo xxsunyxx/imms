@@ -669,7 +669,12 @@ def run_phased_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_n
 
 def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=None,
                 start_round=None, gm_policy=None, speaker=None, gm_agent=None,
-                gm_voice=None):
+                gm_voice=None, finalize=True):
+    """Run discussion rounds.  ``finalize=False`` skips vote/scoring/settlement.
+
+    Used by the headless driver to advance one round at a time; all per-round
+    formulas, IPS, InfoGuard and event writes are unchanged.
+    """
     session_doc = db.get_session(conn, session_id)
     init_runtime(conn, session_doc)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -707,7 +712,14 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     current_round = db.get_game_state(conn, session_id, "round", 0)
     # F22 needs the planned session length, not the current round; otherwise the
     # target heat is always 3.0 and the pacing controller never rests.
-    db.set_game_state(conn, session_id, "total_rounds", max(1, int(rounds)))
+    planned_total = max(1, int(rounds))
+    if not finalize:
+        # A stepped session passes ``rounds=current_round``; keep the previously
+        # declared plan so F22 pacing and driver resume still see the full length.
+        planned_total = max(planned_total, int(
+            db.get_game_state(conn, session_id, "total_rounds") or planned_total
+        ))
+    db.set_game_state(conn, session_id, "total_rounds", planned_total)
     # G22: one breakout token per session by default; G21's macro_quota can
     # raise the cap when it is present in the stored session metadata.
     session_dials = director.from_session(session_doc) or {}
@@ -1214,49 +1226,52 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     db.set_game_state(conn, session_id, "runtime", runtime)
     db.set_game_state(conn, session_id, "llm_stats", llm_stats)
     db.set_game_state(conn, session_id, "infoguard_stats", guard_stats)
-    result = _vote(conn, session_id, runtime, session_doc, scripted, seed)
-    db.set_game_state(conn, session_id, "result", result)
-    # GM narrator: host the vote reveal.  The winner/solved flags come from the
-    # deterministic tally; the agent only supplies atmosphere and wording.
-    if gm_agent is not None and getattr(gm_agent, "name", "") != "template":
-        phase = "tie" if result.get("tie") else "reveal"
-        voice_fp = gm_narrator.pick_voice_fp(
-            conn, session_id, runtime, gm_voice, rounds, seed=seed)
-        vote_prompt = gm_narrator.build_vote_prompt(
-            conn, session_id, phase, result, seat_names, voice_fp=voice_fp)
-        try:
-            vote_report = gm_narrator.parse_narration(
-                gm_agent.generate(vote_prompt), vote_prompt,
-                gm_narrator.allowed_quotes(conn, session_id, rounds),
-                forbidden_terms=gm_narrator.hidden_truth_terms(conn, session_id),
-                required_anchors=gm_narrator.case_anchors(conn, session_id))
-        except Exception as exc:
-            vote_report = {"status": "fallback", "reason": f"ERR_GM_VOTE: {exc}"}
-        vote_report["phase"] = phase
-        db.append_game_event(
-            conn, session_id, rounds, "gm:host", "gm_vote_narration", vote_report, ["public"],
+    result = {}
+    settled_scoring = {}
+    if finalize:
+        result = _vote(conn, session_id, runtime, session_doc, scripted, seed)
+        db.set_game_state(conn, session_id, "result", result)
+        # GM narrator: host the vote reveal.  The winner/solved flags come from
+        # the deterministic tally; the agent only supplies atmosphere and wording.
+        if gm_agent is not None and getattr(gm_agent, "name", "") != "template":
+            phase = "tie" if result.get("tie") else "reveal"
+            voice_fp = gm_narrator.pick_voice_fp(
+                conn, session_id, runtime, gm_voice, rounds, seed=seed)
+            vote_prompt = gm_narrator.build_vote_prompt(
+                conn, session_id, phase, result, seat_names, voice_fp=voice_fp)
+            try:
+                vote_report = gm_narrator.parse_narration(
+                    gm_agent.generate(vote_prompt), vote_prompt,
+                    gm_narrator.allowed_quotes(conn, session_id, rounds),
+                    forbidden_terms=gm_narrator.hidden_truth_terms(conn, session_id),
+                    required_anchors=gm_narrator.case_anchors(conn, session_id))
+            except Exception as exc:
+                vote_report = {"status": "fallback", "reason": f"ERR_GM_VOTE: {exc}"}
+            vote_report["phase"] = phase
+            db.append_game_event(
+                conn, session_id, rounds, "gm:host", "gm_vote_narration", vote_report, ["public"],
+            )
+            log.append({"round": rounds, "actor": "gm:host", "act": "gm_vote_narration",
+                        "status": vote_report["status"], "narration": vote_report.get("narration")})
+        # G08: settle endings, personal goals and F27/player scores from stored
+        # events.  No LLM judges a goal and private goals are written only to
+        # their own seat plus the host audit view.
+        settled_scoring = scoring.settle(conn, session_id)
+        log.append({"round": rounds, "actor": "gm:host", "act": "ending_settled",
+                    "status": settled_scoring["ending"]["code"]})
+        # G23: settle cross-session sentiment/outcome after the vote is final.
+        settled = longterm.settle_session(
+            conn, session_id, player_id=(session_doc.get("l0") or {}).get("player_id")
         )
-        log.append({"round": rounds, "actor": "gm:host", "act": "gm_vote_narration",
-                    "status": vote_report["status"], "narration": vote_report.get("narration")})
-    # G08: settle endings, personal goals and F27/player scores from stored
-    # events.  No LLM judges a goal and private goals are written only to their
-    # own seat plus the host audit view.
-    settled_scoring = scoring.settle(conn, session_id)
-    log.append({"round": rounds, "actor": "gm:host", "act": "ending_settled",
-                "status": settled_scoring["ending"]["code"]})
-    # G23: settle cross-session sentiment/outcome after the vote is final.
-    settled = longterm.settle_session(
-        conn, session_id, player_id=(session_doc.get("l0") or {}).get("player_id")
-    )
-    db.append_game_event(
-        conn, session_id, max(1, int(rounds)), "gm:host", "longterm_settled",
-        {"entries": [{
-            "owner": e["owner_character_id"], "target": e["target_id"],
-            "kind": e["target_kind"], "sentiment": e["sentiment"],
-            "outcome": e["outcome"],
-        } for e in settled]},
-        ["gm:host"],
-    )
+        db.append_game_event(
+            conn, session_id, max(1, int(rounds)), "gm:host", "longterm_settled",
+            {"entries": [{
+                "owner": e["owner_character_id"], "target": e["target_id"],
+                "kind": e["target_kind"], "sentiment": e["sentiment"],
+                "outcome": e["outcome"],
+            } for e in settled]},
+            ["gm:host"],
+        )
     return {
         "session_id": session_id, "rounds": rounds, "log": log, "result": result,
         "llm": llm_stats, "infoguard": guard_stats, "scoring": settled_scoring,

@@ -460,3 +460,10 @@
 - 新增 `oracle.py`：`authoring_validation` 在 solver 可解性之上检查结局条件字段与目标判据类型；`blind_play_check` 只用公开线索推导嫌疑人，真相放 `audit_only` 事后对照；`oracle_report` 合并作者准入、盲测与结局；`smoke` 在临时库按固定 seed 跑 N 局并给指纹/胜方/冤案/冷场率。
 - CLI 增加 `oracle check`（会话或脚本）与 `oracle smoke`；`audit-all` 每条加 `authoring` / `admitted` 门禁，列表输出结构保持不变。
 - 新增 `tests/test_oracle.py`（6 项），含真相改写不影响盲推、5 局指纹可重跑、scratch 库不改原库。全量 305 unittest 通过。
+
+## 2026-11-28 · #34 交互驱动层（G13）
+
+- 新增 `driver.py`：`HeadlessDriver` 每轮复用现有 runtime，`finalize=False` 只跑单轮，最后一轮才投票/评分/跨局结算；从持久化 `round` 与事件 seq 恢复游标；`EventStream` 输出 JSONL 全量审计事件（带 visibility）。
+- `runtime.run_session(finalize=False)` 保留已声明的 `total_rounds`，避免逐轮调用把 F22 热度目标压成单轮长度。
+- CLI 增加 `drive status/step/run`；`run` 接受每轮 JSON 输入数组，可选先跑 intro/搜证阶段。旧 CLI 与 `run_session` 默认行为不变。
+- 新增 `tests/test_driver.py`（5 项）；全量 310 unittest 通过。同步 `docs/GAP_AUDIT.md` 与 `README.md`。

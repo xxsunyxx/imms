@@ -64,6 +64,11 @@ uv run imms --db imms.db replay --session snow-night-villa-s001 --with-eval --ou
 uv run imms --db imms.db oracle check --session snow-night-villa-s001 --out oracle.json
 uv run imms --db imms.db oracle smoke --script-id snow-night-villa --games 5 --rounds 2 --out smoke.json
 uv run imms --db imms.db audit-all --out audit.json
+
+# headless 逐轮驱动（会话可恢复，事件流为 JSONL）
+uv run imms --db imms.db drive status --session snow-night-villa-s001
+uv run imms --db imms.db drive step --session snow-night-villa-s001 --rounds 3 --utterance "我只说公开信息" --out events.jsonl
+uv run imms --db imms.db drive run --session snow-night-villa-s001 --inputs inputs.json --phases --out events.jsonl
 ```
 
 LLM 台词（可选）：设 `IMMS_LLM_URL` / `IMMS_LLM_MODEL` 后 `play --llm auto`；未配置时用离线模板。LLM 只写台词，不碰数值与事实。
@@ -112,6 +117,10 @@ uv run imms --db imms.db vote config --session snow-night-villa-s001
 ## 盲测 oracle 与准入
 
 `oracle.py` 的盲测只从公开线索推导嫌疑人；真相仅在同一份报告的 `audit_only` 段用于事后对照，不参与推导。`oracle check --session` 出单局报告，`oracle check --script-id` 出静态作者准入；`audit-all` 在每条 solvability 摘要上附 `authoring` / `admitted` 门禁。`oracle smoke` 在独立临时库用固定 seed 跑 5 局（默认 2 轮、模板 LLM、轮换固定票型），记录每局胜方、冤案、冷场率和指纹；小样本只报告观察值，不做统计区间硬门槛。
+
+## Headless 交互驱动
+
+`driver.py` 不另造引擎：每次 `step` 调一次现有 runtime，`finalize=False` 只跑当前讨论轮，最后一轮才投票、结算结局与个人目标。`drive status` 从持久化 `round` / `game_events` 复原游标（进程重启后可续），`drive step` 逐轮送用户发言，`drive run` 从 JSON 数组读每轮输入，均可把新增事件追加成 JSONL 事件流。事件是宿主侧全量审计视图，带 `visibility` 字段，消费方需自行按席位过滤；不提供 Web UI 或 WebSocket 协议。
 
 ## 统一摄入：先骨架，再归一化
 

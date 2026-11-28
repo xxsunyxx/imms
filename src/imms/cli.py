@@ -15,6 +15,7 @@ from . import random_source as random_mod
 from . import db as db_mod
 from . import derive as derive_mod
 from . import director as director_mod
+from . import driver as driver_mod
 from . import events as events_mod
 from . import facets as facets_mod
 from . import gm as gm_mod
@@ -311,6 +312,23 @@ def build_parser():
     audit_all_p = sub.add_parser("audit-all", help="Audit every stored script (summary only)")
     audit_all_p.add_argument("--limit", type=int)
     audit_all_p.add_argument("--out", help="Optional JSON report path")
+
+    drive_p = sub.add_parser("drive", help="Headless step-by-step session driver")
+    drive_sp = drive_p.add_subparsers(dest="drive_action", required=True)
+    dst = drive_sp.add_parser("status", help="Show cursor/rounds for a resumable session")
+    dst.add_argument("--session", required=True)
+    dstep = drive_sp.add_parser("step", help="Advance one discussion round")
+    dstep.add_argument("--session", required=True)
+    dstep.add_argument("--utterance", default="")
+    dstep.add_argument("--vote", default=None)
+    dstep.add_argument("--rounds", type=int, default=None)
+    dstep.add_argument("--out", help="Append new events as JSONL")
+    drun = drive_sp.add_parser("run", help="Drive all remaining rounds from a JSON input file")
+    drun.add_argument("--session", required=True)
+    drun.add_argument("--inputs", required=True, help="JSON array of per-round inputs")
+    drun.add_argument("--rounds", type=int, default=None)
+    drun.add_argument("--phases", action="store_true", help="Run intro/investigate first")
+    drun.add_argument("--out", help="Append new events as JSONL")
 
     oracle_p = sub.add_parser("oracle", help="Blind oracle, authoring gate and balance smoke")
     oracle_sp = oracle_p.add_subparsers(dest="oracle_action", required=True)
@@ -826,6 +844,26 @@ def main(argv=None):
             if args.out:
                 write_json(args.out, report)
             print_json(report)
+
+        elif args.cmd == "drive":
+            if args.drive_action == "status":
+                d = driver_mod.HeadlessDriver(conn, args.session)
+                print_json(d.status())
+            else:
+                writer = open(args.out, "a", encoding="utf-8") if args.out else None
+                try:
+                    stream = driver_mod.EventStream(writer=writer)
+                    d = driver_mod.HeadlessDriver(
+                        conn, args.session, rounds=args.rounds, stream=stream
+                    )
+                    if args.drive_action == "step":
+                        result = d.step(args.utterance, args.vote)
+                    else:
+                        result = d.run(driver_mod.load_inputs(args.inputs), phases=args.phases)
+                    print_json(result)
+                finally:
+                    if writer is not None:
+                        writer.close()
 
         elif args.cmd == "oracle":
             if args.oracle_action == "check":
