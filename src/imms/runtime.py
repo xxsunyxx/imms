@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, contradiction, db, director, emotion, events, faction, facets, formulas, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, scoring, script_locks, speech_style, stage_gate, style_compiler, timeline, vote
+from . import aftermath, breakout, contradiction, db, director, emotion, events, faction, facets, formulas, frame, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, scoring, script_locks, speech_style, stage_gate, style_compiler, timeline, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -704,6 +704,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
         guard_engine.exempt_clue(clue)
     rng = random.Random(seed)
     human_id = session_doc["human_character_id"]
+    frame_seat = frame.killer_seat(session_doc, onto)
     all_seats = list(runtime.keys())
     for seat_id, state in runtime.items():
         state["seat_id"] = seat_id
@@ -956,6 +957,18 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                         "round": round_no, "actor": seat_id, "act": "style_compile",
                         **compiled["report"],
                     })
+                # G29: killer-only framing guidance.  The engine computes
+                # observable cracks and known fragments; the killer agent
+                # authors the actual words.  Never injected into other seats.
+                frame_guide = None
+                if seat_id == frame_seat:
+                    frame_guide = frame.build_guide(
+                        conn, session_id, onto, session_doc, state, round_no
+                    )
+                if frame_guide and not state["is_human"]:
+                    state["frame_guide"] = frame_guide["lines"]
+                else:
+                    state.pop("frame_guide", None)
                 if speaker.name != "template":
                     scope = guard_engine.scope_for(state["character_id"])
                     known_lines = (

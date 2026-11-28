@@ -573,6 +573,25 @@ def _affect_section(conn, session_id, names, char_names=None):
     return lines
 
 
+def _frame_section(conn, session_id, names):
+    """GM audit view of killer framing guidance: names and rounds only."""
+    rows = [
+        e for e in journal.audit_events(conn, session_id, act_type="frame_guidance")
+    ]
+    lines = ["## 14. 真凶栽赃推演（主持审计）", ""]
+    if not rows:
+        return lines + ["未生成（无可观察破绽或非真凶席位）。"]
+    for row in rows:
+        payload = row.get("payload") or {}
+        targets = ", ".join(
+            item.get("name", "") for item in (payload.get("targets") or [])
+        )
+        lines.append(
+            f"- 第{row['round']}轮：候选 {targets or '无'}；措辞由真凶 agent 生成"
+        )
+    return lines
+
+
 def build_replay(conn, session_id):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -621,4 +640,6 @@ def build_replay(conn, session_id):
     lines += _script_lock_section(conn, session_id)
     lines.append("")
     lines += _affect_section(conn, session_id, names, char_names)
+    lines.append("")
+    lines += _frame_section(conn, session_id, names)
     return "\n".join(lines) + "\n"

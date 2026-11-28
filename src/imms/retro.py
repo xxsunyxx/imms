@@ -416,6 +416,10 @@ def evaluate(conn, session_id, scripted_motive=None):
                 "faction_shifts": len(journal.audit_events(
                     conn, session_id, act_type="faction_shift")),
             },
+            "framing": {
+                "guidance_rounds": len(journal.audit_events(
+                    conn, session_id, act_type="frame_guidance")),
+            },
         },
     }
 
@@ -552,6 +556,9 @@ def render_evaluation(report):
             f"- 创伤触发 {affect['trauma_triggers']}｜矛盾事件 {affect['contradiction_events']}"
             f"｜阵营变更 {affect['faction_shifts']}"
         )
+    framing = retro.get("framing") or {}
+    if framing:
+        lines.append(f"- 真凶栽赃指引轮次：{framing['guidance_rounds']}（仅私有事件，措辞由 agent 生成）")
     return "\n".join(lines) + "\n"
 
 

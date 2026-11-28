@@ -488,3 +488,9 @@
 - runtime 在事件评价后写 GM+本人可见的 `trauma_trigger` / `contradiction_event` / `faction_shift`；AI 下一轮优先抛出已记录矛盾，仍不新增事实。replay 第 13 节与 retro 看板可见审计计数。
 - ontology YAML 解析保留显式 `trauma` / `faction` / `goal_fit` 字段；未声明的输入保持空/未结盟，并记 `gaps`，不从叙事推断。
 - 新增 `tests/test_affect.py`（5 项）；全量 326 unittest 通过。同步 `docs/GAP_AUDIT.md` 与 `README.md`。
+
+## 2026-11-28 · #129 真凶专用栽赃系统（G29）
+
+- 新增 `frame.py`：只为真凶席位从公开事件、已揭示线索指向、自身怀疑与供述矛盾计算其他角色的破绽分（矛盾 0.40 / 证据 0.25 / 怀疑 0.20 / 沉默 0.15），挑最多 3 个候选并列出可引用片段；无可观察依据时不生成候选。
+- 通过 `prompt_engine.register_block` 注入真凶私有 prompt 段，措辞由 agent 生成；引擎不编造新事实、不写真相时间线、不放内部 id，`claimed_facts` 仍走既有白名单与 InfoGuard。
+- `frame_guidance` 事件只写真凶席位 + GM；replay 第 14 节与 retro 看板给审计计数。新增 `tests/test_frame.py`（3 项），全量 329 unittest 通过。
