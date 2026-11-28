@@ -100,6 +100,10 @@ uv run imms --db imms.db vote config --session snow-night-villa-s001
 
 投票支持弃票/自我投票拦截、非法目标处理、证据平票裁决、1–5 轮复投改票、AI `argmax`/`persona` 策略与完整票据账本。`play` 自动投票并保持旧的 `scripted.vote` 兼容；`scripted.votes` + `vote_config` 可指定多轮票型。复盘会附加投票审计。详见 `docs/VOTE.md`。
 
+## 结局与个人目标评分
+
+每局投票结束后由 `scoring.py` 从事件溯源复算：条件结局（脚本 `endings` 里的 `condition`，支持 `solved` / `tie` / `winner` / `motive_correct` / `min_clue_coverage` / `min_goal_completion` / `max_violations` 与 `all`/`any`/`not`，无 `eval`）、真凶策略行为记录、F27 五项 AI 评分与玩家六维评分。公共事件 `ending_settled` 只带角色姓名和评分，不含内部席位 id；个人目标逐席写 `goal_settled`（可见性仅本人 + GM）。只有脚本给出 `check` 判据（secret / identify / escape / frame / vote_for）的目标才判完成，纯文本目标记 `unscored`，不按措辞猜测。复盘第 11 节与 `retro` 看板都会显示结算；旧会话没有落库评分时按需离线复算。
+
 ## 统一摄入：先骨架，再归一化
 
 ```bash
@@ -155,7 +159,7 @@ uv run python -m unittest discover -s tests
 - `docs/CORE_MODULES.md` — 核心规则模块：人物抽取、提示词引擎、变量计算、确定性随机源、guide 库、谎言私有边界
 - `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
 - `docs/ORIGINAL_SPEC.md` — 用户提供的 IMMS v1.0 原始设定（逐字归档）
-- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（G06/G07 已完成；IPS G17–G25、G26–G28 已完成；G08–G15 待办）
+- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（G06/G07/G08 已完成；IPS G17–G25、G26–G28 已完成；G09–G15 待办）
 - `docs/IPS_ORIGINAL_SPEC.md` — 用户提供的 IPS v1.0 即兴扰动系统原文（逐字归档）
 - `docs/IPS_FUSION.md` — IPS 九段流水线对照、可融入性结论与已定案边界；区分急性越界态（疯批）与长期人格面（黑化/病娇/DID，按记忆作用域分族），含跨局体验记忆，分期 G17–G25
 - `docs/EVENTS.md` — GM 事件注入库：七类外部扰动与多变量触发

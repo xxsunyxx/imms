@@ -446,3 +446,11 @@
 - G07 双轨时间线：`timeline.py` 只在证词与 `timeline_true` 都有可解析时间且对齐时计算 `alibi_gap` 和倒挂，倒挂写 GM-only `timeline_audit`；空洞数值抬高 `exposure_risk`。
 - `memory.py` 补 `confessed` 状态与 `detect_conflict()`：同人、同事实且出现否定/改口/撤回才报冲突，写 GM-only `statement_conflict`（带强度）。`runtime` 接线，replay 新增「时序门控与供述自洽」审计段。
 - 新增 `tests/test_stage_gate.py`（6 项）与 `tests/test_timeline.py`（5 项）。全量 294 unittest 通过。
+
+## 2026-11-28 · #32 多结局与个人目标评分（G08 / P4）
+
+- 新增 `scoring.py`：结局条件判定（无 `eval`，未知字段告警，结构化优先、legacy 顺序兜底）、显式目标判据结算（secret/identify/escape/frame/vote_for）、F27 AI 五分量与玩家六维评分；无证据的分量留 `None`，只对有依据的分量加权。
+- 纯文本个人目标一律 `unscored`，不按措辞猜完成度；真凶策略只记可观察行为（回避/指控/谎言/栽赃票），不推断主观目标是否达成。
+- runtime 在投票结算后写公共 `ending_settled`（角色姓名，不含内部 id）与逐席私有 `goal_settled`（本人 + GM），状态写 `scoring`，同 Result 重复结算会跳过避免事件重复。
+- replay 新增第 11 节「结局与个人目标结算」；retro 增加结局/玩家评分看板。lockedroom 5 指标未改。
+- 新增 `tests/test_scoring.py`（5 项）；全量 299 unittest 通过。同步 `docs/GAP_AUDIT.md`、`docs/JUBENSHA_RULES_AND_GM_PLAN.md`、`README.md`。

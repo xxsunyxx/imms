@@ -3,7 +3,7 @@
 import json
 import re
 
-from . import db, formulas, gm_debrief, journal
+from . import db, formulas, gm_debrief, journal, scoring
 
 SECTIONS = ["真相时间线", "角色内心独白", "关键转折点 Top 5", "谎言全景图",
             "反事实推演", "越界时刻 Top N", "说话风格漂移账"]
@@ -507,6 +507,12 @@ def _continuity_section(conn, session_id, names):
     return lines
 
 
+def _settlement_section(conn, session_id):
+    report = db.get_game_state(conn, session_id, "scoring", {}) or scoring.evaluate(conn, session_id)
+    rendered = scoring.render(report)
+    return rendered.rstrip().splitlines()
+
+
 def build_replay(conn, session_id):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -549,4 +555,6 @@ def build_replay(conn, session_id):
     lines += _gm_narration_section(conn, session_id, names)
     lines.append("")
     lines += _continuity_section(conn, session_id, names)
+    lines.append("")
+    lines += _settlement_section(conn, session_id)
     return "\n".join(lines) + "\n"

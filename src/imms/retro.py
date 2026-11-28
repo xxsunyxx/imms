@@ -12,7 +12,7 @@ the story and no session state is mutated.
 
 import json
 
-from . import db, infoguard, replay, solver, vote
+from . import db, infoguard, replay, scoring, solver, vote
 
 WEIGHT_HARD = 1.0
 WEIGHT_SOFT = 0.3
@@ -405,6 +405,8 @@ def evaluate(conn, session_id, scripted_motive=None):
                 "order_conflicts": audit["timeline"]["order_conflicts"],
                 "warnings": audit["timeline"]["warnings"],
             },
+            "scoring": db.get_game_state(conn, session_id, "scoring", {})
+            or scoring.evaluate(conn, session_id),
         },
     }
 
@@ -507,6 +509,20 @@ def render_evaluation(report):
         lines.append("- 未落目标区间：" + "、".join(failed))
     else:
         lines.append("- 全部有样本的指标均落在目标区间")
+    settled = retro.get("scoring") or {}
+    if settled:
+        ending = settled.get("ending") or {}
+        players = (settled.get("scores") or {}).get("players") or {}
+        lines.extend(["", "**结局与个人目标评分**", ""])
+        lines.append(
+            f"- 结局：{ending.get('code', '—')}（依据 {ending.get('source', '—')}）"
+            f"｜玩家评分："
+            + "、".join(
+                f"{item['name']}={item['score'] if item['score'] is not None else '无法判定'}"
+                for item in players.values()
+            )
+        )
+        lines.append("- 纯文本目标未给机读判据时记为 unscored；完整明细见复盘第 11 节")
     warnings = retro["timeline"]["order_conflicts"] + retro["timeline"]["warnings"]
     lines.extend(["", "**时间线检查**", ""])
     if warnings:

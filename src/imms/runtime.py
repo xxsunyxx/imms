@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, db, director, events, facets, formulas, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, speech_style, stage_gate, style_compiler, timeline, vote
+from . import aftermath, breakout, db, director, events, facets, formulas, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, scoring, speech_style, stage_gate, style_compiler, timeline, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -1238,6 +1238,12 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
         )
         log.append({"round": rounds, "actor": "gm:host", "act": "gm_vote_narration",
                     "status": vote_report["status"], "narration": vote_report.get("narration")})
+    # G08: settle endings, personal goals and F27/player scores from stored
+    # events.  No LLM judges a goal and private goals are written only to their
+    # own seat plus the host audit view.
+    settled_scoring = scoring.settle(conn, session_id)
+    log.append({"round": rounds, "actor": "gm:host", "act": "ending_settled",
+                "status": settled_scoring["ending"]["code"]})
     # G23: settle cross-session sentiment/outcome after the vote is final.
     settled = longterm.settle_session(
         conn, session_id, player_id=(session_doc.get("l0") or {}).get("player_id")
@@ -1253,5 +1259,5 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     )
     return {
         "session_id": session_id, "rounds": rounds, "log": log, "result": result,
-        "llm": llm_stats, "infoguard": guard_stats,
+        "llm": llm_stats, "infoguard": guard_stats, "scoring": settled_scoring,
     }
