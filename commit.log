@@ -495,3 +495,9 @@
 - 通过 `prompt_engine.register_block` 注入真凶私有 prompt 段，措辞由 agent 生成；引擎不编造新事实、不写真相时间线、不放内部 id，`claimed_facts` 仍走既有白名单与 InfoGuard。
 - `frame_guidance` 事件只写真凶席位 + GM；replay 第 14 节与 retro 看板给审计计数。新增 `tests/test_frame.py`（3 项），全量 329 unittest 通过。
 - 顺手修 `ingest`：同一 source_sha256 重导入时保留原 `ingested_at`，canonical 文件做到字节级幂等（此前跨秒会偶发失败）。
+
+## 2026-11-28 · #127/#128 四层记忆与 F26 编号收尾（G11/G15）
+
+- `memory.py` 新增 `seed_semantic()` / `reflect()` / `_recall_items()`：语义记忆只取公开事实、显式规则和角色目标；幕切换与终幕生成 3 条带来源事件、`weight_factor=2` 的反思；F26 检索同时命中情节/语义/反思，prompt 召回段标明来源。
+- runtime 在初始化时播种语义记忆，在阶段切换和终幕写 GM+本人可见的 `reflection` 事件；replay 第 15 节与 retro 看板给分层计数。
+- `cli.py` 记忆帮助由 F30 改为 F26；派生能力 `derive.py` 与 `docs/FORMULAS.md` 的 F30 保持不变。新增 `tests/test_memory_layers.py`（4 项）与 `tests/test_formula_numbering.py`（3 项）。

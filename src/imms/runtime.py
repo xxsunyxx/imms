@@ -137,6 +137,8 @@ def init_runtime(conn, session_doc):
             {"priors": priors}, ["gm:host"],
         )
 
+    for p in seats:
+        memory.seed_semantic(runtime[p["id"]], onto, char_by_id.get(p["script_character_id"]) or {})
     db.set_game_state(conn, session_id, "runtime", runtime)
     db.set_game_state(conn, session_id, "round", 0)
     db.set_game_state(conn, session_id, "revealed_clues", [])
@@ -1279,10 +1281,27 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             )
             log.append({"round": round_no, "actor": "gm:host", "act": "gm_decision",
                         "policy": gm_decision.get("policy"), "release_clue": gm_decision.get("release_clue")})
+        stage_before = stage_gate.current_stage(conn, session_id)
         gm_result = _gm_step(
             conn, session_id, round_no, onto, runtime, guard_engine, seat_map,
             decision=gm_decision,
         )
+        stage_after = stage_gate.current_stage(conn, session_id)
+        if stage_after != stage_before:
+            for reflect_seat, reflect_state in runtime.items():
+                insights = memory.reflect(
+                    reflect_state, round_no,
+                    act_label=f"第{stage_after + 1}幕", seat_names=seat_names,
+                )
+                if insights:
+                    db.append_game_event(
+                        conn, session_id, round_no, "gm:host", "reflection",
+                        {"seat": reflect_seat, "count": len(insights),
+                         "source_seq": insights[0]["source_seq"]},
+                        ["gm:host", reflect_seat],
+                    )
+                    log.append({"round": round_no, "actor": "gm:host", "act": "reflection",
+                                "seat": reflect_seat, "count": len(insights)})
         for change_seat, change_char, change in gm_result.pop("changes", []):
             if change_seat:
                 _log_changes(conn, session_id, round_no, change_seat, change_char, [change])
@@ -1378,6 +1397,19 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
             } for e in settled]},
             ["gm:host"],
         )
+    if finalize:
+        for reflect_seat, reflect_state in runtime.items():
+            insights = memory.reflect(
+                reflect_state, rounds, act_label="终幕", seat_names=seat_names
+            )
+            if insights:
+                db.append_game_event(
+                    conn, session_id, rounds, "gm:host", "reflection",
+                    {"seat": reflect_seat, "count": len(insights),
+                     "source_seq": insights[0]["source_seq"], "act": "终幕"},
+                    ["gm:host", reflect_seat],
+                )
+        db.set_game_state(conn, session_id, "runtime", runtime)
     return {
         "session_id": session_id, "rounds": rounds, "log": log, "result": result,
         "llm": llm_stats, "infoguard": guard_stats, "scoring": settled_scoring,

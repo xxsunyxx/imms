@@ -189,7 +189,7 @@ def build_parser():
 
     mem_p = sub.add_parser("memory", help="Inspect the listener-aware memory ledger")
     mem_sp = mem_p.add_subparsers(dest="memory_action", required=True)
-    ms = mem_sp.add_parser("show", help="Show remembered statements or F30 recall")
+    ms = mem_sp.add_parser("show", help="Show remembered statements or F26 recall")
     ms.add_argument("--session", required=True)
     ms.add_argument("--seat")
     ms.add_argument("--round", type=int)

@@ -12,7 +12,7 @@ the story and no session state is mutated.
 
 import json
 
-from . import db, infoguard, journal, replay, scoring, solver, vote
+from . import db, infoguard, journal, memory, replay, scoring, solver, vote
 
 WEIGHT_HARD = 1.0
 WEIGHT_SOFT = 0.3
@@ -420,6 +420,11 @@ def evaluate(conn, session_id, scripted_motive=None):
                 "guidance_rounds": len(journal.audit_events(
                     conn, session_id, act_type="frame_guidance")),
             },
+            "memory_layers": {
+                seat: memory.summarize(state)
+                for seat, state in (db.get_game_state(
+                    conn, session_id, "runtime", {}) or {}).items()
+            },
         },
     }
 
@@ -559,6 +564,11 @@ def render_evaluation(report):
     framing = retro.get("framing") or {}
     if framing:
         lines.append(f"- 真凶栽赃指引轮次：{framing['guidance_rounds']}（仅私有事件，措辞由 agent 生成）")
+    layers = retro.get("memory_layers") or {}
+    if layers:
+        total_semantic = sum(item.get("semantic", 0) for item in layers.values())
+        total_reflections = sum(item.get("reflections", 0) for item in layers.values())
+        lines.append(f"- 记忆分层：语义 {total_semantic} 条｜反思 {total_reflections} 条（权重加倍）")
     return "\n".join(lines) + "\n"
 
 

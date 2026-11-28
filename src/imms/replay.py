@@ -3,7 +3,7 @@
 import json
 import re
 
-from . import db, formulas, gm_debrief, journal, scoring
+from . import db, formulas, gm_debrief, journal, memory, scoring
 
 SECTIONS = ["真相时间线", "角色内心独白", "关键转折点 Top 5", "谎言全景图",
             "反事实推演", "越界时刻 Top N", "说话风格漂移账"]
@@ -592,6 +592,25 @@ def _frame_section(conn, session_id, names):
     return lines
 
 
+def _memory_section(conn, session_id, char_names=None):
+    """G11: four-memory-layer counts, no private reflection text in public."""
+    char_names = char_names or {}
+    runtime = db.get_game_state(conn, session_id, "runtime", {}) or {}
+    reflection_events = journal.audit_events(conn, session_id, act_type="reflection")
+    lines = [
+        "## 15. 记忆分层", "",
+        f"- 反思事件：{len(reflection_events)} 次（每幕最多 3 条，权重加倍）",
+    ]
+    for seat, state in sorted(runtime.items()):
+        summary = memory.summarize(state)
+        name = char_names.get(state.get("character_id"), state.get("character_id"))
+        lines.append(
+            f"- {name}：情节 {summary['statements']}｜语义 {summary['semantic']}"
+            f"｜反思 {summary['reflections']}｜承诺 {summary['commitments']}"
+        )
+    return lines
+
+
 def build_replay(conn, session_id):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -642,4 +661,6 @@ def build_replay(conn, session_id):
     lines += _affect_section(conn, session_id, names, char_names)
     lines.append("")
     lines += _frame_section(conn, session_id, names)
+    lines.append("")
+    lines += _memory_section(conn, session_id, char_names)
     return "\n".join(lines) + "\n"

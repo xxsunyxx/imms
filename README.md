@@ -145,6 +145,10 @@ uv run imms --db imms.db vote config --session snow-night-villa-s001
 
 `frame.py` 只服务真凶席位：从该席位可见的公开事件、已揭示线索指向、自身怀疑与供述矛盾里，给其他角色算“破绽分”，挑最多 3 个候选，并列出可引用的已知片段。引擎不写假事实、不把真相时间线或内部 id 塞进 prompt；它以一个私有 prompt 块告诉真凶 agent“候选是谁、依据是什么、只能引用已知事实”，具体栽赃措辞由 agent 自己生成。没有可观察依据时不给候选。`frame_guidance` 事件只写真凶席位 + GM，replay 第 14 节与 retro 看板只做审计计数。
 
+## 四层记忆
+
+`memory.py` 在情节记忆之外补齐语义记忆与反思记忆：语义只取公开事实、显式规则与角色自己的目标，不复制私有真相；每次幕切换或终幕生成最多 3 条带来源事件 seq 的反思，权重是普通条目的 2 倍。F26 检索同时给情节、语义、反思三层打分，prompt 的召回段会标明「剧本知识 / 反思」。replay 第 15 节与 retro 看板给分层计数。
+
 ## 统一摄入：先骨架，再归一化
 
 ```bash
@@ -200,7 +204,7 @@ uv run python -m unittest discover -s tests
 - `docs/CORE_MODULES.md` — 核心规则模块：人物抽取、提示词引擎、变量计算、确定性随机源、guide 库、谎言私有边界
 - `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
 - `docs/ORIGINAL_SPEC.md` — 用户提供的 IMMS v1.0 原始设定（逐字归档）
-- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（G06–G10/G12–G14/G29 已完成；IPS G17–G28 已完成；G11/G15 待办）
+- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（G06–G15/G29 已完成；IPS G17–G28 已完成；G16 条件冻结）
 - `docs/IPS_ORIGINAL_SPEC.md` — 用户提供的 IPS v1.0 即兴扰动系统原文（逐字归档）
 - `docs/IPS_FUSION.md` — IPS 九段流水线对照、可融入性结论与已定案边界；区分急性越界态（疯批）与长期人格面（黑化/病娇/DID，按记忆作用域分族），含跨局体验记忆，分期 G17–G25
 - `docs/EVENTS.md` — GM 事件注入库：七类外部扰动与多变量触发

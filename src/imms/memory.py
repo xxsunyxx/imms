@@ -13,7 +13,7 @@ log; recall never invents facts.
 
 import re
 
-from . import formulas
+from . import formulas, infoguard
 
 MAX_MEMORY = 200
 WORD_RE = re.compile(r"[A-Za-z0-9_]+")
@@ -228,24 +228,109 @@ def update_commitments(state, record):
     return changes
 
 
+def seed_semantic(state, onto, char=None):
+    """Seed permanent semantic memory from explicit script knowledge only.
+
+    Public facts, authored rules and the character's own goals are the only
+    accepted sources.  Private truth facts are never copied into a seat.
+    """
+    entries, seen = [], set()
+    candidates = []
+    for fact in (onto or {}).get("facts") or []:
+        if fact.get("visibility") == "public":
+            candidates.append(("fact", fact.get("content")))
+    for rule in ((onto or {}).get("world") or {}).get("rules") or []:
+        candidates.append(("rule", rule if isinstance(rule, str) else rule.get("text")))
+    for goal in (char or {}).get("goals") or []:
+        candidates.append(("goal", goal if isinstance(goal, str) else goal.get("text")))
+    for kind, raw in candidates:
+        text = infoguard.display_text(str(raw or ""))[:300]
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        entries.append({
+            "id": f"sem:{kind}:{len(entries)}", "source": "semantic",
+            "kind": kind, "text": text, "utterance": text,
+            "round": 0, "importance": 0.35, "claimed_facts": [],
+        })
+    state["semantic_memory"] = entries
+    return entries
+
+
+def reflect(state, round_no, act_label="本幕", seat_names=None):
+    """Generate up to three sourced insights at an act boundary (§9.3).
+
+    Insights are deterministic summaries of already-observed material; they
+    never introduce a fact.  Weight is doubled relative to an episodic record
+    (base 0.5 -> 1.0) and source event seqs are retained.
+    """
+    since = int(state.get("last_reflected_round") or 0)
+    records = [
+        m for m in (state.get("memory") or [])
+        if isinstance(m, dict) and int(m.get("round") or 0) > since
+    ]
+    if not records:
+        return []
+    names = seat_names or {}
+    state["last_reflected_round"] = int(round_no)
+    top = max(records, key=lambda m: float(m.get("importance") or 0.0))
+    speaker = names.get(top.get("speaker"), top.get("speaker"))
+    changed = [m for m in records if m.get("status") != "stated"]
+    susp = sorted(
+        (state.get("suspicion") or {}).items(), key=lambda kv: (-kv[1], kv[0])
+    )
+    focus = names.get(susp[0][0], susp[0][0]) if susp else "在座众人"
+    texts = [
+        f"{act_label}最值得保留的发言来自{speaker}：{str(top.get('utterance') or '')[:60]}",
+        f"{act_label}共记录 {len(records)} 条发言、{len(changed)} 次供述状态变化。",
+        f"{act_label}对{focus}的怀疑最高；后续追问应回到上述已记录片段。",
+    ]
+    source_seq = [str(top.get("seq"))] + [str(m.get("seq")) for m in changed[:2]]
+    out = []
+    for index, text in enumerate(texts[:3]):
+        out.append({
+            "id": f"reflection:{round_no}:{index}",
+            "source": "reflection", "text": text, "utterance": text,
+            "round": int(round_no), "importance": 1.0,
+            "weight_factor": 2.0, "source_seq": sorted(set(source_seq)),
+            "claimed_facts": [],
+        })
+    state.setdefault("reflections", []).extend(out)
+    if len(state["reflections"]) > 60:
+        del state["reflections"][:len(state["reflections"]) - 60]
+    return out
+
+
+def _recall_items(state):
+    items = [dict(m) for m in (state.get("memory") or []) if isinstance(m, dict)]
+    for item in state.get("reflections") or []:
+        if isinstance(item, dict):
+            items.append({**item, "age_override": 0})
+    for item in state.get("semantic_memory") or []:
+        if isinstance(item, dict):
+            items.append({**item, "age_override": 0})
+    return items
+
+
 def recall(state, current_round, cue=None, limit=3, tau_m=3.0):
-    """Consume F26: rank remembered statements by age, importance and fit."""
+    """Consume F26: rank episodic, reflective and semantic memory together."""
     tau_m = max(0.1, float(tau_m))
     emo = state.get("emotion") or {}
     cue = cue or ""
     scored = []
-    for item in state.get("memory") or []:
-        if not isinstance(item, dict):
-            continue
-        age = max(0, int(current_round) - int(item.get("round") or 0))
-        cosine = similarity(cue, item.get("utterance", "") + " " + " ".join(item.get("claimed_facts") or []))
+    for item in _recall_items(state):
+        age = int(item.get("age_override", max(
+            0, int(current_round) - int(item.get("round") or 0)
+        )))
+        text = str(item.get("utterance") or item.get("text") or "")
+        cosine = similarity(cue, text + " " + " ".join(item.get("claimed_facts") or []))
         congruence = emotion_congruence(emo, item.get("emotion_snapshot"))
         # G20 memory imprint: an improvised act decays more slowly (tau x3)
         # and carries an emotion tag for trauma-consistent retrieval.
         item_tau = tau_m * max(1.0, float(item.get("tau_m_factor") or 1.0))
         score = formulas.memory_score(age, item_tau, float(item.get("importance") or 0.0), cosine, congruence)
         scored.append({**item, "recall_score": round(score, 4)})
-    scored.sort(key=lambda x: (-x["recall_score"], str(x.get("seq"))))
+    scored.sort(key=lambda x: (-x["recall_score"], str(x.get("seq") or x.get("id"))))
     return scored[:max(0, int(limit))]
 
 
@@ -253,6 +338,18 @@ def recall_lines(items, seat_names=None):
     names = seat_names or {}
     lines = []
     for item in items or []:
+        source = item.get("source")
+        if source == "reflection":
+            lines.append(
+                f"- 第{item.get('round')}轮 反思（来源事件={item.get('source_seq')}）："
+                f"{item.get('text')}（召回分={item.get('recall_score')}）"
+            )
+            continue
+        if source == "semantic":
+            lines.append(
+                f"- 剧本知识：{item.get('text')}（召回分={item.get('recall_score')}）"
+            )
+            continue
         speaker = names.get(item.get("speaker"), item.get("speaker"))
         audience = ",".join(names.get(s, s) for s in item.get("audience") or []) or "在座各位"
         status = item.get("status") or "stated"
@@ -273,6 +370,8 @@ def summarize(state):
         "retracted": sum(
             1 for c in (state.get("commitments") or {}).values() if c.get("status") == "retracted"
         ),
+        "semantic": len(state.get("semantic_memory") or []),
+        "reflections": len(state.get("reflections") or []),
     }
 
 
