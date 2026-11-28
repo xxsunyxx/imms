@@ -407,6 +407,7 @@ def evaluate(conn, session_id, scripted_motive=None):
             },
             "scoring": db.get_game_state(conn, session_id, "scoring", {})
             or scoring.evaluate(conn, session_id),
+            "script_locks": db.get_game_state(conn, session_id, "script_locks", {}),
         },
     }
 
@@ -530,6 +531,12 @@ def render_evaluation(report):
             lines.append(f"- {item['kind']}：{item['detail']}")
     else:
         lines.append("- 时间线顺序无冲突")
+    locks = retro.get("script_locks") or {}
+    if locks:
+        lines.extend(["", "**剧本锁（R4）**", ""])
+        lines.append(f"- 状态：{locks.get('status')}｜统计：{locks.get('counts')}")
+        for item in locks.get("failed") or []:
+            lines.append(f"- 未通过：{item.get('owner')}｜{item.get('type')}｜{item.get('status')}")
     return "\n".join(lines) + "\n"
 
 

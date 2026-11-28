@@ -32,7 +32,7 @@
 | ④ 候选生成 | 动作库检索 + LLM 提案（`k=3`） | `llm.build_provider()` 已有 provider 抽象；`_choose_intent()` 固定 7 意图 | 动作库 YAML 不存在；LLM 提案复用 provider，但需在 `build_prompt` 加方向段 |
 | ⑤ 带通选择 | 意外度 `s∈[1.2,3.2]` ∧ 保真 `F≥0.72` ∧ 方向对齐 | `formulas.utility()`/`softmax()`（F24/F25）已有的排序框架；`BETA`/信念可派生 `freq_session` | 保真锚 `cos(emb(a),anchor_i)` 需要 embedding：当前**无 embedder**；用 OCEAN/values/lexicon 规则代理替代，向量库属 C1 冻结 |
 | ⑥ 定档/配额/时机 | 三档 ε、`ImprovBudget`、Kairos `K` | G01 已修 F22 热度曲线 → `Gap(t)=1-H/H*` 可直接算；`actual_heat()` 有 | 无 budget 令牌池；`Insertable` 阶段白名单依赖 G06（幕/阶段状态机）；`Attn` 可从 `suspicion` 焦点近似 |
-| ⑦ 护栏 IR1–IR5 | 不造事实/不超知/不破坏可解性/不违反锁/必有后效 | IR2 = 既有 G1 InfoGuard + 信念图（G02）；IR3 可查 `solver.coverage`（`solver.py:280`） | IR1 的 `unverified_claim` 标记字段现有 `act` 无；IR3 缺 `is_unique_path()` 查询；IR4 依赖 G09 运行时剧本锁；IR5 需新增 aftermath 校验 |
+| ⑦ 护栏 IR1–IR5 | 不造事实/不超知/不破坏可解性/不违反锁/必有后效 | IR2 = G1 InfoGuard + 信念图；IR3 = `solver.is_unique_path()`；IR4 = `script_locks` 输出护栏；IR5 = aftermath | IR1 的 `unverified_claim` 标记字段现有 `act` 无；坏即兴销毁/伪造路径默认不启用，IR3 以显式 `evidence_action` 触发降级 |
 | ⑧ 执行 delivery | 句长/敬语/省略号/颤抖等表达参数 | `llm.build_prompt()` 已分块注入；模板 `_utter()` 可拼接 | Prompt 与 act 均无 `delivery` 字段；纯文本系统下参数只能落字符串与 Prompt，不进 TruthGraph |
 | ⑨ 余波 Aftermath | 后悔/圆场/加码 + 记忆烙印 + 漂移 + 级联 | **`lie.py.reasoning_log` 已有 `created/believed/exposed/rejustified`；`strategy=maintain/patch/confess` 与 IPS `regret/rationalize/escalate` 可直接映射** | `self_concept` 漂移无字段且违反 L1 只读（见 §3）；级联 `depth≤2` 无实现；`memory.observe` 可承接烙印 |
 
@@ -138,18 +138,18 @@
 | 新 ID | 原文阶段 | 内容 | 前置 | 验收口径 |
 |---|---|---|---|---|
 | ✅ **G17**（已完成） | P0 活人感 | `ips.py` 落地泄漏积分蓄能器（ρ/θ/不应期/冲击明细）、always-on `micro_perturb` 与 7 项安全库；只写 `delivery`；玩家席位按 B3 不进 IPS | 无（l0 已有 acting_skill；emotion 已有 arousal/stress） | 每轮 AI 席位产出 `delivery` 且进 `game_events`（玩家席位按 B3 例外）；`delivery` 不写 TruthGraph；旧测试不回归；`seed` 可复现 |
-| ✅ **G18**（已完成） | P1 会爆发 | `ips.resolve_bursts` 落 I/ε/Kairos 门槛、`ImprovBudget`、同轮令牌竞争、`suppressed_burst`、IR1/IR2/IR5 与三策略 aftermath；IR3/IR4 仍按计划待 G09/solver 唯一路径 | G17；IR4 部分需 G09，IR3 需 `is_unique_path()` | 同轮多人越阈只放最高者；未放行者 A 不清空且记 `suppressed_burst`；每次 meso/macro 有 ≥1 条 aftermath |
+| ✅ **G18**（已完成） | P1 会爆发 | `ips.resolve_bursts` 落 I/ε/Kairos 门槛、`ImprovBudget`、同轮令牌竞争、`suppressed_burst`、IR1/IR2/IR5 与三策略 aftermath；IR3/IR4 已由 G09 转正 | G17；G09/IR3/IR4 已完成 | 同轮多人越阈只放最高者；未放行者 A 不清空且记 `suppressed_burst`；每次 meso/macro 有 ≥1 条 aftermath |
 | ✅ **G19**（已完成） | P2 有方向 | `direction.py` 落面具梯度、ζ 显式阴影反转与三候选带通（s∈[1.2,3.2]、F≥0.72、对齐>0）；无 mask/ζ 时记录 gap 且不编造，L1 只读 | G05（L4/mask、G2 护栏）+ B2 定案 | `direction.mask_gradient` 可复盘；超限候选被拒并记原因；ζ 缺失时降级不编造 |
 | ✅ **G20**（已完成） | P3 有后果 | `aftermath.py` 三策略后果复用 `lie.reasoning_log`/`lie_ledger` 与 `memory`；imp=0.6+0.4I、τ×3、情绪一致标签；漂移审计 L1 范数≤0.08；级联 p0(1-C)·arousal·(1+0.6intimacy)·0.5^d·β，d≤2、降档、配额 | G18 + lie.py + B1 定案 | `aftermath.strategy∈{regret,rationalize,escalate}`；级联 `d≤2` 且强制降档；`self_concept_delta` 不进 L1 |
 | ✅ **G21**（已完成） | P4 可调可评 | `director.py` 落 5 旋钮（improv_gain/chaos/shadow_sensitivity/leak_rate/macro_quota）+ 5 预设；`retro.improvisation_metrics` 输出 10 项指标；CLI `director --preset/--set` | G17–G20；指标基线依赖 G08/G12 | 拨盘改 θ/quota/T 且可复现；retro 输出有效即兴率 30–60%、余波覆盖 100%、漂移 ≤0.08 |
-| ✅ **G22** ★（已完成） | 追加：**急性越界态（疯批）** | `breakout.py` 落 `normal/charged/frenzy` 三态、每局 token（默认 1）、入界需既有 `suppressed_burst`、带通 s_hi 3.2/3.6/4.6 与 F 0.72/0.65/0.55；退出记 exposure/morale/关系净损失；replay 第 6 节单列 | G17–G19；IR4 待 G09 | `s>3.2` 仅在 frenzy 态放行且记 `state`；`memory_scope=full`；IR1/IR2/R4/R5 与真相写入不变；token 默认 ≤1 |
+| ✅ **G22** ★（已完成） | 追加：**急性越界态（疯批）** | `breakout.py` 落 `normal/charged/frenzy` 三态、每局 token（默认 1）、入界需既有 `suppressed_burst`、带通 s_hi 3.2/3.6/4.6 与 F 0.72/0.65/0.55；退出记 exposure/morale/关系净损失；replay 第 6 节单列 | G17–G19；IR4 已由 G09 覆盖 | `s>3.2` 仅在 frenzy 态放行且记 `state`；`memory_scope=full`；IR1/IR2/R4/R5 与真相写入不变；token 默认 ≤1 |
 | ✅ **G23** ★（已完成） | 追加：长期体验记忆 | `long_term_memory` 表 + `longterm.py`：w=exp(-ln2·Δt/3d)、faded 不删除、再交互复活；局末 `settle_session` 从 relations+vote 结算；`init_runtime` 注入 L3 先验（含证据）且 L1 不变；CLI `memory longterm show/settle/forget` | 需稳定 `player_id`（`session.l0` 或参会元数据） | 跨局好恶/输赢可查；超过半衰期权重衰减且可 `faded`；再交互复活；**L1 不变**；证据可溯源 |
 | ✅ **G24**（已完成，并入 G18） | 追加：点火 Provocation | `provoke` 意图 + 玩家 accuse/ally/显式 impact 注入 `s_k` + AI 互燃；点火只写目标 accumulator，玩家席位自身不进 IPS | G17 + §2①/G04 冲击通道 | 玩家点火抬高目标 accumulator 且落库；玩家无 accumulator/delivery；受不应期与 budget 约束 |
 | ✅ **G25** ★★（已完成） | 追加：长期人格面 | `facets.py` 注册表存 L2；连续面 `shared` 记忆共享 + 行为权重重排；分离面 `isolated:<id>` 真正交换 beliefs/memory/lie_ledger 桶并记 `memory_gap`；`scope_filter` 附加面过滤；CLI `facets register/switch/list`；诊断名只留设计文档 | G17/G19/G23；分离面需 InfoGuard scope 附加面过滤 | 两族 `memory_scope` 不同且可验证；分离面之间不共享信念；切换有 `facet_switch` + `memory_gap`；L1 不变；复盘无诊断名 |
 
 **依赖链**：`G05 → G19 → G22`，`G09 → G18(IR4)`，`G06 → G18(Insertable)`，`G08/G12 → G21`，`G17 → G18 → G20 → G21`；`G17 → G24`；`G23` 独立（需 `player_id`），可与 G17 并行；`G23 + G19 → G25`。
 
-**建议执行顺序**：G17（无阻塞）→ G18（含 G24 点火）→ G19（待 G05）→ G20 → G22 → G21 → G23 → G25。G18 的 IR3/IR4 可先以「降级为 claim-only / 跳过锁检查并标红」过渡，待 G09 完成后转正。**G25 单独排最后**：它需要长期记忆的跨局承载与 G19 的方向引擎，且记忆隔离会动到 InfoGuard 的可见性口径，风险最高。
+**建议执行顺序**：G17（无阻塞）→ G18（含 G24 点火）→ G19（待 G05）→ G20 → G22 → G21 → G23 → G25。G18 的 IR3/IR4 已随 G09 转正：唯一证据路径查询与剧本锁护栏都在 `ips.resolve_bursts` 中消费。**G25 单独排最后**：它需要长期记忆的跨局承载与 G19 的方向引擎，且记忆隔离会动到 InfoGuard 的可见性口径，风险最高。
 
 ---
 

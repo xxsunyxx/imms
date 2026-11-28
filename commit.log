@@ -474,3 +474,10 @@
 - 生成派生 `corpus/quality_manifest.json`，源 `corpus/manifest.json` 与 raw 文件未改。当前存量：100 套盒装本 `explicit_partial`、6 套显式真凶本 `explicit_full`。
 - CLI 增加 `quality summary/build`，`audit-all --by-tier` 按层汇总；`audit-all` 每条附 `quality` / `source_type` / `quality_gaps`。
 - 新增 `tests/test_script_quality.py`（4 项）；全量 314 unittest 通过。同步 `docs/GAP_AUDIT.md` 与 `README.md`。
+
+## 2026-11-28 · #125 剧本锁硬检查与 IR3/IR4 转正（G09）
+
+- 新增 `script_locks.py`：只编译显式 `script_locks` / `must_say` / `must_trigger` / `taboo`；`taboo` 输出侧硬拦截，`must_say` / `must_trigger` 终幕按事件审计标红；编译规则写入 session 快照，分叉不再有独立绕过路径。
+- `solver.evidence_paths()` / `is_unique_path()` / `unique_path_audit()` 支持 IR3；`ips.resolve_bursts()` 接入 IR3 唯一路径降级与 IR4 锁/核心目标降级，动作仍为 claim-only。
+- ontology YAML 解析保留显式锁字段；runtime 写 `script_lock_violation`（GM+本人可见）与终幕 `script_locks` 状态；replay 第 12 节、retro 看板展示红标统计但不展示锁文本。
+- 新增 `tests/test_script_locks.py`（7 项）；全量 321 unittest 通过。同步 `docs/GAP_AUDIT.md`、`docs/IPS_FUSION.md`、`README.md`。

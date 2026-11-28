@@ -110,6 +110,13 @@ def parse_yaml_script(path):
                 "backstory": c.get("backstory", ""),
                 "timeline": c.get("timeline", []),
                 "goals": c.get("goals", []),
+                # R4 script locks are only carried when the script declares
+                # them explicitly; absence stays absence instead of being
+                # inferred from prose.
+                "script_locks": c.get("script_locks", []),
+                "must_say": c.get("must_say", []),
+                "must_trigger": c.get("must_trigger", []),
+                "taboo": c.get("taboo", c.get("taboo_topics", [])),
                 "canon_evidence": [],
             }
             for c in characters
@@ -118,6 +125,7 @@ def parse_yaml_script(path):
         "clues": clues,
         "clue_fact_map": clue_fact_map,
         "plot_locks": [],
+        "script_locks": data.get("script_locks", []),
         "endings": [
             f"指认{killer_name}则真凶伏法",
             "指认其他人则冤案",

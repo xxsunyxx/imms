@@ -409,7 +409,7 @@ def _aftermath_strategy(state, seed, round_no):
 
 def resolve_bursts(states, round_no, events, heat, target, budget, public_facts,
                    session_id="", seed=None, stage="roundtable",
-                   s_hi=None, f_min=None):
+                   s_hi=None, f_min=None, onto=None, locks=None, evidence_action=None):
     """§8 token competition + §10 IR1/IR2/IR5 guard + §11 aftermath.
 
     Only the highest-scoring eligible seat bursts this round; everyone else
@@ -547,6 +547,16 @@ def resolve_bursts(states, round_no, events, heat, target, budget, public_facts,
     direction.apply_to_burst(
         burst, state, events, round_no, seed=seed, **kwargs
     )
+    # G09: IR3/IR4 stop being placeholders.  IR3 checks unique evidence paths
+    # when an improv actually targets a clue; IR4 checks explicit script locks
+    # against claims.  Both stay claim-only and never write TruthGraph facts.
+    from . import script_locks
+    if evidence_action:
+        burst["evidence_action"] = dict(evidence_action)
+    ir3 = script_locks.guard_evidence(onto or {}, burst)
+    burst["guard"]["IR3"] = ir3["status"]
+    ir4 = script_locks.guard_improv(locks, burst, state)
+    burst["guard"]["IR4"] = ir4["status"]
     return {"bursts": [burst], "suppressed": suppressed, "changes": changes,
             "budget": budget.to_dict()}
 

@@ -195,6 +195,56 @@ def audit_stage_gates(onto, facts, clues, fact_by_clue):
     return {"gates": gates, "conflicts": conflicts}
 
 
+def evidence_paths(onto, fact_id):
+    """Independent evidence routes that can establish one fact.
+
+    Routes come only from explicit ontology fields: clue reveals, public
+    facts, a character's canon knowledge, or a fully clue-covered evidence
+    chain.  No route is inferred from prose similarity.
+    """
+    paths = []
+    for clue in onto.get("clues") or []:
+        if fact_id in (clue.get("reveals_fact_ids") or []):
+            paths.append({"kind": "clue", "id": clue.get("id")})
+    facts = {f.get("id"): f for f in onto.get("facts") or [] if f.get("id")}
+    fact = facts.get(fact_id) or {}
+    if fact.get("visibility") == "public":
+        paths.append({"kind": "public"})
+    for char in onto.get("characters") or []:
+        if fact_id in (char.get("known_fact_ids") or []):
+            paths.append({"kind": "knower", "id": char.get("id")})
+    chain_ids = [fid for fid, f in facts.items() if f.get("type") == "evidence_chain"]
+    revealed = {
+        fid for clue in onto.get("clues") or []
+        for fid in (clue.get("reveals_fact_ids") or [])
+    }
+    if fact.get("type") == "truth" and chain_ids and all(fid in revealed for fid in chain_ids):
+        paths.append({"kind": "composite_chain", "id": "chain"})
+    return paths
+
+
+def is_unique_path(onto, fact_id, exclude=None):
+    """IR3 query: true when exactly one independent route reaches ``fact_id``."""
+    excluded = set(exclude or [])
+    paths = [
+        p for p in evidence_paths(onto, fact_id)
+        if (p["kind"], p.get("id")) not in excluded
+    ]
+    return len(paths) == 1
+
+
+def unique_path_audit(onto):
+    """Report facts whose only evidence route can be destroyed by improvisation."""
+    facts = [f.get("id") for f in onto.get("facts") or [] if f.get("id")]
+    return {
+        "unique": [
+            {"fact_id": fid, "path": evidence_paths(onto, fid)[0]}
+            for fid in facts if is_unique_path(onto, fid)
+        ],
+        "unreachable": [fid for fid in facts if not evidence_paths(onto, fid)],
+    }
+
+
 def _text_attribution(clues, characters, facts, clue_weights):
     """Fallback attribution when a clue carries no explicit logLR weight."""
     ids = [c.get("id") for c in characters if not c.get("is_victim")]
@@ -420,6 +470,7 @@ def audit_script(onto):
         "timeline": timeline,
         "stage_gates": gates,
         "completion_regression": completions,
+        "unique_paths": unique_path_audit(onto),
         "difficulty_curve": curve,
         "difficulty": difficulty,
         "contradictions": contradictions,

@@ -131,6 +131,12 @@ uv run imms --db imms.db vote config --session snow-night-villa-s001
 
 `script_quality.py` 按已存字段把剧本分五档（`explicit_full` / `explicit_partial` / `explicit_minimal` / `narrative_only` / `insufficient`），并标来源类型（盒装本 md、显式 yaml、RPG JSON、配置、未知）与具体缺口（无真凶、无线索、无结构化事实、无时间线等）。当前存量：100 套盒装本为 `explicit_partial`（有真凶与线索但无 `timeline_true`），6 套显式真凶本为 `explicit_full`。`quality build` 只写派生 `corpus/quality_manifest.json`，不改 `manifest.json` 或来源字节；`audit-all --by-tier` 出分层汇总。
 
+## 剧本锁与即兴护栏
+
+`script_locks.py` 只编译剧本显式声明的 `script_locks` / `must_say` / `must_trigger` / `taboo`，没有声明就没有锁，不从叙事文本猜。`must_say` / `must_trigger` 在终幕按事件轨迹审计，未达成标红；`taboo` 在输出落库前硬拦截，尝试记录只进 GM + 本人可见的事件。分叉继承同一份编译规则与席位锁账本，不能靠换分支跳过。replay 第 12 节和 retro 看板给出红标统计，不含锁的具体文本。
+
+`solver.is_unique_path()` 提供 IR3 的唯一证据路径查询：即兴动作若销毁/伪造唯一路径会降级为 `damaged_recoverable` / `forgery_failed`；IR4 检查显式锁与权重 >0.8 的主线目标，违规降级为 `safe_library`（仅 morale<0.15 且有 GM 令牌才放行）。当前默认即兴是 claim-only，销毁/伪造动作需显式传入，不会自行发生。
+
 ## 统一摄入：先骨架，再归一化
 
 ```bash
@@ -186,7 +192,7 @@ uv run python -m unittest discover -s tests
 - `docs/CORE_MODULES.md` — 核心规则模块：人物抽取、提示词引擎、变量计算、确定性随机源、guide 库、谎言私有边界
 - `docs/MEMORY.md` — 听众账本、承诺状态机与 F26 召回
 - `docs/ORIGINAL_SPEC.md` — 用户提供的 IMMS v1.0 原始设定（逐字归档）
-- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（G06/G07/G08 已完成；IPS G17–G25、G26–G28 已完成；G09–G15 待办）
+- `docs/GAP_AUDIT.md` — 原始设定 vs 现状：冲突、公式落地矩阵与待补任务（G06/G07/G08/G09/G12–G14 已完成；IPS G17–G25、G26–G28 已完成；G10/G11/G15 待办）
 - `docs/IPS_ORIGINAL_SPEC.md` — 用户提供的 IPS v1.0 即兴扰动系统原文（逐字归档）
 - `docs/IPS_FUSION.md` — IPS 九段流水线对照、可融入性结论与已定案边界；区分急性越界态（疯批）与长期人格面（黑化/病娇/DID，按记忆作用域分族），含跨局体验记忆，分期 G17–G25
 - `docs/EVENTS.md` — GM 事件注入库：七类外部扰动与多变量触发

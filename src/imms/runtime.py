@@ -4,7 +4,7 @@ import json
 import random
 import re
 
-from . import aftermath, breakout, db, director, events, facets, formulas, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, scoring, speech_style, stage_gate, style_compiler, timeline, vote
+from . import aftermath, breakout, db, director, events, facets, formulas, gm_direction, gm_narrator, infoguard, investigation, ips, journal, l4, lie, llm, longterm, memory, performance_guide, phases, scoring, script_locks, speech_style, stage_gate, style_compiler, timeline, vote
 
 REL_DEFAULT = {
     "like": 0.0, "trust": 0.0, "respect": 0.5, "intimacy": 0.0,
@@ -39,6 +39,9 @@ def init_runtime(conn, session_doc):
         return
     script_id = session_doc["script_id"]
     onto = db.get_script(conn, script_id)
+    # R4: compile explicit script locks onto the session so forks inherit the
+    # exact same rules; missing declarations stay empty rather than inferred.
+    script_locks.ensure_session(conn, session_id, onto, session_doc)
     persona = db.get_persona_l1(conn, script_id)
     l1map = {p["character_id"]: {a["key"]: a["value"] for a in p["attributes"] if a["value"] is not None} for p in persona["personas"]}
     # L2 assigned values are session-scoped; reload them into the seat view so
@@ -109,6 +112,9 @@ def init_runtime(conn, session_doc):
             "facets": facets.load_registry(conn, session_id, cid),
             "facet_buckets": {},
             "facet_switch_log": [],
+            # G09: per-seat lock ledger is part of the snapshot, so a GM branch
+            # cannot start from a state with already-satisfied/skipped locks.
+            "script_lock_state": script_locks.seat_state(session_doc, p["id"]),
         }
     # Clue cards are not knowledge until a clue is actually released/revealed.
     # Every agent starts with only public facts plus its own canon knowledge.
@@ -1003,6 +1009,28 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
                 guard_info = {**(guard_info or {}), "stage_gate": stage_report}
                 log.append({"round": round_no, "actor": "gm:host", "act": "stage_gate",
                             "status": "rewrite", "hits": stage_report["hits"]})
+            lock_state = state.setdefault(
+                "script_lock_state", script_locks.seat_state(session_doc, seat_id)
+            )
+            lock_report = script_locks.guard_output(lock_state, act, round_no)
+            if lock_report["blocked"]:
+                guard_stats["script_lock_blocked"] = guard_stats.get("script_lock_blocked", 0) + 1
+                guard_info = {**(guard_info or {}), "script_lock": {"status": "blocked"}}
+                db.append_game_event(
+                    conn, session_id, round_no, "gm:host", "script_lock_violation",
+                    {"seat": seat_id, "hits": [
+                        {"lock_id": hit["lock_id"]} for hit in lock_report["hits"]
+                    ]},
+                    ["gm:host", seat_id],
+                )
+                log.append({"round": round_no, "actor": "gm:host", "act": "script_lock",
+                            "status": "blocked", "seat": seat_id})
+            satisfied_locks = script_locks.observe_output(lock_state, act, round_no)
+            if satisfied_locks:
+                log.append({"round": round_no, "actor": "gm:host", "act": "script_lock",
+                            "status": "satisfied", "ids": [
+                                item["lock_id"] for item in satisfied_locks
+                            ]})
             challenge = stage_gate.consume_challenge(
                 conn, session_id, round_no, seat_id, act,
             )
@@ -1129,7 +1157,8 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
         burst_target = formulas.heat_target(round_no, max(1, int(rounds)), 3.0)
         bursts = ips.resolve_bursts(
             runtime, round_no, round_events, burst_heat, burst_target, budget,
-            public_facts, session_id, seed,
+            public_facts, session_id, seed, onto=onto,
+            locks=script_locks.compile_locks(onto),
         )
         for change in bursts["changes"]:
             seat = change.get("seat_id")
@@ -1228,6 +1257,7 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     db.set_game_state(conn, session_id, "infoguard_stats", guard_stats)
     result = {}
     settled_scoring = {}
+    settled_locks = {}
     if finalize:
         result = _vote(conn, session_id, runtime, session_doc, scripted, seed)
         db.set_game_state(conn, session_id, "result", result)
@@ -1259,6 +1289,11 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
         settled_scoring = scoring.settle(conn, session_id)
         log.append({"round": rounds, "actor": "gm:host", "act": "ending_settled",
                     "status": settled_scoring["ending"]["code"]})
+        # G09: R4 locks are checked against the full event trail at settlement.
+        # Unmet locks stay red; they are never silently promoted to satisfied.
+        settled_locks = script_locks.audit(conn, session_id)
+        log.append({"round": rounds, "actor": "gm:host", "act": "script_lock_audit",
+                    "status": settled_locks["status"], "counts": settled_locks["counts"]})
         # G23: settle cross-session sentiment/outcome after the vote is final.
         settled = longterm.settle_session(
             conn, session_id, player_id=(session_doc.get("l0") or {}).get("player_id")
@@ -1275,4 +1310,5 @@ def run_session(conn, session_id, rounds=3, scripted=None, seed=42, llm_name=Non
     return {
         "session_id": session_id, "rounds": rounds, "log": log, "result": result,
         "llm": llm_stats, "infoguard": guard_stats, "scoring": settled_scoring,
+        "script_locks": settled_locks,
     }

@@ -513,6 +513,36 @@ def _settlement_section(conn, session_id):
     return rendered.rstrip().splitlines()
 
 
+def _script_lock_section(conn, session_id):
+    """R4 audit summary: status only, never the private lock wording."""
+    report = db.get_game_state(conn, session_id, "script_locks") or {}
+    if not report:
+        return ["## 12. 剧本锁与即兴护栏", "", "未结算（会话尚未终幕）。"]
+    lines = [
+        "## 12. 剧本锁与即兴护栏", "",
+        f"- 总状态：{report.get('status')}",
+        f"- 统计：{report.get('counts')}",
+    ]
+    if report.get("failed"):
+        lines.append("- 未通过项（不含锁内容）：")
+        for item in report["failed"]:
+            lines.append(
+                f"  - {item.get('owner')}｜{item.get('type')}｜{item.get('status')}"
+            )
+    bursts = [
+        e for e in journal.audit_events(conn, session_id, act_type="improv_burst")
+    ]
+    guards = [e["payload"].get("guard") or {} for e in bursts]
+    lines.append(
+        "- 即兴护栏：IR3 "
+        f"{sum(1 for g in guards if g.get('IR3') == 'downgraded')} 降级 / "
+        f"{sum(1 for g in guards if g.get('IR3') == 'pass')} 通过；IR4 "
+        f"{sum(1 for g in guards if g.get('IR4') == 'downgraded')} 降级 / "
+        f"{sum(1 for g in guards if g.get('IR4') == 'pass')} 通过"
+    )
+    return lines
+
+
 def build_replay(conn, session_id):
     session_doc = db.get_session(conn, session_id)
     onto = db.get_script(conn, session_doc["script_id"])
@@ -557,4 +587,6 @@ def build_replay(conn, session_id):
     lines += _continuity_section(conn, session_id, names)
     lines.append("")
     lines += _settlement_section(conn, session_id)
+    lines.append("")
+    lines += _script_lock_section(conn, session_id)
     return "\n".join(lines) + "\n"

@@ -150,6 +150,12 @@ def regress(base_result, fork_result, fork_conn, fork_id, at_round):
                 claims_ok = False
     checks["claims_known"] = claims_ok
 
+    # G09/IR4: a fork inherits the same compiled locks and is audited with the
+    # same rules.  Replaying a branch cannot turn an unmet lock into a pass.
+    from . import script_locks
+    lock_report = script_locks.audit(fork_conn, fork_id)
+    checks["script_locks"] = lock_report["status"] == "pass"
+
     fork_final = fork_result["result"]
     # "Solvable" means the vote mechanism produced legal seats; whether the
     # players actually caught the culprit is an outcome, not an integrity bug.
